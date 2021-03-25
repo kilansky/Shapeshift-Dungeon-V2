@@ -77,6 +77,7 @@ public class SkullCharge : MonoBehaviour
         //WHY DOES THIS WORK
         bullet = Instantiate(fireball, firePoint.transform.position, transform.rotation);
         bullet.transform.localScale = new Vector3(currentScale, currentScale, currentScale);
+        bullet.transform.parent = this.gameObject.transform;
 
         //bullet.transform.localEulerAngles = Vector3.right;
         bullet.GetComponent<Bullet>().moveSpeed = bulletSpeed;
