@@ -275,6 +275,8 @@ public class EnemyBase : MonoBehaviour, IDamageable
     {
         //target the player
         agent.SetDestination(target.position);
+        //target other crystals
+        //if(this)
         #region turn variables 
         //make sure the enemy faces the player
         //this will be the same for all enemies
