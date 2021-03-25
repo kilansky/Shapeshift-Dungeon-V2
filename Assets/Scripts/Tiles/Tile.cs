@@ -25,7 +25,8 @@ public class Tile : MonoBehaviour
         stairs,
         arcane,
         bridge,
-        rail
+        rail,
+        laser
     }
     public tileTypes tileType;
 

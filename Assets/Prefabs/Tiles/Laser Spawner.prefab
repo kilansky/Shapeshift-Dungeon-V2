@@ -59,7 +59,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 8e628ab3673526648b68be922de630f2, type: 2}
+  - {fileID: 2100000, guid: 3124a87de7723714faee9e73f87953b9, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -106,9 +106,9 @@ GameObject:
   - component: {fileID: 5335884182081978351}
   - component: {fileID: 4395236236510365834}
   - component: {fileID: 7185070882505320911}
-  - component: {fileID: 3719531714306949552}
+  - component: {fileID: 5687594063660209922}
   m_Layer: 10
-  m_Name: Projectile Dispenser
+  m_Name: Laser Spawner
   m_TagString: Tile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -202,9 +202,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e106275fafc3b3429794f9f58664fb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tileType: 7
+  tileType: 12
   willBeShop: 0
---- !u!114 &3719531714306949552
+--- !u!114 &5687594063660209922
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -213,15 +213,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 2333366564355165282}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 95a7fe4ba68403e4e863a75f8d051054, type: 3}
+  m_Script: {fileID: 11500000, guid: b7994bcd12cb7304d894e3c0d644415b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectile: {fileID: 6239542489288251911, guid: e54e494cf3b69074c81cee6b6b3387bc,
+  redLaser: {fileID: 1874401698703570213, guid: 23fa6024f3c084740b839db0b3295092,
     type: 3}
-  rateOfFire: 3
-  chargeTime: 1
-  delayBeforeFiring: 0.5
-  canFire: 0
+  blueLaser: {fileID: 6600484499919377321, guid: bfba43235ad87eb428b10bd550afdff6,
+    type: 3}
+  greenLaser: {fileID: 4851013556838653444, guid: 211ad6cb075174746ab42142f8f16e24,
+    type: 3}
 --- !u!1 &5985843884978807558
 GameObject:
   m_ObjectHideFlags: 0
@@ -232,7 +232,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2922832393303526831}
   m_Layer: 0
-  m_Name: ProjectileSpawner (NEEDS TO BE CHILD 0!!!)
+  m_Name: LaserSpawner (NEEDS TO BE CHILD 0!!!)
   m_TagString: Untagged
   m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -246,7 +246,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5985843884978807558}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 5.5, z: 1.33}
+  m_LocalPosition: {x: 0, y: 5.5, z: 1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2604927979395849003}
