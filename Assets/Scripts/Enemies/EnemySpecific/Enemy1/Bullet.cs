@@ -19,10 +19,39 @@ public class Bullet : MonoBehaviour
     public float minBulletSize;
     public float maxBulletSize;
 
+    [Header("VFX Pointers")]
+    public GameObject beamLight;
+    public GameObject beamDark;
+    public GameObject baseVar;
+    public GameObject glow;
+    public GameObject sparks;
+    public GameObject shell;
+    public GameObject voidVar;
+    public GameObject line;
+
+    private Vector3 original_beamLight;
+    private Vector3 original_beamDark;
+    private Vector3 original_baseVar;
+    private Vector3 original_glow;
+    private Vector3 original_sparks;
+    private Vector3 original_shell;
+    private Vector3 original_voidVar;
+    private Vector3 original_line;
+
     private Vector3 shootDir;
 
     private void Start()
     {
+        original_beamLight = beamLight.transform.localScale;
+        original_beamDark = beamDark.transform.localScale;
+        original_baseVar = baseVar.transform.localScale;
+        original_glow = glow.transform.localScale;
+        original_sparks = sparks.transform.localScale;
+        original_shell = shell.transform.localScale;
+        original_voidVar = voidVar.transform.localScale;
+        original_line = line.transform.localScale;
+
+        //Debug.Log("Original scale of beamLight is " + original_beamLight);
         Setup();
         Destroy(gameObject, 10f); //destroy this projectile if in the scene for 10 seconds
     }
@@ -60,6 +89,8 @@ public class Bullet : MonoBehaviour
 
         //implements bullet facing direction
         transform.eulerAngles = new Vector3(0, 0, GetAngleFromVectorFloat(shootDir));
+
+        
     }
 
     //need this to change bullet facing direction
@@ -72,5 +103,25 @@ public class Bullet : MonoBehaviour
             n += 360;
         }
         return n;
+    }
+
+    /// <summary>
+    /// Sets the scales of all the vfx effects based on a given percentage
+    /// </summary>
+    /// <param name="percent"></param>
+    public void SetVFXScale(float percent)
+    {
+        float scaleFactor = percent / 100f;
+
+        beamLight.transform.localScale = original_beamLight * scaleFactor;
+        beamDark.transform.localScale = original_beamDark * scaleFactor;
+        baseVar.transform.localScale = original_baseVar * scaleFactor;
+        glow.transform.localScale = original_glow * scaleFactor;
+        sparks.transform.localScale = original_sparks * scaleFactor;
+        shell.transform.localScale = original_shell * scaleFactor;
+        voidVar.transform.localScale = original_voidVar * scaleFactor;
+        line.transform.localScale = original_line * scaleFactor;
+
+        //Debug.Log("Original scale of beamLight is " + original_beamLight);
     }
 }
