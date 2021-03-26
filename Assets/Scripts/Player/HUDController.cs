@@ -28,6 +28,9 @@ public class HUDController : SingletonPattern<HUDController>
     public TextMeshProUGUI currentHealthText;
     public UIPanel potionsPanel;
 
+    [Header("Gem Counter")]
+    public TextMeshProUGUI gemCountText;
+
     [Header("Quick Hint Panel")]  
     public UIPanel quickHintPanel;
 
@@ -178,6 +181,11 @@ public class HUDController : SingletonPattern<HUDController>
             yield return new WaitForEndOfFrame();
         }
         fillBar.fillAmount = fillToValue;
+    }
+
+    public void UpdateGemCount(int gemCount)
+    {
+        gemCountText.text = gemCount.ToString();
     }
 
     public void UpdateSpecialCharge()

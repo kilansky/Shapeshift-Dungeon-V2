@@ -15,12 +15,6 @@ public class EMail : SingletonPattern<EMail>
 
     private PlayerHealth ph;
     private PlayerController pc;
-    string specialItem;
-    string headItem;
-    string torsoItem;
-    string footItem;
-    string pocket1Item;
-    string pocket2Item;
 
     private void Start()
     {
@@ -30,37 +24,20 @@ public class EMail : SingletonPattern<EMail>
 
     public void SubmitReview()
     {
-        GetEquippedItemNames();
-
         int levelRating = (int)levelRatingSlider.value;
         string emailSubject = LevelManager.Instance.currMapName + " Feedback";
         string emailBody = "Player ID: " + PlayerPrefs.GetInt("UserID") + " \n" +
             "Level Rating: " + levelRating + " \n" +
-            "Floor #: " + LevelManager.Instance.currFloor + " \n" +
-            "Player Health: " + ph.Health + " \n" +
-            "Potion Count: " + ph.GetPotionCount().ToString() + " \n" +
-            "Items: " + specialItem + ", " + headItem + ", " + torsoItem + ", " + 
-            footItem + ", " + pocket1Item + ", " + pocket2Item + " \n" +
-            "Health Upgrades: " + pc.StatMaxHealthCount + " \n" +
-            "Attack Upgrades: " + pc.StatAttackCount + " \n" +
-            "Speed Upgrades: " + pc.StatSpeedCount + " \n" +
-            "Run Time: " + RunTimer.Instance.TimerTextValue + " \n" + inputField.text;
+            "Floor #: " + LevelManager.Instance.currFloor + " \n" + 
+            inputField.text;
 
         try { SendEmail(emailSubject, emailBody); }
         catch { Debug.LogError("Failed to send email feedback"); }
 
+        AnalyticsEvents.Instance.LevelRated(levelRating); //Send Level Rated Analytics Event
+
         HUDController.Instance.HideLevelReviewPanel();
         LevelManager.Instance.TransitionLevel();
-    }
-
-    private void GetEquippedItemNames()
-    {
-        specialItem = (pc.SpecialSlot ? pc.SpecialSlot.ItemName : "---");
-        headItem = (pc.HeadSlot ? pc.HeadSlot.ItemName : "---");
-        torsoItem = (pc.TorsoSlot ? pc.TorsoSlot.ItemName : "---");
-        footItem = (pc.FootSlot ? pc.FootSlot.ItemName : "---");
-        pocket1Item = (pc.PocketSlot1 ? pc.PocketSlot1.ItemName : "---");
-        pocket2Item = (pc.PocketSlot2 ? pc.PocketSlot2.ItemName : "---");
     }
 
     public void SkipReview()
