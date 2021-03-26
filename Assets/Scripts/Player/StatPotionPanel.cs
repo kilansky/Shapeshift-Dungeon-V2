@@ -6,22 +6,24 @@ public class StatPotionPanel : MonoBehaviour
 {
     public void IncreaseMaxHealth()
     {
-        Debug.Log("Increase Max Health");
         PlayerHealth.Instance.IncreaseMaxHealth(5);
         PlayerController.Instance.StatMaxHealthCount++;
+
         HUDController.Instance.HideStatPotionPanel();
+
+        AnalyticsEvents.Instance.StatUpgraded("Health"); //Send Stat Upgraded Analytics Event
     }
 
     public void IncreaseAttack()
     {
-        Debug.Log("Increase Attack");
-
         //PlayerController.Instance.baseAttackDamage.BaseValue * 0.15f; //We assign a variable to hold the percent increase needed for the variable (25% of the current base value)
         float percentIncrease = 0.45f; //15% of the starting attack damage (3)
         PlayerController.Instance.baseAttackDamage.BaseValue += percentIncrease; //Increases the current base value by the percent increase
         PlayerController.Instance.StatAttackCount++;
 
         HUDController.Instance.HideStatPotionPanel();
+
+        AnalyticsEvents.Instance.StatUpgraded("Attack"); //Send Stat Upgraded Analytics Event
     }
 
     public void IncreaseSpeed()
@@ -38,5 +40,7 @@ public class StatPotionPanel : MonoBehaviour
         PlayerController.Instance.StatSpeedCount++;
 
         HUDController.Instance.HideStatPotionPanel();
+
+        AnalyticsEvents.Instance.StatUpgraded("Speed"); //Send Stat Upgraded Analytics Event
     }
 }
