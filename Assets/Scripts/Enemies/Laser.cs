@@ -20,10 +20,12 @@ public class Laser : MonoBehaviour
     public LayerMask mask;
 
     private LineRenderer beam;
+    private CapsuleCollider collider;
 
     private void Start()
     {
         beam = laser.gameObject.GetComponent<LineRenderer>();
+        collider = GetComponent<CapsuleCollider>();
     }
 
     private void FixedUpdate()
@@ -33,7 +35,7 @@ public class Laser : MonoBehaviour
 
     private void Update()
     {
-        beam.SetPosition(1, new Vector3(0, 0, legnth));
+        UpdateLaser();
     }
 
     /// <summary>
@@ -48,6 +50,13 @@ public class Laser : MonoBehaviour
             //Debug.Log("Hit " + hit.transform.gameObject.name);
             legnth = hit.distance;
         }
+    }
+
+    private void UpdateLaser()
+    {
+        beam.SetPosition(1, new Vector3(0, 0, legnth));
+        collider.center = Vector3.forward * legnth / 2;
+        collider.height = legnth;
     }
 
     /// <summary>
