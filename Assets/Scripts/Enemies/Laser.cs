@@ -12,20 +12,22 @@ public class Laser : MonoBehaviour
      * Date Last Edited: 3/23/2021
      */
 
+    [Header("Laser Parameters")]
     public float legnth = 7f;
-    public float damage = 3f;
+    public float damage = 1f;
+    public float tickRate = .4f;
 
     [Header("Misc")]
     public GameObject laser;
     public LayerMask mask;
 
     private LineRenderer beam;
-    private CapsuleCollider collider;
+    private CapsuleCollider capsuleCollider;
 
     private void Start()
     {
         beam = laser.gameObject.GetComponent<LineRenderer>();
-        collider = GetComponent<CapsuleCollider>();
+        capsuleCollider = GetComponent<CapsuleCollider>();
     }
 
     private void FixedUpdate()
@@ -52,11 +54,37 @@ public class Laser : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Updates the laser's length and hitbox
+    /// </summary>
     private void UpdateLaser()
     {
         beam.SetPosition(1, new Vector3(0, 0, legnth));
-        collider.center = Vector3.forward * legnth / 2;
-        collider.height = legnth;
+        capsuleCollider.center = Vector3.forward * legnth / 2;
+        capsuleCollider.height = legnth;
+    }
+
+    /// <summary>
+    /// Detects when something enters the laser's collider
+    /// </summary>
+    /// <param name="other"></param>
+    private void OnTriggerStay(Collider other)
+    {
+        StartCoroutine(LaserCycle(other.gameObject));
+    }
+
+    /// <summary>
+    /// Deals damage to certain objects that need to take damage
+    /// </summary>
+    /// <param name="target"></param>
+    /// <returns></returns>
+    private IEnumerator LaserCycle(GameObject target)
+    {
+        if (target.CompareTag("Player") && !PlayerController.Instance.IsDashing)
+        {
+            PlayerHealth.Instance.Damage(damage);
+            yield return new WaitForSeconds(tickRate);
+        }
     }
 
     /// <summary>

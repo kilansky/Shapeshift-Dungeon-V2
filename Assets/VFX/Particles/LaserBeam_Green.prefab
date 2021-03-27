@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4851013556266650504}
   - component: {fileID: 4851013556266650506}
   - component: {fileID: 4851013556266650507}
-  m_Layer: 0
+  m_Layer: 1
   m_Name: Source
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4823,7 +4823,7 @@ GameObject:
   - component: {fileID: 4851013556672865650}
   - component: {fileID: 4851013556672865652}
   - component: {fileID: 4851013556672865653}
-  m_Layer: 0
+  m_Layer: 1
   m_Name: Sparks
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9577,7 +9577,7 @@ GameObject:
   - component: {fileID: 4851013556838653447}
   - component: {fileID: 1351586504006552022}
   - component: {fileID: 8296214725030848067}
-  m_Layer: 0
+  m_Layer: 1
   m_Name: LaserBeam_Green
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9615,11 +9615,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   legnth: 7
-  damage: 3
+  damage: 1
+  tickRate: 0.2
   laser: {fileID: 4851013557318947168}
   mask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1557
 --- !u!136 &8296214725030848067
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -9645,7 +9646,7 @@ GameObject:
   - component: {fileID: 4851013556856973005}
   - component: {fileID: 4851013556856973007}
   - component: {fileID: 4851013556856973004}
-  m_Layer: 0
+  m_Layer: 1
   m_Name: Beams
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14398,7 +14399,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4851013557318947171}
   - component: {fileID: 4851013557318947170}
-  m_Layer: 0
+  m_Layer: 1
   m_Name: Laser
   m_TagString: Untagged
   m_Icon: {fileID: 0}
