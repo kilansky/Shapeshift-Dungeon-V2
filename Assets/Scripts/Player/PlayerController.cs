@@ -75,6 +75,7 @@ public class PlayerController : SingletonPattern<PlayerController>
     public bool touchingItem = false; //Variable to track if the player is currently touching an item or not
     public bool pickupItem = false; //Variable to pick up the item
 
+    //Variables that keep track of the amount of times that a stat was upgraded
     public int StatMaxHealthCount {get; set;}
     public int StatAttackCount {get; set;}
     public int StatSpeedCount {get; set;}
