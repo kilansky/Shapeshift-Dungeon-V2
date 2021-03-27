@@ -137,6 +137,8 @@ public class PlayerHealth : SingletonPattern<PlayerHealth>, IDamageable
     //Game is over, display game over screen and level review
     public virtual void Kill()
     {
+        AnalyticsEvents.Instance.PlayerDied(); //Send Player Died Analytics Event
+        AnalyticsEvents.Instance.ItemsOnDeath(); //Send Items On Death Analytics Event
         HUDController.Instance.ShowGameOver();
     }
 

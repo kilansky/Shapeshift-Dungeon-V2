@@ -60,7 +60,7 @@ public class MonsterSpawner : SingletonPattern<MonsterSpawner>
         {
             monstersInRoom--;
             monstersSpawned--;
-            SpawnMonsters();
+            //SpawnMonsters();
             Debug.Log("Attempted to spawn a monster to replace one that died from killbox");
         }
     }
@@ -100,13 +100,10 @@ public class MonsterSpawner : SingletonPattern<MonsterSpawner>
         {
             monstersKilled = 0;
             monstersSpawned = 0;
-            Debug.Log("All Monsters Killed, Display Rewards");
-            //ROOM CLEARED, TRIGGER ROOM REWARDS <----------------------------------- !!
+
             floorCleared = true;
-            
-            //HUDController.Instance.ShowLevelReviewPanel(); //Show the level review panel
-            //LevelManager.Instance.LoadShops();
-            PedestalManager.Instance.LoadPedestals();
+            PedestalManager.Instance.LoadPedestals(); //Activate the item pedestals
+            AnalyticsEvents.Instance.FloorCompleted(); //Send Floor Completed Analytics Event
         }
     }
 

@@ -9,10 +9,12 @@ public class StatPotionPanel : MonoBehaviour
 
     public void IncreaseMaxHealth()
     {
-        Debug.Log("Increase Max Health");
         PlayerHealth.Instance.IncreaseMaxHealth(5);
         PlayerController.Instance.StatMaxHealthCount++;
+
         HUDController.Instance.HideStatPotionPanel();
+
+        AnalyticsEvents.Instance.StatUpgraded("Health"); //Send Stat Upgraded Analytics Event
     }
 
     public void IncreaseAttack()
@@ -31,7 +33,7 @@ public class StatPotionPanel : MonoBehaviour
 
         HUDController.Instance.HideStatPotionPanel(); //Hides the stat potion panel
 
-
+        AnalyticsEvents.Instance.StatUpgraded("Attack"); //Send Stat Upgraded Analytics Event
 
         //(float)Math.Round(finalValue, 1); Rounds the decimal to 1 decimal place
 
@@ -58,6 +60,8 @@ public class StatPotionPanel : MonoBehaviour
         PlayerController.Instance.StatSpeedCount++;
 
         HUDController.Instance.HideStatPotionPanel();
+
+        AnalyticsEvents.Instance.StatUpgraded("Speed"); //Send Stat Upgraded Analytics Event
     }
 
     /// <summary>
@@ -67,7 +71,7 @@ public class StatPotionPanel : MonoBehaviour
     public void displayPercentIncrease()
     {
         //Attack Stat
-        
+
 
 
         //Speed Stat
