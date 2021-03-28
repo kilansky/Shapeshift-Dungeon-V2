@@ -56,6 +56,10 @@ public class PlayerController : SingletonPattern<PlayerController>
     [Header("Input Timing")]
     public float earlyInputTimeAllowance = 0.25f;
 
+    [Header("Mouse Aiming")]
+    public Transform targetTransform;
+    public LayerMask mouseAimMask;
+
     [Header("Object References")]
     public GameObject slashHitbox; //GameObject to hold slash attack hitbox
     public GameObject thrustHitbox; //GameObject to hold thrust attack hitbox
@@ -71,6 +75,7 @@ public class PlayerController : SingletonPattern<PlayerController>
     public bool touchingItem = false; //Variable to track if the player is currently touching an item or not
     public bool pickupItem = false; //Variable to pick up the item
 
+    //Variables that keep track of the amount of times that a stat was upgraded
     public int StatMaxHealthCount {get; set;}
     public int StatAttackCount {get; set;}
     public int StatSpeedCount {get; set;}
@@ -89,6 +94,7 @@ public class PlayerController : SingletonPattern<PlayerController>
     private Quaternion lastTargetRotation;
     private Queue<ButtonInput> inputQueue = new Queue<ButtonInput>();
     private ButtonInput newInput = new ButtonInput();
+    private Vector2 mouseAimPosition;
     private float currMoveSpeed; //the current move speed of the player
     private float moveVelocity; //based on controller movement input, used for walk/run blending
     private int attackComboState = 0; //0 = not attacking, 1 = attack1, 2 = attack2, 3 = attack3
@@ -152,6 +158,10 @@ public class PlayerController : SingletonPattern<PlayerController>
         MovePlayer();
         RotatePlayer();
         AnimatePlayer();
+
+        //Set mouse target pos if using M&K
+        if (GetComponent<PlayerInput>().currentControlScheme == "Keyboard&Mouse")
+            SetMouseTargetPosition();
 
         /*
         //Set whether the player can dash attack after a dash
@@ -261,6 +271,17 @@ public class PlayerController : SingletonPattern<PlayerController>
             controller.Move(movementVector * currMoveSpeed * Time.deltaTime);
         else
             controller.Move(transform.forward * currMoveSpeed * Time.deltaTime);
+    }
+
+    private void SetMouseTargetPosition()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(mouseAimPosition);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity, mouseAimMask))
+        {
+            targetTransform.position = hit.point;
+        }
     }
 
     private void RotatePlayer()
@@ -455,6 +476,16 @@ public class PlayerController : SingletonPattern<PlayerController>
             }
         }
     }
+
+    //Mouse Aiming Screen Position
+    public void SetMousePosition(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            mouseAimPosition = context.ReadValue<Vector2>();
+        }
+    }
+
 
     //---------------------------------------------------------------------------
     //-----------------------------INPUT ACTIVATION------------------------------

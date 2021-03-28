@@ -52,7 +52,7 @@ public class AnalyticsEvents : SingletonPattern<AnalyticsEvents>
 
         AnalyticsResult analyticsResult = Analytics.CustomEvent("Floor_Completed",
             new Dictionary<string, object> { { "Map_Name", mapName },
-            { "Floor_#", floorNum }, { "Player_ID", playerID } });
+            { "Floor_Num", floorNum }, { "Player_ID", playerID } });
 
         Debug.Log("FloorCompleted analyticsResult: " + analyticsResult);
     }
@@ -85,7 +85,7 @@ public class AnalyticsEvents : SingletonPattern<AnalyticsEvents>
 
         AnalyticsResult analyticsResult = Analytics.CustomEvent("Player_Died",
             new Dictionary<string, object> { { "Player_ID", playerID },
-            { "Floor_#", floorNum }, { "Map_Name", mapName },
+            { "Floor_Num", floorNum }, { "Map_Name", mapName },
             { "Health_Potions", potionCount }, { "Health_Upgrades", healthUpgrades },
             { "Attack_Upgrades", attackUpgrades }, { "Speed_Upgrades", speedUpgrades },
             { "Run_Time", runTime } });
@@ -108,7 +108,7 @@ public class AnalyticsEvents : SingletonPattern<AnalyticsEvents>
 
         AnalyticsResult analyticsResult = Analytics.CustomEvent("Items_On_Death",
             new Dictionary<string, object> { { "Player_ID", playerID },
-            { "Floor_#", floorNum }, { "Special_Item", specialItem },
+            { "Floor_Num", floorNum }, { "Special_Item", specialItem },
             { "Head_Item", headItem }, { "Torso_Item", torsoItem },
             { "Foot_Item", footItem }, { "Pocket1_Item", pocket1Item },
             { "Pocket2_Item", pocket2Item } });

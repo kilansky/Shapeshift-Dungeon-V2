@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4851013556266650504}
   - component: {fileID: 4851013556266650506}
   - component: {fileID: 4851013556266650507}
-  m_Layer: 0
+  m_Layer: 1
   m_Name: Source
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4851013556266650505}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.5}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4851013556838653447}
@@ -4823,7 +4823,7 @@ GameObject:
   - component: {fileID: 4851013556672865650}
   - component: {fileID: 4851013556672865652}
   - component: {fileID: 4851013556672865653}
-  m_Layer: 0
+  m_Layer: 1
   m_Name: Sparks
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4838,7 +4838,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4851013556672865651}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.5}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4851013556838653447}
@@ -9575,7 +9575,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4851013556838653447}
-  m_Layer: 0
+  - component: {fileID: 1351586504006552022}
+  - component: {fileID: 8296214725030848067}
+  m_Layer: 1
   m_Name: LaserBeam_Green
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9600,6 +9602,39 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1351586504006552022
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4851013556838653444}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa3b6992cd9ea6e458a57849e470d1c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  legnth: 7
+  damage: 1
+  tickRate: 0.2
+  laser: {fileID: 4851013557318947168}
+  mask:
+    serializedVersion: 2
+    m_Bits: 1557
+--- !u!136 &8296214725030848067
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4851013556838653444}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Radius: 0.25
+  m_Height: 7
+  m_Direction: 2
+  m_Center: {x: 0, y: 0, z: 3.5}
 --- !u!1 &4851013556856973002
 GameObject:
   m_ObjectHideFlags: 0
@@ -9611,7 +9646,7 @@ GameObject:
   - component: {fileID: 4851013556856973005}
   - component: {fileID: 4851013556856973007}
   - component: {fileID: 4851013556856973004}
-  m_Layer: 0
+  m_Layer: 1
   m_Name: Beams
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9626,7 +9661,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4851013556856973002}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.75}
+  m_LocalPosition: {x: 0, y: 0, z: 0.25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4851013556838653447}
@@ -14364,7 +14399,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4851013557318947171}
   - component: {fileID: 4851013557318947170}
-  m_Layer: 0
+  m_Layer: 1
   m_Name: Laser
   m_TagString: Untagged
   m_Icon: {fileID: 0}
