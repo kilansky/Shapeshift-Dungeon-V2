@@ -201,7 +201,7 @@ public class PlayerController : SingletonPattern<PlayerController>
 
         //Check if player is currently performing an action
         //If not, attempt to activate the next input in the queue
-        if (!IsDashing && !IsAttacking && !IsCharging && !IsChargeAttacking && !IsUsingPotion && !IsUsingSpecial || IsAttacking && !IsCharging)
+        if (!IsAttacking && !IsCharging && !IsChargeAttacking && !IsUsingPotion && !IsUsingSpecial || IsAttacking && !IsCharging)
         {
             float timePassedSinceInput = Time.time - inputQueue.Peek().inputTime;
             //Debug.Log(timePassed + " seconds passed since button was input");
@@ -266,10 +266,17 @@ public class PlayerController : SingletonPattern<PlayerController>
 
         movementVector.y = vSpeed;
 
-        if(!isDashing)
-            controller.Move(movementVector * currMoveSpeed * Time.deltaTime);
-        else
+        //Set velocity based on highest value directional input
+        moveVelocity = Mathf.Abs(movementVector.x);
+        if (moveVelocity < Mathf.Abs(movementVector.z))
+            moveVelocity = Mathf.Abs(movementVector.z);
+
+        if (IsDashing)
             controller.Move(transform.forward * currMoveSpeed * Time.deltaTime);
+        else if (IsAttacking || IsChargeAttacking)
+            controller.Move(transform.forward * moveVelocity * currMoveSpeed * Time.deltaTime);
+        else
+            controller.Move(movementVector * currMoveSpeed * Time.deltaTime);
     }
 
     private void SetMouseTargetPosition()
