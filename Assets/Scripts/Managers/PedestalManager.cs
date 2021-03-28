@@ -22,7 +22,8 @@ public class PedestalManager : SingletonPattern<PedestalManager>
         Transform[] allChildrenCurrLevel = LevelManager.Instance.activeLevel.GetComponentsInChildren<Transform>(); //Puts all tiles into an array
         foreach (Transform tile in allChildrenCurrLevel) //Cycles through all tiles in the newly created array
         {
-            if (tile.GetComponent<Tile>() && tile.GetComponent<Tile>().willBeShop) //If the object selected is a tile and has the shop boolean on
+            //if (tile.GetComponent<Tile>() && tile.GetComponent<Tile>().willBeShop) //If the object selected is a tile and has the shop boolean on
+            if(tile.GetComponent<Tile>() && tile.GetComponentInChildren<RewardIndicator>())
             {
                 GameObject pedestal = Instantiate(LevelManager.Instance.pedestalPrefab, tile.transform.position - new Vector3(0, 20, 0), new Quaternion(0, 0, 0, 0)); //Instantiate an item pedestal
                 pedestals.Add(pedestal);

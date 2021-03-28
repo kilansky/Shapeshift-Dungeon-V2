@@ -11,7 +11,8 @@ GameObject:
   - component: {fileID: 417615678019576321}
   - component: {fileID: 3631151076540067236}
   - component: {fileID: 1549387683810400622}
-  m_Layer: 11
+  - component: {fileID: 7401504432552034395}
+  m_Layer: 0
   m_Name: Red Crystal
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -80,6 +81,19 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!65 &7401504432552034395
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1044970987093620923}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.023264294, y: 0.10000001, z: 0.0059760567}
+  m_Center: {x: 0.0005646012, y: 0.059999995, z: -0.0005300164}
 --- !u!1 &2523219302539485698
 GameObject:
   m_ObjectHideFlags: 0
@@ -90,7 +104,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7127418958132021134}
   - component: {fileID: 2119456501289907624}
-  m_Layer: 11
+  m_Layer: 0
   m_Name: Point Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}

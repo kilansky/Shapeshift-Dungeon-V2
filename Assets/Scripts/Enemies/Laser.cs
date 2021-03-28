@@ -12,6 +12,81 @@ public class Laser : MonoBehaviour
      * Date Last Edited: 3/23/2021
      */
 
+    [Header("Laser Parameters")]
+    public float legnth = 7f;
+    public float damage = 1f;
+    public float tickRate = .4f;
+
+    [Header("Misc")]
+    public GameObject laser;
+    public LayerMask mask;
+
+    private LineRenderer beam;
+    private CapsuleCollider capsuleCollider;
+
+    private void Start()
+    {
+        beam = laser.gameObject.GetComponent<LineRenderer>();
+        capsuleCollider = GetComponent<CapsuleCollider>();
+    }
+
+    private void FixedUpdate()
+    {
+        SetLaserLength();
+    }
+
+    private void Update()
+    {
+        UpdateLaser();
+    }
+
+    /// <summary>
+    /// Shoots a raycast to determine the length of the laser
+    /// </summary>
+    private void SetLaserLength()
+    {
+        RaycastHit hit;
+
+        if(Physics.Raycast(laser.transform.position, laser.transform.TransformDirection(Vector3.forward), out hit, Mathf.Infinity, mask))
+        {
+            //Debug.Log("Hit " + hit.transform.gameObject.name);
+            legnth = hit.distance;
+        }
+    }
+
+    /// <summary>
+    /// Updates the laser's length and hitbox
+    /// </summary>
+    private void UpdateLaser()
+    {
+        beam.SetPosition(1, new Vector3(0, 0, legnth));
+        capsuleCollider.center = Vector3.forward * legnth / 2;
+        capsuleCollider.height = legnth;
+    }
+
+    /// <summary>
+    /// Detects when something enters the laser's collider
+    /// </summary>
+    /// <param name="other"></param>
+    private void OnTriggerStay(Collider other)
+    {
+        StartCoroutine(LaserCycle(other.gameObject));
+    }
+
+    /// <summary>
+    /// Deals damage to certain objects that need to take damage
+    /// </summary>
+    /// <param name="target"></param>
+    /// <returns></returns>
+    private IEnumerator LaserCycle(GameObject target)
+    {
+        if (target.CompareTag("Player") && !PlayerController.Instance.IsDashing)
+        {
+            PlayerHealth.Instance.Damage(damage);
+            yield return new WaitForSeconds(tickRate);
+        }
+    }
+
     /// <summary>
     /// Sets the scales of all the vfx effects based on a given percentage
     /// </summary>
