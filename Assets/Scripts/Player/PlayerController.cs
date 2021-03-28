@@ -19,7 +19,6 @@ public class PlayerController : SingletonPattern<PlayerController>
     public PlayerStats baseMoveSpeed; //Variable for getting the move speed stat from ItemsEquipment
     public float rotateSpeed = 12f;
     public float dashRotateSpeed = 4f;
-    public float chargeRotateSpeed = 4f;
 
     [Header("Dash Stats")]
     public PlayerStats dashSpeed; //Dash Speed from ItemsEquipment for Dash Speed
@@ -57,7 +56,7 @@ public class PlayerController : SingletonPattern<PlayerController>
     public float earlyInputTimeAllowance = 0.25f;
 
     [Header("Mouse Aiming")]
-    public Transform targetTransform;
+    public Transform mouseTargetPoint;
     public LayerMask mouseAimMask;
 
     [Header("Object References")]
@@ -280,53 +279,44 @@ public class PlayerController : SingletonPattern<PlayerController>
 
         if (Physics.Raycast(ray, out hit, Mathf.Infinity, mouseAimMask))
         {
-            targetTransform.position = hit.point;
+            mouseTargetPoint.position = hit.point;
         }
     }
 
     private void RotatePlayer()
     {
-        //If NOT in attack3 state of the combo
-        if (attackComboState != 3)
+        //Smoothly Rotate Character in movement direction (if moving)
+        if (Mathf.Abs(movementVector.x) > 0 || Mathf.Abs(movementVector.z) > 0)
         {
-            //Smoothly Rotate Character in movement direction (if moving)
-            if (Mathf.Abs(movementVector.x) > 0 || Mathf.Abs(movementVector.z) > 0)
-            {
-                Vector3 rotationVector = new Vector3(movementVector.x, 0, movementVector.z);
-                Quaternion targetRotation = Quaternion.LookRotation(rotationVector);
+            Vector3 rotationVector = new Vector3(movementVector.x, 0, movementVector.z);
+            Quaternion targetRotation = Quaternion.LookRotation(rotationVector);
 
-                //Change rotation speed based on player state 
-                float rotSpeed = rotateSpeed;
-                if (IsCharging)
-                    rotSpeed = chargeRotateSpeed;
+            //Change rotation speed based on player state 
+            float rotSpeed = rotateSpeed;
 
-                if (IsDashing)
-                    rotSpeed = dashRotateSpeed;
+            if (IsDashing)
+                rotSpeed = dashRotateSpeed;
 
-                //Smoothly Rotate Player
-                lastTargetRotation = Quaternion.Slerp(transform.rotation, targetRotation, rotSpeed * Time.deltaTime);
-                transform.rotation = lastTargetRotation;
-            }
+            //Smoothly Rotate Player
+            lastTargetRotation = Quaternion.Slerp(transform.rotation, targetRotation, rotSpeed * Time.deltaTime);
+            transform.rotation = lastTargetRotation;
+        }
 
-            /*
-            //Rotate towards the nearest enemy while performing the attack combo
-            if (isAttacking && attackComboState != 3)
-            {
-                //Check if there are any monsters in the scene
-                if (GameObject.FindGameObjectWithTag("Monster"))
-                {
-                    //Check if there is a monster within targetMonsterDist of the player
-                    Transform closestMonster = GetClosestMonster();
-                    if (Vector3.Distance(transform.position, closestMonster.position) < targetMonsterDist)
-                    {
-                        //Smoothly Rotate Character in direction of nearest monster
-                        Vector3 targetPoint = new Vector3(-closestMonster.position.x, 0, -closestMonster.position.z) - new Vector3(transform.position.x, 0, transform.position.z);
-                        Quaternion targetRotation = Quaternion.LookRotation(targetPoint);
-                        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotateSpeed * Time.deltaTime);
-                    }
-                }
-            }
-            */
+        //Rotate player towards mouse position to attack if using Mouse & Keyboard
+        if ((IsAttacking || IsCharging) && GetComponent<PlayerInput>().currentControlScheme == "Keyboard&Mouse")
+        {
+            //Rotate Character in direction of mouse position
+            Vector3 targetPoint = new Vector3(mouseTargetPoint.position.x, 0, mouseTargetPoint.position.z) - new Vector3(transform.position.x, 0, transform.position.z);
+            Quaternion targetRotation = Quaternion.LookRotation(targetPoint);
+            transform.rotation = targetRotation;
+        }
+        //Rotate player towards joystick directions to attack if using a Controller
+        else if ((IsAttacking || IsCharging) && GetComponent<PlayerInput>().currentControlScheme == "Keyboard&Mouse")
+        {
+            //Rotate Character in direction of joystick direction
+            Vector3 rotationVector = new Vector3(movementVector.x, 0, movementVector.z);
+            Quaternion targetRotation = Quaternion.LookRotation(rotationVector);
+            transform.rotation = targetRotation;
         }
     }
 
@@ -831,6 +821,15 @@ public class PlayerController : SingletonPattern<PlayerController>
     /// AHL - 2/22/21
     /// While the player is inside the Trigger of an object it will check if they are still touching the object so it can be picked up with the associated action button
     /// </summary>
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Gem")
+        {
+            PlayerGems.Instance.AddGems(1);
+            Destroy(other.gameObject);
+        }
+    }
 
     private void OnTriggerStay(Collider other)
     {
