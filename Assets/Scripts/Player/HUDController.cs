@@ -22,7 +22,8 @@ public class HUDController : SingletonPattern<HUDController>
 {
     [Header("Health UI")]
     public GameObject healthBar;
-    public Image fillBar;
+    public Image healthBarFill;
+    public Sprite[] healthBarBackgrounds = new Sprite[5];
     public float healthLerpSpeed;
     public TextMeshProUGUI maxHealthText;
     public TextMeshProUGUI currentHealthText;
@@ -46,7 +47,7 @@ public class HUDController : SingletonPattern<HUDController>
     [Header("Special Item Panel")]
     public UIPanel specialItemPanel;
     public Image speicalItemIcon;
-    public Slider speicalChargeBar;
+    public Image chargeBarFill;
 
     [Header("Stat Potion Panel")]
     public GameObject statPotionPanel;
@@ -170,17 +171,41 @@ public class HUDController : SingletonPattern<HUDController>
     {
         maxHealthText.text = maxHealth.ToString("0");
         currentHealthText.text = currHealth.ToString("0");
+        SetHealthBarBackground(currHealth, maxHealth);
 
-        float fillFromValue = fillBar.fillAmount;
+        float fillFromValue = healthBarFill.fillAmount;
         float fillToValue = currHealth / maxHealth;
         float t = 0;
         while (t <= 1)
         {
-            fillBar.fillAmount = Mathf.Lerp(fillFromValue, fillToValue, t);
+            healthBarFill.fillAmount = Mathf.Lerp(fillFromValue, fillToValue, t);
             t += Time.deltaTime * healthLerpSpeed;
             yield return new WaitForEndOfFrame();
         }
-        fillBar.fillAmount = fillToValue;
+        healthBarFill.fillAmount = fillToValue;
+    }
+
+    //Sets the damaged condition of the health bar based on the current health value
+    public void SetHealthBarBackground(float currHealth, float maxHealth)
+    {
+        int i = healthBarBackgrounds.Length - 1;
+        foreach (Sprite healthBarSprite in healthBarBackgrounds)
+        {
+            //With 5 health bar backgrounds & 30 max health at start:
+            //index i starts at 4, loop runs 5 times
+            //1: >= (30/4)*4=30     - undamaged
+            //2: >= (30/4)*3=22.5   - damageBar1
+            //3: >= (30/4)*2=15     - damageBar2
+            //4: >= (30/4)*1=7.5    - damageBar3
+            //5: >= (30/4)*0=0      - damageBar4
+            if (currHealth >= (maxHealth / (healthBarBackgrounds.Length-1)) * i)
+            {
+                healthBar.GetComponent<Image>().sprite = healthBarSprite;
+                return;
+            }
+
+            i--;
+        }
     }
 
     public void UpdateGemCount(int gemCount)
@@ -190,19 +215,29 @@ public class HUDController : SingletonPattern<HUDController>
 
     public void UpdateSpecialCharge()
     {
-        speicalChargeBar.maxValue = PlayerController.Instance.specialCooldownTime.Value;
-        speicalChargeBar.value = PlayerController.Instance.SpecialCharge;
+        float maxValue = PlayerController.Instance.specialCooldownTime.Value;
+        float value = PlayerController.Instance.SpecialCharge;
+
+        chargeBarFill.fillAmount = value / maxValue;
     }
 
     public void ShowHealthBar()
     {
         healthBar.SetActive(true);
-        potionsPanel.panel.SetActive(true);
     }
 
     public void HideHealthBar()
     {
         healthBar.SetActive(false);
+    }
+
+    public void ShowPotionsPanel()
+    {
+        potionsPanel.panel.SetActive(true);
+    }
+
+    public void HidePotionsPanel()
+    {
         potionsPanel.panel.SetActive(false);
     }
 
@@ -245,8 +280,7 @@ public class HUDController : SingletonPattern<HUDController>
     {
         specialItemPanel.panel.SetActive(true);
         speicalItemIcon.sprite = PlayerController.Instance.SpecialSlot.sprite;
-        speicalChargeBar.maxValue = PlayerController.Instance.specialCooldownTime.Value;
-        PlayerController.Instance.SpecialCharge = speicalChargeBar.maxValue;
+        PlayerController.Instance.SpecialCharge = PlayerController.Instance.specialCooldownTime.Value;
         UpdateSpecialCharge();
     }
 
