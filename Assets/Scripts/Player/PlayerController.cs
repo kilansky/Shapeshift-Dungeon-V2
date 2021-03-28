@@ -19,7 +19,6 @@ public class PlayerController : SingletonPattern<PlayerController>
     public PlayerStats baseMoveSpeed; //Variable for getting the move speed stat from ItemsEquipment
     public float rotateSpeed = 12f;
     public float dashRotateSpeed = 4f;
-    public float chargeRotateSpeed = 4f;
 
     [Header("Dash Stats")]
     public PlayerStats dashSpeed; //Dash Speed from ItemsEquipment for Dash Speed
@@ -56,14 +55,14 @@ public class PlayerController : SingletonPattern<PlayerController>
     [Header("Input Timing")]
     public float earlyInputTimeAllowance = 0.25f;
 
+    [Header("Mouse Aiming")]
+    public Transform mouseTargetPoint;
+    public LayerMask mouseAimMask;
+
     [Header("Object References")]
     public GameObject slashHitbox; //GameObject to hold slash attack hitbox
     public GameObject thrustHitbox; //GameObject to hold thrust attack hitbox
     public GameObject chargeArrow; //GameObject to hold the arrow underneath the player during charge attacks
-
-    //Properties for player's current move & attack values
-    public float CurrMoveSpeed { get; set; }
-    public float CurrAttackDamage { get; set; }
 
     [Header("Items")]
     public ItemsEquipment SpecialSlot; //Special Item slot
@@ -75,6 +74,7 @@ public class PlayerController : SingletonPattern<PlayerController>
     public bool touchingItem = false; //Variable to track if the player is currently touching an item or not
     public bool pickupItem = false; //Variable to pick up the item
 
+    //Variables that keep track of the amount of times that a stat was upgraded
     public int StatMaxHealthCount {get; set;}
     public int StatAttackCount {get; set;}
     public int StatSpeedCount {get; set;}
@@ -93,8 +93,11 @@ public class PlayerController : SingletonPattern<PlayerController>
     private Quaternion lastTargetRotation;
     private Queue<ButtonInput> inputQueue = new Queue<ButtonInput>();
     private ButtonInput newInput = new ButtonInput();
-    private int attackComboState = 0; //0 = not attacking, 1 = attack1, 2 = attack2, 3 = attack3
+    private Vector2 mouseAimPosition;
+    private float currMoveSpeed; //the current move speed of the player
     private float moveVelocity; //based on controller movement input, used for walk/run blending
+    private int attackComboState = 0; //0 = not attacking, 1 = attack1, 2 = attack2, 3 = attack3
+    private float currAttackDamage;
 
     //Allow/prevent input actions
     private bool canMove = true;
@@ -116,7 +119,8 @@ public class PlayerController : SingletonPattern<PlayerController>
     private bool isPaused = false;
 
     //Properties for player states, read only - can be read from other functions
-    public float MoveSpeed { get { return CurrMoveSpeed; } }        //Set to the current move speed of the player
+    public float MoveSpeed { get { return currMoveSpeed; } }        //Set to the current move speed of the player
+    public float CurrAttackDamage { get { return currAttackDamage; } } //Set to the current attack speed of the player
     public bool IsDashing { get { return isDashing; } }             //True during entire dash
     public bool IsAttacking { get { return isAttacking; } }         //True during combo attacks until hitbox is deactiviated
     //public bool IsDashAttacking { get { return isDashAttacking; } } //True during dash attack
@@ -130,7 +134,7 @@ public class PlayerController : SingletonPattern<PlayerController>
     {
         controller = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
-        CurrMoveSpeed = baseMoveSpeed.Value;
+        currMoveSpeed = baseMoveSpeed.Value;
         lastTargetRotation = Quaternion.identity;
         chargeArrow.SetActive(false);
         dashAttackWindow = dashAttackInputWindow;
@@ -154,6 +158,10 @@ public class PlayerController : SingletonPattern<PlayerController>
         RotatePlayer();
         AnimatePlayer();
 
+        //Set mouse target pos if using M&K
+        if (GetComponent<PlayerInput>().currentControlScheme == "Keyboard&Mouse")
+            SetMouseTargetPosition();
+
         /*
         //Set whether the player can dash attack after a dash
         if(canDashAttack)
@@ -168,7 +176,7 @@ public class PlayerController : SingletonPattern<PlayerController>
         */
 
         //Check if there are any new button inputs and attempt to activate them
-        if(inputQueue.Count > 0)
+        if (inputQueue.Count > 0)
             ActivateQueuedInputs();
 
         //If the input queue has two or more inputs, remove the first button press w/o performing it
@@ -193,7 +201,7 @@ public class PlayerController : SingletonPattern<PlayerController>
 
         //Check if player is currently performing an action
         //If not, attempt to activate the next input in the queue
-        if (!IsDashing && !IsAttacking && !IsCharging && !IsChargeAttacking && !IsUsingPotion && !IsUsingSpecial || IsAttacking && !IsCharging)
+        if (!IsAttacking && !IsCharging && !IsChargeAttacking && !IsUsingPotion && !IsUsingSpecial || IsAttacking && !IsCharging)
         {
             float timePassedSinceInput = Time.time - inputQueue.Peek().inputTime;
             //Debug.Log(timePassed + " seconds passed since button was input");
@@ -258,55 +266,64 @@ public class PlayerController : SingletonPattern<PlayerController>
 
         movementVector.y = vSpeed;
 
-        if(!isDashing)
-            controller.Move(movementVector * CurrMoveSpeed * Time.deltaTime);
+        //Set velocity based on highest value directional input
+        moveVelocity = Mathf.Abs(movementVector.x);
+        if (moveVelocity < Mathf.Abs(movementVector.z))
+            moveVelocity = Mathf.Abs(movementVector.z);
+
+        if (IsDashing)
+            controller.Move(transform.forward * currMoveSpeed * Time.deltaTime);
+        else if (IsAttacking || IsChargeAttacking)
+            controller.Move(transform.forward * moveVelocity * currMoveSpeed * Time.deltaTime);
         else
-            controller.Move(transform.forward * CurrMoveSpeed * Time.deltaTime);
+            controller.Move(movementVector * currMoveSpeed * Time.deltaTime);
+    }
+
+    private void SetMouseTargetPosition()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(mouseAimPosition);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity, mouseAimMask))
+        {
+            mouseTargetPoint.position = hit.point;
+        }
     }
 
     private void RotatePlayer()
     {
-        //If NOT in attack3 state of the combo
-        if (attackComboState != 3)
+        //Smoothly Rotate Character in movement direction (if moving)
+        if (Mathf.Abs(movementVector.x) > 0 || Mathf.Abs(movementVector.z) > 0)
         {
-            //Smoothly Rotate Character in movement direction (if moving)
-            if (Mathf.Abs(movementVector.x) > 0 || Mathf.Abs(movementVector.z) > 0)
-            {
-                Vector3 rotationVector = new Vector3(movementVector.x, 0, movementVector.z);
-                Quaternion targetRotation = Quaternion.LookRotation(rotationVector);
+            Vector3 rotationVector = new Vector3(movementVector.x, 0, movementVector.z);
+            Quaternion targetRotation = Quaternion.LookRotation(rotationVector);
 
-                //Change rotation speed based on player state 
-                float rotSpeed = rotateSpeed;
-                if (IsCharging)
-                    rotSpeed = chargeRotateSpeed;
+            //Change rotation speed based on player state 
+            float rotSpeed = rotateSpeed;
 
-                if (IsDashing)
-                    rotSpeed = dashRotateSpeed;
+            if (IsDashing)
+                rotSpeed = dashRotateSpeed;
 
-                //Smoothly Rotate Player
-                lastTargetRotation = Quaternion.Slerp(transform.rotation, targetRotation, rotSpeed * Time.deltaTime);
-                transform.rotation = lastTargetRotation;
-            }
+            //Smoothly Rotate Player
+            lastTargetRotation = Quaternion.Slerp(transform.rotation, targetRotation, rotSpeed * Time.deltaTime);
+            transform.rotation = lastTargetRotation;
+        }
 
-            /*
-            //Rotate towards the nearest enemy while performing the attack combo
-            if (isAttacking && attackComboState != 3)
-            {
-                //Check if there are any monsters in the scene
-                if (GameObject.FindGameObjectWithTag("Monster"))
-                {
-                    //Check if there is a monster within targetMonsterDist of the player
-                    Transform closestMonster = GetClosestMonster();
-                    if (Vector3.Distance(transform.position, closestMonster.position) < targetMonsterDist)
-                    {
-                        //Smoothly Rotate Character in direction of nearest monster
-                        Vector3 targetPoint = new Vector3(-closestMonster.position.x, 0, -closestMonster.position.z) - new Vector3(transform.position.x, 0, transform.position.z);
-                        Quaternion targetRotation = Quaternion.LookRotation(targetPoint);
-                        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotateSpeed * Time.deltaTime);
-                    }
-                }
-            }
-            */
+        //Rotate player towards mouse position to attack if using Mouse & Keyboard
+        if ((IsAttacking || IsCharging) && GetComponent<PlayerInput>().currentControlScheme == "Keyboard&Mouse")
+        {
+            //Rotate Character in direction of mouse position
+            Vector3 targetPoint = new Vector3(mouseTargetPoint.position.x, 0, mouseTargetPoint.position.z) - new Vector3(transform.position.x, 0, transform.position.z);
+            Quaternion targetRotation = Quaternion.LookRotation(targetPoint);
+            transform.rotation = targetRotation;
+        }
+        //Rotate player towards joystick directions to attack if using a Controller
+        else if ((IsAttacking || IsCharging) && GetComponent<PlayerInput>().currentControlScheme == "Keyboard&Mouse")
+        {
+            //Rotate Character in direction of joystick direction
+            Vector3 rotationVector = new Vector3(movementVector.x, 0, movementVector.z);
+            Quaternion targetRotation = Quaternion.LookRotation(rotationVector);
+            transform.rotation = targetRotation;
         }
     }
 
@@ -343,6 +360,12 @@ public class PlayerController : SingletonPattern<PlayerController>
 
         //Use blend tree for walk/run anims based on velocity
         animator.SetFloat("velocity", moveVelocity);
+    }
+
+    private bool IsGrounded()
+    {
+        float distToGround = GetComponent<CharacterController>().bounds.extents.y;
+        return Physics.Raycast(transform.position, -Vector3.up, distToGround + 0.1f);
     }
 
     //---------------------------------------------------------------------------
@@ -451,6 +474,16 @@ public class PlayerController : SingletonPattern<PlayerController>
         }
     }
 
+    //Mouse Aiming Screen Position
+    public void SetMousePosition(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            mouseAimPosition = context.ReadValue<Vector2>();
+        }
+    }
+
+
     //---------------------------------------------------------------------------
     //-----------------------------INPUT ACTIVATION------------------------------
     //---------------------------------------------------------------------------
@@ -467,14 +500,14 @@ public class PlayerController : SingletonPattern<PlayerController>
             isDashing = true;
             //canDashAttack = true;
             animator.SetBool("isDashing", true);
-            CurrMoveSpeed = dashSpeed.Value; //set dash speed
+            currMoveSpeed = dashSpeed.Value; //set dash speed
             PlayerHealth.Instance.isInvincible = true;
 
             yield return new WaitForSeconds(dashInvincibilityTime.Value); //wait to disable invincibility
             PlayerHealth.Instance.isInvincible = false;
 
             yield return new WaitForSeconds(dashTime.Value - dashInvincibilityTime.Value); //wait for end of dash & restore base speed
-            CurrMoveSpeed = baseMoveSpeed.Value;
+            currMoveSpeed = baseMoveSpeed.Value;
             isDashing = false;
             animator.SetBool("isDashing", false);
 
@@ -515,21 +548,21 @@ public class PlayerController : SingletonPattern<PlayerController>
         {
             case 1:
                 animator.SetBool("attack1", true);
-                CurrAttackDamage = baseAttackDamage.Value;
+                currAttackDamage = baseAttackDamage.Value;
                 break;
             case 2:
                 animator.SetBool("attack2", true);
-                CurrAttackDamage = baseAttackDamage.Value;
+                currAttackDamage = baseAttackDamage.Value;
                 break;
             case 3:
                 animator.SetBool("attack3", true);
-                CurrAttackDamage = baseAttackDamage.Value * attack3DmgModifier; //increase attack damage temporarily
+                currAttackDamage = baseAttackDamage.Value * attack3DmgModifier; //increase attack damage temporarily
                 break;
             default:
                 break;
         }
 
-        CurrMoveSpeed = baseMoveSpeed.Value / 5f; //slows movment while attacking
+        currMoveSpeed = baseMoveSpeed.Value / 5f; //slows movment while attacking
         //CineShake.Instance.Shake(5f, 0.2f);
     }
 
@@ -567,8 +600,8 @@ public class PlayerController : SingletonPattern<PlayerController>
         animator.SetBool("attack3", false);
         //animator.SetBool("isDashAttacking", false);
         DeactivateHitbox();
-        CurrAttackDamage = baseAttackDamage.Value;
-        CurrMoveSpeed = baseMoveSpeed.Value;
+        currAttackDamage = baseAttackDamage.Value;
+        currMoveSpeed = baseMoveSpeed.Value;
     }
 
     //Prevents the player from moving during Attack3 animation
@@ -622,7 +655,7 @@ public class PlayerController : SingletonPattern<PlayerController>
         isCharging = true;
         canChargeAttack = false;
         animator.SetBool("isCharging", true);
-        CurrMoveSpeed = 0; //prevent movement while charging
+        currMoveSpeed = 0; //prevent movement while charging
 
         //Charge input is held down
         chargeArrow.SetActive(true);
@@ -630,7 +663,7 @@ public class PlayerController : SingletonPattern<PlayerController>
         float chargeSpeed = minChargeSpeed;
         while (isCharging) //Increase charge speed & arrow UI until button is released
         {
-            CurrMoveSpeed = 0; //prevent movement while charging
+            currMoveSpeed = 0; //prevent movement while charging
             chargeSpeed += chargeRate.Value * Time.deltaTime;
             chargeSpeed = Mathf.Clamp(chargeSpeed, minChargeSpeed, maxChargeSpeed);
             //Debug.Log("chargeSpeed is: " + chargeSpeed);
@@ -647,7 +680,7 @@ public class PlayerController : SingletonPattern<PlayerController>
         chargeArrow.transform.localScale = new Vector3(1, 1, 1);
 
         Vector3 chargeVector = transform.forward;
-        CurrAttackDamage = baseAttackDamage.Value * chargeDmgModifier.Value; //increase attack damage temporarily
+        currAttackDamage = baseAttackDamage.Value * chargeDmgModifier.Value; //increase attack damage temporarily
         animator.SetBool("isCharging", false);
 
         //Charge forward & apply deceleration until speed is nearly zero
@@ -663,8 +696,8 @@ public class PlayerController : SingletonPattern<PlayerController>
         isChargeAttacking = false;
         yield return new WaitForSeconds(chargeCooldownTime); //wait for charge anim to play out before going back to normal
         canChargeAttack = true;
-        CurrMoveSpeed = baseMoveSpeed.Value;
-        CurrAttackDamage = baseAttackDamage.Value; //reset attack damage
+        currMoveSpeed = baseMoveSpeed.Value;
+        currAttackDamage = baseAttackDamage.Value; //reset attack damage
     }
 
     //Starts and Ends using Special item
@@ -796,6 +829,15 @@ public class PlayerController : SingletonPattern<PlayerController>
     /// While the player is inside the Trigger of an object it will check if they are still touching the object so it can be picked up with the associated action button
     /// </summary>
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Gem")
+        {
+            PlayerGems.Instance.AddGems(1);
+            Destroy(other.gameObject);
+        }
+    }
+
     private void OnTriggerStay(Collider other)
     {
         if (other.tag == "Item") //If the other gameobject is an item then check if the pickup button was pressed
@@ -806,6 +848,9 @@ public class PlayerController : SingletonPattern<PlayerController>
             if (pickupItem == true) //If the item can be picked up
             {
                 other.GetComponentInParent<Item>().Equip(this, this.GetComponent<PlayerHealth>()); //Equip the item to the player
+
+                AnalyticsEvents.Instance.ItemTaken(other.GetComponentInParent<Item>().item.ItemName); //Send Item Taken analytics event
+                
                 Destroy(other.gameObject); //Destroy the instance of the item in the gamescene
                 pickupItem = false; //Set pickup to false
 
