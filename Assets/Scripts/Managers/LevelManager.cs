@@ -10,7 +10,7 @@ public class LevelManager : SingletonPattern<LevelManager>
      * Programmer: Justin Donato
      * Description: Handles the mechanics of the level such as transitioning from one level to the next
      * Date Created: 2/11/2021
-     * Date Last Edited: 3/1/2021
+     * Date Last Edited: 3/29/2021
      */
 
     public GameObject activeLevel;
@@ -202,15 +202,30 @@ public class LevelManager : SingletonPattern<LevelManager>
         //UnityEditor.AI.NavMeshBuilder.BuildNavMesh(); // <<------- Editor Only :(
         GetComponent<NavMeshSurface>().BuildNavMesh();
 
-        foreach(Transform child in activeLevel.transform)
+        ToggleHazards(true);
+    }
+
+    /// <summary>
+    /// Allows the hazards on the map to be enabled or disabled
+    /// </summary>
+    /// <param name="enabled"></param>
+    public void ToggleHazards(bool enabled)
+    {
+        foreach (Transform child in activeLevel.transform)
         {
-            if(child.gameObject.GetComponent<LaserDispenser>())
+            if (child.gameObject.GetComponent<LaserDispenser>())
             {
-                child.gameObject.GetComponent<LaserDispenser>().BeginLaser();
+                child.gameObject.GetComponent<LaserDispenser>().ToggleLaser(enabled);
             }
-            if (child.gameObject.GetComponent<Dispenser>())
+
+            else if (child.gameObject.GetComponent<Dispenser>())
             {
-                child.gameObject.GetComponent<Dispenser>().BeginFiring();
+                child.gameObject.GetComponent<Dispenser>().ToggleFiring(enabled);
+            }
+
+            else if (child.gameObject.GetComponent<SpikeTrap>())
+            {
+                child.gameObject.GetComponent<SpikeTrap>().ToggleSpike(enabled);
             }
         }
     }
