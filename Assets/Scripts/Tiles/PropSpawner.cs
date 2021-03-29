@@ -33,8 +33,7 @@ public class PropSpawner : MonoBehaviour
                 propList.Add(child.gameObject);
             }
             if (propList.Count == 0)
-            { }
-                //Debug.LogError("No props in prop list!");
+                Debug.Log("No props in prop list!");
             else
                 propList[Random.Range(0, propList.Count)].SetActive(true);
         }

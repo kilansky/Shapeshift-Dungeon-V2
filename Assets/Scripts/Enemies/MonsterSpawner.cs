@@ -62,10 +62,11 @@ public class MonsterSpawner : SingletonPattern<MonsterSpawner>
     {
         if (!floorCleared)
         {
-            monstersInRoom--;
-            monstersSpawned--;
-            //SpawnMonsters();
-            Debug.Log("Attempted to spawn a monster to replace one that died from killbox");
+            //I would like this to update the number of monsters to spawn if one is not killed by the player,
+            //But getting this to work properly is hard. Free kills, woo. Hope it wasn't a gem monster...
+
+            //monstersInRoom--;
+            //monstersSpawned--;
         }
     }
 

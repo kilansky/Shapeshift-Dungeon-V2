@@ -28,6 +28,7 @@ public class HUDController : SingletonPattern<HUDController>
     public UIPanel potionsPanel;
 
     [Header("Gem Counter")]
+    public GameObject gemCounter;
     public TextMeshProUGUI gemCountText;
 
     [Header("Quick Hint Panel")]  
@@ -211,6 +212,16 @@ public class HUDController : SingletonPattern<HUDController>
 
             i--;
         }
+    }
+
+    public void ShowGemCounter()
+    {
+        gemCounter.SetActive(true);
+    }
+
+    public void HideGemCounter()
+    {
+        gemCounter.SetActive(false);
     }
 
     public void UpdateGemCount(int gemCount)
