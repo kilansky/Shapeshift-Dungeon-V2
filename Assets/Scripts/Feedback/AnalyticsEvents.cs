@@ -43,6 +43,20 @@ public class AnalyticsEvents : SingletonPattern<AnalyticsEvents>
         Debug.Log("ItemPurchased analyticsResult: " + analyticsResult);
     }
 
+    //Sends an analytics event when a floor is started
+    public void FloorStarted()
+    {
+        string mapName = LevelManager.Instance.currMapName;
+        int floorNum = LevelManager.Instance.currFloor;
+        int playerID = PlayerPrefs.GetInt("UserID");
+
+        AnalyticsResult analyticsResult = Analytics.CustomEvent("Floor_Started",
+            new Dictionary<string, object> { { "Map_Name", mapName },
+            { "Floor_Num", floorNum }, { "Player_ID", playerID } });
+
+        Debug.Log("FloorStarted analyticsResult: " + analyticsResult);
+    }
+
     //Sends an analytics event when a floor is completed
     public void FloorCompleted()
     {
