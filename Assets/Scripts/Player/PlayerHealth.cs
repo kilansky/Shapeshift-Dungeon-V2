@@ -150,6 +150,7 @@ public class PlayerHealth : SingletonPattern<PlayerHealth>, IDamageable
         AnalyticsEvents.Instance.PlayerDied(); //Send Player Died Analytics Event
         AnalyticsEvents.Instance.ItemsOnDeath(); //Send Items On Death Analytics Event
         HUDController.Instance.ShowGameOver();
+        Time.timeScale = 0;
     }
 
     //Makes the player invincible briefly
