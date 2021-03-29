@@ -15,7 +15,7 @@ public class SpawnPoint : MonoBehaviour
         if(isGemMonster)
         {
             //Set monster to gem monster
-            monster.GetComponent<GemMonster>().isGemMonster = true;
+            monster.GetComponent<GemMonster>().SetGemMonster();
             Debug.Log("Spawned a game monster! " + MonsterSpawner.Instance.gemMonstersToSpawn + " gem monsters left to spawn.");
         }        
        
