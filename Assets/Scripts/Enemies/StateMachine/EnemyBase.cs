@@ -332,6 +332,6 @@ public class EnemyBase : MonoBehaviour, IDamageable
     private void DropGem()
     {
         GameObject gem = Instantiate(gemPrefab, transform.position + new Vector3(0, 1, 0), transform.rotation);
-        //gem.GetComponent<Rigidbody>().AddForce(0, 50, 0);
+        gem.GetComponent<Rigidbody>().AddForce(0, 350, 0);
     }
 }
