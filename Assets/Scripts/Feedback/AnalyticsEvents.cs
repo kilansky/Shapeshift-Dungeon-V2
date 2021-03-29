@@ -34,11 +34,13 @@ public class AnalyticsEvents : SingletonPattern<AnalyticsEvents>
     }
 
     //Sends an analytics event when an item is purchased from a shop
-    public void ItemPurchased(string itemName, int itemCost)
+    public void ItemPurchased(string itemName)
     {
+        int floorNum = LevelManager.Instance.currFloor;
+
         AnalyticsResult analyticsResult = Analytics.CustomEvent("Item_Purchased",
             new Dictionary<string, object> { { "Item_Name", itemName },
-            { "Item_Cost", itemCost } });
+            { "Floor_Num", floorNum } });
 
         Debug.Log("ItemPurchased analyticsResult: " + analyticsResult);
     }

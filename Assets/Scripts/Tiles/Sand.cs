@@ -20,6 +20,7 @@ public class Sand : MonoBehaviour
         {
             //Reduce player speed
             Debug.Log("Player is on sand");
+            PlayerController.Instance.SandSpeedMod = 1 - (slowPercent / 100);
         }
     }
 
@@ -29,6 +30,7 @@ public class Sand : MonoBehaviour
         {
             //Set player speed back
             Debug.Log("Player has exited sand");
+            PlayerController.Instance.SandSpeedMod = 1;
         }
     }
 }
