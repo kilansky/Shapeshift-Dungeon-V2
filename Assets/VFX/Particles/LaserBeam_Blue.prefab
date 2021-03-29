@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6600484499884807074}
   - component: {fileID: 6600484499884807073}
-  m_Layer: 0
+  m_Layer: 1
   m_Name: Laser
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -151,7 +151,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6600484499919377320}
-  m_Layer: 0
+  - component: {fileID: 7140284517494178296}
+  - component: {fileID: 7533403553304664422}
+  m_Layer: 1
   m_Name: LaserBeam_Blue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -176,6 +178,39 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7140284517494178296
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6600484499919377321}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa3b6992cd9ea6e458a57849e470d1c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  legnth: 7
+  damage: 1
+  tickRate: 0.2
+  laser: {fileID: 6600484499884807075}
+  mask:
+    serializedVersion: 2
+    m_Bits: 1557
+--- !u!136 &7533403553304664422
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6600484499919377321}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Radius: 0.25
+  m_Height: 7
+  m_Direction: 2
+  m_Center: {x: 0, y: 0, z: 3.5}
 --- !u!1 &6600484500525866252
 GameObject:
   m_ObjectHideFlags: 0
@@ -187,7 +222,7 @@ GameObject:
   - component: {fileID: 6600484500525866251}
   - component: {fileID: 6600484500525866249}
   - component: {fileID: 6600484500525866250}
-  m_Layer: 0
+  m_Layer: 1
   m_Name: Beams
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -202,7 +237,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6600484500525866252}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.75}
+  m_LocalPosition: {x: 0, y: 0, z: 0.25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 6600484499919377320}
@@ -4941,7 +4976,7 @@ GameObject:
   - component: {fileID: 6600484501128290722}
   - component: {fileID: 6600484501128290720}
   - component: {fileID: 6600484501128290721}
-  m_Layer: 0
+  m_Layer: 1
   m_Name: Source
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4956,7 +4991,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6600484501128290723}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.5}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 6600484499919377320}
@@ -9753,7 +9788,7 @@ GameObject:
   - component: {fileID: 6600484501291770743}
   - component: {fileID: 6600484501291770741}
   - component: {fileID: 6600484501291770742}
-  m_Layer: 0
+  m_Layer: 1
   m_Name: Sparks
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9768,7 +9803,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6600484501291770744}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.5}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 6600484499919377320}

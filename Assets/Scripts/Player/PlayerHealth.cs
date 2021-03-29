@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 public class PlayerHealth : SingletonPattern<PlayerHealth>, IDamageable
 {
@@ -43,6 +42,9 @@ public class PlayerHealth : SingletonPattern<PlayerHealth>, IDamageable
             else
                 potionIcon.sprite = transparentSquare;
         }
+
+        if (GetPotionCount() == 0)
+            HUDController.Instance.HidePotionsPanel();
     }
 
     public virtual void Damage(float damage)
@@ -82,6 +84,10 @@ public class PlayerHealth : SingletonPattern<PlayerHealth>, IDamageable
                     potionSlots[i].sprite = transparentSquare;
                     Heal(15f + additionalPotionHealing.Value);
                     StartCoroutine(HUDController.Instance.HidePlayerDamagedOverlay());
+
+                    if(GetPotionCount() == 0)
+                        HUDController.Instance.HidePotionsPanel();
+
                     return;
                 }
             }
@@ -99,6 +105,10 @@ public class PlayerHealth : SingletonPattern<PlayerHealth>, IDamageable
             if (potionSlots[i].sprite == transparentSquare)
             {
                 potionSlots[i].sprite = healthPotionIcon;
+
+                if (GetPotionCount() > 0)
+                    HUDController.Instance.ShowPotionsPanel();
+
                 return;
             }
         }
@@ -137,6 +147,8 @@ public class PlayerHealth : SingletonPattern<PlayerHealth>, IDamageable
     //Game is over, display game over screen and level review
     public virtual void Kill()
     {
+        AnalyticsEvents.Instance.PlayerDied(); //Send Player Died Analytics Event
+        AnalyticsEvents.Instance.ItemsOnDeath(); //Send Items On Death Analytics Event
         HUDController.Instance.ShowGameOver();
     }
 

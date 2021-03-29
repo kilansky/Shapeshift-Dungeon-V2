@@ -8,9 +8,18 @@ public class SpawnPoint : MonoBehaviour
     public Vector3 offset;
 
     //Spawns a monster on a tile (called from MonsterSpawner)
-    public void SpawnMonster(GameObject monsterToSpawn)
+    public void SpawnMonster(GameObject monsterToSpawn/*, bool isGemMonster*/)
     {
-        Instantiate(monsterToSpawn, transform.position + offset, Quaternion.identity);
+        GameObject monster = Instantiate(monsterToSpawn, transform.position + offset, Quaternion.identity);
+
+        /*
+        if(isGemMonster)
+        {
+            //Set monster to gem monster
+            //Debug.Log("Spawned a game monster!");
+        }
+        */
+       
 
         if(spawnVFX != null)
             Instantiate(spawnVFX, transform.position, Quaternion.identity);
