@@ -5,7 +5,6 @@ using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using TMPro;
 
-
 [System.Serializable]
 public class UIPanel
 {
@@ -16,7 +15,6 @@ public class UIPanel
     public Sprite psButton;
     public Sprite xboxButton;
 }
-
 
 public class HUDController : SingletonPattern<HUDController>
 {
@@ -49,6 +47,10 @@ public class HUDController : SingletonPattern<HUDController>
     public Image speicalItemIcon;
     public Image chargeBarFill;
 
+    [Header("Equipment Panel")]
+    public GameObject equipmentPanel;
+    public Image[] equipmentSlots = new Image[5];
+
     [Header("Stat Potion Panel")]
     public GameObject statPotionPanel;
 
@@ -75,6 +77,9 @@ public class HUDController : SingletonPattern<HUDController>
     private PlayerController player;
     private PlayerInput playerInput;
     private string currentControlScheme;
+    private bool itemCollected = false;
+    private bool pocketSlot1Used = false;
+    private bool pocketSlot2Used = false;
 
     void Start()
     {
@@ -262,6 +267,60 @@ public class HUDController : SingletonPattern<HUDController>
         controlsPanel.SetActive(false);
     }
 
+    public void ShowEquipmentPanel()
+    {
+        equipmentPanel.SetActive(true);
+    }
+
+    public void HideEquipmentPanel()
+    {
+        equipmentPanel.SetActive(false);
+    }
+
+    //Sets the item icon of equipped items in the equipment panel
+    public void SetEquipmentPanelItem(int itemType, Sprite itemIcon)
+    {
+        if(!itemCollected && (itemType != 0 & itemType <= 4))
+        {
+            ShowEquipmentPanel();
+            itemCollected = true;
+        }
+
+        switch(itemType)
+        {
+            case 1:
+                equipmentSlots[0].sprite = itemIcon;
+                break;
+            case 2:
+                equipmentSlots[1].sprite = itemIcon;
+                break;
+            case 3:
+                equipmentSlots[2].sprite = itemIcon;
+                break;
+            case 4:
+                {
+                    if(!pocketSlot1Used)//first pocket item taken
+                    {
+                        equipmentSlots[3].sprite = itemIcon;
+                        pocketSlot1Used = true;
+                    }
+                    else if(!pocketSlot2Used)//second pocket item taken
+                    {
+                        equipmentSlots[4].sprite = itemIcon;
+                        pocketSlot2Used = true;
+                    }
+                    else//third+ pocket item taken
+                    {
+                        equipmentSlots[3].sprite = equipmentSlots[4].sprite;
+                        equipmentSlots[4].sprite = itemIcon;
+                    }
+                    break;
+                }
+            default:
+                break;
+        }
+    }
+
     public void ShowStatPotionPanel()
     {
         player.gameObject.GetComponent<PlayerInput>().SwitchCurrentActionMap("UI");
@@ -298,8 +357,11 @@ public class HUDController : SingletonPattern<HUDController>
 
     public void HideLevelReviewPanel()
     {
-        player.gameObject.GetComponent<PlayerInput>().SwitchCurrentActionMap("Player");
-        Time.timeScale = 1;
+        if (PlayerHealth.Instance.Health > 0)
+        {
+            player.gameObject.GetComponent<PlayerInput>().SwitchCurrentActionMap("Player");
+            Time.timeScale = 1;
+        }
         levelReviewPanel.SetActive(false);
     }
 
@@ -308,7 +370,7 @@ public class HUDController : SingletonPattern<HUDController>
         player.gameObject.GetComponent<PlayerInput>().SwitchCurrentActionMap("UI");
         gameOverScreen.SetActive(true);
         playerDamagedOverlay.SetActive(false);      
-        StartCoroutine(gameOverScreen.GetComponent<GameOver>().WaitToDisplayReview());
+        StartCoroutine(gameOverScreen.GetComponent<Buttons>().WaitToDisplayReview());
     }
 
     public void HideGameOver()

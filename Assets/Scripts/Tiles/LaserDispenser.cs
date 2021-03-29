@@ -16,24 +16,24 @@ public class LaserDispenser : MonoBehaviour
     public GameObject redLaser;
     public GameObject blueLaser;
     public GameObject greenLaser;
-
+    
     [Header("Attacking Variables")]
     public float timeOn = 1f;
     public float timeOff = 1f;
 
-    private Transform spawner;
-    private GameObject laser;
+    [Header("Pointers")]
+    public GameObject laserSpawnpoint;
+
+    public GameObject laser;
 
     private void Start()
     {
-        spawner = transform.GetChild(0);
-
-        BeginLaser();
+        //BeginLaser();
     }
 
     public void BeginLaser()
     {
-        laser = Instantiate(blueLaser, spawner.position, spawner.rotation, transform);
+        laser = Instantiate(blueLaser, laserSpawnpoint.transform.position, laserSpawnpoint.transform.rotation, transform);
         StartCoroutine(laserCycle());
     }
 

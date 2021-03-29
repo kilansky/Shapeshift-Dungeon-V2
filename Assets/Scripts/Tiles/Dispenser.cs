@@ -32,6 +32,11 @@ public class Dispenser : MonoBehaviour
             Debug.LogError("Charge time is greater than the rate of fire!");
             return;
         }
+        //StartCoroutine(AttackCycle());
+    }
+
+    public void BeginFiring()
+    {
         StartCoroutine(AttackCycle());
     }
 
