@@ -44,8 +44,6 @@ public class StatPotionPanel : MonoBehaviour
         //Math rounding the increase percents to 1 decimal place to appear on the panel by adjusting the text
         attackText.text = "Attack +" + (float)Math.Round(IncreasePercent, 1) + "%";
 
-        print("Math " + MathCalculation + "\n" + "Increase Value " + IncreaseValue + "\n" + "Increase Percent " + IncreasePercent);
-
         //Speed Stat
         //Math that is done to increase the stat at a decreasing rate, currently set to 1 / a quad root of the amount of times attack has increased.
         MathCalculation = 1f / Mathf.Pow((PlayerController.Instance.StatSpeedCount + 1), 1 / 4f);
