@@ -30,6 +30,7 @@ public class Item : MonoBehaviour
 
             else //If the player does have a special item then unequip their current one and equip the new one
             {
+                Instantiate(c.SpecialSlot.prefab, transform.position, transform.rotation);
                 c.SpecialSlot.prefab.GetComponent<Item>().Unequip(c, h);
                 c.SpecialSlot = this.item;
             }
@@ -43,6 +44,7 @@ public class Item : MonoBehaviour
 
             else //If the player does have a head item then unequip their current one and equip the new one
             {
+                Instantiate(c.HeadSlot.prefab, transform.position, transform.rotation);
                 c.HeadSlot.prefab.GetComponent<Item>().Unequip(c, h);
                 c.HeadSlot = this.item;
             }
@@ -56,6 +58,7 @@ public class Item : MonoBehaviour
 
             else //If the player does have a torso item then unequip their current one and equip the new one
             {
+                Instantiate(c.TorsoSlot.prefab, transform.position, transform.rotation);
                 c.TorsoSlot.prefab.GetComponent<Item>().Unequip(c, h);
                 c.TorsoSlot = this.item;
             }
@@ -69,6 +72,7 @@ public class Item : MonoBehaviour
 
             else //If the player does have a foot item then unequip their current one and equip the new one
             {
+                Instantiate(c.FootSlot.prefab, transform.position, transform.rotation);
                 c.FootSlot.prefab.GetComponent<Item>().Unequip(c, h);
                 c.FootSlot = this.item;
             }
