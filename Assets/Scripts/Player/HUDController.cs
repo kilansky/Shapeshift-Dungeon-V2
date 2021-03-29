@@ -280,7 +280,7 @@ public class HUDController : SingletonPattern<HUDController>
     //Sets the item icon of equipped items in the equipment panel
     public void SetEquipmentPanelItem(int itemType, Sprite itemIcon)
     {
-        if(!itemCollected)
+        if(!itemCollected && (itemType != 0 & itemType <= 4))
         {
             ShowEquipmentPanel();
             itemCollected = true;
