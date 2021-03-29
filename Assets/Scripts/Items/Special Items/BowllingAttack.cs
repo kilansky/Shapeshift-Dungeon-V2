@@ -19,10 +19,10 @@ public class BowllingAttack : MonoBehaviour
             other.GetComponent<EnemyBase>().Damage(damage);
     }
 
-    //Destroy when colliding with Environment Layer
+    //Destroy when colliding with Environment Layer or the Wall Layer
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.layer == 10)
+        if (collision.gameObject.layer == 10 || collision.gameObject.layer == 9)
             Destroy(gameObject);
     }
 
@@ -31,6 +31,5 @@ public class BowllingAttack : MonoBehaviour
     {
         //Every frame the bowling ball will move forward
         transform.Translate(Vector3.forward * speed * Time.deltaTime);
-        //Destroy(this.gameObject, destroyTime); //The bowling ball will be destroyed after a certain amount of time (destroy time)
     }
 }
