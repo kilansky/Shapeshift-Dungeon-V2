@@ -24,7 +24,7 @@ public class FloatingCrystal_MoveState : MoveState
         base.Enter();
         entity.SetVelocity(stateData.moveSpeed);
         
-        enemy.Patrol();
+        //enemy.Patrol();
     }
     public override void Exit()
     {

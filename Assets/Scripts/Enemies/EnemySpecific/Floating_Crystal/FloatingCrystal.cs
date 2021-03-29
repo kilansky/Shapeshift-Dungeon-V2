@@ -39,8 +39,10 @@ public class FloatingCrystal : EnemyBase
     public float chargeRate = 1f;
 
     public Vector3 walkPoint;
+    
     public bool walkPointSet;
-    public float walkPointRange = 15f;
+    public float walkPointRange = 20f;
+    public float rotateSpeed = 5f;
 
 
     public override void Awake()
@@ -70,7 +72,6 @@ public class FloatingCrystal : EnemyBase
         foreach (FloatingCrystal floatingCrystal in crystals)
         {
             Debug.Log("there are " + crystals.Length + " crystals in the scene");
-            //target = ;
         }
 
         //this line is what got rid of my NullReferenceExceptions
@@ -95,18 +96,27 @@ public class FloatingCrystal : EnemyBase
 
     public void Patrol()
     {
+        //walkPoint = Random.insideUnitSphere * walkPointRange;
+        /*walkPoint += transform.position;
+        NavMeshHit hit;
+        NavMesh.SamplePosition(walkPoint, out hit, walkPointRange, 1);
+        Vector3 finalPosition = hit.position;*/
+        //transform.Rotate(0, rotateSpeed, 0);
         //move to a walk point set in the scene
         if (!walkPointSet)
             SearchWalkPoint();
 
         if (walkPointSet)
         {
+            //set the destination to the walkpoint from searchwalkpoint
             agent.SetDestination(walkPoint);
             if (!agent.pathPending)
             {
+                //if you've reached your destination do something
                 if (agent.remainingDistance <= agent.stoppingDistance)
                 {
-                    //walkPointSet = true;
+                    walkPointSet = false;
+                    //if the agent doesn't have a path to a point, or they are stopped
                     if (!agent.hasPath || agent.velocity.sqrMagnitude == 0f)
                     {
                         walkPointSet = false;
@@ -123,22 +133,32 @@ public class FloatingCrystal : EnemyBase
     public void SearchWalkPoint()
     {
         //find a walk point after you've moved to one already
-        float randomZ = Random.Range(-walkPointRange, walkPointRange);
+        walkPoint = new Vector3(Random.insideUnitSphere.x * walkPointRange, transform.position.y, Random.insideUnitSphere.z * walkPointRange);
+        Debug.Log("my walkpoint is " + walkPoint);
+        walkPointSet = true;
+        
+        /*float randomZ = Random.Range(-walkPointRange, walkPointRange);
         float randomX = Random.Range(-walkPointRange, walkPointRange);
 
-        walkPoint = new Vector3(transform.position.x + randomX, transform.position.y, transform.position.z + randomZ);
+        //walkPoint = new Vector3(transform.position.x + randomX, transform.position.y, transform.position.z + randomZ);
         //walkPointSet = true;
-        Debug.Log("my walk point is " + walkPoint);
+        Debug.Log("my walk point is " + walkPoint);*/
 
         NavMeshHit hit;
         Vector3 finalPosition = Vector3.zero;
         if (NavMesh.SamplePosition(walkPoint, out hit, walkPointRange, 1))
         {
+            
             finalPosition = hit.position;
             walkPoint = finalPosition;
+            
+            //Debug.Log("walkpointset is " + walkPointSet);
+            //Debug.Log("i'm going to " + finalPosition);
+            
         }
+
         //may need a parameter for what is walkable ground or not
-        walkPointSet = true;
+        //walkPointSet = true;
 
         /*if (Physics.Raycast(walkPoint, -transform.up, 2f))
         {
