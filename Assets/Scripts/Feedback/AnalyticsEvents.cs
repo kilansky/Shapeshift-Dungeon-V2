@@ -34,13 +34,29 @@ public class AnalyticsEvents : SingletonPattern<AnalyticsEvents>
     }
 
     //Sends an analytics event when an item is purchased from a shop
-    public void ItemPurchased(string itemName, int itemCost)
+    public void ItemPurchased(string itemName)
     {
+        int floorNum = LevelManager.Instance.currFloor;
+
         AnalyticsResult analyticsResult = Analytics.CustomEvent("Item_Purchased",
             new Dictionary<string, object> { { "Item_Name", itemName },
-            { "Item_Cost", itemCost } });
+            { "Floor_Num", floorNum } });
 
         Debug.Log("ItemPurchased analyticsResult: " + analyticsResult);
+    }
+
+    //Sends an analytics event when a floor is started
+    public void FloorStarted()
+    {
+        string mapName = LevelManager.Instance.currMapName;
+        int floorNum = LevelManager.Instance.currFloor;
+        int playerID = PlayerPrefs.GetInt("UserID");
+
+        AnalyticsResult analyticsResult = Analytics.CustomEvent("Floor_Started",
+            new Dictionary<string, object> { { "Map_Name", mapName },
+            { "Floor_Num", floorNum }, { "Player_ID", playerID } });
+
+        Debug.Log("FloorStarted analyticsResult: " + analyticsResult);
     }
 
     //Sends an analytics event when a floor is completed
