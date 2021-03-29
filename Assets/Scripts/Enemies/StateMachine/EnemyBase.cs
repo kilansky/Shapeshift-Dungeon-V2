@@ -36,8 +36,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
     [HideInInspector] public float distanceToPlayer;
     [HideInInspector] public NavMeshAgent agent;
     [HideInInspector] public bool isStunned;
-    //Floating Skull charge rate
-    //public float chargeRate = 1f;
+    
     #endregion
 
     #region Getters and Setters
@@ -52,10 +51,6 @@ public class EnemyBase : MonoBehaviour, IDamageable
     #region Serialize Fields
     [SerializeField]
     public LayerMask whatIsPlayer;
-
-    //fireball is specific to floating skull
-    //[SerializeField]
-    //public GameObject fireball;
 
     [SerializeField]
     private Transform wallCheck;
@@ -73,7 +68,6 @@ public class EnemyBase : MonoBehaviour, IDamageable
     private Transform target;
     private Vector3 velocityWorkspace;
     
-    
     //private bool isAttacking = false;
     private bool stopMoving = false;
     private bool isInvincible = false;
@@ -83,8 +77,6 @@ public class EnemyBase : MonoBehaviour, IDamageable
     //protected bool canAttack = true;
     //protected bool isPlayerInMinAgroRange;
     //protected bool isPlayerInMinAttackRange;
-
-
     #endregion
 
     public virtual void Awake()
@@ -213,6 +205,33 @@ public class EnemyBase : MonoBehaviour, IDamageable
         //return Physics.CheckSphere(playerCheck.position, minAttackRange, entityData.whatIsPlayer);
     }
 
+    /*public virtual bool CheckInSightRange()
+    {
+        RaycastHit hit;
+        //FloatingCrystal[] crystals = FindObjectsOfType<FloatingCrystal>();
+
+        //draw a vector3 from crystals pos to target's pos
+        //need to define target
+        Vector3 direction = transform.position - target.transform.position;
+
+        Debug.DrawRay(firePointFront.transform.position, direction, Color.blue);
+
+        if (Physics.Raycast(firePointFront.transform.position, direction, out hit))
+        {
+            if (hit.transform.CompareTag("Crystal"))
+            {
+                //connect with the crystal
+                return true;
+            }
+            if (hit.transform.CompareTag("Player"))
+            {
+                //do damage to the player
+                return true;
+            }
+        }
+        return false;
+    }*/
+
     public virtual void Damage(float damage)
     {
         //start timer
@@ -285,6 +304,11 @@ public class EnemyBase : MonoBehaviour, IDamageable
         //transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
         #endregion
     }
+
+    /*public void Patrol()
+    {
+
+    }*/
 
     public virtual void Attack()
     {

@@ -7,6 +7,7 @@ using UnityEngine.AI;
 
 public class FloatingCrystal : EnemyBase
 {
+    //script contains all the states of the floating crystal
     public FloatingCrystal_IdleState idleState { get; private set; }
     public FloatingCrystal_MoveState moveState { get; private set; }
     public FloatingCrystal_PlayerDetected playerDetectedState { get; private set; }
@@ -28,11 +29,27 @@ public class FloatingCrystal : EnemyBase
     [SerializeField]
     private D_StunState stunStateData;
 
+    //firing positions of front and back lasers
     public Transform firePointFront;
     public Transform firePointBack;
+    //public Transform target;
 
     public GameObject laser;
+    //public GameObject crystal;
     public float chargeRate = 1f;
+
+    public Vector3 walkPoint;
+    public bool walkPointSet;
+    public float walkPointRange = 15f;
+
+
+    public override void Awake()
+    {
+        base.Awake();
+        //find any other crystals in the scene
+        //crystal = FindObjectsOfType<FloatingCrystal>().gameObject;
+    }
+
 
     public override void Start()
     {
@@ -44,6 +61,16 @@ public class FloatingCrystal : EnemyBase
         attackState = new FloatingCrystal_AttackState(this, stateMachine, "attack", /*firePoint,*/ attackStateData, this);
         lookForPlayerState = new FloatingCrystal_LookForPlayer(this, stateMachine, "lookForPlayer", lookForPlayerStateData, this);
         stunState = new FloatingCrystal_StunState(this, stateMachine, "stun", stunStateData, this);
+
+        //create an array of any crystals in the scene
+        FloatingCrystal[] crystals = FindObjectsOfType<FloatingCrystal>();
+
+        //set target to any other crystals position
+        foreach (FloatingCrystal floatingCrystal in crystals)
+        {
+            Debug.Log("there are " + crystals.Length + " crystals in the scene");
+            //target = ;
+        }
 
         //this line is what got rid of my NullReferenceExceptions
         //start the enemy in its move state
@@ -65,6 +92,64 @@ public class FloatingCrystal : EnemyBase
         }
     }
 
+    public void Patrol()
+    {
+        //move to a walk point set in the scene
+        if (!walkPointSet)
+            SearchWalkPoint();
+
+        if (walkPointSet)
+            agent.SetDestination(walkPoint);
+
+        Vector3 distanceToWalkPoint = transform.position - walkPoint;
+
+        if (distanceToWalkPoint.magnitude < 1f)
+            walkPointSet = false;
+    }
+
+    public void SearchWalkPoint()
+    {
+        //find a walk point after you've moved to one already
+        float randomZ = Random.Range(-walkPointRange, walkPointRange);
+        float randomX = Random.Range(-walkPointRange, walkPointRange);
+
+        walkPoint = new Vector3(transform.position.x + randomX, transform.position.y, transform.position.z + randomZ);
+
+        //may need a parameter for what is walkable ground or not
+        if(Physics.Raycast(walkPoint, -transform.up, 2f))
+        {
+            walkPointSet = true;
+        }
+    }
+
+    /*public virtual bool HaveLineOfSight()
+    {
+        //handles determining if two crystals have line of sight with one another
+        RaycastHit hit;
+        //FloatingCrystal[] crystals = FindObjectsOfType<FloatingCrystal>();
+
+        //draw a vector3 from crystals pos to target's pos
+        //need to define target
+        //Vector3 direction = target.transform.position - transform.position;
+
+        //Debug.DrawRay(firePointFront.transform.position, direction, Color.blue);
+
+        if (Physics.Raycast(firePointFront.transform.position, direction, out hit))
+        {
+            if (hit.transform.CompareTag("Crystal"))
+            {
+                //connect with the crystal
+                return true;
+            }
+            if (hit.transform.CompareTag("Player"))
+            {
+                //do damage to the player
+                return true;
+            }
+        }
+        return false;
+    }*/
+
     private void OnTriggerStay(Collider other)
     {
         if (other.CompareTag("KillBox"))
@@ -73,4 +158,5 @@ public class FloatingCrystal : EnemyBase
             Debug.Log("MONSTER TOUCHED KILLBOX");
         }
     }
+
 }

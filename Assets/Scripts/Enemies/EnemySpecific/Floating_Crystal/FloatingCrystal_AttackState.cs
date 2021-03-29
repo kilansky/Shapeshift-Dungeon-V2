@@ -33,14 +33,18 @@ public class FloatingCrystal_AttackState : AttackState
     {
         base.LogicUpdate();
         //TODO: add another if statement for if already attacking
-        if (enemy.CheckPlayerInMinAttackRange())
+        //if no other crystals in the room fire 2 beams from front
+        //and back that are a fixed length, and spin
+        TriggerAttack();
+
+        /*if (enemy.CheckPlayerInMinAttackRange())
         {
             TriggerAttack();
         }
         else
         {
             stateMachine.ChangeState(enemy.moveState);
-        }
+        }*/
     }
 
     public override void PhysicsUpdate()
@@ -52,5 +56,12 @@ public class FloatingCrystal_AttackState : AttackState
     {
         //canAttack = false;
         base.TriggerAttack();
+        enemy.Anim.SetBool("isAttacking", true);
+        //fire the lasers from the front and back
+        //GameObject laser = Instantiate(LaserBeam_Blue, firePointFront.transform.position, firePointFront.transform.rotation, transform);
+        //GameObject laser = Instantiate(LaserBeam_Blue, firePointBack.transform.position, firePointBack.transform.rotation, transform);
+
+        //rotate the crystal so it helicopters around the scene
+
     }
 }

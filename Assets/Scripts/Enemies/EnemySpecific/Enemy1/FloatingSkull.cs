@@ -8,6 +8,7 @@ using UnityEngine.AI;
 //add Idamageable later
 public class FloatingSkull : EnemyBase
 {
+    //this script contains all the states of the floating skull
     public FloatingSkull_IdleState idleState { get; private set; }
     public FloatingSkull_MoveState moveState { get; private set; }
     public FloatingSkull_PlayerDetected playerDetectedState { get; private set; }

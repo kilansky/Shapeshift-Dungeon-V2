@@ -29,6 +29,21 @@ public class FloatingCrystal_StunState : StunState
     public override void LogicUpdate()
     {
         base.LogicUpdate();
+
+        if (isStunTimeOver)
+        {
+            stateMachine.ChangeState(enemy.attackState);
+            /*if (other crystal alive)
+            {
+                //find and target crystal
+                stateMachine.ChangeState(enemy.moveState);
+            }
+            else
+            {
+                stateMachine.ChangeState(enemy.attackState);
+            }*/
+        }
+
     }
 
     public override void PhysicsUpdate()
