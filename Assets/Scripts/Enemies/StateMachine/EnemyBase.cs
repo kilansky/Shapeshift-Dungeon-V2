@@ -257,7 +257,9 @@ public class EnemyBase : MonoBehaviour, IDamageable
         //Update the monster count of the room
         MonsterSpawner.Instance.MonsterKilled();
         Instantiate(deathEffects, transform.position + new Vector3(0, 2, 0), Quaternion.identity);
-        DropGem();
+        
+        if(GetComponent<GemMonster>().isGemMonster)
+            DropGem();
 
         //Destroy self from root object 
         Destroy(transform.root.gameObject);
