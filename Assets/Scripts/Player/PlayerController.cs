@@ -64,6 +64,8 @@ public class PlayerController : SingletonPattern<PlayerController>
     [Header("Object References")]
     public GameObject slashHitbox; //GameObject to hold slash attack hitbox
     public GameObject thrustHitbox; //GameObject to hold thrust attack hitbox
+    public GameObject radialHitbox; //GameObject to hold radial attack hitbox
+    public GameObject swordImpactPoint; //GameObject to hold point of impact on third attack
     public GameObject chargeArrow; //GameObject to hold the arrow underneath the player during charge attacks
 
     [Header("Items")]
@@ -629,14 +631,63 @@ public class PlayerController : SingletonPattern<PlayerController>
                 if (showHitboxes)
                     slashHitbox.GetComponent<MeshRenderer>().enabled = true;
             }
-            else//activate thrust hitbox
+            else if (IsChargeAttacking)//activate thrust hitbox
             {
                 thrustHitbox.GetComponent<MeshCollider>().enabled = true;
 
                 if (showHitboxes)
                     thrustHitbox.GetComponent<MeshRenderer>().enabled = true;
             }
+            else//Activate radial hitbox - damage wave
+            {
+                thrustHitbox.GetComponent<MeshCollider>().enabled = true;
+
+                if (showHitboxes)
+                    thrustHitbox.GetComponent<MeshRenderer>().enabled = true;
+
+                StartCoroutine(ActivateRadialHitbox());
+            }
         }
+    }
+
+    //Scales a circular wave of damage to hit enemies in a radius
+    public IEnumerator ActivateRadialHitbox()
+    {
+        for (int i = 0; i < 1; i++)
+        {
+            yield return new WaitForEndOfFrame();
+        }
+        //Set starting position of damage radius to the impact point of the sword
+        radialHitbox.transform.position = new Vector3(swordImpactPoint.transform.position.x, radialHitbox.transform.position.y, swordImpactPoint.transform.position.z);
+
+        //Enable the hitbox
+        radialHitbox.GetComponent<SphereCollider>().enabled = true;
+        if (showHitboxes)
+            radialHitbox.GetComponent<MeshRenderer>().enabled = true;
+
+        //Lerp the damage wave to increase in scale over time
+        float attack3HitboxScale;
+        float hitboxOriginalScale = radialHitbox.transform.localScale.x;
+        float hitboxMinScale = radialHitbox.transform.localScale.x / 10;
+        float hitboxMaxScale = radialHitbox.transform.localScale.x * 8;
+        float timeElapsed = 0;
+        float duration = .25f;
+        while (timeElapsed < duration)
+        {
+            attack3HitboxScale = Mathf.Lerp(hitboxMinScale, hitboxMaxScale, timeElapsed / duration);
+            radialHitbox.transform.localScale = new Vector3(attack3HitboxScale, 1, attack3HitboxScale);
+
+            timeElapsed += Time.deltaTime;
+            yield return new WaitForEndOfFrame();
+        }
+
+        //disable the hitbox
+        radialHitbox.GetComponent<SphereCollider>().enabled = false;
+        if (showHitboxes)
+            radialHitbox.GetComponent<MeshRenderer>().enabled = false;
+
+        //reset the scale
+        radialHitbox.transform.localScale = new Vector3(hitboxOriginalScale, 1, hitboxOriginalScale); //reset scale
     }
 
     //Disable the sword hitbox - called from attack animation event
