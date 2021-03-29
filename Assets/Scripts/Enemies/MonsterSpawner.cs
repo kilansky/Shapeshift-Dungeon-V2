@@ -8,6 +8,7 @@ public class FloorSpawnInfo
     public GameObject[] monsters; //the list of potential monsters to spawn
     [Range(0, 100)] public int totalMonsters; //total # of monsters to spawn
     [Range(0, 30)] public int maxMonsters; //# of monsters that can be in the room at once
+    public int gemsOnFloor;
 }
 
 public class MonsterSpawner : SingletonPattern<MonsterSpawner>
@@ -24,6 +25,7 @@ public class MonsterSpawner : SingletonPattern<MonsterSpawner>
     private int monstersSpawned = 0;
     private int monstersKilled = 0;
     private int currFloor;
+    public int gemMonstersToSpawn = 2;
 
     private void Start()
     {
@@ -34,6 +36,8 @@ public class MonsterSpawner : SingletonPattern<MonsterSpawner>
     public void BeginSpawingMonsters()
     {
         currFloor = LevelManager.Instance.currFloor;
+
+        gemMonstersToSpawn = floorSpawnInfo[currFloor].gemsOnFloor;
 
         if (LevelManager.Instance.currFloor % 5 != 0)//Check if current floor is not a shop
         {
@@ -79,7 +83,7 @@ public class MonsterSpawner : SingletonPattern<MonsterSpawner>
             GameObject monsterToSpawn = floorSpawnInfo[currFloor].monsters[randMonster];
 
             //Spawn the monster and disable the spawn point temporarily
-            monsterSpawnPoints[randSpawnPoint].SpawnMonster(monsterToSpawn);
+            monsterSpawnPoints[randSpawnPoint].SpawnMonster(monsterToSpawn, CheckForGem());
             monstersInRoom++;
             monstersSpawned++;
             StartCoroutine(DisableSpawner(randSpawnPoint));
@@ -88,6 +92,34 @@ public class MonsterSpawner : SingletonPattern<MonsterSpawner>
         //Recursively attempt to spawn until the total # of monsters to spawn have been killed
         if (monstersSpawned < floorSpawnInfo[currFloor].totalMonsters)
             StartCoroutine(WaitToSpawnAgain());
+    }
+
+    /// <summary>
+    /// Checks if a spawned enemy will be gem monster based off of how many monsters have already spawned and how many gem monsters need to spawn still
+    /// </summary>
+    /// <returns></returns>
+    private bool CheckForGem()
+    {
+        Debug.Log("This floor will have " + floorSpawnInfo[currFloor].totalMonsters + " monsters. " + monstersSpawned + " have spawned");
+
+
+        if (gemMonstersToSpawn == 0)
+            return false;
+        else
+        {
+            int random = Random.Range(1, floorSpawnInfo[currFloor].totalMonsters - monstersSpawned);
+            if (random <= gemMonstersToSpawn)
+            {
+                Debug.Log("Successful gem roll of " + random + " out of " + (floorSpawnInfo[currFloor].totalMonsters - monstersSpawned));
+                --gemMonstersToSpawn;
+                return true;
+            }
+            else
+            {
+                Debug.Log("Unsuccessful gem roll of " + random + " out of " + (floorSpawnInfo[currFloor].totalMonsters - monstersSpawned));
+                return false;
+            }
+        }
     }
 
     //Call this from Enemy class whenever a monster is killed

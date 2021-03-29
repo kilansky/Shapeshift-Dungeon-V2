@@ -37,14 +37,20 @@ public class EMail : SingletonPattern<EMail>
         AnalyticsEvents.Instance.LevelRated(levelRating); //Send Level Rated Analytics Event
 
         HUDController.Instance.HideLevelReviewPanel();
-        LevelManager.Instance.TransitionLevel();
+
+        if (PlayerHealth.Instance.Health > 0)
+            LevelManager.Instance.TransitionLevel();
     }
 
     public void SkipReview()
     {
         HUDController.Instance.HideLevelReviewPanel();
-        LevelManager.Instance.TransitionLevel();
-        inputField.text = "<i>Enter text... help us make this level better!</i>";
+
+        if(PlayerHealth.Instance.Health > 0)
+        {
+            LevelManager.Instance.TransitionLevel();
+            inputField.text = "<i>Enter text... help us make this level better!</i>";
+        }
     }
 
     public void SendEmail(string subject, string body)

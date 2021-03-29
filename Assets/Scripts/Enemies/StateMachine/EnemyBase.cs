@@ -36,6 +36,8 @@ public class EnemyBase : MonoBehaviour, IDamageable
     [HideInInspector] public float distanceToPlayer;
     [HideInInspector] public NavMeshAgent agent;
     [HideInInspector] public bool isStunned;
+    public GameObject gemPrefab;
+    public GameObject deathEffects;
     //Floating Skull charge rate
     //public float chargeRate = 1f;
     #endregion
@@ -254,6 +256,10 @@ public class EnemyBase : MonoBehaviour, IDamageable
     {
         //Update the monster count of the room
         MonsterSpawner.Instance.MonsterKilled();
+        Instantiate(deathEffects, transform.position + new Vector3(0, 2, 0), Quaternion.identity);
+        
+        if(GetComponent<GemMonster>().isGemMonster)
+            DropGem();
 
         //Destroy self from root object 
         Destroy(transform.root.gameObject);
@@ -323,5 +329,11 @@ public class EnemyBase : MonoBehaviour, IDamageable
         Gizmos.DrawWireSphere(transform.position, minAgroRange);
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(transform.position, minAttackRange);
+    }
+
+    private void DropGem()
+    {
+        GameObject gem = Instantiate(gemPrefab, transform.position + new Vector3(0, 1, 0), transform.rotation);
+        gem.GetComponent<Rigidbody>().AddForce(0, 350, 0);
     }
 }

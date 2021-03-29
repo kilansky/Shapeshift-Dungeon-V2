@@ -42,25 +42,28 @@ public class StatMods
     public playerStatType statType; //Type of Player stat that will be adjusted
 }
 
+
+/// <summary>
+/// What kind of item will it be? - AHL (2/16/21)
+/// Made public by Sky - (3/28/21)
+/// </summary>
+public enum ItemType
+{
+    Special = 0,
+    Head = 1,
+    Torso = 2,
+    Foot = 3,
+    Pocket = 4,
+    Pickup = 5
+}
+
+
 [CreateAssetMenu(fileName = "New item/Equipment", menuName = "Item")]
 public class ItemsEquipment : ScriptableObject
 {
     //Variable Declaration/Initialization List
     public Sprite sprite; //Variable to hold the 2D sprite of the item image
     public GameObject prefab; //Variable to hold the prefab of the gameObject to be generated
-
-    /// <summary>
-    /// What kind of item will it be? - AHL (2/16/21)
-    /// </summary>
-    private enum ItemType
-    {
-        Special = 0,
-        Head = 1, 
-        Torso = 2,
-        Foot = 3, 
-        Pocket = 4, 
-        Pickup = 5
-    }
 
     /// <summary>
     /// **AHL - NOTESSSSSS**

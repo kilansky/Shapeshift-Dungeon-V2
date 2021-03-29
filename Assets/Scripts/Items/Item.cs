@@ -16,8 +16,11 @@ public class Item : MonoBehaviour
         c.touchingItem = false;
         c.pickupItem = false;
 
+        //Set the item icon in the equipment panel - Sky (3/28/21)
+        HUDController.Instance.SetEquipmentPanelItem(item.ItemSlot, item.sprite);
+
         //Long chain of if statements XD - Sometimes I wonder if switch cases are the best
-        
+
         //Special Item Slot
         if (item.ItemSlot == 0)
         {
