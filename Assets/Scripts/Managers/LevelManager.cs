@@ -201,6 +201,18 @@ public class LevelManager : SingletonPattern<LevelManager>
 
         //UnityEditor.AI.NavMeshBuilder.BuildNavMesh(); // <<------- Editor Only :(
         GetComponent<NavMeshSurface>().BuildNavMesh();
+
+        foreach(Transform child in activeLevel.transform)
+        {
+            if(child.gameObject.GetComponent<LaserDispenser>())
+            {
+                child.gameObject.GetComponent<LaserDispenser>().BeginLaser();
+            }
+            if (child.gameObject.GetComponent<Dispenser>())
+            {
+                child.gameObject.GetComponent<Dispenser>().BeginFiring();
+            }
+        }
     }
 
     /*

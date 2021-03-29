@@ -28,7 +28,7 @@ public class LaserDispenser : MonoBehaviour
 
     private void Start()
     {
-        BeginLaser();
+        //BeginLaser();
     }
 
     public void BeginLaser()
