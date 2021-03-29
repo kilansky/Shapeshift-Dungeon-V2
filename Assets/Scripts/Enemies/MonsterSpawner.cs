@@ -79,7 +79,7 @@ public class MonsterSpawner : SingletonPattern<MonsterSpawner>
             GameObject monsterToSpawn = floorSpawnInfo[currFloor].monsters[randMonster];
 
             //Spawn the monster and disable the spawn point temporarily
-            monsterSpawnPoints[randSpawnPoint].SpawnMonster(monsterToSpawn);
+            monsterSpawnPoints[randSpawnPoint].SpawnMonster(monsterToSpawn, true);
             monstersInRoom++;
             monstersSpawned++;
             StartCoroutine(DisableSpawner(randSpawnPoint));
