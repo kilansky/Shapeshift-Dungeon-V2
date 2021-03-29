@@ -4,7 +4,10 @@ using UnityEngine;
 
 public class Item : MonoBehaviour
 {
+    public int price = 0;
     public ItemsEquipment item;
+
+    public GameObject priceCanvas;
 
     /// <summary>
     /// AHL - 2/22/21

@@ -46,14 +46,14 @@ public class LaserDispenser : MonoBehaviour
     {
         if(enabled)
         {
-            laser = Instantiate(GetLaserColor(), laserSpawnpoint.transform.position, laserSpawnpoint.transform.rotation, transform);
+            if(laser != null)
+                laser = Instantiate(GetLaserColor(), laserSpawnpoint.transform.position, laserSpawnpoint.transform.rotation, transform);
             StartCoroutine(LaserCycle());
         }
         else
         {
             StopCoroutine(LaserCycle());
-            //laser.SetActive(false);
-            Destroy(laser, timeOn + timeOff);
+            laser.SetActive(false);
         }       
     }
 

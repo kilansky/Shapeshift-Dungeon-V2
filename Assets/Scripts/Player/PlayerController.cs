@@ -77,6 +77,9 @@ public class PlayerController : SingletonPattern<PlayerController>
     public ItemsEquipment PocketSlot2; //Pocket 2 Item slot
     public bool touchingItem = false; //Variable to track if the player is currently touching an item or not
     public bool pickupItem = false; //Variable to pick up the item
+    public bool canAffordItem = false; //Variable to see if player can afford an item -Justin
+
+    private int priceOfLastTouchedItem = 0; //I need this to store prices -Justin
 
     //Variables that keep track of the amount of times that a stat was upgraded
     public int StatMaxHealthCount {get; set;}
@@ -897,10 +900,12 @@ public class PlayerController : SingletonPattern<PlayerController>
         }
 
         //If there is currently an item being touched then set pickup Item to true
-        if (touchingItem == true)
+        if (touchingItem == true && canAffordItem)
         {
             pickupItem = true;
             touchingItem = false;
+            canAffordItem = false;
+            PlayerGems.Instance.SubtractGems(priceOfLastTouchedItem);
             HUDController.Instance.HideQuickHint();
         }
     }
@@ -931,7 +936,14 @@ public class PlayerController : SingletonPattern<PlayerController>
         if (other.tag == "Item") //If the other gameobject is an item then check if the pickup button was pressed
         {
             touchingItem = true;
-            HUDController.Instance.ShowQuickHint("Pick Up");
+            if (PlayerGems.Instance.GemCount >= other.GetComponentInParent<Item>().price)
+            {
+                canAffordItem = true;
+                priceOfLastTouchedItem = other.GetComponentInParent<Item>().price;
+                HUDController.Instance.ShowQuickHint("Pick Up");
+            }
+            else
+                canAffordItem = false;
 
             if (pickupItem == true) //If the item can be picked up
             {
