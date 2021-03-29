@@ -855,14 +855,8 @@ public class PlayerController : SingletonPattern<PlayerController>
 
         //If on center tile
         if (CenterTile.Instance.onTile)
-        {
-            
-            if (LevelManager.Instance.currFloor == 19)//End game stuff
-            {
-                RunTimer.Instance.IncreaseTimer = false;
-                HUDController.Instance.ShowWinScreen();
-            }
-            else if (LevelManager.Instance.currFloor == 0)//floor 0 stuff
+        {           
+            if (LevelManager.Instance.currFloor == 0)//floor 0 stuff
             {
                 RunTimer.Instance.IncreaseTimer = true;
                 HUDController.Instance.ShowRunTimer();
@@ -880,6 +874,11 @@ public class PlayerController : SingletonPattern<PlayerController>
 
                 HUDController.Instance.controlsPanel.SetActive(false);
                 HUDController.Instance.HideQuickHint();
+            }
+            else if (LevelManager.Instance.currFloor == 30)//End game stuff
+            {
+                RunTimer.Instance.IncreaseTimer = false;
+                HUDController.Instance.ShowWinScreen();
             }
             else
             {

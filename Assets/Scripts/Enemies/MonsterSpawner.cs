@@ -16,7 +16,7 @@ public class MonsterSpawner : SingletonPattern<MonsterSpawner>
     public FloorSpawnInfo[] floorSpawnInfo = new FloorSpawnInfo[31];
     [Range(0,3)] public float timeBetweenSpawns = 0.5f; //How long to wait before allowing another monster to spawn
     [Range(0, 10)] public float disableSpawnerTime = 5f; //How long before a spawner can be used again
-    [HideInInspector] public bool floorCleared = true; //Room is cleared of monsters
+    [HideInInspector] public bool floorCleared = false; //Room is cleared of monsters
 
     //private GameObject[] monsterSpawnPoints;
     private List<SpawnPoint> monsterSpawnPoints = new List<SpawnPoint>();
@@ -29,7 +29,6 @@ public class MonsterSpawner : SingletonPattern<MonsterSpawner>
 
     private void Start()
     {
-        currFloor = 1;
         BeginSpawingMonsters();
     }
 
@@ -41,6 +40,8 @@ public class MonsterSpawner : SingletonPattern<MonsterSpawner>
 
         if (LevelManager.Instance.currFloor % 5 != 0)//Check if current floor is not a shop
         {
+            AnalyticsEvents.Instance.FloorStarted();//Send Level Rated Analytics Event
+
             //Clear the spawn point list of any previously set spawn points
             monsterSpawnPoints.Clear();
 
@@ -50,8 +51,15 @@ public class MonsterSpawner : SingletonPattern<MonsterSpawner>
 
             SpawnMonsters();
         }
+        else if(currFloor == 0) //if floor is the starting room, don't clear the floor (player must pick up potions)
+        {
+            floorCleared = false;
+            CenterTile.Instance.SetTextState();
+        }
         else //if floor is a shop, don't spawn monster, instantly clear the floor
         {
+            AnalyticsEvents.Instance.FloorStarted();//Send Level Rated Analytics Event
+            AnalyticsEvents.Instance.FloorCompleted(); //Send Floor Completed Analytics Event
             floorCleared = true;
             CenterTile.Instance.SetTextState();
         }
