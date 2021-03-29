@@ -15,11 +15,6 @@ public class GemMonster : MonoBehaviour
     public bool isGemMonster = false;
     public GameObject gemDisplay;
 
-    public void Start()
-    {
-        gemDisplay.SetActive(false);
-    }
-
     public void SetGemMonster()
     {
         isGemMonster = true;
