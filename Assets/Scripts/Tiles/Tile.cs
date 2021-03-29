@@ -35,6 +35,12 @@ public class Tile : MonoBehaviour
 
     private GameObject nextTile;
 
+    private void Start()
+    {
+        if (GetComponent<PropSpawner>())
+            GetComponent<PropSpawner>().SpawnProp();
+    }
+
     /// <summary>
     /// Begins the process for replacing this tile with a new one if it needs to be replaced
     /// </summary>

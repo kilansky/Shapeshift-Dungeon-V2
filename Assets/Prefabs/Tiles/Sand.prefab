@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5335884182081978351}
   - component: {fileID: 4395236236510365834}
   - component: {fileID: 6357567054876964504}
+  - component: {fileID: 1361096669645340444}
   m_Layer: 10
   m_Name: Sand
   m_TagString: Tile
@@ -33,6 +34,7 @@ Transform:
   m_Children:
   - {fileID: 7116797453994431281}
   - {fileID: 2681406104483708370}
+  - {fileID: 1409371129920507745}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -110,6 +112,50 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tileType: 2
   willBeShop: 0
+--- !u!114 &1361096669645340444
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2333366564355165282}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db4db1abd9655234babdcc3e90e1712c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  propChance: 0
+  propHolder: {fileID: 6201630904139610162}
+--- !u!1 &6201630904139610162
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1409371129920507745}
+  m_Layer: 0
+  m_Name: PropHolder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1409371129920507745
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6201630904139610162}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2604927979395849003}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &4147192504361287178
 PrefabInstance:
   m_ObjectHideFlags: 0
