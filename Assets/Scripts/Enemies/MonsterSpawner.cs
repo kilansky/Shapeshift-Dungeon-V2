@@ -109,23 +109,27 @@ public class MonsterSpawner : SingletonPattern<MonsterSpawner>
     /// <returns></returns>
     private bool CheckForGem()
     {
-        Debug.Log("This floor will have " + floorSpawnInfo[currFloor].totalMonsters + " monsters. " + monstersSpawned + " have spawned");
+        //Debug.Log("This floor will have " + floorSpawnInfo[currFloor].totalMonsters + " monsters. " + monstersSpawned + " have spawned");
 
 
-        if (gemMonstersToSpawn == 0)
+        if (gemMonstersToSpawn == 0) //If there are no more gem monsters to spawn, simply return false
             return false;
         else
         {
+            //Uses a roll check to see if a monster will be spawned as a gem monster
             int random = Random.Range(1, floorSpawnInfo[currFloor].totalMonsters - monstersSpawned);
+
+            //A successful roll lands when the random number rolls less than or equal to the gem monsters remaining amount
+            //Rolls from 1 (always at least 1 enemy to spawn if enemy is being spawned) to enemies left to spawn
             if (random <= gemMonstersToSpawn)
             {
-                Debug.Log("Successful gem roll of " + random + " out of " + (floorSpawnInfo[currFloor].totalMonsters - monstersSpawned));
+                //Debug.Log("Successful gem roll of " + random + " out of " + (floorSpawnInfo[currFloor].totalMonsters - monstersSpawned));
                 --gemMonstersToSpawn;
                 return true;
             }
             else
             {
-                Debug.Log("Unsuccessful gem roll of " + random + " out of " + (floorSpawnInfo[currFloor].totalMonsters - monstersSpawned));
+                //Debug.Log("Unsuccessful gem roll of " + random + " out of " + (floorSpawnInfo[currFloor].totalMonsters - monstersSpawned));
                 return false;
             }
         }
@@ -144,6 +148,7 @@ public class MonsterSpawner : SingletonPattern<MonsterSpawner>
 
             floorCleared = true;
             PedestalManager.Instance.LoadPedestals(); //Activate the item pedestals
+            LevelManager.Instance.ToggleHazards(false); //Disabled level hazards
             AnalyticsEvents.Instance.FloorCompleted(); //Send Floor Completed Analytics Event
         }
     }

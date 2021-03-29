@@ -77,6 +77,9 @@ public class PlayerController : SingletonPattern<PlayerController>
     public ItemsEquipment PocketSlot2; //Pocket 2 Item slot
     public bool touchingItem = false; //Variable to track if the player is currently touching an item or not
     public bool pickupItem = false; //Variable to pick up the item
+    public bool canAffordItem = false; //Variable to see if player can afford an item -Justin
+
+    private int priceOfLastTouchedItem = 0; //I need this to store prices -Justin
 
     //Variables that keep track of the amount of times that a stat was upgraded
     public int StatMaxHealthCount {get; set;}
@@ -84,6 +87,7 @@ public class PlayerController : SingletonPattern<PlayerController>
     public int StatSpeedCount {get; set;}
 
     public float SpecialCharge { get; set; }
+    public float SandSpeedMod { get; set; }
 
     [Header("DEBUG")]
     public bool showHitboxes = false;
@@ -148,6 +152,7 @@ public class PlayerController : SingletonPattern<PlayerController>
         StatMaxHealthCount = 0;
         StatAttackCount = 0;
         StatSpeedCount = 0;
+        SandSpeedMod = 1;
 
         if (PlayerPrefs.GetInt("UserID") == 0)
         {
@@ -172,7 +177,6 @@ public class PlayerController : SingletonPattern<PlayerController>
         }
         else
             isUsingMouse = false;
-
 
         /*
         //Set whether the player can dash attack after a dash
@@ -284,11 +288,11 @@ public class PlayerController : SingletonPattern<PlayerController>
             moveVelocity = Mathf.Abs(movementVector.z);
 
         if (IsDashing)
-            controller.Move(transform.forward * currMoveSpeed * Time.deltaTime);
+            controller.Move(transform.forward * currMoveSpeed * SandSpeedMod * Time.deltaTime);
         else if (IsAttacking || IsChargeAttacking)
-            controller.Move(transform.forward * moveVelocity * currMoveSpeed * Time.deltaTime);
+            controller.Move(transform.forward * moveVelocity * currMoveSpeed * SandSpeedMod * Time.deltaTime);
         else
-            controller.Move(movementVector * currMoveSpeed * Time.deltaTime);
+            controller.Move(movementVector * currMoveSpeed * SandSpeedMod * Time.deltaTime);
     }
 
     private void SetMouseTargetPosition()
@@ -317,7 +321,7 @@ public class PlayerController : SingletonPattern<PlayerController>
                 rotSpeed = dashRotateSpeed;
 
             //Smoothly Rotate Player
-            lastTargetRotation = Quaternion.Slerp(transform.rotation, targetRotation, rotSpeed * Time.deltaTime);
+            lastTargetRotation = Quaternion.Slerp(transform.rotation, targetRotation, rotSpeed * SandSpeedMod * Time.deltaTime);
             transform.rotation = lastTargetRotation;
         }
 
@@ -896,10 +900,12 @@ public class PlayerController : SingletonPattern<PlayerController>
         }
 
         //If there is currently an item being touched then set pickup Item to true
-        if (touchingItem == true)
+        if (touchingItem == true && canAffordItem)
         {
             pickupItem = true;
             touchingItem = false;
+            canAffordItem = false;
+            PlayerGems.Instance.SubtractGems(priceOfLastTouchedItem);
             HUDController.Instance.HideQuickHint();
         }
     }
@@ -930,14 +936,24 @@ public class PlayerController : SingletonPattern<PlayerController>
         if (other.tag == "Item") //If the other gameobject is an item then check if the pickup button was pressed
         {
             touchingItem = true;
-            HUDController.Instance.ShowQuickHint("Pick Up");
+            if (PlayerGems.Instance.GemCount >= other.GetComponentInParent<Item>().price)
+            {
+                canAffordItem = true;
+                priceOfLastTouchedItem = other.GetComponentInParent<Item>().price;
+                HUDController.Instance.ShowQuickHint("Pick Up");
+            }
+            else
+                canAffordItem = false;
 
             if (pickupItem == true) //If the item can be picked up
             {
                 other.GetComponentInParent<Item>().Equip(this, this.GetComponent<PlayerHealth>()); //Equip the item to the player
 
-                AnalyticsEvents.Instance.ItemTaken(other.GetComponentInParent<Item>().item.ItemName); //Send Item Taken analytics event
-                
+                if(LevelManager.Instance.currFloor %5 != 0)
+                    AnalyticsEvents.Instance.ItemTaken(other.GetComponentInParent<Item>().item.ItemName); //Send Item Taken analytics event
+                else if(LevelManager.Instance.currFloor != 0)
+                    AnalyticsEvents.Instance.ItemPurchased(other.GetComponentInParent<Item>().item.ItemName); //Send Item Purchased analytics event
+
                 Destroy(other.gameObject); //Destroy the instance of the item in the gamescene
                 pickupItem = false; //Set pickup to false
 

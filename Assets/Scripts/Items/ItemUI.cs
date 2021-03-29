@@ -11,6 +11,9 @@ public class ItemUI : MonoBehaviour
     public TMP_Text Name; //Gets the name of the item
     public TMP_Text Description; //Gets the description of the item
 
+    public TMP_Text Price; //Gets price of item
+    public GameObject priceCanvas; //Gets the canvas holding price stuff
+
     /// <summary>
     /// When the item is created it will set all the needed UI elemets - AHL (3/8/21)
     /// </summary>
@@ -19,5 +22,8 @@ public class ItemUI : MonoBehaviour
         Image.sprite = GetComponentInParent<Item>().item.sprite;
         Name.text = GetComponentInParent<Item>().item.ItemName;
         Description.text = GetComponentInParent<Item>().item.itemDescription;
+        Price.text = GetComponentInParent<Item>().price.ToString();
+
+        priceCanvas.SetActive(GetComponentInParent<Item>().price > 0); //Sets price canvas to active if price is greater than 0
     }
 }

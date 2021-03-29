@@ -7,7 +7,7 @@ public class Gem : MonoBehaviour
     public float spinSpeed;
     public float disableColliderTime = .5f;
 
-    public CapsuleCollider collider;
+    //public CapsuleCollider collider;
     public CapsuleCollider trigger;
 
     private void Update()
@@ -23,7 +23,7 @@ public class Gem : MonoBehaviour
     private IEnumerator HitboxCycle()
     {
         yield return new WaitForSeconds(disableColliderTime);
-        collider.enabled = true;
+        //collider.enabled = true;
         trigger.enabled = true;
     }
 }

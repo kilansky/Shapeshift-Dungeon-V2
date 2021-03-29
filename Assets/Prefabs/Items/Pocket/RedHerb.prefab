@@ -44,7 +44,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb38d7ffc4ca44f4a836688a0c7a61cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  price: 0
   item: {fileID: 11400000, guid: 0e4fdd9f741c2eb4686b858ff0015a7a, type: 2}
+  priceCanvas: {fileID: 6117332508867169031}
 --- !u!1001 &7972160873836564219
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -117,6 +119,12 @@ PrefabInstance:
 --- !u!4 &2827066833579849419 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5303283630089140272, guid: c37f43fdf27cc0e48a72ed2e4fc84866,
+    type: 3}
+  m_PrefabInstance: {fileID: 7972160873836564219}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &6117332508867169031 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4199588591828059644, guid: c37f43fdf27cc0e48a72ed2e4fc84866,
     type: 3}
   m_PrefabInstance: {fileID: 7972160873836564219}
   m_PrefabAsset: {fileID: 0}
