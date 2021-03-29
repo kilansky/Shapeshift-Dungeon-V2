@@ -240,11 +240,15 @@ public class EnemyBase : MonoBehaviour, IDamageable
         //subtract the players damage from the enemies stun resistance
         currentStunResistance -= damage;
 
+        Debug.Log("Base Damage called");
+
         if (!isInvincible)
         {
             //enemy takes damage from the player
             Health -= damage;
             UpdateUI();
+
+            Debug.Log("Should have taken damage");
 
             if (Health <= 0)
                 Kill();

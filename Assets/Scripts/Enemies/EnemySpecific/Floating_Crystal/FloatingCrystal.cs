@@ -82,6 +82,7 @@ public class FloatingCrystal : EnemyBase
     //set current state to stunState if isStunned
     public override void Damage(float damage)
     {
+        Debug.Log("Floating Crytal Damage called");
         base.Damage(damage);
 
         /*if (isDead)
