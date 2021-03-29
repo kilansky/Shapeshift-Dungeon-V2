@@ -6,6 +6,7 @@ public class FloatingCrystal_AttackState : AttackState
 {
     private FloatingCrystal enemy;
 
+    //private Laser laser;
 
 
     public FloatingCrystal_AttackState(EnemyBase entity, FiniteStateMachine stateMachine, string animBoolName, D_AttackState stateData, FloatingCrystal enemy) : base(entity, stateMachine, animBoolName, stateData)
@@ -22,6 +23,7 @@ public class FloatingCrystal_AttackState : AttackState
     {
         //attack the player
         base.Enter();
+        //laser = enemy.GetComponent<Laser>();
     }
 
     public override void Exit()

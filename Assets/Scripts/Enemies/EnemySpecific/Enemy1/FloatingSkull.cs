@@ -36,6 +36,7 @@ public class FloatingSkull : EnemyBase
 
     public override void Start()
     {
+        SetNewTarget(player);
         base.Start();
 
         moveState = new FloatingSkull_MoveState(this, stateMachine, "move", moveStateData, this);
@@ -47,6 +48,7 @@ public class FloatingSkull : EnemyBase
 
         //this line is what got rid of my NullReferenceExceptions
         stateMachine.Initialize(moveState);
+        
     }
 
     //set current state to stunState if isStunned

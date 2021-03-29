@@ -53,6 +53,7 @@ public class FloatingCrystal : EnemyBase
 
     public override void Start()
     {
+        
         base.Start();
 
         moveState = new FloatingCrystal_MoveState(this, stateMachine, "move", moveStateData, this);
@@ -99,12 +100,24 @@ public class FloatingCrystal : EnemyBase
             SearchWalkPoint();
 
         if (walkPointSet)
+        {
             agent.SetDestination(walkPoint);
+            if (!agent.pathPending)
+            {
+                if (agent.remainingDistance <= agent.stoppingDistance)
+                {
+                    //walkPointSet = true;
+                    if (!agent.hasPath || agent.velocity.sqrMagnitude == 0f)
+                    {
+                        walkPointSet = false;
+                    }
+                }
+            }
+        }
+        /*Vector3 distanceToWalkPoint = transform.position - walkPoint;
 
-        Vector3 distanceToWalkPoint = transform.position - walkPoint;
-
-        if (distanceToWalkPoint.magnitude < 1f)
-            walkPointSet = false;
+        if (distanceToWalkPoint.magnitude <= 1f)
+            walkPointSet = false;*/
     }
 
     public void SearchWalkPoint()
@@ -114,12 +127,24 @@ public class FloatingCrystal : EnemyBase
         float randomX = Random.Range(-walkPointRange, walkPointRange);
 
         walkPoint = new Vector3(transform.position.x + randomX, transform.position.y, transform.position.z + randomZ);
+        //walkPointSet = true;
+        Debug.Log("my walk point is " + walkPoint);
 
+        NavMeshHit hit;
+        Vector3 finalPosition = Vector3.zero;
+        if (NavMesh.SamplePosition(walkPoint, out hit, walkPointRange, 1))
+        {
+            finalPosition = hit.position;
+            walkPoint = finalPosition;
+        }
         //may need a parameter for what is walkable ground or not
-        if(Physics.Raycast(walkPoint, -transform.up, 2f))
+        walkPointSet = true;
+
+        /*if (Physics.Raycast(walkPoint, -transform.up, 2f))
         {
             walkPointSet = true;
-        }
+            Debug.Log("walkPoint set SHOULD be true, and it is " + walkPointSet);
+        }*/
     }
 
     /*public virtual bool HaveLineOfSight()

@@ -23,6 +23,8 @@ public class FloatingCrystal_MoveState : MoveState
     {
         base.Enter();
         entity.SetVelocity(stateData.moveSpeed);
+        
+        enemy.Patrol();
     }
     public override void Exit()
     {
@@ -33,18 +35,16 @@ public class FloatingCrystal_MoveState : MoveState
     {
         base.LogicUpdate();
         //should be if no other crystals in the scene, move to attack state
-        if (enemy.CheckPlayerInMinAttackRange())
+        /*if (enemy.CheckPlayerInMinAttackRange())
         {
             stateMachine.ChangeState(enemy.attackState);
-        }
+        }*/
     }
 
     public override void PhysicsUpdate()
     {
         base.PhysicsUpdate();
         enemy.Patrol();
-        //should be in update
-        //enemy.HaveLineOfSight();
     }
 
 }

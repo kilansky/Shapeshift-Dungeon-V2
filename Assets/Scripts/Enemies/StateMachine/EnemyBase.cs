@@ -97,7 +97,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
         Anim = aliveGO.GetComponent<Animator>();
 
         //find player pos and go to it
-        SetNewTarget(player);
+        //SetNewTarget(player);
         //SetDestination();
 
         //set health variables
@@ -288,14 +288,16 @@ public class EnemyBase : MonoBehaviour, IDamageable
     {
         //this will be used for the dummy item
         target = newTarget.transform;
+        
     }
 
     public void SetDestination()
     {
-        //target the player
-        agent.SetDestination(target.position);
-        //target other crystals
-        //if(this)
+        if (target != null)
+        {
+            //target the player
+            agent.SetDestination(target.position);
+        }
         #region turn variables 
         //make sure the enemy faces the player
         //this will be the same for all enemies
