@@ -42,7 +42,9 @@ public class PlayerController : SingletonPattern<PlayerController>
     public float maxChargeSpeed = 35f;
     public float chargeDeceleration = 55f;
     public float chargeCooldownTime = 0.2f;
+    public float minChargeDmgModifier;
     public PlayerStats chargeDmgModifier; //ItemsEquipment for Dash Damage Modifier
+    public float timeToFullCharge = 3f;
 
     [Header("Special Stats")]
     public float useSpecialTime = 0.5f;
@@ -117,6 +119,7 @@ public class PlayerController : SingletonPattern<PlayerController>
     private bool isUsingPotion = false;
     private bool isUsingSpecial = false;
     private bool isPaused = false;
+    private bool isUsingMouse = false;
 
     //Properties for player states, read only - can be read from other functions
     public float MoveSpeed { get { return currMoveSpeed; } }        //Set to the current move speed of the player
@@ -129,6 +132,7 @@ public class PlayerController : SingletonPattern<PlayerController>
     public bool IsUsingPotion { get { return isUsingPotion; } }     //True while drinking a potion
     public bool IsUsingSpecial { get { return isUsingSpecial; } }   //True while using a Special Item
     public bool IsPaused { get { return isPaused; } }               //True while game is paused
+    public bool IsUsingMouse { get { return isUsingMouse; } }      //True while player is using mouse and keyboard controls
 
     private void Start()
     {
@@ -160,7 +164,13 @@ public class PlayerController : SingletonPattern<PlayerController>
 
         //Set mouse target pos if using M&K
         if (GetComponent<PlayerInput>().currentControlScheme == "Keyboard&Mouse")
+        {
+            isUsingMouse = true;
             SetMouseTargetPosition();
+        }
+        else
+            isUsingMouse = false;
+
 
         /*
         //Set whether the player can dash attack after a dash
@@ -661,16 +671,26 @@ public class PlayerController : SingletonPattern<PlayerController>
         chargeArrow.SetActive(true);
         float arrowScale = chargeArrow.transform.localScale.y;
         float chargeSpeed = minChargeSpeed;
+        currAttackDamage = baseAttackDamage.Value * minChargeDmgModifier;
+
+        float timeElapsed = 0;
         while (isCharging) //Increase charge speed & arrow UI until button is released
         {
             currMoveSpeed = 0; //prevent movement while charging
-            chargeSpeed += chargeRate.Value * Time.deltaTime;
-            chargeSpeed = Mathf.Clamp(chargeSpeed, minChargeSpeed, maxChargeSpeed);
-            //Debug.Log("chargeSpeed is: " + chargeSpeed);
 
-            arrowScale += (chargeRate.Value / 10) * Time.deltaTime;
-            arrowScale = Mathf.Clamp(arrowScale, 0f, 2.5f);
+            chargeSpeed = Mathf.Lerp(minChargeSpeed, maxChargeSpeed, timeElapsed / timeToFullCharge);
+            currAttackDamage = Mathf.Lerp(baseAttackDamage.Value * minChargeDmgModifier, baseAttackDamage.Value * chargeDmgModifier.Value, timeElapsed / timeToFullCharge);
+
+            arrowScale = Mathf.Lerp(0.5f, 2.5f, timeElapsed / timeToFullCharge);
             chargeArrow.transform.localScale = new Vector3(1, arrowScale, 1);
+
+            timeElapsed += Time.deltaTime;
+            if (timeElapsed > timeToFullCharge)
+            {
+                timeElapsed = timeToFullCharge;
+                chargeSpeed = maxChargeSpeed;
+                currAttackDamage = baseAttackDamage.Value * chargeDmgModifier.Value;
+            }
 
             yield return new WaitForEndOfFrame();
         }
@@ -680,7 +700,7 @@ public class PlayerController : SingletonPattern<PlayerController>
         chargeArrow.transform.localScale = new Vector3(1, 1, 1);
 
         Vector3 chargeVector = transform.forward;
-        currAttackDamage = baseAttackDamage.Value * chargeDmgModifier.Value; //increase attack damage temporarily
+        
         animator.SetBool("isCharging", false);
 
         //Charge forward & apply deceleration until speed is nearly zero
@@ -715,11 +735,25 @@ public class PlayerController : SingletonPattern<PlayerController>
 
             //Bowling Ball item
             if (SpecialSlot.ItemName == "Bowling Ball")
-                SpecialSlot.prefab.GetComponent<BowlingBall>().spawnBowlingBall(this.transform.position, this.transform.forward, lastTargetRotation);
+            {
+                Vector3 spawnDirection = transform.forward;
+                Quaternion spawnRotation = lastTargetRotation;
+
+                if (IsUsingMouse)//Spawn in direction of mouse pointer if using a mouse
+                {
+                    spawnDirection = new Vector3(mouseTargetPoint.position.x, 0, mouseTargetPoint.position.z) - new Vector3(transform.position.x, 0, transform.position.z);
+                    spawnDirection = spawnDirection.normalized /2;
+
+                    spawnRotation = Quaternion.LookRotation(spawnDirection);
+                }
+
+                SpecialSlot.prefab.GetComponent<BowlingBall>().spawnBowlingBall(transform.position, spawnDirection, spawnRotation);
+            }
+
 
             //Bomb Item
             else if (SpecialSlot.ItemName == "Bomb Bag")
-                SpecialSlot.prefab.GetComponent<BombBag>().spawnBomb(this.transform.position, this.transform.rotation);
+                SpecialSlot.prefab.GetComponent<BombBag>().spawnBomb(transform.position, transform.rotation);
 
         }
         SpecialCharge = 0;
@@ -833,6 +867,9 @@ public class PlayerController : SingletonPattern<PlayerController>
     {
         if (other.tag == "Gem")
         {
+            if(PlayerGems.Instance.GemCount == 0)
+                HUDController.Instance.ShowGemCounter();
+
             PlayerGems.Instance.AddGems(1);
             Destroy(other.gameObject);
         }

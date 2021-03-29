@@ -6656,7 +6656,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &5959771832196107717
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7308,11 +7308,12 @@ MonoBehaviour:
     panel: {fileID: 4008793164343453374}
     image: {fileID: 8035926169167970073}
     textBox: {fileID: 0}
-    keyboardButton: {fileID: 4867997324236600249, guid: 6aad66f6f658cb740b50dd7325e863b6,
+    keyboardButton: {fileID: 447975684042479193, guid: 6aad66f6f658cb740b50dd7325e863b6,
       type: 3}
     psButton: {fileID: 9119321558747815104, guid: 4368c9403c2d2dc49ae2a0046e4ab17c,
       type: 3}
     xboxButton: {fileID: 21300000, guid: b93f32676836f49428a52c6084f22bcf, type: 3}
+  gemCounter: {fileID: 2975008741232000862}
   gemCountText: {fileID: 8103161875707932625}
   quickHintPanel:
     panel: {fileID: 5410179290512313505}
@@ -7363,8 +7364,7 @@ MonoBehaviour:
     panel: {fileID: 6026773796518395846}
     image: {fileID: 1209954226333683151}
     textBox: {fileID: 0}
-    keyboardButton: {fileID: 447975684042479193, guid: 6aad66f6f658cb740b50dd7325e863b6,
-      type: 3}
+    keyboardButton: {fileID: 21300000, guid: 0e5576dfc8327c140a7a00e8c835f3eb, type: 3}
     psButton: {fileID: 3835041523803439072, guid: 4368c9403c2d2dc49ae2a0046e4ab17c,
       type: 3}
     xboxButton: {fileID: 21300000, guid: 91e4ec715544552459e1599d37a4e5d0, type: 3}
@@ -7830,8 +7830,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3624880165548483179}
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 1.6185, y: 0.95146, z: -0.791}
-  m_LocalScale: {x: 0.30371466, y: 0.66006476, z: 0.049647395}
+  m_LocalPosition: {x: 1.6185, y: 0.95146, z: -0.89933}
+  m_LocalScale: {x: 0.30371466, y: 0.7038271, z: 0.049647395}
   m_Children: []
   m_Father: {fileID: 4449653545844286154}
   m_RootOrder: 5
@@ -16915,7 +16915,7 @@ MeshRenderer:
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
   m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 2
+  m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
