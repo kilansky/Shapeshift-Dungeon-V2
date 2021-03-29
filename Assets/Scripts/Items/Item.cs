@@ -82,6 +82,7 @@ public class Item : MonoBehaviour
 
             else //If the player does have a pocket1 and pocket2 items then unequip the first one, slide 2 to 1, then equip the new one
             {
+                Instantiate(c.PocketSlot1.prefab, transform.position, transform.rotation);
                 c.PocketSlot1.prefab.GetComponent<Item>().Unequip(c, h);
                 c.PocketSlot1 = c.PocketSlot2;
                 c.PocketSlot2 = this.item;
