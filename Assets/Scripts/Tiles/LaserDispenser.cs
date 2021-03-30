@@ -43,7 +43,6 @@ public class LaserDispenser : MonoBehaviour
     private void Start()
     {
         laser = Instantiate(GetLaserColor(), laserSpawnpoint.transform.position, laserSpawnpoint.transform.rotation, transform);
-        ToggleLaser(true);
     }
 
     /// <summary>
