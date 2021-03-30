@@ -5,7 +5,7 @@ using UnityEngine;
 public class FloatingCrystal_AttackState : AttackState
 {
     private FloatingCrystal enemy;
-    public float rotateSpeed = 5f;
+    //public float rotateSpeed = 5f;
     //private Laser laser;
 
 
@@ -61,7 +61,7 @@ public class FloatingCrystal_AttackState : AttackState
         enemy.Anim.SetBool("isAttacking", true);
         //still needs to move, but needs to attack now too
         enemy.Patrol();
-        enemy.transform.Rotate(0, rotateSpeed, 0);
+        //enemy.transform.Rotate(0, rotateSpeed, 0);
         //fire the lasers from the front and back
         //GameObject laser = Instantiate(LaserBeam_Blue, firePointFront.transform.position, firePointFront.transform.rotation, transform);
         //GameObject laser = Instantiate(LaserBeam_Blue, firePointBack.transform.position, firePointBack.transform.rotation, transform);

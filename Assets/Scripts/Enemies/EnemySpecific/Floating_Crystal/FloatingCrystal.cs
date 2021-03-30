@@ -42,7 +42,7 @@ public class FloatingCrystal : EnemyBase
     
     public bool walkPointSet;
     public float walkPointRange = 20f;
-    public float rotateSpeed = 5f;
+    //public float rotateSpeed = 3f;
 
 
     public override void Awake()
@@ -102,7 +102,9 @@ public class FloatingCrystal : EnemyBase
         NavMeshHit hit;
         NavMesh.SamplePosition(walkPoint, out hit, walkPointRange, 1);
         Vector3 finalPosition = hit.position;*/
+
         //transform.Rotate(0, rotateSpeed, 0);
+        
         //move to a walk point set in the scene
         if (!walkPointSet)
             SearchWalkPoint();
