@@ -112,7 +112,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tileType: 4
-  willBeShop: 0
+  spawnerIndicator: {fileID: 0}
+  rewardIndicator: {fileID: 0}
+  mask:
+    serializedVersion: 2
+    m_Bits: 1024
 --- !u!65 &4561851407393960900
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -339,6 +343,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lave Effect
+      objectReference: {fileID: 0}
+    - target: {fileID: 2725810724537271653, guid: 0c7e02aa645732342ad53eccb6c5d100,
+        type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2725810724537271653, guid: 0c7e02aa645732342ad53eccb6c5d100,
         type: 3}

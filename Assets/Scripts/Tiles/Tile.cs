@@ -33,6 +33,7 @@ public class Tile : MonoBehaviour
     [Header("Pointers")]
     public GameObject spawnerIndicator;
     public GameObject rewardIndicator;
+    public LayerMask mask;
 
     private GameObject nextTile;
 
@@ -69,8 +70,9 @@ public class Tile : MonoBehaviour
     {
         RaycastHit hit;
 
-        if(Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), out hit)) //Sends a raycast to look for an object below this one
+        if(Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), out hit, Mathf.Infinity, mask)) //Sends a raycast to look for an object below this one
         {
+            Debug.Log("Raycast hit: " + hit.transform.name);
             if(hit.transform.gameObject.GetComponent<Tile>()) //If the raycast finds an object, this finds out if that object is a tile
             {
                 //The tile gameobject is stored for later use and is returned back to the original script that called it
