@@ -5,9 +5,11 @@ using UnityEngine;
 public class FloatingCrystal_AttackState : AttackState
 {
     private FloatingCrystal enemy;
-    //public float rotateSpeed = 5f;
-    private Laser laser;
-
+    [HideInInspector] public float rotateSpeed = 3f;
+    private LaserDispenser laser;
+    float timeElapsed;
+    float attackDuration = 8f;
+    bool isAttacking = true;
 
     public FloatingCrystal_AttackState(EnemyBase entity, FiniteStateMachine stateMachine, string animBoolName, D_AttackState stateData, FloatingCrystal enemy) : base(entity, stateMachine, animBoolName, stateData)
     {
@@ -23,7 +25,10 @@ public class FloatingCrystal_AttackState : AttackState
     {
         //attack the player
         base.Enter();
-        laser = enemy.GetComponent<Laser>();
+        isAttacking = true;
+        Debug.Log("enemy is " + enemy.name);
+        laser = enemy.GetComponent<LaserDispenser>();
+        TriggerAttack();
     }
 
     public override void Exit()
@@ -37,7 +42,17 @@ public class FloatingCrystal_AttackState : AttackState
         //TODO: add another if statement for if already attacking
         //if no other crystals in the room fire 2 beams from front
         //and back that are a fixed length, and spin
-        TriggerAttack();
+
+        if (isAttacking)
+            timeElapsed += Time.deltaTime;
+
+        if (timeElapsed >= attackDuration && isAttacking)
+        {
+            isAttacking = false;
+            enemy.Anim.SetBool("isAttacking", false);
+            timeElapsed = 0;
+            stateMachine.ChangeState(enemy.moveState);
+        }
 
         /*if (enemy.CheckPlayerInMinAttackRange())
         {
@@ -52,6 +67,8 @@ public class FloatingCrystal_AttackState : AttackState
     public override void PhysicsUpdate()
     {
         base.PhysicsUpdate();
+        if(isAttacking)
+            enemy.transform.Rotate(0, rotateSpeed, 0);
     }
 
     public override void TriggerAttack()
@@ -60,17 +77,8 @@ public class FloatingCrystal_AttackState : AttackState
         base.TriggerAttack();
         enemy.Anim.SetBool("isAttacking", true);
         
-        //still needs to move, but needs to attack now too
-        enemy.Patrol();
-        //enemy.transform.Rotate(0, rotateSpeed, 0);
-
         //fire the lasers from the front and back
-        laser.Attack(enemy.LaserBeam_Blue, enemy.firePointBack.transform, enemy.firePointFront.transform);
-
-        GameObject laserBeamF = Instantiate(LaserBeam_Blue, firePointFront.transform.position, firePointFront.transform.rotation, transform);
-        GameObject laserBeamB = Instantiate(LaserBeam_Blue, firePointBack.transform.position, firePointBack.transform.rotation, transform);
-
-        //rotate the crystal so it helicopters around the scene
-
+        enemy.GetComponent<LaserDispenser>().ToggleLaser(true);
     }
+
 }

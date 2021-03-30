@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 184444783}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: PlayerCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 184444782}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 39, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 911771371}
@@ -39,7 +39,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 309479102}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: FirePointBack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -54,7 +54,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 309479101}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.44, z: -0.293}
+  m_LocalPosition: {x: 0, y: 57, z: -9.8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 911771371}
@@ -69,7 +69,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 474434372}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: LedgeCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -84,7 +84,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 474434371}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.08, y: -1.51, z: 0.13}
+  m_LocalPosition: {x: 0.08, y: 1.1, z: 0.13}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 911771371}
@@ -99,7 +99,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 603791008}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: WallCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -114,7 +114,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 603791007}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.06, y: -0.26, z: 0.49}
+  m_LocalPosition: {x: 0.06, y: 45.1, z: 10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 911771371}
@@ -132,9 +132,9 @@ GameObject:
   - component: {fileID: 1893331332864294558}
   - component: {fileID: 8507985245833340897}
   - component: {fileID: 6192517944135278764}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: AliveCrystal
-  m_TagString: Untagged
+  m_TagString: Monster
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -203,10 +203,10 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.42309898
-  m_Height: 2.7198575
+  m_Radius: 0.5
+  m_Height: 1
   m_Direction: 1
-  m_Center: {x: 0.083657496, y: -0.18597053, z: 0.091117375}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &942725481
 GameObject:
   m_ObjectHideFlags: 0
@@ -216,7 +216,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 942725482}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: FirePointFront
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -231,7 +231,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 942725481}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.42, z: 0.528}
+  m_LocalPosition: {x: 0, y: 56.8, z: 10.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 911771371}
@@ -262,7 +262,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 681768504641416162}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.07500001, z: 0}
+  m_LocalPosition: {x: 0, y: 1.9, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 417615678019576321}
@@ -419,6 +419,7 @@ GameObject:
   - component: {fileID: 1655958689}
   - component: {fileID: 1655958688}
   - component: {fileID: 598847389874727681}
+  - component: {fileID: 1093160298}
   m_Layer: 11
   m_Name: Blue Crystal
   m_TagString: Crystal
@@ -435,7 +436,7 @@ Transform:
   m_GameObject: {fileID: 1044970987093620923}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 28.648966, y: 28.648966, z: 28.648966}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1528746187431396342}
   - {fileID: 102407286136067083}
@@ -504,7 +505,7 @@ NavMeshAgent:
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
-  m_StoppingDistance: 0
+  m_StoppingDistance: 0.25
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
@@ -556,12 +557,7 @@ MonoBehaviour:
   stunStateData: {fileID: 11400000, guid: e95c3bdc6bb22d74a89b7ef523ccfd45, type: 2}
   firePointFront: {fileID: 942725482}
   firePointBack: {fileID: 309479102}
-  laser: {fileID: 6600484499919377321, guid: bfba43235ad87eb428b10bd550afdff6, type: 3}
   chargeRate: 1
-  walkPoint: {x: 0, y: 0, z: 0}
-  walkPointSet: 0
-  walkPointRange: 15
-  rotateSpeed: 5
 --- !u!54 &1655958689
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -586,12 +582,12 @@ CapsuleCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1044970987093620923}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.017084159
-  m_Height: 0.09777549
+  m_Radius: 0.47835642
+  m_Height: 2.7377133
   m_Direction: 1
-  m_Center: {x: -0.000146769, y: 0.05489392, z: 0.000055532444}
+  m_Center: {x: -0.004109502, y: 1.5370295, z: 0.0015548915}
 --- !u!114 &598847389874727681
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -606,6 +602,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isGemMonster: 0
   gemDisplay: {fileID: 6893059595541414566}
+--- !u!114 &1093160298
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1044970987093620923}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7994bcd12cb7304d894e3c0d644415b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  laserType: 2
+  firingMode: 1
+  timeOn: 10
+  timeOff: 5
+  redLaser: {fileID: 0}
+  blueLaser: {fileID: 6600484499919377321, guid: bfba43235ad87eb428b10bd550afdff6,
+    type: 3}
+  greenLaser: {fileID: 0}
+  laserSpawnpoint: {fileID: 942725481}
+  laser: {fileID: 0}
 --- !u!1 &1685075701894157085
 GameObject:
   m_ObjectHideFlags: 0
@@ -671,7 +689,7 @@ RectTransform:
   m_GameObject: {fileID: 3282461353276255380}
   m_LocalRotation: {x: -0, y: 0.97629607, z: -0.2164396, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: -0.0008}
-  m_LocalScale: {x: 0.00034905277, y: 0.00034905277, z: 0.00034905272}
+  m_LocalScale: {x: 0.009773479, y: 0.009773479, z: 0.009773476}
   m_Children:
   - {fileID: 1253809997616481964}
   - {fileID: 3923504533769381679}
@@ -680,7 +698,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 25, y: 180, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0.1143}
+  m_AnchoredPosition: {x: 0, y: 3.03}
   m_SizeDelta: {x: 300, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &1004429695432646746
