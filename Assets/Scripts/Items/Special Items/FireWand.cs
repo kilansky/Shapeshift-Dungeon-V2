@@ -13,7 +13,7 @@ public class FireWand : MonoBehaviour
     /// </summary>
     public void spawnFireBall(Vector3 playerPos, Vector3 playerDir, Quaternion playerRotation)
     {
-        Vector3 spawnPos = playerPos + playerDir * 2; //Sets the vector position to spawn the Fireball attack slightly infront of the player
+        Vector3 spawnPos = playerPos + playerDir; //Sets the vector position to spawn the Fireball attack in front of the player
         spawnPos.y += 1f; //Adjusts the fireball to spawn in the correct position to the player
 
         Instantiate(PlayerFireBall, spawnPos, playerRotation); //Spawns the fireball attack

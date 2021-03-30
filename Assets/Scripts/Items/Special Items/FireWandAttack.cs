@@ -8,6 +8,11 @@ public class FireWandAttack : MonoBehaviour
     public float damage; //Damage variable to adjust the damage the enemy takes when it gets hit
     public float speed; //The speed that the Fire ball will go at
 
+    private void Start()
+    {
+        Destroy(gameObject, 8f);
+    }
+
     /// <summary>
     /// OnTrigger so when it hits an enemy it will damage them - AHL (3/4/21)
     /// </summary>

@@ -47,7 +47,7 @@ public class StatusEffects : MonoBehaviour
 
             timeLeft = duration - currTime; //Adjusts time left to show how much time is remaining (aka how much damage is left for the enemy to take)
 
-            print("This object has this much time remaining: " + timeLeft);
+            print("This object: " + gameObject.name + " has this much time remaining for the fire status effect: " + timeLeft);
 
             yield return new WaitForSeconds(1); //Waits for a single second before checking the while loop again
         }
