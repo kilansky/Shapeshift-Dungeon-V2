@@ -662,7 +662,7 @@ public class PlayerController : SingletonPattern<PlayerController>
             yield return new WaitForEndOfFrame();
         }
         //Set starting position of damage radius to the impact point of the sword
-        radialHitbox.transform.position = new Vector3(swordImpactPoint.transform.position.x, radialHitbox.transform.position.y, swordImpactPoint.transform.position.z);
+        radialHitbox.transform.position = swordImpactPoint.transform.position;
 
         //Enable the hitbox
         radialHitbox.GetComponent<SphereCollider>().enabled = true;
@@ -802,7 +802,7 @@ public class PlayerController : SingletonPattern<PlayerController>
                     spawnRotation = Quaternion.LookRotation(spawnDirection);
                 }
 
-                SpecialSlot.prefab.GetComponent<BowlingBall>().spawnBowlingBall(transform.position, spawnDirection, spawnRotation);
+                SpecialSlot.prefab.GetComponent<BowlingBall>().spawnBowlingBall(transform.position + new Vector3(0, 0.35f, 0), spawnDirection, spawnRotation);
             }
 
             //Bomb Item
