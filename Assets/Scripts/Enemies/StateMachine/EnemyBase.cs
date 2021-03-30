@@ -33,6 +33,9 @@ public class EnemyBase : MonoBehaviour, IDamageable
     //public float maxAttackRange = 20f;
     public float timeBetweenAttacks = 3f;
     public float minAgroRange = 10f;
+    public GameObject deathEffect;
+    public GameObject gemPrefab;
+
     [HideInInspector] public float distanceToPlayer;
     [HideInInspector] public NavMeshAgent agent;
     [HideInInspector] public bool isStunned;
@@ -278,8 +281,21 @@ public class EnemyBase : MonoBehaviour, IDamageable
         //Update the monster count of the room
         MonsterSpawner.Instance.MonsterKilled();
 
+        //Update the monster count of the room
+        MonsterSpawner.Instance.MonsterKilled();
+        Instantiate(deathEffect, transform.position + new Vector3(0, 2, 0), Quaternion.identity);
+
+        if (GetComponent<GemMonster>().isGemMonster)
+            DropGem();
+
         //Destroy self from root object 
         Destroy(transform.root.gameObject);
+    }
+
+    private void DropGem()
+    {
+        GameObject gem = Instantiate(gemPrefab, transform.position + new Vector3(0, 1, 0), Quaternion.identity);
+        gem.GetComponent<Rigidbody>().AddForce(Vector3.up * 350f);
     }
 
     private void UpdateUI()
@@ -364,7 +380,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
             Debug.Log("MONSTER TOUCHED KILLBOX");
             MonsterSpawner.Instance.MonsterKilledPrematurly();
 
-            Destroy(transform.root);
+            Destroy(transform.root.gameObject);
         }
     }
 }
