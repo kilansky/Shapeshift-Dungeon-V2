@@ -364,7 +364,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
             Debug.Log("MONSTER TOUCHED KILLBOX");
             MonsterSpawner.Instance.MonsterKilledPrematurly();
 
-            Destroy(transform.root);
+            Destroy(transform.root.gameObject);
         }
     }
 }

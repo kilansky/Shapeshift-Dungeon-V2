@@ -7,6 +7,8 @@ public class StatusEffects : MonoBehaviour
     private float currTime = 0; //CurrTime variable to be accessed by the fireStatus script
     private float timeLeft = 0; //TimeLeft variable to check how much time is left in the current coroutine if it is already running
 
+    public GameObject fireEffect;
+
     /// <summary>
     /// Function to start the Enumerator Coroutine to deal damage over a set period of time which will be specified by the source. - AHL (3/29/21)
     /// </summary>
@@ -32,6 +34,8 @@ public class StatusEffects : MonoBehaviour
     {
         currTime = 0; //Tracker to make sure that the ticks only happen a certain amount of time as specified by the duration
 
+        fireEffect.SetActive(true);
+
         //While the tracker is less than the duration the function will run and every second deal a single damage to the player or the enemy that this script is attached to.
         while (currTime < duration)
         {
@@ -52,5 +56,6 @@ public class StatusEffects : MonoBehaviour
             yield return new WaitForSeconds(1); //Waits for a single second before checking the while loop again
         }
 
+        fireEffect.SetActive(false);
     }
 }
