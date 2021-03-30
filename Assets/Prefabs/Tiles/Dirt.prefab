@@ -142,7 +142,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tileType: 1
-  willBeShop: 0
+  spawnerIndicator: {fileID: 186188970890191261}
+  rewardIndicator: {fileID: 4581605145813497275}
 --- !u!114 &101501108082051583
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -243,6 +244,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dd629662198651046b5803ffec4513d9, type: 3}
+--- !u!1 &4581605145813497275 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 175244011936390578, guid: dd629662198651046b5803ffec4513d9,
+    type: 3}
+  m_PrefabInstance: {fileID: 4466363682702174217}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2395980019393784785 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2070403729958192088, guid: dd629662198651046b5803ffec4513d9,
@@ -328,6 +335,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 74f7f1b7d6bbf3b45baa4cb9571763a4, type: 3}
+--- !u!1 &186188970890191261 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4875288836369237611, guid: 74f7f1b7d6bbf3b45baa4cb9571763a4,
+    type: 3}
+  m_PrefabInstance: {fileID: 4701187073090398198}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5815191956152870588 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1265035381876015434, guid: 74f7f1b7d6bbf3b45baa4cb9571763a4,
