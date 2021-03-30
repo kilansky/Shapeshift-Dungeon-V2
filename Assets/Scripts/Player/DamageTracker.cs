@@ -35,6 +35,12 @@ public class DamageTracker : SingletonPattern<DamageTracker>
         {
             spikeDamage += damageValue;
         }
+
+        //Pitfalls
+        else if(damageSource.GetComponent<Pit>())
+        {
+            pitfallDamage += damageValue;
+        }
     }
 
     /// <summary>

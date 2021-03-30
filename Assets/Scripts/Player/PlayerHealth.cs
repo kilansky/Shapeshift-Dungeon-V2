@@ -82,14 +82,14 @@ public class PlayerHealth : SingletonPattern<PlayerHealth>, IDamageable
             StartCoroutine(HUDController.Instance.UpdateHealthBar(Health, maxHealth));
             StartCoroutine(HUDController.Instance.ShowPlayerDamagedOverlay());
 
+            GetComponent<DamageTracker>().updateDamage(damage, damageSource); //Updates the damage variables in damage tracker baseed on the amount of damage that the player took from a specific source
+
             //Check if the player is dead
             if (Health <= 0)
             {
                 Kill();
                 return;
             }
-
-            GetComponent<DamageTracker>().updateDamage(damage, damageSource); //Updates the damage variables in damage tracker baseed on the amount of damage that the player took from a specific source
 
             //prevent from taking damage temporarily
             StartCoroutine(InvincibilityFrames());
