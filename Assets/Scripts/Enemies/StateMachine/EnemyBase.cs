@@ -280,9 +280,6 @@ public class EnemyBase : MonoBehaviour, IDamageable
     {
         //Update the monster count of the room
         MonsterSpawner.Instance.MonsterKilled();
-
-        //Update the monster count of the room
-        MonsterSpawner.Instance.MonsterKilled();
         Instantiate(deathEffect, transform.position + new Vector3(0, 2, 0), Quaternion.identity);
 
         if (GetComponent<GemMonster>().isGemMonster)

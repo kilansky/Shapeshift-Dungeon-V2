@@ -204,7 +204,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tileType: 7
-  willBeShop: 0
+  spawnerIndicator: {fileID: 0}
+  rewardIndicator: {fileID: 0}
+  mask:
+    serializedVersion: 2
+    m_Bits: 1024
 --- !u!114 &3719531714306949552
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -222,7 +226,6 @@ MonoBehaviour:
   rateOfFire: 3
   chargeTime: 1
   delayBeforeFiring: 0.5
-  canFire: 0
 --- !u!1 &5655740178386878972
 GameObject:
   m_ObjectHideFlags: 0
