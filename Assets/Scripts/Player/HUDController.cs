@@ -387,7 +387,8 @@ public class HUDController : SingletonPattern<HUDController>
     {
         player.gameObject.GetComponent<PlayerInput>().SwitchCurrentActionMap("UI");
         gameOverScreen.SetActive(true);
-        playerDamagedOverlay.SetActive(false);      
+        playerDamagedOverlay.SetActive(false);
+        GameOverStats.Instance.SetGameOverStats();
         StartCoroutine(gameOverScreen.GetComponent<Buttons>().WaitToDisplayReview());
     }
 
