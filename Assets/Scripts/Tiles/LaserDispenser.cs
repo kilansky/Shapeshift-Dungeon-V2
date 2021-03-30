@@ -14,6 +14,7 @@ public class LaserDispenser : MonoBehaviour
 
     [Header("Attacking Variables")]
     public fireTypes laserType;
+    public mode firingMode;
     public float timeOn = 1f;
     public float timeOff = 1f;
 
@@ -25,6 +26,12 @@ public class LaserDispenser : MonoBehaviour
     [Header("Pointers")]
     public GameObject laserSpawnpoint;
 
+    public enum mode
+    {
+        constant,
+        alternating
+    }   
+
     [HideInInspector]public GameObject laser;
     public enum fireTypes
     {
@@ -35,7 +42,8 @@ public class LaserDispenser : MonoBehaviour
 
     private void Start()
     {
-        //BeginLaser();
+        laser = Instantiate(GetLaserColor(), laserSpawnpoint.transform.position, laserSpawnpoint.transform.rotation, transform);
+        ToggleLaser(true);
     }
 
     /// <summary>
@@ -45,14 +53,18 @@ public class LaserDispenser : MonoBehaviour
     public void ToggleLaser(bool enabled)
     {
         if(enabled)
-        {
-            if(laser != null)
-                laser = Instantiate(GetLaserColor(), laserSpawnpoint.transform.position, laserSpawnpoint.transform.rotation, transform);
-            StartCoroutine(LaserCycle());
+        {   
+            if(firingMode == mode.constant)
+            {
+                laser.SetActive(true);
+            }
+            else
+                StartCoroutine(LaserCycle());
         }
         else
         {
-            StopCoroutine(LaserCycle());
+            if(firingMode == mode.alternating)
+                StopCoroutine(LaserCycle());
             laser.SetActive(false);
         }       
     }
