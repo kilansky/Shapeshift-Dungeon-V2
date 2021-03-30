@@ -33,6 +33,9 @@ public class EnemyBase : MonoBehaviour, IDamageable
     //public float maxAttackRange = 20f;
     public float timeBetweenAttacks = 3f;
     public float minAgroRange = 10f;
+    public GameObject deathEffect;
+    public GameObject gemPrefab;
+
     [HideInInspector] public float distanceToPlayer;
     [HideInInspector] public NavMeshAgent agent;
     [HideInInspector] public bool isStunned;
@@ -240,15 +243,13 @@ public class EnemyBase : MonoBehaviour, IDamageable
         //subtract the players damage from the enemies stun resistance
         currentStunResistance -= damage;
 
-        Debug.Log("Base Damage called");
-
         if (!isInvincible)
         {
             //enemy takes damage from the player
             Health -= damage;
             UpdateUI();
 
-            Debug.Log("Should have taken damage");
+            Debug.Log("Enemy Took Damage");
 
             if (Health <= 0)
                 Kill();
@@ -268,6 +269,8 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     public virtual void Heal(float heal)
     {
+        Debug.Log("Enemy Healed");
+
         //heal the enemy
         Health += heal;
         UpdateUI();
@@ -278,8 +281,21 @@ public class EnemyBase : MonoBehaviour, IDamageable
         //Update the monster count of the room
         MonsterSpawner.Instance.MonsterKilled();
 
+        //Update the monster count of the room
+        MonsterSpawner.Instance.MonsterKilled();
+        Instantiate(deathEffect, transform.position + new Vector3(0, 2, 0), Quaternion.identity);
+
+        if (GetComponent<GemMonster>().isGemMonster)
+            DropGem();
+
         //Destroy self from root object 
         Destroy(transform.root.gameObject);
+    }
+
+    private void DropGem()
+    {
+        GameObject gem = Instantiate(gemPrefab, transform.position + new Vector3(0, 1, 0), Quaternion.identity);
+        gem.GetComponent<Rigidbody>().AddForce(Vector3.up * 350f);
     }
 
     private void UpdateUI()
@@ -355,5 +371,16 @@ public class EnemyBase : MonoBehaviour, IDamageable
         Gizmos.DrawWireSphere(transform.position, minAgroRange);
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(transform.position, minAttackRange);
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.CompareTag("KillBox"))
+        {
+            Debug.Log("MONSTER TOUCHED KILLBOX");
+            MonsterSpawner.Instance.MonsterKilledPrematurly();
+
+            Destroy(transform.root.gameObject);
+        }
     }
 }

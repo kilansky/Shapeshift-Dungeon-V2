@@ -68,14 +68,12 @@ public class MonsterSpawner : SingletonPattern<MonsterSpawner>
     //Called when monsters are spawned above/below the map and killed instantly
     public void MonsterKilledPrematurly()
     {
-        if (!floorCleared)
-        {
-            //I would like this to update the number of monsters to spawn if one is not killed by the player,
-            //But getting this to work properly is hard. Free kills, woo. Hope it wasn't a gem monster...
+        monstersInRoom--;
 
-            //monstersInRoom--;
-            //monstersSpawned--;
-        }
+        if (!floorCleared)
+            monstersSpawned--;
+        else
+            monstersKilled++;
     }
 
     //Spawns a single monster, waits, and is called again recursively until all monsters have been killed

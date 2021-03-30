@@ -24,7 +24,7 @@ public class BowllingAttack : MonoBehaviour
             other.GetComponent<EnemyBase>().Damage(damage);
     }
 
-    //Destroy when colliding with Environment Layer
+    //Destroy when colliding with Environment Layer or the Wall Layer
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.layer == 9 || collision.gameObject.layer == 10)
