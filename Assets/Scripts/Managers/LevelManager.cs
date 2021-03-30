@@ -211,6 +211,7 @@ public class LevelManager : SingletonPattern<LevelManager>
     /// <param name="enabled"></param>
     public void ToggleHazards(bool enabled)
     {
+        Debug.Log("Toggle Hazards entered");
         foreach (Transform child in activeLevel.transform)
         {
             if (child.gameObject.GetComponent<LaserDispenser>())
@@ -221,6 +222,7 @@ public class LevelManager : SingletonPattern<LevelManager>
             else if (child.gameObject.GetComponent<Dispenser>())
             {
                 child.gameObject.GetComponent<Dispenser>().ToggleFiring(enabled);
+                Debug.Log("Dispensers Toggled");
             }
 
             else if (child.gameObject.GetComponent<SpikeTrap>())
