@@ -164,7 +164,7 @@ public class Tile : MonoBehaviour
             transform.position = new Vector3(originalPos.x, originalPos.y - yPos, originalPos.z);
             yield return null;
         }
-        nextTile.transform.SetParent(transform.parent); //Sets next tile to be a child of the parent of this tile
+        nextTile.transform.SetParent(LevelManager.Instance.activeLevel.transform); //Sets next tile to be a child of the parent of this tile
         nextTile.GetComponent<Tile>().StartMoving(timeToMove); //Triggers the next tile to begin moving up     
         Destroy(gameObject); //Destroys this object when its job is complete
     }

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1745479108801324094}
   - component: {fileID: 8628620159991845236}
   - component: {fileID: 8081523290022223404}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Pit
   m_TagString: Tile
   m_Icon: {fileID: 8418204508859773708, guid: 0000000000000000d000000000000000, type: 0}
@@ -46,6 +46,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tileType: 3
+  spawnerIndicator: {fileID: 0}
+  rewardIndicator: {fileID: 0}
+  mask:
+    serializedVersion: 2
+    m_Bits: 1024
 --- !u!65 &8628620159991845236
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -71,3 +76,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab95f27a68420c342aac69e7d68e6540, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pitDamage: 5

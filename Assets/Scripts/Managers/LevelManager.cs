@@ -230,40 +230,6 @@ public class LevelManager : SingletonPattern<LevelManager>
         }
     }
 
-    /*
-    /// <summary>
-    /// Loads finds tiles with the shop bool set and switches them out for shops
-    /// </summary>
-    [ContextMenu("Test Shop Loading")]
-    public void LoadShops()
-    {
-        Transform[] allChildrenCurrLevel = activeLevel.GetComponentsInChildren<Transform>(); //Puts all tiles into an array
-        foreach (Transform tile in allChildrenCurrLevel) //Cycles through all tiles in the newly created array
-        {
-            if (tile.GetComponent<Tile>() && tile.GetComponent<Tile>().willBeShop) //If the object selected is a tile and has the shop boolean on
-            {
-                GameObject pedestal = Instantiate(pedestalPrefab, tile.transform.position - new Vector3(0, 20, 0), new Quaternion(0, 0, 0, 0)); //Instantiate an item pedestal
-                tile.GetComponent<Tile>().DoTransition(transitionTime, 0f); //Runs the function to initiate a transition
-                StartCoroutine(ShopColliderCycle(pedestal));
-            }
-        }
-    }
-
-    /// <summary>
-    /// Triggers the collider for the pedestal to turn on and then turns it off after waiting for the transition to finish
-    /// </summary>
-    /// <param name="obj"></param>
-    /// <returns></returns>
-    private IEnumerator ShopColliderCycle(GameObject obj)
-    {
-        CenterTile.Instance.canTransition = false;
-        obj.GetComponent<ItemPedestal>().SetCollider(true);
-        yield return new WaitForSeconds(2 * transitionTime);
-        obj.GetComponent<ItemPedestal>().SetCollider(false);
-        CenterTile.Instance.canTransition = true;
-    }
-    */
-
     private void Start()
     {
         CenterTile.Instance.SetFloorText(currFloor); //Ensures the level display is set correctly on start
