@@ -42,7 +42,7 @@ public class StatPotionPanel : MonoBehaviour
         float IncreasePercent = (((originalAttackBaseValue + IncreaseValue) / originalAttackBaseValue) - 1) * 100;
 
         //Math rounding the increase percents to 1 decimal place to appear on the panel by adjusting the text
-        attackText.text = "Attack +" + (float)Math.Round(IncreasePercent, 1) + "%";
+        attackText.text = "Attack +" + Math.Round(IncreasePercent, 1).ToString("0") + "%";
 
         //Speed Stat
         //Math that is done to increase the stat at a decreasing rate, currently set to 1 / a quad root of the amount of times attack has increased.
