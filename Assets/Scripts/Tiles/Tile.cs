@@ -30,8 +30,9 @@ public class Tile : MonoBehaviour
     }
     public tileTypes tileType;
 
-    [Header("Shop Toggle")]
-    public bool willBeShop;
+    [Header("Pointers")]
+    public GameObject spawnerIndicator;
+    public GameObject rewardIndicator;
 
     private GameObject nextTile;
 
@@ -115,8 +116,8 @@ public class Tile : MonoBehaviour
             }
             else if(NoOrientation()) //If the block doesn't require an orientation, it is also a spawnable block
             {
-                transform.GetChild(0).gameObject.SetActive(CheckForSpawner(newTile)); //Sets this block's spawner to the same state as the next tile and then does no movement
-                transform.GetChild(0).gameObject.SetActive(CheckForReward(newTile)); //Sets this block's spawner to the same state as the next tile and then does no movement
+                spawnerIndicator.SetActive(CheckForSpawner(newTile)); //Sets this block's spawner to the same state as the next tile and then does no movement
+                rewardIndicator.SetActive(CheckForReward(newTile)); //Sets this block's spawner to the same state as the next tile and then does no movement
                 return false;
             }
             else
