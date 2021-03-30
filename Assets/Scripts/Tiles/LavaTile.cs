@@ -30,6 +30,10 @@ public class LavaTile : MonoBehaviour
         if (target.CompareTag("Player") && !PlayerController.Instance.IsDashing)
         {
             yield return new WaitForSeconds(damageDelay);
+
+            if(!PlayerHealth.Instance.isInvincible)
+                AnalyticsEvents.Instance.PlayerDamaged("Lava"); //Sends analytics event about damage source
+
             PlayerHealth.Instance.Damage(damage);
         }
     }

@@ -19,6 +19,7 @@ public class FloatingCrystal_StunState : StunState
     public override void Enter()
     {
         base.Enter();
+        enemy.GetComponent<LaserDispenser>().ToggleLaser(false);
     }
 
     public override void Exit()

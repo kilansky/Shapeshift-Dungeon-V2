@@ -22,6 +22,9 @@ public class BowllingAttack : MonoBehaviour
         //If the other object is Monster (Contains the enemy base script) then go on with the rest of the damage
         if (other.GetComponent<EnemyBase>())
             other.GetComponent<EnemyBase>().Damage(damage);
+
+        if (other.gameObject.layer == 9 || other.gameObject.layer == 10)
+            Destroy(gameObject);
     }
 
     //Destroy when colliding with Environment Layer or the Wall Layer

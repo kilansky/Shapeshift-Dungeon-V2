@@ -18,6 +18,7 @@ public class Bullet : MonoBehaviour
     //bullet charge time
     public float minBulletSize;
     public float maxBulletSize;
+    public string shotBy; //used for damage type analytics - REMOVE LATER
 
     [Header("VFX Pointers")]
     public GameObject beamLight;
@@ -68,6 +69,9 @@ public class Bullet : MonoBehaviour
         {
             if(!PlayerHealth.Instance.isInvincible)
             {
+                if (!PlayerHealth.Instance.isInvincible)
+                    AnalyticsEvents.Instance.PlayerDamaged(shotBy + " Projectile"); //Sends analytics event about damage source
+
                 PlayerHealth.Instance.Damage(bulletDamage);
                 Destroy(gameObject);
             }
@@ -88,9 +92,7 @@ public class Bullet : MonoBehaviour
         shootDir = transform.forward;
 
         //implements bullet facing direction
-        transform.eulerAngles = new Vector3(0, 0, GetAngleFromVectorFloat(shootDir));
-
-        
+        transform.eulerAngles = new Vector3(0, 0, GetAngleFromVectorFloat(shootDir));       
     }
 
     //need this to change bullet facing direction

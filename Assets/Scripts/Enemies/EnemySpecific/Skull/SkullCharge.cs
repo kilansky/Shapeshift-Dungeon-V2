@@ -84,6 +84,7 @@ public class SkullCharge : MonoBehaviour
         //bullet.transform.localEulerAngles = Vector3.right;
         bullet.GetComponent<Bullet>().moveSpeed = bulletSpeed;
         bullet.GetComponent<Bullet>().canDamage = true;
+        bullet.GetComponent<Bullet>().shotBy = "Skull";
 
         yield return new WaitForSeconds(attackCoolDown);
         isAttacking = false;

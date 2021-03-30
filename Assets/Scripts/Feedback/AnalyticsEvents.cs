@@ -131,4 +131,17 @@ public class AnalyticsEvents : SingletonPattern<AnalyticsEvents>
 
         Debug.Log("ItemsOnDeath analyticsResult: " + analyticsResult);
     }
+
+    //Sends an analytics event when the player takes damage
+    public void PlayerDamaged(string damageSource)
+    {
+        int floorNum = LevelManager.Instance.currFloor;
+        string mapName = LevelManager.Instance.currMapName;
+
+        AnalyticsResult analyticsResult = Analytics.CustomEvent("Player_Damaged",
+            new Dictionary<string, object> { { "Damage_Source", damageSource },
+            { "Floor_Num", floorNum }, { "Map_Name", mapName } });
+
+        Debug.Log("PlayerDamaged analyticsResult: " + analyticsResult);
+    }
 }

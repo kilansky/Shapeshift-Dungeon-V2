@@ -43,6 +43,7 @@ public class LaserDispenser : MonoBehaviour
     private void Start()
     {
         laser = Instantiate(GetLaserColor(), laserSpawnpoint.transform.position, laserSpawnpoint.transform.rotation, transform);
+        laser.SetActive(false);
     }
 
     /// <summary>
@@ -64,7 +65,9 @@ public class LaserDispenser : MonoBehaviour
         {
             if(firingMode == mode.alternating)
                 StopCoroutine(LaserCycle());
-            laser.SetActive(false);
+
+            if(laser)
+                laser.SetActive(false);
         }       
     }
 

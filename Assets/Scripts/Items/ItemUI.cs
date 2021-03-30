@@ -22,8 +22,11 @@ public class ItemUI : MonoBehaviour
         Image.sprite = GetComponentInParent<Item>().item.sprite;
         Name.text = GetComponentInParent<Item>().item.ItemName;
         Description.text = GetComponentInParent<Item>().item.itemDescription;
-        Price.text = GetComponentInParent<Item>().price.ToString();
 
-        priceCanvas.SetActive(GetComponentInParent<Item>().price > 0); //Sets price canvas to active if price is greater than 0
+        if (priceCanvas)//Check if this item has a price canvas set up
+        {
+            Price.text = GetComponentInParent<Item>().price.ToString();
+            priceCanvas.SetActive(GetComponentInParent<Item>().price > 0); //Sets price canvas to active if price is greater than 0
+        }
     }
 }

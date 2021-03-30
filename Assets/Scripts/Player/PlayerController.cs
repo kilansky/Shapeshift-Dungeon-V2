@@ -662,7 +662,7 @@ public class PlayerController : SingletonPattern<PlayerController>
             yield return new WaitForEndOfFrame();
         }
         //Set starting position of damage radius to the impact point of the sword
-        radialHitbox.transform.position = new Vector3(swordImpactPoint.transform.position.x, radialHitbox.transform.position.y, swordImpactPoint.transform.position.z);
+        radialHitbox.transform.position = swordImpactPoint.transform.position;
 
         //Enable the hitbox
         radialHitbox.GetComponent<SphereCollider>().enabled = true;
@@ -802,7 +802,7 @@ public class PlayerController : SingletonPattern<PlayerController>
                     spawnRotation = Quaternion.LookRotation(spawnDirection);
                 }
 
-                SpecialSlot.prefab.GetComponent<BowlingBall>().spawnBowlingBall(transform.position, spawnDirection, spawnRotation);
+                SpecialSlot.prefab.GetComponent<BowlingBall>().spawnBowlingBall(transform.position + new Vector3(0, 0.35f, 0), spawnDirection, spawnRotation);
             }
 
             //Bomb Item
@@ -895,9 +895,10 @@ public class PlayerController : SingletonPattern<PlayerController>
                 HUDController.Instance.controlsPanel.SetActive(false);
                 HUDController.Instance.HideQuickHint();
             }
-            else if (LevelManager.Instance.currFloor == 30)//End game stuff
+            else if (LevelManager.Instance.currFloor == 19)//End game stuff
             {
                 RunTimer.Instance.IncreaseTimer = false;
+                Time.timeScale = 0;
                 HUDController.Instance.ShowWinScreen();
             }
             else
@@ -963,7 +964,7 @@ public class PlayerController : SingletonPattern<PlayerController>
 
             if (pickupItem == true) //If the item can be picked up
             {
-                other.GetComponentInParent<Item>().Equip(this, this.GetComponent<PlayerHealth>()); //Equip the item to the player
+                other.GetComponentInParent<Item>().Equip(this, GetComponent<PlayerHealth>()); //Equip the item to the player
 
                 if(LevelManager.Instance.currFloor %5 != 0)
                     AnalyticsEvents.Instance.ItemTaken(other.GetComponentInParent<Item>().item.ItemName); //Send Item Taken analytics event

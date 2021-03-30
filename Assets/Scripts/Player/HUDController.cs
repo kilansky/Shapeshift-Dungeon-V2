@@ -175,20 +175,27 @@ public class HUDController : SingletonPattern<HUDController>
 
     public IEnumerator UpdateHealthBar(float currHealth, float maxHealth)
     {
+        //Set text and damage state
         maxHealthText.text = maxHealth.ToString("0");
         currentHealthText.text = currHealth.ToString("0");
         SetHealthBarBackground(currHealth, maxHealth);
 
-        float fillFromValue = healthBarFill.fillAmount;
-        float fillToValue = currHealth / maxHealth;
-        float t = 0;
-        while (t <= 1)
-        {
-            healthBarFill.fillAmount = Mathf.Lerp(fillFromValue, fillToValue, t);
-            t += Time.deltaTime * healthLerpSpeed;
-            yield return new WaitForEndOfFrame();
+        //lerp health to new value
+        if (currHealth == 0)
+            healthBarFill.fillAmount = 0;
+        else
+        { 
+            float fillFromValue = healthBarFill.fillAmount;
+            float fillToValue = currHealth / maxHealth;
+            float t = 0;
+            while (t <= 1)
+            {
+                healthBarFill.fillAmount = Mathf.Lerp(fillFromValue, fillToValue, t);
+                t += Time.deltaTime * healthLerpSpeed;
+                yield return new WaitForEndOfFrame();
+            }
+            healthBarFill.fillAmount = fillToValue;
         }
-        healthBarFill.fillAmount = fillToValue;
     }
 
     //Sets the damaged condition of the health bar based on the current health value
@@ -380,7 +387,8 @@ public class HUDController : SingletonPattern<HUDController>
     {
         player.gameObject.GetComponent<PlayerInput>().SwitchCurrentActionMap("UI");
         gameOverScreen.SetActive(true);
-        playerDamagedOverlay.SetActive(false);      
+        playerDamagedOverlay.SetActive(false);
+        GameOverStats.Instance.SetGameOverStats();
         StartCoroutine(gameOverScreen.GetComponent<Buttons>().WaitToDisplayReview());
     }
 

@@ -33,7 +33,7 @@ public class Item : MonoBehaviour
 
             else //If the player does have a special item then unequip their current one and equip the new one
             {
-                Instantiate(c.SpecialSlot.prefab, transform.position, transform.rotation);
+                Instantiate(c.SpecialSlot.prefab, transform.position, transform.rotation, transform.parent);
                 c.SpecialSlot.prefab.GetComponent<Item>().Unequip(c, h);
                 c.SpecialSlot = this.item;
             }
@@ -47,7 +47,7 @@ public class Item : MonoBehaviour
 
             else //If the player does have a head item then unequip their current one and equip the new one
             {
-                Instantiate(c.HeadSlot.prefab, transform.position, transform.rotation);
+                Instantiate(c.HeadSlot.prefab, transform.position, transform.rotation, transform.parent);
                 c.HeadSlot.prefab.GetComponent<Item>().Unequip(c, h);
                 c.HeadSlot = this.item;
             }
@@ -61,7 +61,7 @@ public class Item : MonoBehaviour
 
             else //If the player does have a torso item then unequip their current one and equip the new one
             {
-                Instantiate(c.TorsoSlot.prefab, transform.position, transform.rotation);
+                Instantiate(c.TorsoSlot.prefab, transform.position, transform.rotation, transform.parent);
                 c.TorsoSlot.prefab.GetComponent<Item>().Unequip(c, h);
                 c.TorsoSlot = this.item;
             }
@@ -75,7 +75,7 @@ public class Item : MonoBehaviour
 
             else //If the player does have a foot item then unequip their current one and equip the new one
             {
-                Instantiate(c.FootSlot.prefab, transform.position, transform.rotation);
+                Instantiate(c.FootSlot.prefab, transform.position, transform.rotation, transform.parent);
                 c.FootSlot.prefab.GetComponent<Item>().Unequip(c, h);
                 c.FootSlot = this.item;
             }
@@ -92,7 +92,7 @@ public class Item : MonoBehaviour
 
             else //If the player does have a pocket1 and pocket2 items then unequip the first one, slide 2 to 1, then equip the new one
             {
-                Instantiate(c.PocketSlot1.prefab, transform.position, transform.rotation);
+                Instantiate(c.PocketSlot1.prefab, transform.position, transform.rotation, transform.parent);
                 c.PocketSlot1.prefab.GetComponent<Item>().Unequip(c, h);
                 c.PocketSlot1 = c.PocketSlot2;
                 c.PocketSlot2 = this.item;
