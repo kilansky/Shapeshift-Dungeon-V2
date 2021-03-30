@@ -195,14 +195,4 @@ public class FloatingCrystal : EnemyBase
         }
         return false;
     }*/
-
-    private void OnTriggerStay(Collider other)
-    {
-        if (other.CompareTag("KillBox"))
-        {
-            Damage(100);
-            Debug.Log("MONSTER TOUCHED KILLBOX");
-        }
-    }
-
 }
