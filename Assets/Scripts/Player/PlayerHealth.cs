@@ -69,6 +69,33 @@ public class PlayerHealth : SingletonPattern<PlayerHealth>, IDamageable
         }
     }
 
+    /// <summary>
+    /// Secondary Damage function that takes into account the damage source to adjust the damage tracker script variables - AHL (3/30/21)
+    /// </summary>
+    public virtual void Damage(float damage, GameObject damageSource)
+    {
+        if (!isInvincible && Health > 0)
+        {
+            //deal damage to player
+            Health -= damage * damageModifier.Value;
+            Health = Mathf.Clamp(Health, 0, maxHealth);
+            StartCoroutine(HUDController.Instance.UpdateHealthBar(Health, maxHealth));
+            StartCoroutine(HUDController.Instance.ShowPlayerDamagedOverlay());
+
+            //Check if the player is dead
+            if (Health <= 0)
+            {
+                Kill();
+                return;
+            }
+
+            GetComponent<DamageTracker>().updateDamage(damage, damageSource); //Updates the damage variables in damage tracker baseed on the amount of damage that the player took from a specific source
+
+            //prevent from taking damage temporarily
+            StartCoroutine(InvincibilityFrames());
+        }
+    }
+
     //Uses a potion - REPLACE W/ BETTER SYSTEM LATER!
     public void UsePotion()
     {
@@ -154,6 +181,7 @@ public class PlayerHealth : SingletonPattern<PlayerHealth>, IDamageable
     //Game is over, display game over screen and level review
     public virtual void Kill()
     {
+        GetComponent<DamageTracker>().displayDamage(); //Displays the amount of damage that the player took throughout the game and from what sources
         AnalyticsEvents.Instance.PlayerDied(); //Send Player Died Analytics Event
         AnalyticsEvents.Instance.ItemsOnDeath(); //Send Items On Death Analytics Event
         HUDController.Instance.ShowGameOver();
