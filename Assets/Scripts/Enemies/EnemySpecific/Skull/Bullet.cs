@@ -65,7 +65,7 @@ public class Bullet : MonoBehaviour
     //Check if player was hit & deal damage
     private void OnTriggerEnter(Collider collider)
     {
-        if (collider.CompareTag("Player") && canDamage)
+        if (collider.GetComponent<PlayerController>() && canDamage)
         {
             if(!PlayerHealth.Instance.isInvincible)
             {

@@ -20,7 +20,7 @@ public class Pit : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.tag == "Player")
+        if(other.GetComponent<PlayerController>())
         {
             FindSafeTile.Instance.MovePlayerToSafeLocation();
 

@@ -3,8 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Analytics;
 
+[System.Serializable]
+public class DamageSourceData
+{
+    public string damageType;
+    public int damageCount;
+}
+
 public class AnalyticsEvents : SingletonPattern<AnalyticsEvents>
 {
+    private List<DamageSourceData> damageSources = new List<DamageSourceData>();
+    private DamageSourceData newDamageData = new DamageSourceData();
+    private bool canSendDamageEvent = true;
+
     //Sends an analytics event when an item is picked up by the player
     public void ItemTaken(string itemName)
     {
@@ -132,16 +143,76 @@ public class AnalyticsEvents : SingletonPattern<AnalyticsEvents>
         Debug.Log("ItemsOnDeath analyticsResult: " + analyticsResult);
     }
 
-    //Sends an analytics event when the player takes damage
-    public void PlayerDamaged(string damageSource)
+    public IEnumerator DamageSourcesData()
     {
-        int floorNum = LevelManager.Instance.currFloor;
-        string mapName = LevelManager.Instance.currMapName;
+        int i = 1;
 
-        AnalyticsResult analyticsResult = Analytics.CustomEvent("Player_Damaged",
-            new Dictionary<string, object> { { "Damage_Source", damageSource },
-            { "Floor_Num", floorNum }, { "Map_Name", mapName } });
+        foreach (DamageSourceData storedDamageType in damageSources)
+        {
+            AnalyticsResult analyticsResult = Analytics.CustomEvent("Damage_Sources" + i,
+                new Dictionary<string, object> { { "Damage_Type", storedDamageType.damageType },
+                { "Damage_Count", storedDamageType.damageCount } });
 
-        Debug.Log("PlayerDamaged analyticsResult: " + analyticsResult);
+            Debug.Log("DamageSources " + storedDamageType.damageType + " analyticsResult: " + analyticsResult);
+            print(storedDamageType.damageType);
+            print(storedDamageType.damageCount);
+            i++;
+
+            yield return new WaitForSecondsRealtime(0.25f);
+        }
+    }
+
+    //Sends an analytics event when the player takes damage
+    public void PlayerDamaged(string newDamageSource)
+    {
+        if(canSendDamageEvent)
+        {
+            bool matchFound = false;
+            foreach (DamageSourceData storedDamageType in damageSources)
+            {
+                if (storedDamageType.damageType == newDamageSource)
+                {
+                    storedDamageType.damageCount++;
+                    matchFound = true;
+                    break;
+                }
+            }
+
+            if (!matchFound)
+            {
+                newDamageData.damageType = newDamageSource;
+                newDamageData.damageCount = 1;
+
+                damageSources.Add(newDamageData);
+            }
+
+            /*
+            foreach (DamageSourceData storedDamageType in damageSources)
+            {
+                print(storedDamageType.damageType);
+                print(storedDamageType.damageCount);
+            }
+            */
+
+            StartCoroutine(DisableDamageEvents());
+        }
+    }
+
+    //Sends an analytics event describing the player's controls when the player begins the game
+    public void PlayerControls()
+    {
+        string controlType = HUDController.Instance.CurrentControlScheme;
+
+        AnalyticsResult analyticsResult = Analytics.CustomEvent("Player_Controls",
+            new Dictionary<string, object> { { "Control_Type", controlType } });
+
+        Debug.Log("PlayerControls analyticsResult: " + analyticsResult);
+    }
+
+    private IEnumerator DisableDamageEvents()
+    {
+        canSendDamageEvent = false;
+        yield return new WaitForSecondsRealtime(PlayerHealth.Instance.dmgInvincibilityTime);
+        canSendDamageEvent = true;
     }
 }
