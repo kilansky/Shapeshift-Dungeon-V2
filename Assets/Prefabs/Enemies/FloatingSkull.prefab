@@ -125,7 +125,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2141400604531658943}
   - component: {fileID: 5429058932085050053}
-  - component: {fileID: 7065759313127183542}
   - component: {fileID: 713983638228988762}
   - component: {fileID: 5500098375395493343}
   m_Layer: 11
@@ -173,18 +172,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &7065759313127183542
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1656225346805746181}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cc7c936286fd5cf4bbd1971417289b91, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!54 &713983638228988762
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -765,17 +752,13 @@ MonoBehaviour:
   healthBar: {fileID: 8531734560222423607}
   entityData: {fileID: 11400000, guid: 421632450167ebd499eafb6e84d01c25, type: 2}
   dmgInvincibilityTime: 0.5
-  sightRange: 15
+  sightRange: 25
   minAttackRange: 5
   timeBetweenAttacks: 2
-  minAgroRange: 15
+  minAgroRange: 25
   distanceToPlayer: 0
   agent: {fileID: 0}
   isStunned: 0
-  gemPrefab: {fileID: 1679218149131978045, guid: 269ad815a67e12f4d86befaa2ccef290,
-    type: 3}
-  deathEffects: {fileID: 3017006636548126711, guid: 9fa9cc35f614bf44d8df492ba34ed85b,
-    type: 3}
   whatIsPlayer:
     serializedVersion: 2
     m_Bits: 256

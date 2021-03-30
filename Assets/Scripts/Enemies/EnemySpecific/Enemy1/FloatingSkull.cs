@@ -8,6 +8,7 @@ using UnityEngine.AI;
 //add Idamageable later
 public class FloatingSkull : EnemyBase
 {
+    //this script contains all the states of the floating skull
     public FloatingSkull_IdleState idleState { get; private set; }
     public FloatingSkull_MoveState moveState { get; private set; }
     public FloatingSkull_PlayerDetected playerDetectedState { get; private set; }
@@ -35,6 +36,7 @@ public class FloatingSkull : EnemyBase
 
     public override void Start()
     {
+        SetNewTarget(player);
         base.Start();
 
         moveState = new FloatingSkull_MoveState(this, stateMachine, "move", moveStateData, this);
@@ -46,6 +48,7 @@ public class FloatingSkull : EnemyBase
 
         //this line is what got rid of my NullReferenceExceptions
         stateMachine.Initialize(moveState);
+        
     }
 
     //set current state to stunState if isStunned
@@ -60,15 +63,6 @@ public class FloatingSkull : EnemyBase
         if (isStunned && stateMachine.currentState != stunState)
         {
             stateMachine.ChangeState(stunState);
-        }
-    }
-
-    private void OnTriggerStay(Collider other)
-    {
-        if (other.CompareTag("KillBox"))
-        {
-            Damage(100);
-            Debug.Log("MONSTER TOUCHED KILLBOX");
         }
     }
 }

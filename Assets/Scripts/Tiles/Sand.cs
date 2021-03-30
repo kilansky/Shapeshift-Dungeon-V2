@@ -19,7 +19,7 @@ public class Sand : MonoBehaviour
         if(other.gameObject == PlayerController.Instance.gameObject)
         {
             //Reduce player speed
-            Debug.Log("Player is on sand");
+            //Debug.Log("Player is on sand");
             PlayerController.Instance.SandSpeedMod = 1 - (slowPercent / 100);
         }
     }
@@ -29,7 +29,7 @@ public class Sand : MonoBehaviour
         if (other.gameObject == PlayerController.Instance.gameObject)
         {
             //Set player speed back
-            Debug.Log("Player has exited sand");
+            //Debug.Log("Player has exited sand");
             PlayerController.Instance.SandSpeedMod = 1;
         }
     }
