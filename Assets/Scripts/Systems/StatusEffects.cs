@@ -34,7 +34,7 @@ public class StatusEffects : MonoBehaviour
     {
         currTime = 0; //Tracker to make sure that the ticks only happen a certain amount of time as specified by the duration
 
-        fireEffect.SetActive(true);
+        fireEffect.SetActive(true); //Activates the fire effect object on the object
 
         //While the tracker is less than the duration the function will run and every second deal a single damage to the player or the enemy that this script is attached to.
         while (currTime < duration)
@@ -56,6 +56,6 @@ public class StatusEffects : MonoBehaviour
             yield return new WaitForSeconds(1); //Waits for a single second before checking the while loop again
         }
 
-        fireEffect.SetActive(false);
+        fireEffect.SetActive(false); //Deactivates the fire effect on the current object
     }
 }
