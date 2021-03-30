@@ -6,7 +6,7 @@ public class FloatingCrystal_AttackState : AttackState
 {
     private FloatingCrystal enemy;
     //public float rotateSpeed = 5f;
-    //private Laser laser;
+    private Laser laser;
 
 
     public FloatingCrystal_AttackState(EnemyBase entity, FiniteStateMachine stateMachine, string animBoolName, D_AttackState stateData, FloatingCrystal enemy) : base(entity, stateMachine, animBoolName, stateData)
@@ -23,7 +23,7 @@ public class FloatingCrystal_AttackState : AttackState
     {
         //attack the player
         base.Enter();
-        //laser = enemy.GetComponent<Laser>();
+        laser = enemy.GetComponent<Laser>();
     }
 
     public override void Exit()
@@ -59,12 +59,16 @@ public class FloatingCrystal_AttackState : AttackState
         //canAttack = false;
         base.TriggerAttack();
         enemy.Anim.SetBool("isAttacking", true);
+        
         //still needs to move, but needs to attack now too
         enemy.Patrol();
         //enemy.transform.Rotate(0, rotateSpeed, 0);
+
         //fire the lasers from the front and back
-        //GameObject laser = Instantiate(LaserBeam_Blue, firePointFront.transform.position, firePointFront.transform.rotation, transform);
-        //GameObject laser = Instantiate(LaserBeam_Blue, firePointBack.transform.position, firePointBack.transform.rotation, transform);
+        laser.Attack(enemy.LaserBeam_Blue, enemy.firePointBack.transform, enemy.firePointFront.transform);
+
+        GameObject laserBeamF = Instantiate(LaserBeam_Blue, firePointFront.transform.position, firePointFront.transform.rotation, transform);
+        GameObject laserBeamB = Instantiate(LaserBeam_Blue, firePointBack.transform.position, firePointBack.transform.rotation, transform);
 
         //rotate the crystal so it helicopters around the scene
 
