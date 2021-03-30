@@ -25,7 +25,13 @@ public class Pit : MonoBehaviour
             FindSafeTile.Instance.MovePlayerToSafeLocation();
 
             if(LevelManager.Instance.currFloor != 0)//don't deal damage on level 0
+            {
+                if (!PlayerHealth.Instance.isInvincible)
+                    AnalyticsEvents.Instance.PlayerDamaged("Pit"); //Sends analytics event about damage source
+
                 PlayerHealth.Instance.Damage(pitDamage);
+            }
+
         }
     }
 }

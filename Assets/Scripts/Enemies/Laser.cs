@@ -82,6 +82,9 @@ public class Laser : MonoBehaviour
     {
         if (target.CompareTag("Player") && !PlayerController.Instance.IsDashing)
         {
+            if (!PlayerHealth.Instance.isInvincible)
+                AnalyticsEvents.Instance.PlayerDamaged("Laser"); //Sends analytics event about damage source
+
             PlayerHealth.Instance.Damage(damage);
             yield return new WaitForSeconds(tickRate);
         }
