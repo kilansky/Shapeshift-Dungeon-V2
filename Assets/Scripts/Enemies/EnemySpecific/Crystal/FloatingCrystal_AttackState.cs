@@ -5,7 +5,7 @@ using UnityEngine;
 public class FloatingCrystal_AttackState : AttackState
 {
     private FloatingCrystal enemy;
-    [HideInInspector] public float rotateSpeed = 3f;
+    [HideInInspector] public float rotateSpeed = 1.5f;
     private LaserDispenser laser;
     float timeElapsed;
     float attackDuration = 8f;
@@ -54,14 +54,6 @@ public class FloatingCrystal_AttackState : AttackState
             stateMachine.ChangeState(enemy.moveState);
         }
 
-        /*if (enemy.CheckPlayerInMinAttackRange())
-        {
-            TriggerAttack();
-        }
-        else
-        {
-            stateMachine.ChangeState(enemy.moveState);
-        }*/
     }
 
     public override void PhysicsUpdate()
