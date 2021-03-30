@@ -788,7 +788,7 @@ public class PlayerController : SingletonPattern<PlayerController>
         {
             //IF statement chain to see what special item is currently being used
 
-            //Bowling Ball item
+            //Bowling Ball Item
             if (SpecialSlot.ItemName == "Bowling Ball")
             {
                 Vector3 spawnDirection = transform.forward;
@@ -805,10 +805,26 @@ public class PlayerController : SingletonPattern<PlayerController>
                 SpecialSlot.prefab.GetComponent<BowlingBall>().spawnBowlingBall(transform.position, spawnDirection, spawnRotation);
             }
 
-
             //Bomb Item
             else if (SpecialSlot.ItemName == "Bomb Bag")
                 SpecialSlot.prefab.GetComponent<BombBag>().spawnBomb(transform.position, transform.rotation);
+
+            //Fire Wand Item
+            if (SpecialSlot.ItemName == "Fire Wand")
+            {
+                Vector3 spawnDirection = transform.forward;
+                Quaternion spawnRotation = lastTargetRotation;
+
+                if (IsUsingMouse)//Spawn in direction of mouse pointer if using a mouse
+                {
+                    spawnDirection = new Vector3(mouseTargetPoint.position.x, 0, mouseTargetPoint.position.z) - new Vector3(transform.position.x, 0, transform.position.z);
+                    spawnDirection = spawnDirection.normalized / 2;
+
+                    spawnRotation = Quaternion.LookRotation(spawnDirection);
+                }
+
+                SpecialSlot.prefab.GetComponent<FireWand>().spawnFireBall(transform.position, spawnDirection, spawnRotation);
+            }
 
         }
         SpecialCharge = 0;
