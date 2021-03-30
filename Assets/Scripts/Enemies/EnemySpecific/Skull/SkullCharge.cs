@@ -5,6 +5,8 @@ using UnityEngine;
 public class SkullCharge : MonoBehaviour
 {
     private EnemyBase enemy;
+    private Animator myAnim;
+    
     [HideInInspector] public bool isAttacking = false;
     public float attackCoolDown = 2f;
 
@@ -27,7 +29,8 @@ public class SkullCharge : MonoBehaviour
 
     private void Start()
     {
-        enemy = GetComponent<EnemyBase>();
+        enemy = transform.parent.GetComponent<EnemyBase>();
+        myAnim = GetComponent<Animator>();
     }
 
     public void Attack(GameObject fireball, Transform firePoint, float chargeRate)
@@ -61,7 +64,7 @@ public class SkullCharge : MonoBehaviour
             if (enemy.isStunned)
             {
                 Destroy(bullet);
-                enemy.Anim.SetBool("isAttacking", false);
+                myAnim.SetBool("isAttacking", false);
                 yield break;
             }
             
@@ -88,7 +91,6 @@ public class SkullCharge : MonoBehaviour
 
     public void AttackEnded()
     {
-        enemy.Anim.SetBool("isAttacking", false);
+        myAnim.SetBool("isAttacking", false);
     }
-
 }

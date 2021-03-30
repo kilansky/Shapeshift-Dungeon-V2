@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-
 public class FloatingSkull_AttackState : AttackState
 {
     //attack state for the Floating Skull
@@ -12,7 +11,6 @@ public class FloatingSkull_AttackState : AttackState
 
     public float shootForce;
     public float timeBetweenAttacks;
-
 
     public FloatingSkull_AttackState(EnemyBase entity, FiniteStateMachine stateMachine, string animBoolName, D_AttackState stateData, FloatingSkull enemy) : base(entity, stateMachine, animBoolName, stateData)
     {
@@ -26,7 +24,7 @@ public class FloatingSkull_AttackState : AttackState
 
     public override void Enter()
     {
-        charge = enemy.GetComponent<SkullCharge>();
+        charge = enemy.aliveGO.GetComponent<SkullCharge>();
 
         base.Enter();
         
@@ -73,40 +71,6 @@ public class FloatingSkull_AttackState : AttackState
     {
         base.PhysicsUpdate();
     }
-
-    /*IEnumerator BulletCharge(GameObject bullet)
-        {
-            canAttack = false;
-            //set movespeed to 0
-            float bulletSpeed = bullet.GetComponent<Bullet>().moveSpeed;
-            bullet.GetComponent<Bullet>().moveSpeed = 0f;
-
-            float currentScale = bullet.GetComponent<Bullet>().minBulletSize;
-            bullet.transform.localScale = new Vector3(currentScale, currentScale, currentScale);
-
-            while (currentScale < bullet.GetComponent<Bullet>().maxBulletSize)
-            {
-                //scale bullet until it reaches max bullet size
-                currentScale += chargeRate * Time.deltaTime;
-                bullet.transform.localScale = new Vector3(currentScale, currentScale, currentScale);
-                yield return new WaitForEndOfFrame();
-            }
-
-            //WE DESTROY THE GD BULLET WE JUST WENT THROUGH CREATING
-            Object.Destroy(bullet);
-
-            //WHY DOES THIS WORK
-            bullet = Object.Instantiate(fireball, firePoint.transform.position, bullet.transform.rotation);
-            bullet.transform.localScale = new Vector3(currentScale, currentScale, currentScale);
-
-            //bullet.transform.localEulerAngles = Vector3.right;
-            bullet.GetComponent<Bullet>().moveSpeed = bulletSpeed;
-            bullet.GetComponent<Bullet>().canDamage = true;
-
-            yield return new WaitForSeconds(timeBetweenAttacks);
-            canAttack = true;
-            isAttacking = false;
-        }*/
 
     public override void TriggerAttack()
     {

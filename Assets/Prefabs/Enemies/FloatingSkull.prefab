@@ -127,6 +127,7 @@ GameObject:
   - component: {fileID: 5429058932085050053}
   - component: {fileID: 713983638228988762}
   - component: {fileID: 5500098375395493343}
+  - component: {fileID: 3820503092354865684}
   m_Layer: 11
   m_Name: AliveSkull
   m_TagString: Monster
@@ -201,6 +202,20 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 1.4, z: 0}
+--- !u!114 &3820503092354865684
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1656225346805746181}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb8c88b257423be44b6af5f49f2fa00b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isAttacking: 0
+  attackCoolDown: 1
 --- !u!1 &2467794100948193589
 GameObject:
   m_ObjectHideFlags: 0
@@ -686,7 +701,6 @@ GameObject:
   - component: {fileID: 3285207134206969447}
   - component: {fileID: 7547200278732577573}
   - component: {fileID: 6601630646834322518}
-  - component: {fileID: 1340166467}
   - component: {fileID: 7148665511968356611}
   - component: {fileID: 9207836850496688587}
   m_Layer: 11
@@ -753,10 +767,14 @@ MonoBehaviour:
   healthBar: {fileID: 8531734560222423607}
   entityData: {fileID: 11400000, guid: 421632450167ebd499eafb6e84d01c25, type: 2}
   dmgInvincibilityTime: 0.5
-  sightRange: 25
+  sightRange: 15
   minAttackRange: 5
   timeBetweenAttacks: 2
-  minAgroRange: 25
+  minAgroRange: 15
+  deathEffect: {fileID: 3017006636548126711, guid: 9fa9cc35f614bf44d8df492ba34ed85b,
+    type: 3}
+  gemPrefab: {fileID: 1679218149131978045, guid: 269ad815a67e12f4d86befaa2ccef290,
+    type: 3}
   distanceToPlayer: 0
   agent: {fileID: 0}
   isStunned: 0
@@ -807,20 +825,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &1340166467
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3285207134206969448}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fb8c88b257423be44b6af5f49f2fa00b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isAttacking: 0
-  attackCoolDown: 1
 --- !u!114 &7148665511968356611
 MonoBehaviour:
   m_ObjectHideFlags: 0
