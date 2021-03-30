@@ -7,7 +7,7 @@ public class StatusEffects : MonoBehaviour
     private float currTime = 0; //CurrTime variable to be accessed by the fireStatus script
     private float timeLeft = 0; //TimeLeft variable to check how much time is left in the current coroutine if it is already running
 
-    public GameObject fireEffect;
+    public GameObject fireEffect; //Assigns the Fire Effect so the player can see the enemies or themselves burning
 
     /// <summary>
     /// Function to start the Enumerator Coroutine to deal damage over a set period of time which will be specified by the source. - AHL (3/29/21)
