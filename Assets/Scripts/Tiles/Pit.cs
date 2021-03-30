@@ -13,6 +13,11 @@ public class Pit : MonoBehaviour
      **/
     public float pitDamage = 5f;
 
+    private void Start()
+    {
+        GetComponent<MeshRenderer>().enabled = false;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if(other.tag == "Player")
