@@ -35,6 +35,8 @@ public class Tile : MonoBehaviour
     public GameObject rewardIndicator;
     public LayerMask mask;
 
+    [HideInInspector] public bool hasDecor = false;
+
     private GameObject nextTile;
 
     private void Start()
@@ -103,7 +105,7 @@ public class Tile : MonoBehaviour
             return false;
         }
 
-        if (newTile.GetComponent<Tile>().tileType != tileType) //If the next tile is of a different type than this tile, do some stuff
+        if (newTile.GetComponent<Tile>().tileType != tileType || newTile.GetComponent<Tile>().hasDecor) //If the next tile is of a different type than this tile or has decor, do some stuff
         {            
             return true;
         }

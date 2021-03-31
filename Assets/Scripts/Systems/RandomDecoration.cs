@@ -4,14 +4,26 @@ using UnityEngine;
 
 public class RandomDecoration : MonoBehaviour
 {
+    [Range(0f, 100f)]public float decorChance;
+    public bool mustBePresent;
+
+    public List<GameObject> proplist;
+
     void Start()
     {
-        foreach (Transform child in transform)
+        if(!SpawnRoll())
         {
-            child.gameObject.SetActive(false); //deactivate all children
+            gameObject.SetActive(false);
+            transform.parent.parent.GetComponent<Tile>().hasDecor = false;
         }
+        else
+        {
+            transform.parent.parent.GetComponent<Tile>().hasDecor = true;
+        }
+    }
 
-        int randDecor = Random.Range(0, transform.childCount); //get a random index based on the number of children
-        transform.GetChild(randDecor).gameObject.SetActive(true); //activate the random child, aka: random decoration
+    private bool SpawnRoll()
+    {
+        return (decorChance >= Random.Range(1, 100) || mustBePresent);
     }
 }
