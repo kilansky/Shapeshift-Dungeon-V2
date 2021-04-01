@@ -73,14 +73,15 @@ public class HUDController : SingletonPattern<HUDController>
     [Header("Player Damaged Overlay")]
     public GameObject runTimer;
 
-    public bool ShowLevelReview { get; set; }
-
     private PlayerController player;
     private PlayerInput playerInput;
     private string currentControlScheme;
     private bool itemCollected = false;
     private bool pocketSlot1Used = false;
     private bool pocketSlot2Used = false;
+
+    public bool ShowLevelReview { get; set; }
+    public string CurrentControlScheme { get { return currentControlScheme; } }
 
     void Start()
     {

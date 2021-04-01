@@ -881,6 +881,8 @@ public class PlayerController : SingletonPattern<PlayerController>
                 RunTimer.Instance.IncreaseTimer = true;
                 HUDController.Instance.ShowRunTimer();
 
+                AnalyticsEvents.Instance.PlayerControls(); //Sends an analytics event describing the players current controls
+
                 LevelManager.Instance.TransitionLevel();
                 CenterTile.Instance.onTile = false;
 

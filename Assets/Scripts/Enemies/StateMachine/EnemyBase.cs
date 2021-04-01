@@ -104,6 +104,10 @@ public class EnemyBase : MonoBehaviour, IDamageable
         //SetDestination();
 
         //set health variables
+
+        if (GetComponent<GemMonster>().isGemMonster)
+            health *= GetComponent<GemMonster>().healthMod;
+
         Health = health;
         healthBar.maxValue = Health;
         healthBar.value = Health;
