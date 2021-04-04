@@ -57,7 +57,10 @@ public class Dispenser : MonoBehaviour
         Vector3 originalScale = bullet.transform.localScale;
         float originalSpeed = bullet.GetComponent<Bullet>().moveSpeed;
         float vfxPercent = 0;
-       
+
+        //Sets the bullets parent game object to this one to make the Damage Tracker acquire the skull as the correct game object for tracking
+        bullet.GetComponent<Bullet>().parentObject = transform.root.gameObject;
+
         //bullet.GetComponent<Bullet>().SetVFXScale(25f);
         bullet.GetComponent<Bullet>().moveSpeed = 0f;
 

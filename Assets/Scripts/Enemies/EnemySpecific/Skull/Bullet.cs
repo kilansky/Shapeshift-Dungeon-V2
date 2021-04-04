@@ -41,6 +41,8 @@ public class Bullet : MonoBehaviour
 
     private Vector3 shootDir;
 
+    [HideInInspector] public GameObject parentObject; //Variable to hold the parent Object to make sure the Damage Tracker is able to track the damage correctly
+
     private void Start()
     {
         original_beamLight = beamLight.transform.localScale;
@@ -72,7 +74,7 @@ public class Bullet : MonoBehaviour
                 if (!PlayerHealth.Instance.isInvincible)
                     AnalyticsEvents.Instance.PlayerDamaged(shotBy + " Projectile"); //Sends analytics event about damage source
 
-                PlayerHealth.Instance.Damage(bulletDamage);
+                PlayerHealth.Instance.Damage(bulletDamage, parentObject);
                 Destroy(gameObject);
             }
         }       

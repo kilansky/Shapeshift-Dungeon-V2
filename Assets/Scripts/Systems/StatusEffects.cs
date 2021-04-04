@@ -45,7 +45,7 @@ public class StatusEffects : MonoBehaviour
 
             //If the object is the palyer than deal the damage
             if (GetComponent<PlayerHealth>())
-                PlayerHealth.Instance.Damage(1);
+                PlayerHealth.Instance.Damage(1, gameObject);
 
             currTime++; //Adds 1 to the current time to help with the while statement
 
