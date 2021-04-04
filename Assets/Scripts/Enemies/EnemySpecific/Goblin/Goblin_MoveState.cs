@@ -19,6 +19,8 @@ public class Goblin_MoveState : MoveState
     public override void Enter()
     {
         base.Enter();
+
+        entity.SetVelocity(stateData.moveSpeed);
     }
 
     public override void Exit()
@@ -34,5 +36,8 @@ public class Goblin_MoveState : MoveState
     public override void PhysicsUpdate()
     {
         base.PhysicsUpdate();
+
+        //set destination to the player, look check should go here
+        entity.SetDestination();
     }
 }

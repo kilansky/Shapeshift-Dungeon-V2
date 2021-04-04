@@ -30,6 +30,17 @@ public class Goblin_AttackState : AttackState
     public override void LogicUpdate()
     {
         base.LogicUpdate();
+
+        if (enemy.CheckPlayerInMinAttackRange())
+        {
+            //TODO double check logic here 
+            TriggerAttack();
+        }
+        else
+        {
+            stateMachine.ChangeState(enemy.moveState);
+            //stateMachine.ChangeState(enemy.lookForPlayerState);
+        }
     }
 
     public override void PhysicsUpdate()
@@ -40,5 +51,8 @@ public class Goblin_AttackState : AttackState
     public override void TriggerAttack()
     {
         base.TriggerAttack();
+
+        enemy.Anim.SetBool("isAttacking", true);
+
     }
 }

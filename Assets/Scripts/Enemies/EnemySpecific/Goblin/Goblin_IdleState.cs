@@ -29,6 +29,11 @@ public class Goblin_IdleState : IdleState
     public override void LogicUpdate()
     {
         base.LogicUpdate();
+
+        if (enemy.CheckPlayerInMinAgroRange())
+        {
+            stateMachine.ChangeState(enemy.playerDetectedState);
+        }
     }
 
     public override void PhysicsUpdate()

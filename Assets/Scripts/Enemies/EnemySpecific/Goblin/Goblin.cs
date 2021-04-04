@@ -30,9 +30,8 @@ public class Goblin : EnemyBase
     [SerializeField]
     private D_StunState stunStateData;
 
-    public Transform firePoint;
-    public GameObject fireball;
-    public float chargeRate = 1f;
+    //will have a melee range instead of fireball
+    
 
     public override void Start()
     {
