@@ -24,7 +24,7 @@ public class DamageTracker : SingletonPattern<DamageTracker>
     }*/
 
     /// <summary>
-    /// Updates the damage float values with the amount of damage that the player took based on the game object source - AHL (3/30/21)
+    /// Updates the damage float values with the amount of damage that the player took based on the game object source - AHL (4/4/21)
     /// </summary>
     public void updateDamage(float damageValue, GameObject damageSource)
     {
@@ -52,12 +52,20 @@ public class DamageTracker : SingletonPattern<DamageTracker>
         else if (damageSource.GetComponent<FloatingSkull>())
         {
             skullDamage += damageValue;
+
+            //If the player is wearing the Flame Crown then damage the enemy for 3 seconds
+            if (PlayerController.Instance.SpecialSlot.ItemName == "Flame Crown")
+                damageSource.GetComponent<StatusEffects>().fireStatus(3);
         }
 
         //Crystal
         else if (damageSource.GetComponent<FloatingCrystal>())
         {
             crystalDamage += damageValue;
+
+            //If the player is wearing the Flame Crown then damage the enemy for 3 seconds
+            if (PlayerController.Instance.SpecialSlot.ItemName == "Flame Crown")
+                damageSource.GetComponent<StatusEffects>().fireStatus(3);
         }
 
         //Bomb
