@@ -156,6 +156,7 @@ public class PlayerHealth : SingletonPattern<PlayerHealth>, IDamageable
     {
         AnalyticsEvents.Instance.PlayerDied(); //Send Player Died Analytics Event
         AnalyticsEvents.Instance.ItemsOnDeath(); //Send Items On Death Analytics Event
+        StartCoroutine(AnalyticsEvents.Instance.DamageSourcesData()); //Send Damage source data Analytics Event
         HUDController.Instance.ShowGameOver();
         Time.timeScale = 0;
     }
