@@ -31,7 +31,13 @@ public class BombAttack : MonoBehaviour
 
             //Checks if the player is in the range
             if (other.GetComponent<PlayerHealth>())
+            {
+                if (!PlayerHealth.Instance.isInvincible)
+                    AnalyticsEvents.Instance.PlayerDamaged("Bomb"); //Sends analytics event about damage source
+
                 other.GetComponent<PlayerHealth>().Damage(damage);
+            }
+                
         }
     }
 

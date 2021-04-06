@@ -21,10 +21,14 @@ public class SpikeTrap : MonoBehaviour
     [SerializeField] private float lowerTime = 1f;
 
     private bool isTriggered = false;
+    private bool isEnabled = true;
     [SerializeField]private List<GameObject> entitiesOnSpike;
 
     private IEnumerator SpikeCycle()
     {
+        if (!isEnabled) //If spike trap is disabled, exit coroutine
+            yield break;
+
         //Raise spikes up a little as a warning
         isTriggered = true;
         float counter = 0f; //Counter to keep track of time elapsed
@@ -101,10 +105,19 @@ public class SpikeTrap : MonoBehaviour
     {
         foreach (GameObject entity in entitiesOnSpike)
         {
-            if(entity.tag == "Player")
+            if(entity.GetComponent<PlayerController>())
             {
+                if (!PlayerHealth.Instance.isInvincible)
+                    AnalyticsEvents.Instance.PlayerDamaged("Spikes"); //Sends analytics event about damage source
+
                 PlayerHealth.Instance.Damage(damage);
             }
         }
+    }
+
+    public void ToggleSpike(bool enabled)
+    {
+        Debug.Log("Spike traps have been toggled to " + enabled);
+        isEnabled = enabled;
     }
 }

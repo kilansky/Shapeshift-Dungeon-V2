@@ -82,7 +82,7 @@ public class PlayerHealth : SingletonPattern<PlayerHealth>, IDamageable
                 if (potionSlots[i].sprite != transparentSquare)
                 {
                     potionSlots[i].sprite = transparentSquare;
-                    Heal(15f + additionalPotionHealing.Value);
+                    Heal(maxHealth); //Old healing value: 15f + additionalPotionHealing.Value
                     StartCoroutine(HUDController.Instance.HidePlayerDamagedOverlay());
 
                     if(GetPotionCount() == 0)
@@ -108,6 +108,13 @@ public class PlayerHealth : SingletonPattern<PlayerHealth>, IDamageable
 
                 if (GetPotionCount() > 0)
                     HUDController.Instance.ShowPotionsPanel();
+
+                //Once player has grabbed a potion on the starting floor, clear the floor
+                if (LevelManager.Instance.currFloor == 0)
+                {
+                    MonsterSpawner.Instance.floorCleared = true;
+                    CenterTile.Instance.SetTextState();
+                }
 
                 return;
             }
@@ -149,7 +156,9 @@ public class PlayerHealth : SingletonPattern<PlayerHealth>, IDamageable
     {
         AnalyticsEvents.Instance.PlayerDied(); //Send Player Died Analytics Event
         AnalyticsEvents.Instance.ItemsOnDeath(); //Send Items On Death Analytics Event
+        //StartCoroutine(AnalyticsEvents.Instance.DamageSourcesData()); //Send Damage source data Analytics Event
         HUDController.Instance.ShowGameOver();
+        Time.timeScale = 0;
     }
 
     //Makes the player invincible briefly

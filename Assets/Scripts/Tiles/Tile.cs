@@ -30,10 +30,18 @@ public class Tile : MonoBehaviour
     }
     public tileTypes tileType;
 
-    [Header("Shop Toggle")]
-    public bool willBeShop;
+    [Header("Pointers")]
+    public GameObject spawnerIndicator;
+    public GameObject rewardIndicator;
+    public LayerMask mask;
 
     private GameObject nextTile;
+
+    private void Start()
+    {
+        //if (GetComponent<PropSpawner>())
+            //GetComponent<PropSpawner>().SpawnProp();
+    }
 
     /// <summary>
     /// Begins the process for replacing this tile with a new one if it needs to be replaced
@@ -62,8 +70,9 @@ public class Tile : MonoBehaviour
     {
         RaycastHit hit;
 
-        if(Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), out hit)) //Sends a raycast to look for an object below this one
+        if(Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), out hit, Mathf.Infinity, mask)) //Sends a raycast to look for an object below this one
         {
+            //Debug.Log("Raycast hit: " + hit.transform.name);
             if(hit.transform.gameObject.GetComponent<Tile>()) //If the raycast finds an object, this finds out if that object is a tile
             {
                 //The tile gameobject is stored for later use and is returned back to the original script that called it
@@ -103,13 +112,14 @@ public class Tile : MonoBehaviour
             //There will be more logic here in the future for specific tiles that need more information
             //Example: a stair that is rotated a different way
             if (newTile.transform.position.y != transform.position.y - 20 //Tests if a tile of the same type is at a different height level than current tile
-                || (newTile.transform.rotation != transform.rotation && !NoOrientation()) || newTile.GetComponent<Tile>().willBeShop) //Tests if the tiles rotation is different than its replacement and also ignores some rotation differences in certain tiles
+                || (newTile.transform.rotation != transform.rotation && !NoOrientation()) /*|| newTile.GetComponent<Tile>().willBeShop*/) //Tests if the tiles rotation is different than its replacement and also ignores some rotation differences in certain tiles
             {
                 return true;
             }
             else if(NoOrientation()) //If the block doesn't require an orientation, it is also a spawnable block
             {
-                transform.GetChild(0).gameObject.SetActive(CheckForSpawner(newTile)); //Sets this block's spawner to the same state as the next tile and then does no movement
+                spawnerIndicator.SetActive(CheckForSpawner(newTile)); //Sets this block's spawner to the same state as the next tile and then does no movement
+                rewardIndicator.SetActive(CheckForReward(newTile)); //Sets this block's spawner to the same state as the next tile and then does no movement
                 return false;
             }
             else
@@ -130,7 +140,7 @@ public class Tile : MonoBehaviour
 
         RaycastHit hit;
 
-        while (willBeShop && Physics.BoxCast(transform.position, transform.localScale, transform.TransformDirection(Vector3.up), out hit)) //Sends a boxcast to look for an object above this one if it is flagged as a shop
+        while (NoOrientation() && transform.GetChild(1).gameObject.activeInHierarchy && Physics.BoxCast(transform.position, transform.localScale, transform.TransformDirection(Vector3.up), out hit)) //Sends a boxcast to look for an object above this one if it is flagged as a shop
         {
             if (hit.transform.CompareTag("Player")) //If boxcast finds player on top of tile, delay the transition
             {
@@ -154,7 +164,7 @@ public class Tile : MonoBehaviour
             transform.position = new Vector3(originalPos.x, originalPos.y - yPos, originalPos.z);
             yield return null;
         }
-        nextTile.transform.SetParent(transform.parent); //Sets next tile to be a child of the parent of this tile
+        nextTile.transform.SetParent(LevelManager.Instance.activeLevel.transform); //Sets next tile to be a child of the parent of this tile
         nextTile.GetComponent<Tile>().StartMoving(timeToMove); //Triggers the next tile to begin moving up     
         Destroy(gameObject); //Destroys this object when its job is complete
     }
@@ -194,6 +204,11 @@ public class Tile : MonoBehaviour
     private bool CheckForSpawner(GameObject newTile)
     {
         return newTile.transform.GetChild(0).gameObject.activeInHierarchy;
+    }
+
+    private bool CheckForReward(GameObject newTile)
+    {
+        return newTile.transform.GetChild(1).gameObject.activeInHierarchy;
     }
 
     /// <summary>

@@ -20,7 +20,7 @@ public class Dispenser : MonoBehaviour
     public float chargeTime = 1f;
     public float delayBeforeFiring = 0.5f;
 
-    [HideInInspector] public bool canFire = false;
+    private bool canFire = false;
 
     private Transform spawner;
 
@@ -32,7 +32,14 @@ public class Dispenser : MonoBehaviour
             Debug.LogError("Charge time is greater than the rate of fire!");
             return;
         }
-        StartCoroutine(AttackCycle());
+        //StartCoroutine(AttackCycle());
+    }
+
+    public void ToggleFiring(bool enabled)
+    {
+        canFire = enabled;
+        if(enabled)
+            StartCoroutine(AttackCycle());
     }
 
     private IEnumerator AttackCycle()
@@ -75,9 +82,12 @@ public class Dispenser : MonoBehaviour
         //Fires Projectile after waiting
         bullet.GetComponent<Bullet>().moveSpeed = originalSpeed;
         bullet.GetComponent<Bullet>().canDamage = true;
+        bullet.GetComponent<Bullet>().shotBy = "Dispenser";
 
         yield return new WaitForSeconds(rateOfFire - delayBeforeFiring - chargeTime);
-        StartCoroutine(AttackCycle());
+
+        if(canFire)
+            StartCoroutine(AttackCycle());
 
         //bullet.GetComponent<Bullet>().SetVFXScale(100f);
     }

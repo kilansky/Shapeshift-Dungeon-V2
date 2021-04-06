@@ -10,7 +10,7 @@ public class LevelManager : SingletonPattern<LevelManager>
      * Programmer: Justin Donato
      * Description: Handles the mechanics of the level such as transitioning from one level to the next
      * Date Created: 2/11/2021
-     * Date Last Edited: 3/1/2021
+     * Date Last Edited: 3/29/2021
      */
 
     public GameObject activeLevel;
@@ -201,41 +201,34 @@ public class LevelManager : SingletonPattern<LevelManager>
 
         //UnityEditor.AI.NavMeshBuilder.BuildNavMesh(); // <<------- Editor Only :(
         GetComponent<NavMeshSurface>().BuildNavMesh();
+
+        ToggleHazards(true);
     }
 
-    /*
     /// <summary>
-    /// Loads finds tiles with the shop bool set and switches them out for shops
+    /// Allows the hazards on the map to be enabled or disabled
     /// </summary>
-    [ContextMenu("Test Shop Loading")]
-    public void LoadShops()
+    /// <param name="enabled"></param>
+    public void ToggleHazards(bool enabled)
     {
-        Transform[] allChildrenCurrLevel = activeLevel.GetComponentsInChildren<Transform>(); //Puts all tiles into an array
-        foreach (Transform tile in allChildrenCurrLevel) //Cycles through all tiles in the newly created array
+        foreach (Transform child in activeLevel.transform)
         {
-            if (tile.GetComponent<Tile>() && tile.GetComponent<Tile>().willBeShop) //If the object selected is a tile and has the shop boolean on
+            if (child.gameObject.GetComponent<LaserDispenser>())
             {
-                GameObject pedestal = Instantiate(pedestalPrefab, tile.transform.position - new Vector3(0, 20, 0), new Quaternion(0, 0, 0, 0)); //Instantiate an item pedestal
-                tile.GetComponent<Tile>().DoTransition(transitionTime, 0f); //Runs the function to initiate a transition
-                StartCoroutine(ShopColliderCycle(pedestal));
+                child.gameObject.GetComponent<LaserDispenser>().ToggleLaser(enabled);
+            }
+
+            else if (child.gameObject.GetComponent<Dispenser>())
+            {
+                child.gameObject.GetComponent<Dispenser>().ToggleFiring(enabled);
+            }
+
+            else if (child.gameObject.GetComponent<SpikeTrap>())
+            {
+                child.gameObject.GetComponent<SpikeTrap>().ToggleSpike(enabled);
             }
         }
     }
-
-    /// <summary>
-    /// Triggers the collider for the pedestal to turn on and then turns it off after waiting for the transition to finish
-    /// </summary>
-    /// <param name="obj"></param>
-    /// <returns></returns>
-    private IEnumerator ShopColliderCycle(GameObject obj)
-    {
-        CenterTile.Instance.canTransition = false;
-        obj.GetComponent<ItemPedestal>().SetCollider(true);
-        yield return new WaitForSeconds(2 * transitionTime);
-        obj.GetComponent<ItemPedestal>().SetCollider(false);
-        CenterTile.Instance.canTransition = true;
-    }
-    */
 
     private void Start()
     {

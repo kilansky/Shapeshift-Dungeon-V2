@@ -13,12 +13,25 @@ public class Pit : MonoBehaviour
      **/
     public float pitDamage = 5f;
 
+    private void Start()
+    {
+        GetComponent<MeshRenderer>().enabled = false;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
-        if(other.tag == "Player")
+        if(other.GetComponent<PlayerController>())
         {
             FindSafeTile.Instance.MovePlayerToSafeLocation();
-            PlayerHealth.Instance.Damage(pitDamage);
+
+            if(LevelManager.Instance.currFloor != 0)//don't deal damage on level 0
+            {
+                if (!PlayerHealth.Instance.isInvincible)
+                    AnalyticsEvents.Instance.PlayerDamaged("Pit"); //Sends analytics event about damage source
+
+                PlayerHealth.Instance.Damage(pitDamage);
+            }
+
         }
     }
 }
