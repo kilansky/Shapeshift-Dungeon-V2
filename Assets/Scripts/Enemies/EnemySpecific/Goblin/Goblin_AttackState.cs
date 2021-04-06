@@ -7,6 +7,8 @@ public class Goblin_AttackState : AttackState
 {
     private Goblin enemy;
 
+    //protected AttackDetails attackDetails;
+
     public Goblin_AttackState(EnemyBase entity, FiniteStateMachine stateMachine, string animBoolName, D_AttackState stateData, Goblin enemy) : base(entity, stateMachine, animBoolName, stateData)
     {
         this.enemy = enemy;
@@ -53,6 +55,8 @@ public class Goblin_AttackState : AttackState
         base.TriggerAttack();
 
         enemy.Anim.SetBool("isAttacking", true);
+        
+        //swipe at the player
 
     }
 }

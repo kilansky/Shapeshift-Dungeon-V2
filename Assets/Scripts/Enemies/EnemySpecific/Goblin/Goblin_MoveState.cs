@@ -31,6 +31,11 @@ public class Goblin_MoveState : MoveState
     public override void LogicUpdate()
     {
         base.LogicUpdate();
+
+        if (enemy.CheckPlayerInMinAttackRange())
+        {
+            stateMachine.ChangeState(enemy.attackState);
+        }
     }
 
     public override void PhysicsUpdate()
