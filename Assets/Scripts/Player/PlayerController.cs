@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.EventSystems;
 
 public enum inputButtons { Dash, Attack, Charge, Special, Potion, Interact }
 
@@ -386,7 +387,7 @@ public class PlayerController : SingletonPattern<PlayerController>
     }
 
     //---------------------------------------------------------------------------
-    //------------------------------RECIEVE INPUTS-------------------------------
+    //-------------------------RECIEVE ACTION INPUTS-----------------------------
     //---------------------------------------------------------------------------
 
     //Set movementVector based on movement input
@@ -500,6 +501,52 @@ public class PlayerController : SingletonPattern<PlayerController>
         }
     }
 
+    //---------------------------------------------------------------------------
+    //----------------------------RECIEVE UI INPUTS------------------------------
+    //---------------------------------------------------------------------------
+
+    //Set movementVector based on movement input
+    public void Navigate(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            Buttons buttons = GameObject.FindGameObjectWithTag("Buttons").GetComponent<Buttons>();
+
+            Vector2 navigationInput = context.ReadValue<Vector2>();
+
+            //EventSystem.current.SetSelectedGameObject(buttons[0]);
+
+            if (navigationInput.y > 0.5f)
+                buttons.PreviousButton();
+
+            if (navigationInput.y < -0.5f)
+                buttons.NextButton();
+
+            //if (navigationInput.x > 0.5f)
+            //Debug.Log("Navigation RIGHT");
+
+            //if (navigationInput.x < -0.5f)
+            //Debug.Log("Navigation LEFT");
+        }
+    }
+
+    //Dash Button Pressed
+    public void Submit(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            Debug.Log("SUBMIT PRESSED");
+        }
+    }
+
+    //Attack Button Pressed
+    public void Cancel(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            Debug.Log("CANCEL PRESSED");
+        }
+    }
 
     //---------------------------------------------------------------------------
     //-----------------------------INPUT ACTIVATION------------------------------
