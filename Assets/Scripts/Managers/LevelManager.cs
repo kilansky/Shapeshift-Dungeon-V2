@@ -59,6 +59,11 @@ public class LevelManager : SingletonPattern<LevelManager>
             return;
         }
 
+        if(PlayerController.Instance.hasRedHerb == true) //If the player has the red herb then they heal 3 HP
+        {
+            PlayerHealth.Instance.Heal(3); //Heal 3 HP
+        }
+
         isTransitioning = true;
         CenterTile.Instance.SetInvisibleWall(true);
         CameraController.Instance.ZoomOut();

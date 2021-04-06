@@ -78,6 +78,7 @@ public class PlayerController : SingletonPattern<PlayerController>
     public bool touchingItem = false; //Variable to track if the player is currently touching an item or not
     public bool pickupItem = false; //Variable to pick up the item
     public bool canAffordItem = false; //Variable to see if player can afford an item -Justin
+    [HideInInspector] public bool hasRedHerb = false; //Variable to make sure that the player has the red herb (makes for less checking of both pocker slots) so they are able to regain health when they start a new level
 
     private int priceOfLastTouchedItem = 0; //I need this to store prices -Justin
 

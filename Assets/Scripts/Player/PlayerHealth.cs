@@ -109,7 +109,7 @@ public class PlayerHealth : SingletonPattern<PlayerHealth>, IDamageable
                 if (potionSlots[i].sprite != transparentSquare)
                 {
                     potionSlots[i].sprite = transparentSquare;
-                    Heal(maxHealth); //Old healing value: 15f + additionalPotionHealing.Value
+                    Heal(maxHealth); //Heals to max health
                     StartCoroutine(HUDController.Instance.HidePlayerDamagedOverlay());
 
                     if(GetPotionCount() == 0)
@@ -170,7 +170,7 @@ public class PlayerHealth : SingletonPattern<PlayerHealth>, IDamageable
         StartCoroutine(HUDController.Instance.UpdateHealthBar(Health, maxHealth));
     }
 
-    //Heal the player (potions)
+    //Heal the player (Red Herb)
     public virtual void Heal(float heal)
     {
         Health += heal;

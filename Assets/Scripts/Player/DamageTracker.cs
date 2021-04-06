@@ -54,7 +54,7 @@ public class DamageTracker : SingletonPattern<DamageTracker>
             skullDamage += damageValue;
 
             //If the player is wearing the Flame Crown then damage the enemy for 3 seconds
-            if (PlayerController.Instance.SpecialSlot.ItemName == "Flame Crown")
+            if (PlayerController.Instance.SpecialSlot != null && PlayerController.Instance.SpecialSlot.ItemName == "Flame Crown")
                 damageSource.GetComponent<StatusEffects>().fireStatus(3);
         }
 
@@ -64,7 +64,7 @@ public class DamageTracker : SingletonPattern<DamageTracker>
             crystalDamage += damageValue;
 
             //If the player is wearing the Flame Crown then damage the enemy for 3 seconds
-            if (PlayerController.Instance.SpecialSlot.ItemName == "Flame Crown")
+            if (PlayerController.Instance.SpecialSlot != null && PlayerController.Instance.SpecialSlot.ItemName == "Flame Crown")
                 damageSource.GetComponent<StatusEffects>().fireStatus(3);
         }
 

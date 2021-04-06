@@ -92,10 +92,20 @@ public class Item : MonoBehaviour
 
             else //If the player does have a pocket1 and pocket2 items then unequip the first one, slide 2 to 1, then equip the new one
             {
+                if (c.PocketSlot1.ItemName == "Red Herb") //Checks if the pocket slot 1 item is the Red Herb so we can adjust the bool variable in the player controller since we are dropping it
+                {
+                    PlayerController.Instance.hasRedHerb = false;
+                }
+
                 Instantiate(c.PocketSlot1.prefab, transform.position, transform.rotation, transform.parent);
                 c.PocketSlot1.prefab.GetComponent<Item>().Unequip(c, h);
                 c.PocketSlot1 = c.PocketSlot2;
                 c.PocketSlot2 = this.item;
+            }
+
+            if (item.ItemName == "Red Herb") //Checks if the item being equipped is a Red Herb so we can adjust the bool variable in the player controller
+            {
+                c.hasRedHerb = true;
             }
         }
 
