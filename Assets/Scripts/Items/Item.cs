@@ -94,7 +94,12 @@ public class Item : MonoBehaviour
             {
                 if (c.PocketSlot1.ItemName == "Red Herb") //Checks if the pocket slot 1 item is the Red Herb so we can adjust the bool variable in the player controller since we are dropping it
                 {
-                    PlayerController.Instance.hasRedHerb = false;
+                    c.hasRedHerb = false;
+                }
+
+                if (c.PocketSlot1.ItemName == "Bag Of Holding") //Checks if the pocket slot 1 item is the Bag Of Holding item so we can adjust the bool variable in the player controller since we are dropping it
+                {
+                    c.hasRedHerb = false;
                 }
 
                 Instantiate(c.PocketSlot1.prefab, transform.position, transform.rotation, transform.parent);
@@ -106,6 +111,11 @@ public class Item : MonoBehaviour
             if (item.ItemName == "Red Herb") //Checks if the item being equipped is a Red Herb so we can adjust the bool variable in the player controller
             {
                 c.hasRedHerb = true;
+            }
+
+            if (item.ItemName == "Bag Of Holding") //Checks if the item being equipped is the Bag Of Holding itme so we can adjust the bool variable in the player controller
+            {
+                c.hasBagOfHolding = true;
             }
         }
 

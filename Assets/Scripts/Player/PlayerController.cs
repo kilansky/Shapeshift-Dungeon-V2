@@ -76,10 +76,13 @@ public class PlayerController : SingletonPattern<PlayerController>
     public ItemsEquipment FootSlot; //Foot Item slot
     public ItemsEquipment PocketSlot1; //Pocket 1 Item slot
     public ItemsEquipment PocketSlot2; //Pocket 2 Item slot
+    public ItemsEquipment BagOfHoldingSlot; //Bag Of Holding Item Slot to swap between special items/ store additional special items
     public bool touchingItem = false; //Variable to track if the player is currently touching an item or not
     public bool pickupItem = false; //Variable to pick up the item
     public bool canAffordItem = false; //Variable to see if player can afford an item -Justin
     [HideInInspector] public bool hasRedHerb = false; //Variable to make sure that the player has the red herb (makes for less checking of both pocker slots) so they are able to regain health when they start a new level
+    //[HideInInspector]
+    public bool hasBagOfHolding = false; //Variable to make sure that the player has the bag of holding item (makes for less checking of both pocker slots) so they are able to store/swap special items
 
     private int priceOfLastTouchedItem = 0; //I need this to store prices -Justin
 
