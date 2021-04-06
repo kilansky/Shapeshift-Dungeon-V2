@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 4395236236510365834}
   - component: {fileID: 1932354311292841629}
   - component: {fileID: 3229998449162458295}
-  - component: {fileID: 5521804231298551328}
   m_Layer: 10
   m_Name: Stone
   m_TagString: Tile
@@ -117,6 +116,7 @@ MonoBehaviour:
   mask:
     serializedVersion: 2
     m_Bits: 1024
+  hasDecor: 0
 --- !u!114 &3229998449162458295
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -129,20 +129,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9cd67f9fec6b4d46bc7fcaadae53c59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &5521804231298551328
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2333366564355165282}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: db4db1abd9655234babdcc3e90e1712c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  propChance: 15
-  propHolder: {fileID: 3903544593339758935}
 --- !u!1 &3903544593339758935
 GameObject:
   m_ObjectHideFlags: 0
