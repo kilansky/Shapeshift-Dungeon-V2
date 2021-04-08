@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.EventSystems;
 
 public enum inputButtons { Dash, Attack, Charge, Special, Potion, Interact }
 
@@ -19,7 +20,6 @@ public class PlayerController : SingletonPattern<PlayerController>
     public PlayerStats baseMoveSpeed; //Variable for getting the move speed stat from ItemsEquipment
     public float rotateSpeed = 12f;
     public float dashRotateSpeed = 4f;
-    public float chargeRotateSpeed = 4f;
 
     [Header("Dash Stats")]
     public PlayerStats dashSpeed; //Dash Speed from ItemsEquipment for Dash Speed
@@ -43,7 +43,9 @@ public class PlayerController : SingletonPattern<PlayerController>
     public float maxChargeSpeed = 35f;
     public float chargeDeceleration = 55f;
     public float chargeCooldownTime = 0.2f;
+    public float minChargeDmgModifier;
     public PlayerStats chargeDmgModifier; //ItemsEquipment for Dash Damage Modifier
+    public float timeToFullCharge = 3f;
 
     [Header("Special Stats")]
     public float useSpecialTime = 0.5f;
@@ -57,12 +59,14 @@ public class PlayerController : SingletonPattern<PlayerController>
     public float earlyInputTimeAllowance = 0.25f;
 
     [Header("Mouse Aiming")]
-    public Transform targetTransform;
+    public Transform mouseTargetPoint;
     public LayerMask mouseAimMask;
 
     [Header("Object References")]
     public GameObject slashHitbox; //GameObject to hold slash attack hitbox
     public GameObject thrustHitbox; //GameObject to hold thrust attack hitbox
+    public GameObject radialHitbox; //GameObject to hold radial attack hitbox
+    public GameObject swordImpactPoint; //GameObject to hold point of impact on third attack
     public GameObject chargeArrow; //GameObject to hold the arrow underneath the player during charge attacks
 
     [Header("Items")]
@@ -74,6 +78,9 @@ public class PlayerController : SingletonPattern<PlayerController>
     public ItemsEquipment PocketSlot2; //Pocket 2 Item slot
     public bool touchingItem = false; //Variable to track if the player is currently touching an item or not
     public bool pickupItem = false; //Variable to pick up the item
+    public bool canAffordItem = false; //Variable to see if player can afford an item -Justin
+
+    private int priceOfLastTouchedItem = 0; //I need this to store prices -Justin
 
     //Variables that keep track of the amount of times that a stat was upgraded
     public int StatMaxHealthCount {get; set;}
@@ -81,6 +88,7 @@ public class PlayerController : SingletonPattern<PlayerController>
     public int StatSpeedCount {get; set;}
 
     public float SpecialCharge { get; set; }
+    public float SandSpeedMod { get; set; }
 
     [Header("DEBUG")]
     public bool showHitboxes = false;
@@ -118,6 +126,7 @@ public class PlayerController : SingletonPattern<PlayerController>
     private bool isUsingPotion = false;
     private bool isUsingSpecial = false;
     private bool isPaused = false;
+    private bool isUsingMouse = false;
 
     //Properties for player states, read only - can be read from other functions
     public float MoveSpeed { get { return currMoveSpeed; } }        //Set to the current move speed of the player
@@ -130,6 +139,7 @@ public class PlayerController : SingletonPattern<PlayerController>
     public bool IsUsingPotion { get { return isUsingPotion; } }     //True while drinking a potion
     public bool IsUsingSpecial { get { return isUsingSpecial; } }   //True while using a Special Item
     public bool IsPaused { get { return isPaused; } }               //True while game is paused
+    public bool IsUsingMouse { get { return isUsingMouse; } }      //True while player is using mouse and keyboard controls
 
     private void Start()
     {
@@ -143,6 +153,7 @@ public class PlayerController : SingletonPattern<PlayerController>
         StatMaxHealthCount = 0;
         StatAttackCount = 0;
         StatSpeedCount = 0;
+        SandSpeedMod = 1;
 
         if (PlayerPrefs.GetInt("UserID") == 0)
         {
@@ -161,7 +172,12 @@ public class PlayerController : SingletonPattern<PlayerController>
 
         //Set mouse target pos if using M&K
         if (GetComponent<PlayerInput>().currentControlScheme == "Keyboard&Mouse")
+        {
+            isUsingMouse = true;
             SetMouseTargetPosition();
+        }
+        else
+            isUsingMouse = false;
 
         /*
         //Set whether the player can dash attack after a dash
@@ -202,7 +218,7 @@ public class PlayerController : SingletonPattern<PlayerController>
 
         //Check if player is currently performing an action
         //If not, attempt to activate the next input in the queue
-        if (!IsDashing && !IsAttacking && !IsCharging && !IsChargeAttacking && !IsUsingPotion && !IsUsingSpecial || IsAttacking && !IsCharging)
+        if (!IsAttacking && !IsCharging && !IsChargeAttacking && !IsUsingPotion && !IsUsingSpecial || IsAttacking && !IsCharging)
         {
             float timePassedSinceInput = Time.time - inputQueue.Peek().inputTime;
             //Debug.Log(timePassed + " seconds passed since button was input");
@@ -267,10 +283,17 @@ public class PlayerController : SingletonPattern<PlayerController>
 
         movementVector.y = vSpeed;
 
-        if(!isDashing)
-            controller.Move(movementVector * currMoveSpeed * Time.deltaTime);
+        //Set velocity based on highest value directional input
+        moveVelocity = Mathf.Abs(movementVector.x);
+        if (moveVelocity < Mathf.Abs(movementVector.z))
+            moveVelocity = Mathf.Abs(movementVector.z);
+
+        if (IsDashing)
+            controller.Move(transform.forward * currMoveSpeed * SandSpeedMod * Time.deltaTime);
+        else if (IsAttacking || IsChargeAttacking)
+            controller.Move(transform.forward * moveVelocity * currMoveSpeed * SandSpeedMod * Time.deltaTime);
         else
-            controller.Move(transform.forward * currMoveSpeed * Time.deltaTime);
+            controller.Move(movementVector * currMoveSpeed * SandSpeedMod * Time.deltaTime);
     }
 
     private void SetMouseTargetPosition()
@@ -280,53 +303,44 @@ public class PlayerController : SingletonPattern<PlayerController>
 
         if (Physics.Raycast(ray, out hit, Mathf.Infinity, mouseAimMask))
         {
-            targetTransform.position = hit.point;
+            mouseTargetPoint.position = hit.point;
         }
     }
 
     private void RotatePlayer()
     {
-        //If NOT in attack3 state of the combo
-        if (attackComboState != 3)
+        //Smoothly Rotate Character in movement direction (if moving)
+        if (Mathf.Abs(movementVector.x) > 0 || Mathf.Abs(movementVector.z) > 0)
         {
-            //Smoothly Rotate Character in movement direction (if moving)
-            if (Mathf.Abs(movementVector.x) > 0 || Mathf.Abs(movementVector.z) > 0)
-            {
-                Vector3 rotationVector = new Vector3(movementVector.x, 0, movementVector.z);
-                Quaternion targetRotation = Quaternion.LookRotation(rotationVector);
+            Vector3 rotationVector = new Vector3(movementVector.x, 0, movementVector.z);
+            Quaternion targetRotation = Quaternion.LookRotation(rotationVector);
 
-                //Change rotation speed based on player state 
-                float rotSpeed = rotateSpeed;
-                if (IsCharging)
-                    rotSpeed = chargeRotateSpeed;
+            //Change rotation speed based on player state 
+            float rotSpeed = rotateSpeed;
 
-                if (IsDashing)
-                    rotSpeed = dashRotateSpeed;
+            if (IsDashing)
+                rotSpeed = dashRotateSpeed;
 
-                //Smoothly Rotate Player
-                lastTargetRotation = Quaternion.Slerp(transform.rotation, targetRotation, rotSpeed * Time.deltaTime);
-                transform.rotation = lastTargetRotation;
-            }
+            //Smoothly Rotate Player
+            lastTargetRotation = Quaternion.Slerp(transform.rotation, targetRotation, rotSpeed * SandSpeedMod * Time.deltaTime);
+            transform.rotation = lastTargetRotation;
+        }
 
-            /*
-            //Rotate towards the nearest enemy while performing the attack combo
-            if (isAttacking && attackComboState != 3)
-            {
-                //Check if there are any monsters in the scene
-                if (GameObject.FindGameObjectWithTag("Monster"))
-                {
-                    //Check if there is a monster within targetMonsterDist of the player
-                    Transform closestMonster = GetClosestMonster();
-                    if (Vector3.Distance(transform.position, closestMonster.position) < targetMonsterDist)
-                    {
-                        //Smoothly Rotate Character in direction of nearest monster
-                        Vector3 targetPoint = new Vector3(-closestMonster.position.x, 0, -closestMonster.position.z) - new Vector3(transform.position.x, 0, transform.position.z);
-                        Quaternion targetRotation = Quaternion.LookRotation(targetPoint);
-                        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotateSpeed * Time.deltaTime);
-                    }
-                }
-            }
-            */
+        //Rotate player towards mouse position to attack if using Mouse & Keyboard
+        if ((IsAttacking || IsCharging) && GetComponent<PlayerInput>().currentControlScheme == "Keyboard&Mouse")
+        {
+            //Rotate Character in direction of mouse position
+            Vector3 targetPoint = new Vector3(mouseTargetPoint.position.x, 0, mouseTargetPoint.position.z) - new Vector3(transform.position.x, 0, transform.position.z);
+            Quaternion targetRotation = Quaternion.LookRotation(targetPoint);
+            transform.rotation = targetRotation;
+        }
+        //Rotate player towards joystick directions to attack if using a Controller
+        else if ((IsAttacking || IsCharging) && GetComponent<PlayerInput>().currentControlScheme == "Keyboard&Mouse")
+        {
+            //Rotate Character in direction of joystick direction
+            Vector3 rotationVector = new Vector3(movementVector.x, 0, movementVector.z);
+            Quaternion targetRotation = Quaternion.LookRotation(rotationVector);
+            transform.rotation = targetRotation;
         }
     }
 
@@ -372,7 +386,7 @@ public class PlayerController : SingletonPattern<PlayerController>
     }
 
     //---------------------------------------------------------------------------
-    //------------------------------RECIEVE INPUTS-------------------------------
+    //-------------------------RECIEVE ACTION INPUTS-----------------------------
     //---------------------------------------------------------------------------
 
     //Set movementVector based on movement input
@@ -486,6 +500,52 @@ public class PlayerController : SingletonPattern<PlayerController>
         }
     }
 
+    //---------------------------------------------------------------------------
+    //----------------------------RECIEVE UI INPUTS------------------------------
+    //---------------------------------------------------------------------------
+
+    //Set movementVector based on movement input
+    public void Navigate(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            Buttons buttons = GameObject.FindGameObjectWithTag("Buttons").GetComponent<Buttons>();
+
+            Vector2 navigationInput = context.ReadValue<Vector2>();
+
+            //EventSystem.current.SetSelectedGameObject(buttons[0]);
+
+            if (navigationInput.y > 0.5f)
+                buttons.PreviousButton();
+
+            if (navigationInput.y < -0.5f)
+                buttons.NextButton();
+
+            //if (navigationInput.x > 0.5f)
+            //Debug.Log("Navigation RIGHT");
+
+            //if (navigationInput.x < -0.5f)
+            //Debug.Log("Navigation LEFT");
+        }
+    }
+
+    //Dash Button Pressed
+    public void Submit(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            Debug.Log("SUBMIT PRESSED");
+        }
+    }
+
+    //Attack Button Pressed
+    public void Cancel(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            Debug.Log("CANCEL PRESSED");
+        }
+    }
 
     //---------------------------------------------------------------------------
     //-----------------------------INPUT ACTIVATION------------------------------
@@ -622,14 +682,63 @@ public class PlayerController : SingletonPattern<PlayerController>
                 if (showHitboxes)
                     slashHitbox.GetComponent<MeshRenderer>().enabled = true;
             }
-            else//activate thrust hitbox
+            else if (IsChargeAttacking)//activate thrust hitbox
             {
                 thrustHitbox.GetComponent<MeshCollider>().enabled = true;
 
                 if (showHitboxes)
                     thrustHitbox.GetComponent<MeshRenderer>().enabled = true;
             }
+            else//Activate radial hitbox - damage wave
+            {
+                thrustHitbox.GetComponent<MeshCollider>().enabled = true;
+
+                if (showHitboxes)
+                    thrustHitbox.GetComponent<MeshRenderer>().enabled = true;
+
+                StartCoroutine(ActivateRadialHitbox());
+            }
         }
+    }
+
+    //Scales a circular wave of damage to hit enemies in a radius
+    public IEnumerator ActivateRadialHitbox()
+    {
+        for (int i = 0; i < 1; i++)
+        {
+            yield return new WaitForEndOfFrame();
+        }
+        //Set starting position of damage radius to the impact point of the sword
+        radialHitbox.transform.position = swordImpactPoint.transform.position;
+
+        //Enable the hitbox
+        radialHitbox.GetComponent<SphereCollider>().enabled = true;
+        if (showHitboxes)
+            radialHitbox.GetComponent<MeshRenderer>().enabled = true;
+
+        //Lerp the damage wave to increase in scale over time
+        float attack3HitboxScale;
+        float hitboxOriginalScale = radialHitbox.transform.localScale.x;
+        float hitboxMinScale = radialHitbox.transform.localScale.x / 10;
+        float hitboxMaxScale = radialHitbox.transform.localScale.x * 8;
+        float timeElapsed = 0;
+        float duration = .25f;
+        while (timeElapsed < duration)
+        {
+            attack3HitboxScale = Mathf.Lerp(hitboxMinScale, hitboxMaxScale, timeElapsed / duration);
+            radialHitbox.transform.localScale = new Vector3(attack3HitboxScale, 1, attack3HitboxScale);
+
+            timeElapsed += Time.deltaTime;
+            yield return new WaitForEndOfFrame();
+        }
+
+        //disable the hitbox
+        radialHitbox.GetComponent<SphereCollider>().enabled = false;
+        if (showHitboxes)
+            radialHitbox.GetComponent<MeshRenderer>().enabled = false;
+
+        //reset the scale
+        radialHitbox.transform.localScale = new Vector3(hitboxOriginalScale, 1, hitboxOriginalScale); //reset scale
     }
 
     //Disable the sword hitbox - called from attack animation event
@@ -664,16 +773,26 @@ public class PlayerController : SingletonPattern<PlayerController>
         chargeArrow.SetActive(true);
         float arrowScale = chargeArrow.transform.localScale.y;
         float chargeSpeed = minChargeSpeed;
+        currAttackDamage = baseAttackDamage.Value * minChargeDmgModifier;
+
+        float timeElapsed = 0;
         while (isCharging) //Increase charge speed & arrow UI until button is released
         {
             currMoveSpeed = 0; //prevent movement while charging
-            chargeSpeed += chargeRate.Value * Time.deltaTime;
-            chargeSpeed = Mathf.Clamp(chargeSpeed, minChargeSpeed, maxChargeSpeed);
-            //Debug.Log("chargeSpeed is: " + chargeSpeed);
 
-            arrowScale += (chargeRate.Value / 10) * Time.deltaTime;
-            arrowScale = Mathf.Clamp(arrowScale, 0f, 2.5f);
+            chargeSpeed = Mathf.Lerp(minChargeSpeed, maxChargeSpeed, timeElapsed / timeToFullCharge);
+            currAttackDamage = Mathf.Lerp(baseAttackDamage.Value * minChargeDmgModifier, baseAttackDamage.Value * chargeDmgModifier.Value, timeElapsed / timeToFullCharge);
+
+            arrowScale = Mathf.Lerp(0.5f, 2.5f, timeElapsed / timeToFullCharge);
             chargeArrow.transform.localScale = new Vector3(1, arrowScale, 1);
+
+            timeElapsed += Time.deltaTime;
+            if (timeElapsed > timeToFullCharge)
+            {
+                timeElapsed = timeToFullCharge;
+                chargeSpeed = maxChargeSpeed;
+                currAttackDamage = baseAttackDamage.Value * chargeDmgModifier.Value;
+            }
 
             yield return new WaitForEndOfFrame();
         }
@@ -683,7 +802,7 @@ public class PlayerController : SingletonPattern<PlayerController>
         chargeArrow.transform.localScale = new Vector3(1, 1, 1);
 
         Vector3 chargeVector = transform.forward;
-        currAttackDamage = baseAttackDamage.Value * chargeDmgModifier.Value; //increase attack damage temporarily
+        
         animator.SetBool("isCharging", false);
 
         //Charge forward & apply deceleration until speed is nearly zero
@@ -716,13 +835,43 @@ public class PlayerController : SingletonPattern<PlayerController>
         {
             //IF statement chain to see what special item is currently being used
 
-            //Bowling Ball item
+            //Bowling Ball Item
             if (SpecialSlot.ItemName == "Bowling Ball")
-                SpecialSlot.prefab.GetComponent<BowlingBall>().spawnBowlingBall(this.transform.position, this.transform.forward, lastTargetRotation);
+            {
+                Vector3 spawnDirection = transform.forward;
+                Quaternion spawnRotation = lastTargetRotation;
+
+                if (IsUsingMouse)//Spawn in direction of mouse pointer if using a mouse
+                {
+                    spawnDirection = new Vector3(mouseTargetPoint.position.x, 0, mouseTargetPoint.position.z) - new Vector3(transform.position.x, 0, transform.position.z);
+                    spawnDirection = spawnDirection.normalized /2;
+
+                    spawnRotation = Quaternion.LookRotation(spawnDirection);
+                }
+
+                SpecialSlot.prefab.GetComponent<BowlingBall>().spawnBowlingBall(transform.position + new Vector3(0, 0.35f, 0), spawnDirection, spawnRotation);
+            }
 
             //Bomb Item
             else if (SpecialSlot.ItemName == "Bomb Bag")
-                SpecialSlot.prefab.GetComponent<BombBag>().spawnBomb(this.transform.position, this.transform.rotation);
+                SpecialSlot.prefab.GetComponent<BombBag>().spawnBomb(transform.position, transform.rotation);
+
+            //Fire Wand Item
+            if (SpecialSlot.ItemName == "Fire Wand")
+            {
+                Vector3 spawnDirection = transform.forward;
+                Quaternion spawnRotation = lastTargetRotation;
+
+                if (IsUsingMouse)//Spawn in direction of mouse pointer if using a mouse
+                {
+                    spawnDirection = new Vector3(mouseTargetPoint.position.x, 0, mouseTargetPoint.position.z) - new Vector3(transform.position.x, 0, transform.position.z);
+                    spawnDirection = spawnDirection.normalized / 2;
+
+                    spawnRotation = Quaternion.LookRotation(spawnDirection);
+                }
+
+                SpecialSlot.prefab.GetComponent<FireWand>().spawnFireBall(transform.position, spawnDirection, spawnRotation);
+            }
 
         }
         SpecialCharge = 0;
@@ -773,17 +922,13 @@ public class PlayerController : SingletonPattern<PlayerController>
 
         //If on center tile
         if (CenterTile.Instance.onTile)
-        {
-            
-            if (LevelManager.Instance.currFloor == 19)//End game stuff
-            {
-                RunTimer.Instance.IncreaseTimer = false;
-                HUDController.Instance.ShowWinScreen();
-            }
-            else if (LevelManager.Instance.currFloor == 0)//floor 0 stuff
+        {           
+            if (LevelManager.Instance.currFloor == 0)//floor 0 stuff
             {
                 RunTimer.Instance.IncreaseTimer = true;
                 HUDController.Instance.ShowRunTimer();
+
+                AnalyticsEvents.Instance.PlayerControls(); //Sends an analytics event describing the players current controls
 
                 LevelManager.Instance.TransitionLevel();
                 CenterTile.Instance.onTile = false;
@@ -798,6 +943,12 @@ public class PlayerController : SingletonPattern<PlayerController>
 
                 HUDController.Instance.controlsPanel.SetActive(false);
                 HUDController.Instance.HideQuickHint();
+            }
+            else if (LevelManager.Instance.currFloor == 19)//End game stuff
+            {
+                RunTimer.Instance.IncreaseTimer = false;
+                Time.timeScale = 0;
+                HUDController.Instance.ShowWinScreen();
             }
             else
             {
@@ -815,10 +966,12 @@ public class PlayerController : SingletonPattern<PlayerController>
         }
 
         //If there is currently an item being touched then set pickup Item to true
-        if (touchingItem == true)
+        if (touchingItem == true && canAffordItem)
         {
             pickupItem = true;
             touchingItem = false;
+            canAffordItem = false;
+            PlayerGems.Instance.SubtractGems(priceOfLastTouchedItem);
             HUDController.Instance.HideQuickHint();
         }
     }
@@ -832,19 +985,41 @@ public class PlayerController : SingletonPattern<PlayerController>
     /// While the player is inside the Trigger of an object it will check if they are still touching the object so it can be picked up with the associated action button
     /// </summary>
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Gem")
+        {
+            if(PlayerGems.Instance.GemCount == 0)
+                HUDController.Instance.ShowGemCounter();
+
+            PlayerGems.Instance.AddGems(1);
+            Destroy(other.gameObject);
+        }
+    }
+
     private void OnTriggerStay(Collider other)
     {
         if (other.tag == "Item") //If the other gameobject is an item then check if the pickup button was pressed
         {
             touchingItem = true;
-            HUDController.Instance.ShowQuickHint("Pick Up");
+            if (PlayerGems.Instance.GemCount >= other.GetComponentInParent<Item>().price)
+            {
+                canAffordItem = true;
+                priceOfLastTouchedItem = other.GetComponentInParent<Item>().price;
+                HUDController.Instance.ShowQuickHint("Pick Up");
+            }
+            else
+                canAffordItem = false;
 
             if (pickupItem == true) //If the item can be picked up
             {
-                other.GetComponentInParent<Item>().Equip(this, this.GetComponent<PlayerHealth>()); //Equip the item to the player
+                other.GetComponentInParent<Item>().Equip(this, GetComponent<PlayerHealth>()); //Equip the item to the player
 
-                AnalyticsEvents.Instance.ItemTaken(other.GetComponentInParent<Item>().item.ItemName); //Send Item Taken analytics event
-                
+                if(LevelManager.Instance.currFloor %5 != 0)
+                    AnalyticsEvents.Instance.ItemTaken(other.GetComponentInParent<Item>().item.ItemName); //Send Item Taken analytics event
+                else if(LevelManager.Instance.currFloor != 0)
+                    AnalyticsEvents.Instance.ItemPurchased(other.GetComponentInParent<Item>().item.ItemName); //Send Item Purchased analytics event
+
                 Destroy(other.gameObject); //Destroy the instance of the item in the gamescene
                 pickupItem = false; //Set pickup to false
 

@@ -15,6 +15,7 @@ public class LavaTile : MonoBehaviour
     [SerializeField] private float damage = 2f;
     //[SerializeField] private float rate = 1f;
     [SerializeField] private float damageDelay = .2f;
+    private bool lavaHit = false;
 
     /// <summary>
     /// Detects if something is on this lava tile. If its a player, deals damage. Will add logic for enemies later
@@ -27,10 +28,15 @@ public class LavaTile : MonoBehaviour
 
     private IEnumerator LavaCycle(GameObject target)
     {        
-        if (target.CompareTag("Player") && !PlayerController.Instance.IsDashing)
+        if (!lavaHit && target.GetComponent<PlayerController>() && !PlayerController.Instance.IsDashing)
         {
-            yield return new WaitForSeconds(damageDelay);
+            if (!PlayerHealth.Instance.isInvincible)
+                AnalyticsEvents.Instance.PlayerDamaged("Lava"); //Sends analytics event about damage source
+
+            lavaHit = true;
             PlayerHealth.Instance.Damage(damage);
+            yield return new WaitForSeconds(damageDelay);
+            lavaHit = false;
         }
     }
 }

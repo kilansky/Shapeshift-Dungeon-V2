@@ -80,8 +80,11 @@ public class Laser : MonoBehaviour
     /// <returns></returns>
     private IEnumerator LaserCycle(GameObject target)
     {
-        if (target.CompareTag("Player") && !PlayerController.Instance.IsDashing)
+        if (target.GetComponent<PlayerController>() && !PlayerController.Instance.IsDashing)
         {
+            if (!PlayerHealth.Instance.isInvincible)
+                AnalyticsEvents.Instance.PlayerDamaged("Laser"); //Sends analytics event about damage source
+
             PlayerHealth.Instance.Damage(damage);
             yield return new WaitForSeconds(tickRate);
         }

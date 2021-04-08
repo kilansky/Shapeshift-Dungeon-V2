@@ -33,11 +33,13 @@ public class EnemyBase : MonoBehaviour, IDamageable
     //public float maxAttackRange = 20f;
     public float timeBetweenAttacks = 3f;
     public float minAgroRange = 10f;
+    public GameObject deathEffect;
+    public GameObject gemPrefab;
+
     [HideInInspector] public float distanceToPlayer;
     [HideInInspector] public NavMeshAgent agent;
     [HideInInspector] public bool isStunned;
-    //Floating Skull charge rate
-    //public float chargeRate = 1f;
+    
     #endregion
 
     #region Getters and Setters
@@ -52,10 +54,6 @@ public class EnemyBase : MonoBehaviour, IDamageable
     #region Serialize Fields
     [SerializeField]
     public LayerMask whatIsPlayer;
-
-    //fireball is specific to floating skull
-    //[SerializeField]
-    //public GameObject fireball;
 
     [SerializeField]
     private Transform wallCheck;
@@ -73,7 +71,6 @@ public class EnemyBase : MonoBehaviour, IDamageable
     private Transform target;
     private Vector3 velocityWorkspace;
     
-    
     //private bool isAttacking = false;
     private bool stopMoving = false;
     private bool isInvincible = false;
@@ -83,8 +80,6 @@ public class EnemyBase : MonoBehaviour, IDamageable
     //protected bool canAttack = true;
     //protected bool isPlayerInMinAgroRange;
     //protected bool isPlayerInMinAttackRange;
-
-
     #endregion
 
     public virtual void Awake()
@@ -105,10 +100,14 @@ public class EnemyBase : MonoBehaviour, IDamageable
         Anim = aliveGO.GetComponent<Animator>();
 
         //find player pos and go to it
-        SetNewTarget(player);
+        //SetNewTarget(player);
         //SetDestination();
 
         //set health variables
+
+        if (GetComponent<GemMonster>().isGemMonster)
+            health *= GetComponent<GemMonster>().healthMod;
+
         Health = health;
         healthBar.maxValue = Health;
         healthBar.value = Health;
@@ -213,6 +212,33 @@ public class EnemyBase : MonoBehaviour, IDamageable
         //return Physics.CheckSphere(playerCheck.position, minAttackRange, entityData.whatIsPlayer);
     }
 
+    /*public virtual bool CheckInSightRange()
+    {
+        RaycastHit hit;
+        //FloatingCrystal[] crystals = FindObjectsOfType<FloatingCrystal>();
+
+        //draw a vector3 from crystals pos to target's pos
+        //need to define target
+        Vector3 direction = transform.position - target.transform.position;
+
+        Debug.DrawRay(firePointFront.transform.position, direction, Color.blue);
+
+        if (Physics.Raycast(firePointFront.transform.position, direction, out hit))
+        {
+            if (hit.transform.CompareTag("Crystal"))
+            {
+                //connect with the crystal
+                return true;
+            }
+            if (hit.transform.CompareTag("Player"))
+            {
+                //do damage to the player
+                return true;
+            }
+        }
+        return false;
+    }*/
+
     public virtual void Damage(float damage)
     {
         //start timer
@@ -226,6 +252,8 @@ public class EnemyBase : MonoBehaviour, IDamageable
             //enemy takes damage from the player
             Health -= damage;
             UpdateUI();
+
+            Debug.Log("Enemy Took Damage");
 
             if (Health <= 0)
                 Kill();
@@ -245,6 +273,8 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     public virtual void Heal(float heal)
     {
+        Debug.Log("Enemy Healed");
+
         //heal the enemy
         Health += heal;
         UpdateUI();
@@ -254,9 +284,19 @@ public class EnemyBase : MonoBehaviour, IDamageable
     {
         //Update the monster count of the room
         MonsterSpawner.Instance.MonsterKilled();
+        Instantiate(deathEffect, transform.position + new Vector3(0, 2, 0), Quaternion.identity);
+
+        if (GetComponent<GemMonster>().isGemMonster)
+            DropGem();
 
         //Destroy self from root object 
         Destroy(transform.root.gameObject);
+    }
+
+    private void DropGem()
+    {
+        GameObject gem = Instantiate(gemPrefab, transform.position + new Vector3(0, 1, 0), Quaternion.identity);
+        gem.GetComponent<Rigidbody>().AddForce(Vector3.up * 350f);
     }
 
     private void UpdateUI()
@@ -269,12 +309,16 @@ public class EnemyBase : MonoBehaviour, IDamageable
     {
         //this will be used for the dummy item
         target = newTarget.transform;
+        
     }
 
     public void SetDestination()
     {
-        //target the player
-        agent.SetDestination(target.position);
+        if (target != null)
+        {
+            //target the player
+            agent.SetDestination(target.position);
+        }
         #region turn variables 
         //make sure the enemy faces the player
         //this will be the same for all enemies
@@ -283,6 +327,11 @@ public class EnemyBase : MonoBehaviour, IDamageable
         //transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
         #endregion
     }
+
+    /*public void Patrol()
+    {
+
+    }*/
 
     public virtual void Attack()
     {
@@ -323,5 +372,16 @@ public class EnemyBase : MonoBehaviour, IDamageable
         Gizmos.DrawWireSphere(transform.position, minAgroRange);
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(transform.position, minAttackRange);
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.CompareTag("KillBox"))
+        {
+            Debug.Log("MONSTER TOUCHED KILLBOX");
+            MonsterSpawner.Instance.MonsterKilledPrematurly();
+
+            Destroy(transform.root.gameObject);
+        }
     }
 }

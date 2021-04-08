@@ -9,6 +9,11 @@ public class BowllingAttack : MonoBehaviour
     //public float destroyTime; //This is the time that it will take before the bowling ball gets destroyed
     public float speed; //The speed that the bowling ball will go at
 
+    private void Start()
+    {
+        Destroy(gameObject, 8f);
+    }
+
     /// <summary>
     /// OnTrigger so when it hits an enemy it will damage them - AHL (3/4/21)
     /// </summary>
@@ -17,12 +22,15 @@ public class BowllingAttack : MonoBehaviour
         //If the other object is Monster (Contains the enemy base script) then go on with the rest of the damage
         if (other.GetComponent<EnemyBase>())
             other.GetComponent<EnemyBase>().Damage(damage);
+
+        if (other.gameObject.layer == 9 || other.gameObject.layer == 10)
+            Destroy(gameObject);
     }
 
-    //Destroy when colliding with Environment Layer
+    //Destroy when colliding with Environment Layer or the Wall Layer
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.layer == 10)
+        if (collision.gameObject.layer == 9 || collision.gameObject.layer == 10)
             Destroy(gameObject);
     }
 
@@ -31,6 +39,7 @@ public class BowllingAttack : MonoBehaviour
     {
         //Every frame the bowling ball will move forward
         transform.Translate(Vector3.forward * speed * Time.deltaTime);
-        //Destroy(this.gameObject, destroyTime); //The bowling ball will be destroyed after a certain amount of time (destroy time)
+        //And rotate forward - Sky (3/29/21)
+        //transform.RotateAround(transform.position, Vector3.right, speed * Time.deltaTime);
     }
 }

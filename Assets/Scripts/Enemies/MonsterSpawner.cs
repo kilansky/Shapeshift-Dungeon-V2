@@ -8,6 +8,7 @@ public class FloorSpawnInfo
     public GameObject[] monsters; //the list of potential monsters to spawn
     [Range(0, 100)] public int totalMonsters; //total # of monsters to spawn
     [Range(0, 30)] public int maxMonsters; //# of monsters that can be in the room at once
+    public int gemsOnFloor;
 }
 
 public class MonsterSpawner : SingletonPattern<MonsterSpawner>
@@ -15,7 +16,7 @@ public class MonsterSpawner : SingletonPattern<MonsterSpawner>
     public FloorSpawnInfo[] floorSpawnInfo = new FloorSpawnInfo[31];
     [Range(0,3)] public float timeBetweenSpawns = 0.5f; //How long to wait before allowing another monster to spawn
     [Range(0, 10)] public float disableSpawnerTime = 5f; //How long before a spawner can be used again
-    [HideInInspector] public bool floorCleared = true; //Room is cleared of monsters
+    [HideInInspector] public bool floorCleared = false; //Room is cleared of monsters
 
     //private GameObject[] monsterSpawnPoints;
     private List<SpawnPoint> monsterSpawnPoints = new List<SpawnPoint>();
@@ -24,10 +25,10 @@ public class MonsterSpawner : SingletonPattern<MonsterSpawner>
     private int monstersSpawned = 0;
     private int monstersKilled = 0;
     private int currFloor;
+    public int gemMonstersToSpawn = 2;
 
     private void Start()
     {
-        currFloor = 1;
         BeginSpawingMonsters();
     }
 
@@ -35,8 +36,12 @@ public class MonsterSpawner : SingletonPattern<MonsterSpawner>
     {
         currFloor = LevelManager.Instance.currFloor;
 
+        gemMonstersToSpawn = floorSpawnInfo[currFloor].gemsOnFloor;
+
         if (LevelManager.Instance.currFloor % 5 != 0)//Check if current floor is not a shop
         {
+            AnalyticsEvents.Instance.FloorStarted();//Send Level Rated Analytics Event
+
             //Clear the spawn point list of any previously set spawn points
             monsterSpawnPoints.Clear();
 
@@ -46,8 +51,15 @@ public class MonsterSpawner : SingletonPattern<MonsterSpawner>
 
             SpawnMonsters();
         }
+        else if(currFloor == 0) //if floor is the starting room, don't clear the floor (player must pick up potions)
+        {
+            floorCleared = false;
+            CenterTile.Instance.SetTextState();
+        }
         else //if floor is a shop, don't spawn monster, instantly clear the floor
         {
+            AnalyticsEvents.Instance.FloorStarted();//Send Level Rated Analytics Event
+            AnalyticsEvents.Instance.FloorCompleted(); //Send Floor Completed Analytics Event
             floorCleared = true;
             CenterTile.Instance.SetTextState();
         }
@@ -56,13 +68,12 @@ public class MonsterSpawner : SingletonPattern<MonsterSpawner>
     //Called when monsters are spawned above/below the map and killed instantly
     public void MonsterKilledPrematurly()
     {
+        monstersInRoom--;
+
         if (!floorCleared)
-        {
-            monstersInRoom--;
             monstersSpawned--;
-            //SpawnMonsters();
-            Debug.Log("Attempted to spawn a monster to replace one that died from killbox");
-        }
+        else
+            monstersKilled++;
     }
 
     //Spawns a single monster, waits, and is called again recursively until all monsters have been killed
@@ -79,7 +90,7 @@ public class MonsterSpawner : SingletonPattern<MonsterSpawner>
             GameObject monsterToSpawn = floorSpawnInfo[currFloor].monsters[randMonster];
 
             //Spawn the monster and disable the spawn point temporarily
-            monsterSpawnPoints[randSpawnPoint].SpawnMonster(monsterToSpawn);
+            monsterSpawnPoints[randSpawnPoint].SpawnMonster(monsterToSpawn, CheckForGem());
             monstersInRoom++;
             monstersSpawned++;
             StartCoroutine(DisableSpawner(randSpawnPoint));
@@ -88,6 +99,38 @@ public class MonsterSpawner : SingletonPattern<MonsterSpawner>
         //Recursively attempt to spawn until the total # of monsters to spawn have been killed
         if (monstersSpawned < floorSpawnInfo[currFloor].totalMonsters)
             StartCoroutine(WaitToSpawnAgain());
+    }
+
+    /// <summary>
+    /// Checks if a spawned enemy will be gem monster based off of how many monsters have already spawned and how many gem monsters need to spawn still
+    /// </summary>
+    /// <returns></returns>
+    private bool CheckForGem()
+    {
+        //Debug.Log("This floor will have " + floorSpawnInfo[currFloor].totalMonsters + " monsters. " + monstersSpawned + " have spawned");
+
+
+        if (gemMonstersToSpawn == 0) //If there are no more gem monsters to spawn, simply return false
+            return false;
+        else
+        {
+            //Uses a roll check to see if a monster will be spawned as a gem monster
+            int random = Random.Range(1, floorSpawnInfo[currFloor].totalMonsters - monstersSpawned);
+
+            //A successful roll lands when the random number rolls less than or equal to the gem monsters remaining amount
+            //Rolls from 1 (always at least 1 enemy to spawn if enemy is being spawned) to enemies left to spawn
+            if (random <= gemMonstersToSpawn)
+            {
+                //Debug.Log("Successful gem roll of " + random + " out of " + (floorSpawnInfo[currFloor].totalMonsters - monstersSpawned));
+                --gemMonstersToSpawn;
+                return true;
+            }
+            else
+            {
+                //Debug.Log("Unsuccessful gem roll of " + random + " out of " + (floorSpawnInfo[currFloor].totalMonsters - monstersSpawned));
+                return false;
+            }
+        }
     }
 
     //Call this from Enemy class whenever a monster is killed
@@ -103,6 +146,7 @@ public class MonsterSpawner : SingletonPattern<MonsterSpawner>
 
             floorCleared = true;
             PedestalManager.Instance.LoadPedestals(); //Activate the item pedestals
+            LevelManager.Instance.ToggleHazards(false); //Disabled level hazards
             AnalyticsEvents.Instance.FloorCompleted(); //Send Floor Completed Analytics Event
         }
     }
