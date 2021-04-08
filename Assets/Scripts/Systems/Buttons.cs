@@ -9,23 +9,46 @@ public class Buttons : MonoBehaviour
 {
     public GameObject buttonsPanel;
     public GameObject[] buttons;
+    public EventSystem eventSystem;
+
+    private int currButtonIndex;
 
     private void Start()
     {
-        //Clear selected object
-        //EventSystem.current.SetSelectedGameObject(null);
-        //Set a new selected object
-        //EventSystem.current.SetSelectedGameObject(buttons[0]);
+        ResetButtons();
+    }
+
+    public void ResetButtons()
+    {
+        //Clear selected buttons
+        eventSystem.GetComponent<EventSystem>().SetSelectedGameObject(null);
+
+        //Set a new selected button
+        currButtonIndex = 0;
+        eventSystem.GetComponent<EventSystem>().SetSelectedGameObject(buttons[currButtonIndex]);
     }
 
     public void NextButton()
     {
+        currButtonIndex++;
+        if (currButtonIndex > buttons.Length - 1)
+            currButtonIndex = 0;
 
+        eventSystem.GetComponent<EventSystem>().SetSelectedGameObject(buttons[currButtonIndex]);
     }
 
     public void PreviousButton()
     {
+        currButtonIndex--;
+        if (currButtonIndex < 0)
+            currButtonIndex = buttons.Length - 1;
 
+        eventSystem.GetComponent<EventSystem>().SetSelectedGameObject(buttons[currButtonIndex]);
+    }
+
+    public void SubmitButton()
+    {
+        buttons[currButtonIndex].GetComponent<Button>().onClick.Invoke();
     }
 
     public void QuitGame()

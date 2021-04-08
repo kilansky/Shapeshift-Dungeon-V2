@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.EventSystems;
 
 public enum inputButtons { Dash, Attack, Charge, Special, Potion, Interact }
 
@@ -385,7 +386,7 @@ public class PlayerController : SingletonPattern<PlayerController>
     }
 
     //---------------------------------------------------------------------------
-    //------------------------------RECIEVE INPUTS-------------------------------
+    //-------------------------RECIEVE ACTION INPUTS-----------------------------
     //---------------------------------------------------------------------------
 
     //Set movementVector based on movement input
@@ -499,6 +500,44 @@ public class PlayerController : SingletonPattern<PlayerController>
         }
     }
 
+    //---------------------------------------------------------------------------
+    //----------------------------RECIEVE UI INPUTS------------------------------
+    //---------------------------------------------------------------------------
+
+    //Set movementVector based on movement input
+    public void Navigate(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            Vector2 navigationInput = context.ReadValue<Vector2>();
+
+            Buttons buttons = FindObjectOfType<Buttons>();
+
+            if (navigationInput.y > 0.5f || navigationInput.x < -0.5f)
+                buttons.PreviousButton();
+
+            if (navigationInput.y < -0.5f || navigationInput.x > 0.5f)
+                buttons.NextButton();
+        }
+    }
+
+    //Dash Button Pressed
+    public void Submit(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            FindObjectOfType<Buttons>().SubmitButton();
+        }
+    }
+
+    //Attack Button Pressed
+    public void Cancel(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            //Debug.Log("CANCEL PRESSED");
+        }
+    }
 
     //---------------------------------------------------------------------------
     //-----------------------------INPUT ACTIVATION------------------------------

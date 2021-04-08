@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using TMPro;
 
 [System.Serializable]
@@ -88,6 +89,13 @@ public class HUDController : SingletonPattern<HUDController>
         ShowLevelReview = true;
         player = PlayerController.Instance;
         playerInput = player.gameObject.GetComponent<PlayerInput>();
+
+        HidePotionsPanel();
+        HideGemCounter();
+        HideEquipmentPanel();
+        HideSpecialItemPanel();
+        HideQuickHint();
+
         ControlSchemeChanged();
     }
 
@@ -135,6 +143,13 @@ public class HUDController : SingletonPattern<HUDController>
         //Using Keyboard
         if (playerInput.currentControlScheme == "Keyboard&Mouse")
         {
+            //Set Cursor to be visible
+            Cursor.visible = true;
+
+            //Clear selected buttons
+            GetComponent<EventSystem>().SetSelectedGameObject(null);
+
+            //Update up button icons
             potionsPanel.image.sprite = potionsPanel.keyboardButton;
             quickHintPanel.image.sprite = quickHintPanel.keyboardButton;
 
@@ -147,9 +162,13 @@ public class HUDController : SingletonPattern<HUDController>
         //Using Controller
         else
         {
+            //Set Cursor to not be visible
+            Cursor.visible = false;
+
             //Using PS4 Controller
             if (Gamepad.current.device.ToString().Contains("DualShock"))
             {
+                //Update up button icons
                 potionsPanel.image.sprite = potionsPanel.psButton;
                 quickHintPanel.image.sprite = quickHintPanel.psButton;
 
@@ -162,6 +181,7 @@ public class HUDController : SingletonPattern<HUDController>
             //Using Xbox Controller
             else
             {
+                //Update up button icons
                 potionsPanel.image.sprite = potionsPanel.xboxButton;
                 quickHintPanel.image.sprite = quickHintPanel.xboxButton;
 
@@ -345,6 +365,7 @@ public class HUDController : SingletonPattern<HUDController>
         player.gameObject.GetComponent<PlayerInput>().SwitchCurrentActionMap("UI");
         Time.timeScale = 0;
         statPotionPanel.SetActive(true);
+        statPotionPanel.GetComponent<Buttons>().ResetButtons();
     }
 
     public void HideStatPotionPanel()
@@ -352,6 +373,7 @@ public class HUDController : SingletonPattern<HUDController>
         player.gameObject.GetComponent<PlayerInput>().SwitchCurrentActionMap("Player");
         Time.timeScale = 1;
         statPotionPanel.SetActive(false);
+        statPotionPanel.GetComponent<Buttons>().ResetButtons();
     }
 
     public void ShowSpecialItemPanel()
@@ -390,6 +412,8 @@ public class HUDController : SingletonPattern<HUDController>
         gameOverScreen.SetActive(true);
         playerDamagedOverlay.SetActive(false);
         GameOverStats.Instance.SetGameOverStats();
+        gameOverScreen.GetComponent<Buttons>().ResetButtons();
+
         StartCoroutine(gameOverScreen.GetComponent<Buttons>().WaitToDisplayReview());
     }
 
@@ -397,6 +421,7 @@ public class HUDController : SingletonPattern<HUDController>
     {
         player.gameObject.GetComponent<PlayerInput>().SwitchCurrentActionMap("Player");
         gameOverScreen.SetActive(false);
+        gameOverScreen.GetComponent<Buttons>().ResetButtons();
     }
 
     public void ShowWinScreen()
@@ -405,24 +430,28 @@ public class HUDController : SingletonPattern<HUDController>
         winScreen.SetActive(true);
         Time.timeScale = 0;
         playerDamagedOverlay.SetActive(false);
+        winScreen.GetComponent<Buttons>().ResetButtons();
     }
 
     public void HideWinScreen()
     {
         player.gameObject.GetComponent<PlayerInput>().SwitchCurrentActionMap("Player");
         winScreen.SetActive(false);
+        winScreen.GetComponent<Buttons>().ResetButtons();
     }
 
     public void ShowPauseScreen()
     {
         player.gameObject.GetComponent<PlayerInput>().SwitchCurrentActionMap("UI");
         pauseScreen.SetActive(true);
+        pauseScreen.GetComponent<Buttons>().ResetButtons();
     }
 
     public void HidePauseScreen()
     {
         player.gameObject.GetComponent<PlayerInput>().SwitchCurrentActionMap("Player");
         pauseScreen.SetActive(false);
+        pauseScreen.GetComponent<Buttons>().ResetButtons();
     }
 
     public void ShowRunTimer()
