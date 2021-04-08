@@ -23,6 +23,11 @@ public class ItemUI : MonoBehaviour
         Name.text = GetComponentInParent<Item>().item.ItemName;
         Description.text = GetComponentInParent<Item>().item.itemDescription;
 
+        SetPriceCanvas();
+    }
+
+    public void SetPriceCanvas()
+    {
         if (priceCanvas)//Check if this item has a price canvas set up
         {
             Price.text = GetComponentInParent<Item>().price.ToString();
