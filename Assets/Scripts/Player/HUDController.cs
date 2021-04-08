@@ -240,7 +240,7 @@ public class HUDController : SingletonPattern<HUDController>
     public void UpdateSpecialCharge()
     {
         float maxValue = PlayerController.Instance.specialCooldownTime.Value;
-        float value = PlayerController.Instance.SpecialCharge;
+        float value = PlayerController.Instance.SpecialCharge1;
 
         chargeBarFill.fillAmount = value / maxValue;
     }
@@ -358,7 +358,7 @@ public class HUDController : SingletonPattern<HUDController>
     {
         specialItemPanel.panel.SetActive(true);
         speicalItemIcon.sprite = PlayerController.Instance.SpecialSlot.sprite;
-        PlayerController.Instance.SpecialCharge = PlayerController.Instance.specialCooldownTime.Value;
+        PlayerController.Instance.SpecialCharge1 = PlayerController.Instance.specialCooldownTime.Value;
         UpdateSpecialCharge();
     }
 
