@@ -10,7 +10,7 @@ public class Item : MonoBehaviour
     public GameObject priceCanvas;
 
     /// <summary>
-    /// AHL - 2/22/21
+    /// AHL - 4/8/21
     /// Equip function to have the item be attached to the player and adjusts their stats by using the StatModifier script
     /// </summary>
     public void Equip(PlayerController c, PlayerHealth h)
@@ -30,10 +30,16 @@ public class Item : MonoBehaviour
             if (c.SpecialSlot == null) //If the player doesn't have a special item then equip one
                 c.SpecialSlot = this.item;
 
-
-            else //If the player does have a special item then unequip their current one and equip the new one
+            else if(c.hasBagOfHolding == true && c.BagOfHoldingSlot == null) //If the player has a special item and the bag of holding but nothing in the bag of holding then we place the item in the bag
             {
-                Instantiate(c.SpecialSlot.prefab, transform.position, transform.rotation, transform.parent);
+                c.BagOfHoldingSlot = this.item;
+            }
+
+            else //If the player does have a special item and No Bag of Holding OR if the player has the bag of holding and it is filled as well then unequip their current one and equip the new one
+            {
+                if(c.isItemSwapping == false) //Only instantiate the prefab if there is no item swapping happening from the Bag Of Holding button
+                    Instantiate(c.SpecialSlot.prefab, transform.position, transform.rotation, transform.parent);
+                
                 c.SpecialSlot.prefab.GetComponent<Item>().Unequip(c, h);
                 c.SpecialSlot = this.item;
             }
@@ -346,7 +352,8 @@ public class Item : MonoBehaviour
         }
 
         HUDController.Instance.HideQuickHint();
-        Destroy(gameObject);
+        if(c.isItemSwapping == false) //Only Destroy a game object if there is no item swapping happening from the Bag of Holding button
+            Destroy(gameObject);
     }
 
     /// <summary>

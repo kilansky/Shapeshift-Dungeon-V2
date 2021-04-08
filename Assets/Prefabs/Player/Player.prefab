@@ -415,6 +415,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buttonsPanel: {fileID: 0}
   buttons: []
+  eventSystem: {fileID: 0}
 --- !u!1 &663311423
 GameObject:
   m_ObjectHideFlags: 0
@@ -652,6 +653,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buttonsPanel: {fileID: 0}
   buttons: []
+  eventSystem: {fileID: 0}
 --- !u!1 &1236753318
 GameObject:
   m_ObjectHideFlags: 0
@@ -741,6 +743,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buttonsPanel: {fileID: 0}
   buttons: []
+  eventSystem: {fileID: 0}
 --- !u!1 &1256433306
 GameObject:
   m_ObjectHideFlags: 0
@@ -935,6 +938,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buttonsPanel: {fileID: 0}
   buttons: []
+  eventSystem: {fileID: 0}
 --- !u!1 &1698146748
 GameObject:
   m_ObjectHideFlags: 0
@@ -1172,6 +1176,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buttonsPanel: {fileID: 0}
   buttons: []
+  eventSystem: {fileID: 0}
 --- !u!1 &2143466422
 GameObject:
   m_ObjectHideFlags: 0
@@ -6719,6 +6724,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buttonsPanel: {fileID: 0}
   buttons: []
+  eventSystem: {fileID: 0}
 --- !u!1 &2510716975081090659
 GameObject:
   m_ObjectHideFlags: 0
@@ -9337,6 +9343,7 @@ MonoBehaviour:
   - {fileID: 22993866641604919}
   - {fileID: 3287570918741790590}
   - {fileID: 4627547227128774682}
+  eventSystem: {fileID: 0}
 --- !u!1 &3757286146092985428
 GameObject:
   m_ObjectHideFlags: 0
@@ -10005,6 +10012,21 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 9222ea2b-7ad9-4b72-af65-1193dc9e41df
     m_ActionName: Player/MouseAiming[/Mouse/position]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3930385730876700785}
+        m_MethodName: BagOfHoldingItemSwap
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 66585002-09f8-4a76-851e-b00259794ef9
+    m_ActionName: Player/ItemSwapping[/Keyboard/leftShift]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: Keyboard&Mouse
   m_DefaultActionMap: Player
@@ -10072,9 +10094,13 @@ MonoBehaviour:
   FootSlot: {fileID: 0}
   PocketSlot1: {fileID: 0}
   PocketSlot2: {fileID: 0}
+  BagOfHoldingSlot: {fileID: 0}
+  TemporarySlot: {fileID: 0}
   touchingItem: 0
   pickupItem: 0
   canAffordItem: 0
+  hasRedHerb: 0
+  hasBagOfHolding: 0
   showHitboxes: 1
 --- !u!114 &4090330974890201958
 MonoBehaviour:
@@ -14636,6 +14662,7 @@ MonoBehaviour:
   - {fileID: 32658782615356947}
   - {fileID: 8781225323050938046}
   - {fileID: 1744657513058616101}
+  eventSystem: {fileID: 0}
 --- !u!114 &6517752535184637692
 MonoBehaviour:
   m_ObjectHideFlags: 0

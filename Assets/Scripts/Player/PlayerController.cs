@@ -77,12 +77,13 @@ public class PlayerController : SingletonPattern<PlayerController>
     public ItemsEquipment PocketSlot1; //Pocket 1 Item slot
     public ItemsEquipment PocketSlot2; //Pocket 2 Item slot
     public ItemsEquipment BagOfHoldingSlot; //Bag Of Holding Item Slot to swap between special items/ store additional special items
+    private ItemsEquipment TemporarySlot; //This slot is used for item swapping and temporary holding of items or equipement
     public bool touchingItem = false; //Variable to track if the player is currently touching an item or not
     public bool pickupItem = false; //Variable to pick up the item
     public bool canAffordItem = false; //Variable to see if player can afford an item -Justin
     [HideInInspector] public bool hasRedHerb = false; //Variable to make sure that the player has the red herb (makes for less checking of both pocker slots) so they are able to regain health when they start a new level
-    //[HideInInspector]
-    public bool hasBagOfHolding = false; //Variable to make sure that the player has the bag of holding item (makes for less checking of both pocker slots) so they are able to store/swap special items
+    [HideInInspector] public bool hasBagOfHolding = false; //Variable to make sure that the player has the bag of holding item (makes for less checking of both pocker slots) so they are able to store/swap special items
+    [HideInInspector] public bool isItemSwapping = false; //Variable to be used to check if the itms are currently being swapped or not
 
     private int priceOfLastTouchedItem = 0; //I need this to store prices -Justin
 
@@ -470,6 +471,29 @@ public class PlayerController : SingletonPattern<PlayerController>
             newInput.inputButton = inputButtons.Potion;
             newInput.inputTime = Time.time;
             inputQueue.Enqueue(newInput);
+        }
+    }
+
+    //Bag Of Holding Item Swap Button Pressed - AHL (4/8/21)
+    public void BagOfHoldingItemSwap(InputAction.CallbackContext context)
+    {
+        if (context.performed && hasBagOfHolding == true && BagOfHoldingSlot != null) //This action is only performed when the Bag of Holding Item is equipped and there is an item in the slot
+        {
+            //Adjusts bool to make sure things work as intended during this process
+            isItemSwapping = true;
+
+            //Puts the Special Item into the Temporary slot to begin the item transfer
+            TemporarySlot = SpecialSlot;
+
+            //Equips the Bag Of Holding Item
+            BagOfHoldingSlot.prefab.GetComponent<Item>().Equip(this, PlayerHealth.Instance);
+
+            //Swaps the rest of the items and makes temporary null again (Just in case o.o)
+            BagOfHoldingSlot = TemporarySlot;
+            TemporarySlot = null;
+
+            //Adjusts the bool to make sure things work as inteded after this process
+            isItemSwapping = false;
         }
     }
 
