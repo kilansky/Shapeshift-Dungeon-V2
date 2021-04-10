@@ -171,16 +171,7 @@ public class LevelManager : SingletonPattern<LevelManager>
             Debug.LogError("Level out of range!");
             return null;
         }
-    }
-
-    /// <summary>
-    /// Runs the entire transition process for testing purposes
-    /// </summary>
-    [ContextMenu("Test Scene Loading")]
-    private void DoLevelStuff()
-    {
-        TransitionLevel();
-    }
+    }  
 
     /// <summary>
     /// Waits until the transition is done to do more logic
@@ -234,5 +225,20 @@ public class LevelManager : SingletonPattern<LevelManager>
     {
         CenterTile.Instance.SetFloorText(currFloor); //Ensures the level display is set correctly on start
         CenterTile.Instance.SetTextState(); //Enables the glow of the center tile number
+    }
+
+    /// <summary>
+    /// Runs the entire transition process for testing purposes
+    /// </summary>
+    [ContextMenu("Test Scene Loading")]
+    private void DoLevelStuff()
+    {
+        TransitionLevel();
+    }
+
+    [ContextMenu("EnableHazards")]
+    private void ForceStartHazards()
+    {
+        ToggleHazards(true);
     }
 }
