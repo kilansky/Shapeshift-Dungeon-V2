@@ -187,13 +187,17 @@ public class LevelManager : SingletonPattern<LevelManager>
         {
             MonsterSpawner.Instance.BeginSpawingMonsters(); //Start spawning monsters
         }
+        //Set camera zoom & shadows
         CameraController.Instance.ZoomIn();
-        Debug.Log("Current map is: " + currMapName);
+        CameraController.Instance.SetShadows();
 
-        //UnityEditor.AI.NavMeshBuilder.BuildNavMesh(); // <<------- Editor Only :(
+        //Build Navigation Mesh
         GetComponent<NavMeshSurface>().BuildNavMesh();
 
+        //Activate hazards in the map
         ToggleHazards(true);
+
+        Debug.Log("Current map is: " + currMapName);
     }
 
     /// <summary>

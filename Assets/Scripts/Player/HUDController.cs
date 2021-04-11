@@ -365,7 +365,12 @@ public class HUDController : SingletonPattern<HUDController>
         player.gameObject.GetComponent<PlayerInput>().SwitchCurrentActionMap("UI");
         Time.timeScale = 0;
         statPotionPanel.SetActive(true);
-        statPotionPanel.GetComponent<Buttons>().ResetButtons();
+
+        //Set initial selected button if using controller
+        if (playerInput.currentControlScheme != "Keyboard&Mouse")
+            statPotionPanel.GetComponent<Buttons>().SetSelectedButton();
+        else
+            statPotionPanel.GetComponent<Buttons>().ClearSelectedButtons();
     }
 
     public void HideStatPotionPanel()
@@ -373,7 +378,6 @@ public class HUDController : SingletonPattern<HUDController>
         player.gameObject.GetComponent<PlayerInput>().SwitchCurrentActionMap("Player");
         Time.timeScale = 1;
         statPotionPanel.SetActive(false);
-        statPotionPanel.GetComponent<Buttons>().ResetButtons();
     }
 
     public void ShowSpecialItemPanel()
@@ -412,7 +416,12 @@ public class HUDController : SingletonPattern<HUDController>
         gameOverScreen.SetActive(true);
         playerDamagedOverlay.SetActive(false);
         GameOverStats.Instance.SetGameOverStats();
-        gameOverScreen.GetComponent<Buttons>().ResetButtons();
+
+        //Set initial selected button if using controller
+        if (playerInput.currentControlScheme != "Keyboard&Mouse")
+            gameOverScreen.GetComponent<Buttons>().SetSelectedButton();
+        else
+            gameOverScreen.GetComponent<Buttons>().ClearSelectedButtons();
 
         StartCoroutine(gameOverScreen.GetComponent<Buttons>().WaitToDisplayReview());
     }
@@ -421,7 +430,6 @@ public class HUDController : SingletonPattern<HUDController>
     {
         player.gameObject.GetComponent<PlayerInput>().SwitchCurrentActionMap("Player");
         gameOverScreen.SetActive(false);
-        gameOverScreen.GetComponent<Buttons>().ResetButtons();
     }
 
     public void ShowWinScreen()
@@ -430,28 +438,36 @@ public class HUDController : SingletonPattern<HUDController>
         winScreen.SetActive(true);
         Time.timeScale = 0;
         playerDamagedOverlay.SetActive(false);
-        winScreen.GetComponent<Buttons>().ResetButtons();
+
+        //Set initial selected button if using controller
+        if (playerInput.currentControlScheme != "Keyboard&Mouse")
+            winScreen.GetComponent<Buttons>().SetSelectedButton();
+        else
+            winScreen.GetComponent<Buttons>().ClearSelectedButtons();
     }
 
     public void HideWinScreen()
     {
         player.gameObject.GetComponent<PlayerInput>().SwitchCurrentActionMap("Player");
-        winScreen.SetActive(false);
-        winScreen.GetComponent<Buttons>().ResetButtons();
+        winScreen.SetActive(false);       
     }
 
     public void ShowPauseScreen()
     {
         player.gameObject.GetComponent<PlayerInput>().SwitchCurrentActionMap("UI");
         pauseScreen.SetActive(true);
-        pauseScreen.GetComponent<Buttons>().ResetButtons();
+
+        //Set initial selected button if using controller
+        if (playerInput.currentControlScheme != "Keyboard&Mouse")
+            pauseScreen.GetComponent<Buttons>().SetSelectedButton();
+        else
+            pauseScreen.GetComponent<Buttons>().ClearSelectedButtons();
     }
 
     public void HidePauseScreen()
     {
         player.gameObject.GetComponent<PlayerInput>().SwitchCurrentActionMap("Player");
         pauseScreen.SetActive(false);
-        pauseScreen.GetComponent<Buttons>().ResetButtons();
     }
 
     public void ShowRunTimer()
@@ -476,7 +492,7 @@ public class HUDController : SingletonPattern<HUDController>
         float lerpSpeed = 3f;
 
         //Set color to lerp to based on if player is at low health
-        if (PlayerHealth.Instance.Health < PlayerHealth.Instance.maxHealth / 3)
+        if (PlayerHealth.Instance.Health < PlayerHealth.Instance.maxHealth / 4)
         {
             lerpFromColor = lowHealth;
             lerpToColor = lowHealthHurt;
@@ -502,7 +518,7 @@ public class HUDController : SingletonPattern<HUDController>
         lerpFromColor = lerpToColor;
 
         //Set color to lerp to based on if player is at low health
-        if (PlayerHealth.Instance.Health < PlayerHealth.Instance.maxHealth / 3)
+        if (PlayerHealth.Instance.Health < PlayerHealth.Instance.maxHealth / 4)
             lerpToColor = lowHealth;
         else
             lerpToColor = noAlpha;

@@ -149,7 +149,7 @@ public class PlayerHealth : SingletonPattern<PlayerHealth>, IDamageable
         Health = Mathf.Clamp(Health, 0, maxHealth);
         StartCoroutine(HUDController.Instance.UpdateHealthBar(Health, maxHealth));
 
-        if(Health > maxHealth/3)
+        if(Health > maxHealth/4)
             StartCoroutine(HUDController.Instance.HidePlayerDamagedOverlay());
     }
 

@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Gem : MonoBehaviour
 {
-    public float spinSpeed;
-    public float disableColliderTime = .5f;
+    [SerializeField] private float spinSpeed;
+    [SerializeField] private float disableColliderTime = .5f;
 
     //public CapsuleCollider collider;
     public CapsuleCollider trigger;
