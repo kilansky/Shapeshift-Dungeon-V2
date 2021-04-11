@@ -7,11 +7,14 @@ public class Decoration : MonoBehaviour
     public enum decorTypes
     {
         barrel,
+        blood,
         chains,
         crate,
         mushroomCluster,
         mushroomSingle,
         mushroomTile,
+        rockCluster,
+        rockSingle,
         torch,
         webs
     }

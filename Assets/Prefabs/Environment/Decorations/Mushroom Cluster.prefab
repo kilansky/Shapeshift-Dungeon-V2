@@ -90,6 +90,7 @@ GameObject:
   - component: {fileID: 1740233292187197265}
   - component: {fileID: 2282257972344556170}
   - component: {fileID: 1019798964969256805}
+  - component: {fileID: 775134207014907481}
   m_Layer: 2
   m_Name: Mushroom Cluster
   m_TagString: Untagged
@@ -128,6 +129,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e2848302ab029947a41ef23fb0488ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  decorChance: 0
+  mustBePresent: 0
+  proplist: []
 --- !u!114 &1019798964969256805
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -140,6 +144,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9cd67f9fec6b4d46bc7fcaadae53c59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &775134207014907481
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1399876596999914987}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54db07d4bc427aa4bae4a0dcc6b924cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  propType: 4
+  forceTileSwap: 0
 --- !u!1 &1399876598031788932
 GameObject:
   m_ObjectHideFlags: 0

@@ -102,6 +102,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5654245449867979164}
   - component: {fileID: 3720119384016691935}
+  - component: {fileID: 6857484855034014235}
   m_Layer: 0
   m_Name: Rocks_Individual
   m_TagString: Untagged
@@ -138,6 +139,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e2848302ab029947a41ef23fb0488ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  decorChance: 0
+  mustBePresent: 0
+  proplist: []
+--- !u!114 &6857484855034014235
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5339470744678682076}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54db07d4bc427aa4bae4a0dcc6b924cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  propType: 8
+  forceTileSwap: 0
 --- !u!1 &6058542937211017488
 GameObject:
   m_ObjectHideFlags: 0
