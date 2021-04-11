@@ -83,7 +83,6 @@ public class PlayerHealth : SingletonPattern<PlayerHealth>, IDamageable
                 {
                     potionSlots[i].sprite = transparentSquare;
                     Heal(maxHealth); //Old healing value: 15f + additionalPotionHealing.Value
-                    StartCoroutine(HUDController.Instance.HidePlayerDamagedOverlay());
 
                     if(GetPotionCount() == 0)
                         HUDController.Instance.HidePotionsPanel();
@@ -149,6 +148,9 @@ public class PlayerHealth : SingletonPattern<PlayerHealth>, IDamageable
         Health += heal;
         Health = Mathf.Clamp(Health, 0, maxHealth);
         StartCoroutine(HUDController.Instance.UpdateHealthBar(Health, maxHealth));
+
+        if(Health > maxHealth/3)
+            StartCoroutine(HUDController.Instance.HidePlayerDamagedOverlay());
     }
 
     //Game is over, display game over screen and level review
