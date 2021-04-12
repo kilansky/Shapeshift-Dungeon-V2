@@ -80,7 +80,7 @@ public class SpikeTrap : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.tag == "Player")
+        if(other.GetComponent<PlayerController>() || other.GetComponent<EnemyBase>())
         {
             entitiesOnSpike.Add(other.gameObject); //Adds entity to the list of entities on the spike
             if(!isTriggered) //If the spike is not mid trigger, triggers the spike
@@ -112,6 +112,9 @@ public class SpikeTrap : MonoBehaviour
 
                 PlayerHealth.Instance.Damage(damage);
             }
+
+            if (entity.GetComponent<EnemyBase>())
+                entity.GetComponent<EnemyBase>().Damage(damage);
         }
     }
 
