@@ -44,6 +44,9 @@ public class LevelManager : SingletonPattern<LevelManager>
     public GameObject pedestalPrefab;
     //public GameObject invisibleCollider;
 
+    [Header("Nav Mesh Area Baking")]
+    public GameObject navMeshHazards;
+
     private bool isTransitioning = false;
     private int enemiesRemaining;
 
@@ -202,6 +205,7 @@ public class LevelManager : SingletonPattern<LevelManager>
 
         //Build Navigation Mesh
         GetComponent<NavMeshSurface>().BuildNavMesh();
+        navMeshHazards.GetComponent<NavMeshSurface>().BuildNavMesh();
 
         //Activate hazards in the map
         ToggleHazards(true);
