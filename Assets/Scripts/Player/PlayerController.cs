@@ -92,7 +92,7 @@ public class PlayerController : SingletonPattern<PlayerController>
     public int StatAttackCount {get; set;}
     public int StatSpeedCount {get; set;}
 
-    public float SpecialCharge1 { get; set; }
+    public float SpecialCharge { get; set; } //Mainly used for the current Special Item charge rate
     public float SandSpeedMod { get; set; }
 
     [Header("DEBUG")]
@@ -902,7 +902,7 @@ public class PlayerController : SingletonPattern<PlayerController>
             }
 
         }
-        SpecialCharge1 = 0;
+        SpecialCharge = 0;
 
         yield return new WaitForSeconds(useSpecialTime);
         isUsingSpecial = false;
@@ -912,9 +912,9 @@ public class PlayerController : SingletonPattern<PlayerController>
 
     IEnumerator RechargeSpecial()
     {
-        while (SpecialCharge1 < specialCooldownTime.Value)
+        while (SpecialCharge < specialCooldownTime.Value)
         {
-            SpecialCharge1 += Time.deltaTime;
+            SpecialCharge += Time.deltaTime;
             HUDController.Instance.UpdateSpecialCharge();
             yield return new WaitForEndOfFrame();
         }
