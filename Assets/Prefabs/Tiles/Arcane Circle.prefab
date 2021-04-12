@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1443038493154512026}
   - component: {fileID: 4460675372047834200}
   - component: {fileID: 2343947656436044591}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: ArcaneCircle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -134,6 +134,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 369049049392421023}
+  - {fileID: 8028495378575982198}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -215,6 +216,38 @@ MonoBehaviour:
   mask:
     serializedVersion: 2
     m_Bits: 1024
+  hasDecor: 0
+  forceSwap: 0
+--- !u!1 &2646025530689527905
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8028495378575982198}
+  m_Layer: 0
+  m_Name: PropHolder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8028495378575982198
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2646025530689527905}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2604927979395849003}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3040459982827438068
 GameObject:
   m_ObjectHideFlags: 0
@@ -227,7 +260,7 @@ GameObject:
   - component: {fileID: 1170438941576685160}
   - component: {fileID: 7139440889172517044}
   - component: {fileID: 8014493554108849605}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}

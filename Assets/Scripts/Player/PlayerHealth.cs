@@ -11,7 +11,7 @@ public class PlayerHealth : SingletonPattern<PlayerHealth>, IDamageable
     public PlayerStats damageModifier; //Damage Modifier from ItemsEquipment for Damage modifier
     public float dmgInvincibilityTime = 1f;
     public PlayerStats additionalPotionHealing; //Potion Healing Modifier to be used from ItemsEquipment
-    
+
     [Header("UI References")]
     //public Slider healthBar;
     //public TextMeshProUGUI healthText;
@@ -109,8 +109,7 @@ public class PlayerHealth : SingletonPattern<PlayerHealth>, IDamageable
                 if (potionSlots[i].sprite != transparentSquare)
                 {
                     potionSlots[i].sprite = transparentSquare;
-                    Heal(maxHealth); //Heals to max health
-                    StartCoroutine(HUDController.Instance.HidePlayerDamagedOverlay());
+                    Heal(maxHealth); //Old healing value: 15f + additionalPotionHealing.Value
 
                     if(GetPotionCount() == 0)
                         HUDController.Instance.HidePotionsPanel();
@@ -176,6 +175,9 @@ public class PlayerHealth : SingletonPattern<PlayerHealth>, IDamageable
         Health += heal;
         Health = Mathf.Clamp(Health, 0, maxHealth);
         StartCoroutine(HUDController.Instance.UpdateHealthBar(Health, maxHealth));
+
+        if(Health > maxHealth/4)
+            StartCoroutine(HUDController.Instance.HidePlayerDamagedOverlay());
     }
 
     //Game is over, display game over screen and level review

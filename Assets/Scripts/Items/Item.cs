@@ -5,7 +5,9 @@ using UnityEngine;
 public class Item : MonoBehaviour
 {
     public int price = 0;
+    private int originalPrice = 0;
     public ItemsEquipment item;
+    public GameObject itemBase;
 
     public GameObject priceCanvas;
 
@@ -464,6 +466,17 @@ public class Item : MonoBehaviour
                 Debug.Log("The new Damage From Enemies is " + c.specialCooldownTime.Value);
             }
         }
+    }
+
+    private void Start()
+    {
+        originalPrice = price;
+    }
+
+    public void SetPrice(int value)
+    {
+        price = value;
+        itemBase.GetComponent<ItemUI>().SetPriceCanvas();
     }
 
 

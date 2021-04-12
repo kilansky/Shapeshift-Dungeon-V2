@@ -11,41 +11,44 @@ public class Buttons : MonoBehaviour
     public GameObject[] buttons;
     public EventSystem eventSystem;
 
-    private int buttonIndex;
+    private int currButtonIndex = 0;
 
-    private void Start()
+    public void SetSelectedButton()
     {
-        //Clear selected object
-        EventSystem.current.SetSelectedGameObject(null);
-        
-        //Set a new selected object
-        buttonIndex = 0;
-        //buttons[buttonIndex].GetComponent<Button>().Select();
-        eventSystem.GetComponent<EventSystem>().SetSelectedGameObject(buttons[buttonIndex]);
+        ClearSelectedButtons();
+
+        //Set a new selected button
+        currButtonIndex = 0;
+        eventSystem.GetComponent<EventSystem>().SetSelectedGameObject(buttons[currButtonIndex]);
+    }
+
+    public void ClearSelectedButtons()
+    {
+        //Clear selected buttons
+        eventSystem.GetComponent<EventSystem>().SetSelectedGameObject(null);
     }
 
     public void NextButton()
     {
-        buttonIndex++;
-        if (buttonIndex > buttons.Length - 1)
-            buttonIndex = 0;
+        currButtonIndex++;
+        if (currButtonIndex > buttons.Length - 1)
+            currButtonIndex = 0;
 
-        //buttons[buttonIndex].GetComponent<Button>().Select();
-
-        eventSystem.GetComponent<EventSystem>().SetSelectedGameObject(buttons[buttonIndex]);
-        Debug.Log("NextButton Performed");
+        eventSystem.GetComponent<EventSystem>().SetSelectedGameObject(buttons[currButtonIndex]);
     }
 
     public void PreviousButton()
     {
-        buttonIndex--;
-        if (buttonIndex < 0)
-            buttonIndex = buttons.Length - 1;
+        currButtonIndex--;
+        if (currButtonIndex < 0)
+            currButtonIndex = buttons.Length - 1;
 
-        //buttons[buttonIndex].GetComponent<Button>().Select();
+        eventSystem.GetComponent<EventSystem>().SetSelectedGameObject(buttons[currButtonIndex]);
+    }
 
-        eventSystem.GetComponent<EventSystem>().SetSelectedGameObject(buttons[buttonIndex]);
-        Debug.Log("PreviousButton Performed");
+    public void SubmitButton()
+    {
+        buttons[currButtonIndex].GetComponent<Button>().onClick.Invoke();
     }
 
     public void QuitGame()

@@ -115,6 +115,8 @@ MonoBehaviour:
   mask:
     serializedVersion: 2
     m_Bits: 1024
+  hasDecor: 0
+  forceSwap: 0
 --- !u!114 &3719531714306949552
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -129,6 +131,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   projectile: {fileID: 6239542489288251911, guid: e54e494cf3b69074c81cee6b6b3387bc,
     type: 3}
+  firePoint: {fileID: 2922832393303526831}
   rateOfFire: 3
   chargeTime: 1
   delayBeforeFiring: 0.5

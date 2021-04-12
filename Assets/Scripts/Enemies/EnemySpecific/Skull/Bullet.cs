@@ -6,7 +6,7 @@ public class Bullet : MonoBehaviour
 {
     //script for bullet interactions/stats
     //should be able to create custom projectile
-    //prefabs from this one script 
+    //prefabs from this one script
 
     [Range(0f, 1f)]
     public bool canDamage = false;
@@ -67,26 +67,30 @@ public class Bullet : MonoBehaviour
     //Check if player was hit & deal damage
     private void OnTriggerEnter(Collider collider)
     {
-        if (collider.GetComponent<PlayerController>() && canDamage)
+        if (canDamage && collider.GetComponent<PlayerController>())
         {
-            if(!PlayerHealth.Instance.isInvincible)
-            {
-                if (!PlayerHealth.Instance.isInvincible)
-                    AnalyticsEvents.Instance.PlayerDamaged(shotBy + " Projectile"); //Sends analytics event about damage source
+            if (!PlayerHealth.Instance.isInvincible)
+                AnalyticsEvents.Instance.PlayerDamaged(shotBy + " Projectile"); //Sends analytics event about damage source
 
-                PlayerHealth.Instance.Damage(bulletDamage, parentObject);
-                Destroy(gameObject);
-            }
-        }       
+            PlayerHealth.Instance.Damage(bulletDamage, parentObject);
+            Destroy(gameObject);
+        }
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        //destroy the bullet if it hits the environment, the player, or stairs
-        if(collision.gameObject.layer == 10 || collision.gameObject.layer == 8 || collision.gameObject.layer == 2)
+        //destroy the bullet if it hits the environment, walls, the player, or stairs
+        if(collision.gameObject.layer == 10 || collision.gameObject.layer == 9 || collision.gameObject.layer == 8 || collision.gameObject.layer == 2)
         {
             Destroy(gameObject);
-        }       
+        }
+
+        //if the bullet hit another enemy, damage the enemy & destroy the bullet
+        if (collision.gameObject.layer == 11)
+        {
+            collision.gameObject.GetComponent<EnemyBase>().Damage(bulletDamage);
+            Destroy(gameObject);
+        }
     }
 
     private void Setup()
@@ -94,7 +98,7 @@ public class Bullet : MonoBehaviour
         shootDir = transform.forward;
 
         //implements bullet facing direction
-        transform.eulerAngles = new Vector3(0, 0, GetAngleFromVectorFloat(shootDir));       
+        transform.eulerAngles = new Vector3(0, 0, GetAngleFromVectorFloat(shootDir));
     }
 
     //need this to change bullet facing direction

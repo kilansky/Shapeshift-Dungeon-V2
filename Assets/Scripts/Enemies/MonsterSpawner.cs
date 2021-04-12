@@ -13,22 +13,25 @@ public class FloorSpawnInfo
 
 public class MonsterSpawner : SingletonPattern<MonsterSpawner>
 {
+    //public variables
     public FloorSpawnInfo[] floorSpawnInfo = new FloorSpawnInfo[31];
     [Range(0,3)] public float timeBetweenSpawns = 0.5f; //How long to wait before allowing another monster to spawn
     [Range(0, 10)] public float disableSpawnerTime = 5f; //How long before a spawner can be used again
     [HideInInspector] public bool floorCleared = false; //Room is cleared of monsters
+    public int gemMonstersToSpawn = 2;
 
-    //private GameObject[] monsterSpawnPoints;
+    //private variables
     private List<SpawnPoint> monsterSpawnPoints = new List<SpawnPoint>();
     private Queue<SpawnPoint> disabledSpawnQueue = new Queue<SpawnPoint>();
     private int monstersInRoom = 0;
     private int monstersSpawned = 0;
     private int monstersKilled = 0;
     private int currFloor;
-    public int gemMonstersToSpawn = 2;
+    private bool isSpawningMonsters;
 
     private void Start()
     {
+        isSpawningMonsters = false;
         BeginSpawingMonsters();
     }
 
@@ -70,15 +73,21 @@ public class MonsterSpawner : SingletonPattern<MonsterSpawner>
     {
         monstersInRoom--;
 
-        if (!floorCleared)
+        if (!floorCleared)//if the floor has not been cleared yet, attempt to spawn an additional monster
+        {
             monstersSpawned--;
-        else
+            if (!isSpawningMonsters)
+                SpawnMonsters();
+        }
+        else//if the floor has already been cleared, just kill the last monster and pretend things are normal
             monstersKilled++;
     }
 
     //Spawns a single monster, waits, and is called again recursively until all monsters have been killed
     private void SpawnMonsters()
     {
+        isSpawningMonsters = true;
+
         //Only spawn if the # of monsters in the room is less than maxMonsters
         if (monstersInRoom < floorSpawnInfo[currFloor].maxMonsters && monsterSpawnPoints.Count > 0)
         {
@@ -99,6 +108,8 @@ public class MonsterSpawner : SingletonPattern<MonsterSpawner>
         //Recursively attempt to spawn until the total # of monsters to spawn have been killed
         if (monstersSpawned < floorSpawnInfo[currFloor].totalMonsters)
             StartCoroutine(WaitToSpawnAgain());
+        else
+            isSpawningMonsters = false;
     }
 
     /// <summary>
