@@ -76,7 +76,7 @@ public class LevelDecorator : MonoBehaviour
             Debug.LogError("Unassigned prop types found! Disabling all unasigned props");
             foreach(Transform prop in props)
             {
-                Debug.LogError(prop.GetComponent<Decoration>().propType + " has been disabled at " + prop.position);
+                Debug.LogWarning(prop.GetComponent<Decoration>().propType + " has been disabled at " + prop.position);
                 prop.gameObject.SetActive(false);
             }
         }
