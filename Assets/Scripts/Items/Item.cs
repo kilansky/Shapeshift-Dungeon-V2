@@ -107,7 +107,7 @@ public class Item : MonoBehaviour
 
                 if (c.PocketSlot1.ItemName == "Bag Of Holding") //Checks if the pocket slot 1 item is the Bag Of Holding item so we can adjust the bool variable in the player controller since we are dropping it
                 {
-                    c.hasRedHerb = false;
+                    c.hasBagOfHolding = false;
                 }
 
                 Instantiate(c.PocketSlot1.prefab, transform.position, transform.rotation, transform.parent);

@@ -486,12 +486,25 @@ public class PlayerController : SingletonPattern<PlayerController>
             //Puts the Special Item into the Temporary slot to begin the item transfer
             TemporarySlot = SpecialSlot;
 
+            //Assigns the secondary special charge to here
+            float tempSpecial = SpecialCharge;
+
             //Equips the Bag Of Holding Item
             BagOfHoldingSlot.prefab.GetComponent<Item>().Equip(this, PlayerHealth.Instance);
 
             //Swaps the rest of the items and makes temporary null again (Just in case o.o)
             BagOfHoldingSlot = TemporarySlot;
             TemporarySlot = null;
+
+            //Swaps the charge values
+            if(specialCharge2 != 0)
+                SpecialCharge = specialCharge2;
+            
+            specialCharge2 = tempSpecial;
+
+            //Starts the Corutine if the special charge is not equal to the value
+            if (SpecialCharge != specialCooldownTime.Value)
+                StartCoroutine(RechargeSpecial());
 
             //Adjusts the bool to make sure things work as inteded after this process
             isItemSwapping = false;
@@ -790,7 +803,7 @@ public class PlayerController : SingletonPattern<PlayerController>
                 SpecialSlot.prefab.GetComponent<BombBag>().spawnBomb(transform.position, transform.rotation);
 
             //Fire Wand Item
-            if (SpecialSlot.ItemName == "Fire Wand")
+            else if (SpecialSlot.ItemName == "Fire Wand")
             {
                 Vector3 spawnDirection = transform.forward;
                 Quaternion spawnRotation = lastTargetRotation;
@@ -807,6 +820,7 @@ public class PlayerController : SingletonPattern<PlayerController>
             }
 
         }
+
         SpecialCharge = 0;
 
         yield return new WaitForSeconds(useSpecialTime);
@@ -817,13 +831,15 @@ public class PlayerController : SingletonPattern<PlayerController>
 
     IEnumerator RechargeSpecial()
     {
-        while (SpecialCharge < specialCooldownTime.Value)
+        while (SpecialCharge < specialCooldownTime.Value && !isItemSwapping)
         {
             SpecialCharge += Time.deltaTime;
             HUDController.Instance.UpdateSpecialCharge();
             yield return new WaitForEndOfFrame();
         }
-        canUseSpecial = true;
+
+        if (!isItemSwapping)
+            canUseSpecial = true;
     }
 
     //Starts and Ends using a Potion
