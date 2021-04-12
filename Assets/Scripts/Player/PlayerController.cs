@@ -15,7 +15,7 @@ public class ButtonInput
 
 public class PlayerController : SingletonPattern<PlayerController>
 {
-    //-----------Publics-----------
+    //================Publics================
     [Header("Movement Stats")]
     public PlayerStats baseMoveSpeed; //Variable for getting the move speed stat from ItemsEquipment
     public float rotateSpeed = 12f;
@@ -30,14 +30,16 @@ public class PlayerController : SingletonPattern<PlayerController>
     [Header("Attack Stats")]
     public PlayerStats baseAttackDamage; //Attack Damage Variable used for AttackDam in ItemsEquipment
     public PlayerStats attackTime; //ItemsEquipment for Attack Speed
+    public float attackMoveSpeedMod = 1/4;
     public float attack3DmgModifier = 1.5f; //increases damage of third attack
-    public float targetMonsterDist = 4f;
+    //public float targetMonsterDist = 4f;
 
     [Header("Dash Attack Stats")]
     public float dashAttackInputWindow = 0.6f;
     private float dashAttackWindow;
 
     [Header("Charge Attack Stats")]
+    public GameObject chargeArrow; //GameObject to hold the arrow underneath the player during charge attacks
     public PlayerStats chargeRate; //ItemsEquipment for Charge Attack Time
     public float minChargeSpeed = 20f;
     public float maxChargeSpeed = 35f;
@@ -62,13 +64,6 @@ public class PlayerController : SingletonPattern<PlayerController>
     public Transform mouseTargetPoint;
     public LayerMask mouseAimMask;
 
-    [Header("Object References")]
-    public GameObject slashHitbox; //GameObject to hold slash attack hitbox
-    public GameObject thrustHitbox; //GameObject to hold thrust attack hitbox
-    public GameObject radialHitbox; //GameObject to hold radial attack hitbox
-    public GameObject swordImpactPoint; //GameObject to hold point of impact on third attack
-    public GameObject chargeArrow; //GameObject to hold the arrow underneath the player during charge attacks
-
     [Header("Items")]
     public ItemsEquipment SpecialSlot; //Special Item slot
     public ItemsEquipment HeadSlot; //Head Item slot
@@ -76,24 +71,30 @@ public class PlayerController : SingletonPattern<PlayerController>
     public ItemsEquipment FootSlot; //Foot Item slot
     public ItemsEquipment PocketSlot1; //Pocket 1 Item slot
     public ItemsEquipment PocketSlot2; //Pocket 2 Item slot
+    public ItemsEquipment BagOfHoldingSlot; //Bag Of Holding Item Slot to swap between special items/ store additional special items
+    private ItemsEquipment TemporarySlot; //This slot is used for item swapping and temporary holding of items or equipement
     public bool touchingItem = false; //Variable to track if the player is currently touching an item or not
     public bool pickupItem = false; //Variable to pick up the item
     public bool canAffordItem = false; //Variable to see if player can afford an item -Justin
+    [HideInInspector] public bool hasRedHerb = false; //Variable to make sure that the player has the red herb (makes for less checking of both pocker slots) so they are able to regain health when they start a new level
+    [HideInInspector] public bool hasBagOfHolding = false; //Variable to make sure that the player has the bag of holding item (makes for less checking of both pocker slots) so they are able to store/swap special items
+    [HideInInspector] public bool isItemSwapping = false; //Variable to be used to check if the itms are currently being swapped or not
+    private float specialCharge2 = 0; //Varaible to hold the special charge of the item in the bag of holding
 
-    private int priceOfLastTouchedItem = 0; //I need this to store prices -Justin
-
-    //Variables that keep track of the amount of times that a stat was upgraded
+    //Settable properties
+    //Keep track of the amount of times that a stat was upgraded
     public int StatMaxHealthCount {get; set;}
     public int StatAttackCount {get; set;}
     public int StatSpeedCount {get; set;}
 
+    //Track the current charge of a special item
     public float SpecialCharge { get; set; }
+
+    //The amount of speed reduction while in sand
+    //Default is 1 until entering sand tile
     public float SandSpeedMod { get; set; }
 
-    [Header("DEBUG")]
-    public bool showHitboxes = false;
-
-    //-----------Privates-----------
+    //================Privates================
     private float gravity = 9.81f / 3;
     private float vSpeed = 0;
     private Animator animator;
@@ -107,6 +108,7 @@ public class PlayerController : SingletonPattern<PlayerController>
     private float moveVelocity; //based on controller movement input, used for walk/run blending
     private int attackComboState = 0; //0 = not attacking, 1 = attack1, 2 = attack2, 3 = attack3
     private float currAttackDamage;
+    private int priceOfLastTouchedItem = 0; //I need this to store prices -Justin
 
     //Allow/prevent input actions
     private bool canMove = true;
@@ -128,7 +130,8 @@ public class PlayerController : SingletonPattern<PlayerController>
     private bool isPaused = false;
     private bool isUsingMouse = false;
 
-    //Properties for player states, read only - can be read from other functions
+    //================Properties================
+    //read only - can be read from other functions
     public float MoveSpeed { get { return currMoveSpeed; } }        //Set to the current move speed of the player
     public float CurrAttackDamage { get { return currAttackDamage; } } //Set to the current attack speed of the player
     public bool IsDashing { get { return isDashing; } }             //True during entire dash
@@ -147,8 +150,8 @@ public class PlayerController : SingletonPattern<PlayerController>
         animator = GetComponent<Animator>();
         currMoveSpeed = baseMoveSpeed.Value;
         lastTargetRotation = Quaternion.identity;
-        chargeArrow.SetActive(false);
         dashAttackWindow = dashAttackInputWindow;
+        chargeArrow.SetActive(false);
 
         StatMaxHealthCount = 0;
         StatAttackCount = 0;
@@ -221,7 +224,7 @@ public class PlayerController : SingletonPattern<PlayerController>
         if (!IsAttacking && !IsCharging && !IsChargeAttacking && !IsUsingPotion && !IsUsingSpecial || IsAttacking && !IsCharging)
         {
             float timePassedSinceInput = Time.time - inputQueue.Peek().inputTime;
-            //Debug.Log(timePassed + " seconds passed since button was input");
+            //Debug.Log(timePassedSinceInput + " seconds passed since button was input");
 
             //Drop inputs that were pressed too early
             if (timePassedSinceInput > earlyInputTimeAllowance)
@@ -309,13 +312,16 @@ public class PlayerController : SingletonPattern<PlayerController>
 
     private void RotatePlayer()
     {
+        if (!canMove)
+            return;
+
         //Smoothly Rotate Character in movement direction (if moving)
         if (Mathf.Abs(movementVector.x) > 0 || Mathf.Abs(movementVector.z) > 0)
         {
             Vector3 rotationVector = new Vector3(movementVector.x, 0, movementVector.z);
             Quaternion targetRotation = Quaternion.LookRotation(rotationVector);
 
-            //Change rotation speed based on player state 
+            //Change rotation speed based on player state
             float rotSpeed = rotateSpeed;
 
             if (IsDashing)
@@ -469,6 +475,43 @@ public class PlayerController : SingletonPattern<PlayerController>
         }
     }
 
+    //Bag Of Holding Item Swap Button Pressed - AHL (4/8/21)
+    public void BagOfHoldingItemSwap(InputAction.CallbackContext context)
+    {
+        if (context.performed && hasBagOfHolding == true && BagOfHoldingSlot != null) //This action is only performed when the Bag of Holding Item is equipped and there is an item in the slot
+        {
+            //Adjusts bool to make sure things work as intended during this process
+            isItemSwapping = true;
+
+            //Puts the Special Item into the Temporary slot to begin the item transfer
+            TemporarySlot = SpecialSlot;
+
+            //Assigns the secondary special charge to here
+            float tempSpecial = SpecialCharge;
+
+            //Equips the Bag Of Holding Item
+            BagOfHoldingSlot.prefab.GetComponent<Item>().Equip(this, PlayerHealth.Instance);
+
+            //Swaps the rest of the items and makes temporary null again (Just in case o.o)
+            BagOfHoldingSlot = TemporarySlot;
+            TemporarySlot = null;
+
+            //Swaps the charge values
+            if(specialCharge2 != 0)
+                SpecialCharge = specialCharge2;
+            
+            specialCharge2 = tempSpecial;
+
+            //Starts the Corutine if the special charge is not equal to the value
+            if (SpecialCharge != specialCooldownTime.Value)
+                StartCoroutine(RechargeSpecial());
+
+            //Adjusts the bool to make sure things work as inteded after this process
+            isItemSwapping = false;
+            HUDController.Instance.UpdateSpecialCharge();
+        }
+    }
+
     /// Pause function to pause the game based on the isPause variable and will stop the game time while displaying the pause screen
     public void Pause(InputAction.CallbackContext context)
     {
@@ -593,32 +636,30 @@ public class PlayerController : SingletonPattern<PlayerController>
     {
         inputQueue.Dequeue();
         attackComboState++;
+        Debug.Log("attackComboState is: " + attackComboState);
+
         if (attackComboState > 3)
             attackComboState = 1;
 
-        canAttack = false;
         isAttacking = true;
 
         switch (attackComboState)
         {
             case 1:
                 animator.SetBool("attack1", true);
-                currAttackDamage = baseAttackDamage.Value;
                 break;
             case 2:
                 animator.SetBool("attack2", true);
-                currAttackDamage = baseAttackDamage.Value;
                 break;
             case 3:
                 animator.SetBool("attack3", true);
-                currAttackDamage = baseAttackDamage.Value * attack3DmgModifier; //increase attack damage temporarily
+                canAttack = false;
                 break;
             default:
                 break;
         }
 
-        currMoveSpeed = baseMoveSpeed.Value / 5f; //slows movment while attacking
-        //CineShake.Instance.Shake(5f, 0.2f);
+        currMoveSpeed = baseMoveSpeed.Value * attackMoveSpeedMod; //slows movment while attacking
     }
 
     //Ends an Attack - called from attack animation event
@@ -654,102 +695,16 @@ public class PlayerController : SingletonPattern<PlayerController>
         animator.SetBool("attack2", false);
         animator.SetBool("attack3", false);
         //animator.SetBool("isDashAttacking", false);
-        DeactivateHitbox();
+        PlayerAttackController.Instance.DeactivateAllHitboxes();
         currAttackDamage = baseAttackDamage.Value;
-        currMoveSpeed = baseMoveSpeed.Value;
+
+        if(!IsDashing)
+            currMoveSpeed = baseMoveSpeed.Value;
     }
 
-    //Prevents the player from moving during Attack3 animation
+    //Prevents/Re-enables the player from moving during Attack3 animation
     public void DisableMovement() { canMove = false; }
-
-    //Enable the sword hitbox - called from attack animation event
-    public void ActivateHitbox()
-    {
-        if (!IsDashing && !IsCharging && !IsUsingPotion && !IsUsingSpecial)
-        {
-            if (attackComboState != 3 && !IsChargeAttacking)//activate slash hitbox
-            {
-                slashHitbox.GetComponent<MeshCollider>().enabled = true;
-
-                if (showHitboxes)
-                    slashHitbox.GetComponent<MeshRenderer>().enabled = true;
-            }
-            else if (IsChargeAttacking)//activate thrust hitbox
-            {
-                thrustHitbox.GetComponent<MeshCollider>().enabled = true;
-
-                if (showHitboxes)
-                    thrustHitbox.GetComponent<MeshRenderer>().enabled = true;
-            }
-            else//Activate radial hitbox - damage wave
-            {
-                thrustHitbox.GetComponent<MeshCollider>().enabled = true;
-
-                if (showHitboxes)
-                    thrustHitbox.GetComponent<MeshRenderer>().enabled = true;
-
-                StartCoroutine(ActivateRadialHitbox());
-            }
-        }
-    }
-
-    //Scales a circular wave of damage to hit enemies in a radius
-    public IEnumerator ActivateRadialHitbox()
-    {
-        for (int i = 0; i < 1; i++)
-        {
-            yield return new WaitForEndOfFrame();
-        }
-        //Set starting position of damage radius to the impact point of the sword
-        radialHitbox.transform.position = swordImpactPoint.transform.position;
-
-        //Enable the hitbox
-        radialHitbox.GetComponent<SphereCollider>().enabled = true;
-        if (showHitboxes)
-            radialHitbox.GetComponent<MeshRenderer>().enabled = true;
-
-        //Lerp the damage wave to increase in scale over time
-        float attack3HitboxScale;
-        float hitboxOriginalScale = radialHitbox.transform.localScale.x;
-        float hitboxMinScale = radialHitbox.transform.localScale.x / 10;
-        float hitboxMaxScale = radialHitbox.transform.localScale.x * 8;
-        float timeElapsed = 0;
-        float duration = .25f;
-        while (timeElapsed < duration)
-        {
-            attack3HitboxScale = Mathf.Lerp(hitboxMinScale, hitboxMaxScale, timeElapsed / duration);
-            radialHitbox.transform.localScale = new Vector3(attack3HitboxScale, 1, attack3HitboxScale);
-
-            timeElapsed += Time.deltaTime;
-            yield return new WaitForEndOfFrame();
-        }
-
-        //disable the hitbox
-        radialHitbox.GetComponent<SphereCollider>().enabled = false;
-        if (showHitboxes)
-            radialHitbox.GetComponent<MeshRenderer>().enabled = false;
-
-        //reset the scale
-        radialHitbox.transform.localScale = new Vector3(hitboxOriginalScale, 1, hitboxOriginalScale); //reset scale
-    }
-
-    //Disable the sword hitbox - called from attack animation event
-    public void DeactivateHitbox()
-    {
-        slashHitbox.GetComponent<MeshCollider>().enabled = false;
-
-        if (showHitboxes)
-            slashHitbox.GetComponent<MeshRenderer>().enabled = false;
-
-        thrustHitbox.GetComponent<MeshCollider>().enabled = false;
-
-        if (showHitboxes)
-            thrustHitbox.GetComponent<MeshRenderer>().enabled = false;
-
-        animator.SetBool("attack3", false);
-        isAttacking = false;
-        canAttack = true;
-    }
+    public void EnableMovement() { canMove = true; }
 
     //Starts and Ends a Charge Attack
     IEnumerator ActivateChargeAttack()
@@ -794,11 +749,11 @@ public class PlayerController : SingletonPattern<PlayerController>
         chargeArrow.transform.localScale = new Vector3(1, 1, 1);
 
         Vector3 chargeVector = transform.forward;
-        
+
         animator.SetBool("isCharging", false);
 
         //Charge forward & apply deceleration until speed is nearly zero
-        while (chargeSpeed > 3f) 
+        while (chargeSpeed > 3f)
         {
             controller.Move(chargeVector * chargeSpeed * Time.deltaTime);
             chargeSpeed -= chargeDeceleration * Time.deltaTime;
@@ -849,7 +804,7 @@ public class PlayerController : SingletonPattern<PlayerController>
                 SpecialSlot.prefab.GetComponent<BombBag>().spawnBomb(transform.position, transform.rotation);
 
             //Fire Wand Item
-            if (SpecialSlot.ItemName == "Fire Wand")
+            else if (SpecialSlot.ItemName == "Fire Wand")
             {
                 Vector3 spawnDirection = transform.forward;
                 Quaternion spawnRotation = lastTargetRotation;
@@ -866,6 +821,7 @@ public class PlayerController : SingletonPattern<PlayerController>
             }
 
         }
+
         SpecialCharge = 0;
 
         yield return new WaitForSeconds(useSpecialTime);
@@ -876,13 +832,15 @@ public class PlayerController : SingletonPattern<PlayerController>
 
     IEnumerator RechargeSpecial()
     {
-        while (SpecialCharge < specialCooldownTime.Value)
+        while (SpecialCharge < specialCooldownTime.Value && !isItemSwapping)
         {
             SpecialCharge += Time.deltaTime;
             HUDController.Instance.UpdateSpecialCharge();
             yield return new WaitForEndOfFrame();
         }
-        canUseSpecial = true;
+
+        if (!isItemSwapping)
+            canUseSpecial = true;
     }
 
     //Starts and Ends using a Potion
@@ -914,7 +872,7 @@ public class PlayerController : SingletonPattern<PlayerController>
 
         //If on center tile
         if (CenterTile.Instance.onTile)
-        {           
+        {
             if (LevelManager.Instance.currFloor == 0)//floor 0 stuff
             {
                 RunTimer.Instance.IncreaseTimer = true;

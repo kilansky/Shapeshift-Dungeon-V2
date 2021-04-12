@@ -81,6 +81,9 @@ public class SkullCharge : MonoBehaviour
         bullet = Instantiate(fireball, firePoint.transform.position, transform.rotation);
         bullet.transform.localScale = new Vector3(currentScale, currentScale, currentScale);
 
+        //Sets the bullets parent game object to this one to make the Damage Tracker acquire the skull as the correct game object for tracking
+        bullet.GetComponent<Bullet>().parentObject = transform.root.gameObject;
+
         //bullet.transform.localEulerAngles = Vector3.right;
         bullet.GetComponent<Bullet>().moveSpeed = bulletSpeed;
         bullet.GetComponent<Bullet>().canDamage = true;

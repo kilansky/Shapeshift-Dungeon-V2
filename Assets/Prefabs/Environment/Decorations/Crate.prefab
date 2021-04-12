@@ -93,8 +93,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.2, y: 1.2, z: 1.2}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 1.25, y: 1.25, z: 1.25}
+  m_Center: {x: 0, y: 0.6248561, z: 0.000000029802322}
 --- !u!208 &3065253837200304153
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -105,11 +105,11 @@ NavMeshObstacle:
   m_Enabled: 1
   serializedVersion: 3
   m_Shape: 1
-  m_Extents: {x: 0.70000005, y: 0.70000005, z: 0.70000005}
+  m_Extents: {x: 0.625, y: 0.625, z: 0.625}
   m_MoveThreshold: 0.1
-  m_Carve: 0
+  m_Carve: 1
   m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: 0.625, z: 0}
   m_TimeToStationary: 0.5
 --- !u!114 &7338010588718501612
 MonoBehaviour:
@@ -123,5 +123,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54db07d4bc427aa4bae4a0dcc6b924cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  propType: 2
+  propType: 3
   forceTileSwap: 0
+  mask:
+    serializedVersion: 2
+    m_Bits: 1024

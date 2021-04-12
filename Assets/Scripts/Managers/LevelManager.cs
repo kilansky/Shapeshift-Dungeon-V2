@@ -14,6 +14,7 @@ public class LevelManager : SingletonPattern<LevelManager>
      */
 
     public GameObject activeLevel;
+    public GameObject forceLevelOne;
     public bool disableSpawning;
     [Header("Level Sets")]
     public List<GameObject> levelSet1;
@@ -43,6 +44,9 @@ public class LevelManager : SingletonPattern<LevelManager>
     public GameObject pedestalPrefab;
     //public GameObject invisibleCollider;
 
+    [Header("Nav Mesh Area Baking")]
+    public GameObject navMeshHazards;
+
     private bool isTransitioning = false;
     private int enemiesRemaining;
 
@@ -59,13 +63,27 @@ public class LevelManager : SingletonPattern<LevelManager>
             return;
         }
 
+        if(PlayerController.Instance.hasRedHerb == true) //If the player has the red herb then they heal 3 HP
+        {
+            PlayerHealth.Instance.Heal(3); //Heal 3 HP
+        }
+
         isTransitioning = true;
         CenterTile.Instance.SetInvisibleWall(true);
         CameraController.Instance.ZoomOut();
 
         //LoadNextLevel(levelSet1); //Loads next level
         ++currFloor;
-        LoadNextLevel(SelectLevelList());
+        if(forceLevelOne)
+        {
+            Debug.LogWarning("Force loading level: " + forceLevelOne.name);
+            forceLevelOne.SetActive(true);
+            MonsterSpawner.Instance.SetSpawnInfo(forceLevelOne.GetComponent<SpawnInfo>().spawnInfo);
+            forceLevelOne = null;
+        }
+        else
+            LoadNextLevel(SelectLevelList());
+
         Transform[] allChildrenCurrLevel = activeLevel.GetComponentsInChildren<Transform>(); //Puts all tiles into an array
         foreach(Transform tile in allChildrenCurrLevel) //Cycles through all tiles in the newly created array
         {
@@ -102,6 +120,8 @@ public class LevelManager : SingletonPattern<LevelManager>
         //Debug.Log("Index Selected: " + rnd + "     Total Levels in List: " + mainLevels.Count);
         levelList[rnd].SetActive(true); //Sets the selected level to active
         currMapName = levelList[rnd].name;
+        //MonsterSpawner.Instance.currFloorInfo = levelList[rnd].GetComponent<SpawnInfo>().spawnInfo;
+        MonsterSpawner.Instance.SetSpawnInfo(levelList[rnd].GetComponent<SpawnInfo>().spawnInfo);
         levelList.RemoveAt(rnd); //Removes selected level from list so it cannot be selected again in the future
     }
 
@@ -187,13 +207,18 @@ public class LevelManager : SingletonPattern<LevelManager>
         {
             MonsterSpawner.Instance.BeginSpawingMonsters(); //Start spawning monsters
         }
+        //Set camera zoom & shadows
         CameraController.Instance.ZoomIn();
-        Debug.Log("Current map is: " + currMapName);
+        CameraController.Instance.SetShadows();
 
-        //UnityEditor.AI.NavMeshBuilder.BuildNavMesh(); // <<------- Editor Only :(
+        //Build Navigation Mesh
         GetComponent<NavMeshSurface>().BuildNavMesh();
+        navMeshHazards.GetComponent<NavMeshSurface>().BuildNavMesh();
 
+        //Activate hazards in the map
         ToggleHazards(true);
+
+        Debug.Log("Current map is: " + currMapName);
     }
 
     /// <summary>

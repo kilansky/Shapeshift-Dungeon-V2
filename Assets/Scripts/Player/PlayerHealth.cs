@@ -11,7 +11,7 @@ public class PlayerHealth : SingletonPattern<PlayerHealth>, IDamageable
     public PlayerStats damageModifier; //Damage Modifier from ItemsEquipment for Damage modifier
     public float dmgInvincibilityTime = 1f;
     public PlayerStats additionalPotionHealing; //Potion Healing Modifier to be used from ItemsEquipment
-    
+
     [Header("UI References")]
     //public Slider healthBar;
     //public TextMeshProUGUI healthText;
@@ -56,6 +56,33 @@ public class PlayerHealth : SingletonPattern<PlayerHealth>, IDamageable
             Health = Mathf.Clamp(Health, 0, maxHealth);
             StartCoroutine(HUDController.Instance.UpdateHealthBar(Health, maxHealth));
             StartCoroutine(HUDController.Instance.ShowPlayerDamagedOverlay());
+
+            //Check if the player is dead
+            if (Health <= 0)
+            {
+                Kill();
+                return;
+            }
+
+            //prevent from taking damage temporarily
+            StartCoroutine(InvincibilityFrames());
+        }
+    }
+
+    /// <summary>
+    /// Secondary Damage function that takes into account the damage source to adjust the damage tracker script variables - AHL (3/30/21)
+    /// </summary>
+    public virtual void Damage(float damage, GameObject damageSource)
+    {
+        if (!isInvincible && Health > 0)
+        {
+            //deal damage to player
+            Health -= damage * damageModifier.Value;
+            Health = Mathf.Clamp(Health, 0, maxHealth);
+            StartCoroutine(HUDController.Instance.UpdateHealthBar(Health, maxHealth));
+            StartCoroutine(HUDController.Instance.ShowPlayerDamagedOverlay());
+
+            GetComponent<DamageTracker>().updateDamage(damage, damageSource); //Updates the damage variables in damage tracker baseed on the amount of damage that the player took from a specific source
 
             //Check if the player is dead
             if (Health <= 0)
@@ -142,20 +169,21 @@ public class PlayerHealth : SingletonPattern<PlayerHealth>, IDamageable
         StartCoroutine(HUDController.Instance.UpdateHealthBar(Health, maxHealth));
     }
 
-    //Heal the player (potions)
+    //Heal the player (Red Herb)
     public virtual void Heal(float heal)
     {
         Health += heal;
         Health = Mathf.Clamp(Health, 0, maxHealth);
         StartCoroutine(HUDController.Instance.UpdateHealthBar(Health, maxHealth));
 
-        if(Health > maxHealth/3)
+        if(Health > maxHealth/4)
             StartCoroutine(HUDController.Instance.HidePlayerDamagedOverlay());
     }
 
     //Game is over, display game over screen and level review
     public virtual void Kill()
     {
+        GetComponent<DamageTracker>().displayDamage(); //Displays the amount of damage that the player took throughout the game and from what sources
         AnalyticsEvents.Instance.PlayerDied(); //Send Player Died Analytics Event
         AnalyticsEvents.Instance.ItemsOnDeath(); //Send Items On Death Analytics Event
         //StartCoroutine(AnalyticsEvents.Instance.DamageSourcesData()); //Send Damage source data Analytics Event

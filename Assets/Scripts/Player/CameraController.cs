@@ -11,13 +11,20 @@ public class CameraController : SingletonPattern<CameraController>
     [SerializeField] private VolumeProfile volProf;
     [SerializeField] private float baseCamDist = 12;
     [SerializeField] private float zoomOutCamDist = 25;
+    [SerializeField] private float shadowAdjustAmt = -0.012f;
+
 
     private DepthOfField DoF;
+    private ShadowsMidtonesHighlights shadMidHigh;
+    private float shadowValue = 1;
 
     private void Start()
     {
         volProf.TryGet(out DoF);
+        volProf.TryGet(out shadMidHigh);
+        SetShadows();
     }
+
 
     //Increases the camera's distance from the player during a level transition
     public void ZoomOut()
@@ -35,5 +42,11 @@ public class CameraController : SingletonPattern<CameraController>
         framingTransposer.m_CameraDistance = baseCamDist;
 
         DoF.focalLength.value = 215;
+    }
+
+    public void SetShadows()
+    {
+        shadowValue += shadowAdjustAmt;
+        shadMidHigh.shadows.SetValue(new Vector4Parameter(new Vector4(1f, shadowValue, shadowValue, -0.4f)));
     }
 }

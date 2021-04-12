@@ -142,12 +142,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e106275fafc3b3429794f9f58664fb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tileType: 1
+  tileType: 14
   spawnerIndicator: {fileID: 186188970890191261}
   rewardIndicator: {fileID: 4581605145813497275}
   mask:
     serializedVersion: 2
     m_Bits: 1024
+  hasDecor: 0
+  forceSwap: 0
 --- !u!114 &101501108082051583
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -186,10 +188,55 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Grass (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 189314240925958053, guid: 94926f6e23a890c41a7303b8755234c9,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 425648328952192356, guid: 94926f6e23a890c41a7303b8755234c9,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 622819029892853141, guid: 94926f6e23a890c41a7303b8755234c9,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 904694542714780249, guid: 94926f6e23a890c41a7303b8755234c9,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 1054937748456032222, guid: 94926f6e23a890c41a7303b8755234c9,
         type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1866411260062624065, guid: 94926f6e23a890c41a7303b8755234c9,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2413704909373898873, guid: 94926f6e23a890c41a7303b8755234c9,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5027878224171799803, guid: 94926f6e23a890c41a7303b8755234c9,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5521613915487613894, guid: 94926f6e23a890c41a7303b8755234c9,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7012557270178892262, guid: 94926f6e23a890c41a7303b8755234c9,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7461168671662632642, guid: 94926f6e23a890c41a7303b8755234c9,
         type: 3}

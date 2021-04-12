@@ -35,7 +35,7 @@ public class BombAttack : MonoBehaviour
                 if (!PlayerHealth.Instance.isInvincible)
                     AnalyticsEvents.Instance.PlayerDamaged("Bomb"); //Sends analytics event about damage source
 
-                other.GetComponent<PlayerHealth>().Damage(damage);
+                PlayerHealth.Instance.Damage(damage, gameObject);
             }
                 
         }

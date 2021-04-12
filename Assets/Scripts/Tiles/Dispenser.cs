@@ -9,24 +9,22 @@ public class Dispenser : MonoBehaviour
      * Programmer: Justin Donato
      * Description: Behavior of the projectile dispenser tile
      * Date Created: 3/9/2021
-     * Date Last Edited: 3/9/2021
+     * Date Last Edited: 4/10/2021 by Sky
      **/
 
     [Header("Dispenser Variables")]
-    public GameObject projectile;
+    [SerializeField] private GameObject projectile;
+    [SerializeField] private Transform firePoint;
     
     [Header("Attacking Variables")]
-    public float rateOfFire = 3f;
-    public float chargeTime = 1f;
-    public float delayBeforeFiring = 0.5f;
+    [SerializeField] private float rateOfFire = 3f;
+    [SerializeField] private float chargeTime = 1f;
+    [SerializeField] private float delayBeforeFiring = 0.5f;
 
     private bool canFire = false;
 
-    private Transform spawner;
-
     private void Start()
     {
-        spawner = transform.GetChild(0);
         if(chargeTime + delayBeforeFiring > rateOfFire)
         {
             Debug.LogError("Charge time is greater than the rate of fire!");
@@ -44,20 +42,15 @@ public class Dispenser : MonoBehaviour
 
     private IEnumerator AttackCycle()
     {
-        /*
-        if(!canFire)
-        {
-            //StartCoroutine(AttackCycle());
-            yield break;
-        }
-        */
-
         //Spawns in projectile and sets its scale to 0 and slowly begins to scale up to proper size over chargeTime seconds
-        GameObject bullet = Instantiate(projectile, spawner.position, transform.rotation, transform);
+        GameObject bullet = Instantiate(projectile, firePoint.position, transform.rotation, transform);
         Vector3 originalScale = bullet.transform.localScale;
         float originalSpeed = bullet.GetComponent<Bullet>().moveSpeed;
         float vfxPercent = 0;
-       
+
+        //Sets the bullets parent game object to this one to make the Damage Tracker acquire the skull as the correct game object for tracking
+        bullet.GetComponent<Bullet>().parentObject = transform.root.gameObject;
+
         //bullet.GetComponent<Bullet>().SetVFXScale(25f);
         bullet.GetComponent<Bullet>().moveSpeed = 0f;
 
@@ -88,7 +81,5 @@ public class Dispenser : MonoBehaviour
 
         if(canFire)
             StartCoroutine(AttackCycle());
-
-        //bullet.GetComponent<Bullet>().SetVFXScale(100f);
     }
 }

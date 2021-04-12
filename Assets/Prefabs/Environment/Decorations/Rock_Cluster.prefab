@@ -3311,6 +3311,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1784685491294571159}
   - component: {fileID: 2431265258047490108}
+  - component: {fileID: 8220044722934833593}
   m_Layer: 0
   m_Name: Rock_Cluster
   m_TagString: Untagged
@@ -3356,6 +3357,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e2848302ab029947a41ef23fb0488ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &8220044722934833593
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5582034255025212182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54db07d4bc427aa4bae4a0dcc6b924cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  propType: 7
+  forceTileSwap: 0
+  mask:
+    serializedVersion: 2
+    m_Bits: 1024
 --- !u!1 &5633361967194570215
 GameObject:
   m_ObjectHideFlags: 0

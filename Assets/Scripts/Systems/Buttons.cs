@@ -11,21 +11,21 @@ public class Buttons : MonoBehaviour
     public GameObject[] buttons;
     public EventSystem eventSystem;
 
-    private int currButtonIndex;
+    private int currButtonIndex = 0;
 
-    private void Start()
+    public void SetSelectedButton()
     {
-        ResetButtons();
-    }
-
-    public void ResetButtons()
-    {
-        //Clear selected buttons
-        eventSystem.GetComponent<EventSystem>().SetSelectedGameObject(null);
+        ClearSelectedButtons();
 
         //Set a new selected button
         currButtonIndex = 0;
         eventSystem.GetComponent<EventSystem>().SetSelectedGameObject(buttons[currButtonIndex]);
+    }
+
+    public void ClearSelectedButtons()
+    {
+        //Clear selected buttons
+        eventSystem.GetComponent<EventSystem>().SetSelectedGameObject(null);
     }
 
     public void NextButton()
