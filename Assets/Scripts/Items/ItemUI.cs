@@ -10,6 +10,7 @@ public class ItemUI : MonoBehaviour
     public Image Image; //Slot to put in the item image
     public TMP_Text Name; //Gets the name of the item
     public TMP_Text Description; //Gets the description of the item
+    public Image slotImage; //Slot to put in the slot image for the item type
 
     public TMP_Text Price; //Gets price of item
     public GameObject priceCanvas; //Gets the canvas holding price stuff
@@ -22,6 +23,7 @@ public class ItemUI : MonoBehaviour
         Image.sprite = GetComponentInParent<Item>().item.sprite;
         Name.text = GetComponentInParent<Item>().item.ItemName;
         Description.text = GetComponentInParent<Item>().item.itemDescription;
+        slotImage.sprite = GetComponentInParent<Item>().item.slotSprite;
 
         SetPriceCanvas();
     }
