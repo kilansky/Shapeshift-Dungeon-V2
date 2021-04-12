@@ -34,6 +34,10 @@ public class Goblin_IdleState : IdleState
         {
             stateMachine.ChangeState(enemy.playerDetectedState);
         }
+        else if (isIdleTimeOver)
+        {
+            stateMachine.ChangeState(enemy.moveState);
+        }
     }
 
     public override void PhysicsUpdate()

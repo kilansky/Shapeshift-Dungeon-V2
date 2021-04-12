@@ -19,10 +19,6 @@ public class EnemyBase : MonoBehaviour, IDamageable
     public float health;
     //public GameObject firePoint;
 
-    //may need to change this
-    //was firePoint, moved to Floating Skull script
-    //public GameObject shootPoint;
-
     public Slider healthBar;
     public D_Entity entityData;
     public FiniteStateMachine stateMachine;
@@ -323,11 +319,6 @@ public class EnemyBase : MonoBehaviour, IDamageable
         //transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
         #endregion
     }
-
-    /*public void Patrol()
-    {
-
-    }*/
 
     public virtual void Attack()
     {

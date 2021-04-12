@@ -6,12 +6,15 @@ using UnityEngine.AI;
 public class Goblin_AttackState : AttackState
 {
     private Goblin enemy;
+    
+    protected Transform attackPosition;
 
-    //protected AttackDetails attackDetails;
+    public GameObject meleeHitBox;
 
     public Goblin_AttackState(EnemyBase entity, FiniteStateMachine stateMachine, string animBoolName, D_AttackState stateData, Goblin enemy) : base(entity, stateMachine, animBoolName, stateData)
     {
         this.enemy = enemy;
+        //this.attackPosition = attackPosition;
     }
 
     public override void DoChecks()
@@ -22,6 +25,8 @@ public class Goblin_AttackState : AttackState
     public override void Enter()
     {
         base.Enter();
+
+        //how much damage do they do, and where does it come from
     }
 
     public override void Exit()
@@ -55,6 +60,10 @@ public class Goblin_AttackState : AttackState
         base.TriggerAttack();
 
         enemy.Anim.SetBool("isAttacking", true);
+        //hit the player
+        //meleeHitBox.GetComponent<MeshCollider>().enabled = true;
+        //turn on mesh collider hit box for melee attack
+        //meleeHitBox.GetComponent<MeshRenderer>().enabled = true;
         
         //swipe at the player
 
