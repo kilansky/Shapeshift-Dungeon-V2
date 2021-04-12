@@ -262,7 +262,8 @@ public class HUDController : SingletonPattern<HUDController>
         float maxValue = PlayerController.Instance.specialCooldownTime.Value;
         float value = PlayerController.Instance.SpecialCharge;
 
-        chargeBarFill.fillAmount = value / maxValue;
+        if(PlayerController.Instance.isItemSwapping == false)
+            chargeBarFill.fillAmount = value / maxValue;
     }
 
     public void ShowHealthBar()

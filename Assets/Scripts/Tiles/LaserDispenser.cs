@@ -43,6 +43,10 @@ public class LaserDispenser : MonoBehaviour
     private void Start()
     {
         laser = Instantiate(GetLaserColor(), laserSpawnpoint.transform.position, laserSpawnpoint.transform.rotation, transform);
+
+        //Sets the lasers parent game object to this one to make the Damage Tracker acquire the Crystal enemy as the correct game object for tracking
+        laser.GetComponent<Laser>().parentObject = transform.root.gameObject;
+
         laser.SetActive(false);
     }
 

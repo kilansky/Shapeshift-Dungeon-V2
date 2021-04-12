@@ -71,9 +71,15 @@ public class PlayerController : SingletonPattern<PlayerController>
     public ItemsEquipment FootSlot; //Foot Item slot
     public ItemsEquipment PocketSlot1; //Pocket 1 Item slot
     public ItemsEquipment PocketSlot2; //Pocket 2 Item slot
+    public ItemsEquipment BagOfHoldingSlot; //Bag Of Holding Item Slot to swap between special items/ store additional special items
+    private ItemsEquipment TemporarySlot; //This slot is used for item swapping and temporary holding of items or equipement
     public bool touchingItem = false; //Variable to track if the player is currently touching an item or not
     public bool pickupItem = false; //Variable to pick up the item
     public bool canAffordItem = false; //Variable to see if player can afford an item -Justin
+    [HideInInspector] public bool hasRedHerb = false; //Variable to make sure that the player has the red herb (makes for less checking of both pocker slots) so they are able to regain health when they start a new level
+    [HideInInspector] public bool hasBagOfHolding = false; //Variable to make sure that the player has the bag of holding item (makes for less checking of both pocker slots) so they are able to store/swap special items
+    [HideInInspector] public bool isItemSwapping = false; //Variable to be used to check if the itms are currently being swapped or not
+    private float specialCharge2 = 0; //Varaible to hold the special charge of the item in the bag of holding
 
     //Settable properties
     //Keep track of the amount of times that a stat was upgraded
@@ -315,7 +321,7 @@ public class PlayerController : SingletonPattern<PlayerController>
             Vector3 rotationVector = new Vector3(movementVector.x, 0, movementVector.z);
             Quaternion targetRotation = Quaternion.LookRotation(rotationVector);
 
-            //Change rotation speed based on player state 
+            //Change rotation speed based on player state
             float rotSpeed = rotateSpeed;
 
             if (IsDashing)
@@ -466,6 +472,43 @@ public class PlayerController : SingletonPattern<PlayerController>
             newInput.inputButton = inputButtons.Potion;
             newInput.inputTime = Time.time;
             inputQueue.Enqueue(newInput);
+        }
+    }
+
+    //Bag Of Holding Item Swap Button Pressed - AHL (4/8/21)
+    public void BagOfHoldingItemSwap(InputAction.CallbackContext context)
+    {
+        if (context.performed && hasBagOfHolding == true && BagOfHoldingSlot != null) //This action is only performed when the Bag of Holding Item is equipped and there is an item in the slot
+        {
+            //Adjusts bool to make sure things work as intended during this process
+            isItemSwapping = true;
+
+            //Puts the Special Item into the Temporary slot to begin the item transfer
+            TemporarySlot = SpecialSlot;
+
+            //Assigns the secondary special charge to here
+            float tempSpecial = SpecialCharge;
+
+            //Equips the Bag Of Holding Item
+            BagOfHoldingSlot.prefab.GetComponent<Item>().Equip(this, PlayerHealth.Instance);
+
+            //Swaps the rest of the items and makes temporary null again (Just in case o.o)
+            BagOfHoldingSlot = TemporarySlot;
+            TemporarySlot = null;
+
+            //Swaps the charge values
+            if(specialCharge2 != 0)
+                SpecialCharge = specialCharge2;
+            
+            specialCharge2 = tempSpecial;
+
+            //Starts the Corutine if the special charge is not equal to the value
+            if (SpecialCharge != specialCooldownTime.Value)
+                StartCoroutine(RechargeSpecial());
+
+            //Adjusts the bool to make sure things work as inteded after this process
+            isItemSwapping = false;
+            HUDController.Instance.UpdateSpecialCharge();
         }
     }
 
@@ -706,11 +749,11 @@ public class PlayerController : SingletonPattern<PlayerController>
         chargeArrow.transform.localScale = new Vector3(1, 1, 1);
 
         Vector3 chargeVector = transform.forward;
-        
+
         animator.SetBool("isCharging", false);
 
         //Charge forward & apply deceleration until speed is nearly zero
-        while (chargeSpeed > 3f) 
+        while (chargeSpeed > 3f)
         {
             controller.Move(chargeVector * chargeSpeed * Time.deltaTime);
             chargeSpeed -= chargeDeceleration * Time.deltaTime;
@@ -761,7 +804,7 @@ public class PlayerController : SingletonPattern<PlayerController>
                 SpecialSlot.prefab.GetComponent<BombBag>().spawnBomb(transform.position, transform.rotation);
 
             //Fire Wand Item
-            if (SpecialSlot.ItemName == "Fire Wand")
+            else if (SpecialSlot.ItemName == "Fire Wand")
             {
                 Vector3 spawnDirection = transform.forward;
                 Quaternion spawnRotation = lastTargetRotation;
@@ -778,6 +821,7 @@ public class PlayerController : SingletonPattern<PlayerController>
             }
 
         }
+
         SpecialCharge = 0;
 
         yield return new WaitForSeconds(useSpecialTime);
@@ -788,13 +832,15 @@ public class PlayerController : SingletonPattern<PlayerController>
 
     IEnumerator RechargeSpecial()
     {
-        while (SpecialCharge < specialCooldownTime.Value)
+        while (SpecialCharge < specialCooldownTime.Value && !isItemSwapping)
         {
             SpecialCharge += Time.deltaTime;
             HUDController.Instance.UpdateSpecialCharge();
             yield return new WaitForEndOfFrame();
         }
-        canUseSpecial = true;
+
+        if (!isItemSwapping)
+            canUseSpecial = true;
     }
 
     //Starts and Ends using a Potion
@@ -826,7 +872,7 @@ public class PlayerController : SingletonPattern<PlayerController>
 
         //If on center tile
         if (CenterTile.Instance.onTile)
-        {           
+        {
             if (LevelManager.Instance.currFloor == 0)//floor 0 stuff
             {
                 RunTimer.Instance.IncreaseTimer = true;

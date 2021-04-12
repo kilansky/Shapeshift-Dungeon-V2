@@ -6,7 +6,7 @@ public class Bullet : MonoBehaviour
 {
     //script for bullet interactions/stats
     //should be able to create custom projectile
-    //prefabs from this one script 
+    //prefabs from this one script
 
     [Range(0f, 1f)]
     public bool canDamage = false;
@@ -41,6 +41,8 @@ public class Bullet : MonoBehaviour
 
     private Vector3 shootDir;
 
+    [HideInInspector] public GameObject parentObject; //Variable to hold the parent Object to make sure the Damage Tracker is able to track the damage correctly
+
     private void Start()
     {
         original_beamLight = beamLight.transform.localScale;
@@ -70,9 +72,9 @@ public class Bullet : MonoBehaviour
             if (!PlayerHealth.Instance.isInvincible)
                 AnalyticsEvents.Instance.PlayerDamaged(shotBy + " Projectile"); //Sends analytics event about damage source
 
-            PlayerHealth.Instance.Damage(bulletDamage);
+            PlayerHealth.Instance.Damage(bulletDamage, parentObject);
             Destroy(gameObject);
-        }       
+        }
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -83,7 +85,7 @@ public class Bullet : MonoBehaviour
             Destroy(gameObject);
         }
 
-        //if the bullet hit another enemy, damage the enemy & destroy the bullet 
+        //if the bullet hit another enemy, damage the enemy & destroy the bullet
         if (collision.gameObject.layer == 11)
         {
             collision.gameObject.GetComponent<EnemyBase>().Damage(bulletDamage);
@@ -96,7 +98,7 @@ public class Bullet : MonoBehaviour
         shootDir = transform.forward;
 
         //implements bullet facing direction
-        transform.eulerAngles = new Vector3(0, 0, GetAngleFromVectorFloat(shootDir));       
+        transform.eulerAngles = new Vector3(0, 0, GetAngleFromVectorFloat(shootDir));
     }
 
     //need this to change bullet facing direction

@@ -57,6 +57,8 @@ public class SpikeTrap : MonoBehaviour
         }
         DealDamage();
 
+        print("Spikes dealt damage and are now going back down");
+
         //Wait for some amount of time
         yield return new WaitForSeconds(idleTime);
 
@@ -111,7 +113,7 @@ public class SpikeTrap : MonoBehaviour
                 if (!PlayerHealth.Instance.isInvincible)
                     AnalyticsEvents.Instance.PlayerDamaged("Spikes"); //Sends analytics event about damage source
 
-                PlayerHealth.Instance.Damage(damage);
+                PlayerHealth.Instance.Damage(damage,gameObject);
             }
 
             if (entity.GetComponent<EnemyBase>())
