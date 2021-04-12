@@ -15,6 +15,9 @@ public class Sword : MonoBehaviour
             Vector3 enemyPos = other.transform.position;
             Instantiate(hitEffect, new Vector3(enemyPos.x, transform.position.y, enemyPos.z), Quaternion.identity);
 
+            //Apply slight camera shake
+            CineShake.Instance.Shake(1f, 0.1f);
+
             //Determine dameage to deal based on player's current attack damage
             float damageToDeal = PlayerController.Instance.CurrAttackDamage;
 
@@ -24,6 +27,19 @@ public class Sword : MonoBehaviour
             //Apply damage to enemy
             other.GetComponent<EnemyBase>().Damage(damageToDeal);
 
+        }
+
+        if (other.GetComponent<DestructibleProp>())
+        {
+            //Spawn hit effect
+            //Vector3 objectPos = other.transform.position;
+            //Instantiate(hitEffect, new Vector3(objectPos.x, transform.position.y, objectPos.z), Quaternion.identity);
+
+            //Apply slight camera shake
+            CineShake.Instance.Shake(1f, 0.1f);
+
+            //Destroy Prop
+            other.GetComponent<DestructibleProp>().DestroyObject();
         }
     }
 }
