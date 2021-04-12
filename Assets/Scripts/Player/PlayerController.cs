@@ -508,6 +508,7 @@ public class PlayerController : SingletonPattern<PlayerController>
 
             //Adjusts the bool to make sure things work as inteded after this process
             isItemSwapping = false;
+            HUDController.Instance.UpdateSpecialCharge();
         }
     }
 
