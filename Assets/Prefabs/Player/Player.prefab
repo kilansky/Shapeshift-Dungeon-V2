@@ -7799,6 +7799,7 @@ GameObject:
   - component: {fileID: 3746358466672108912}
   - component: {fileID: 4443094567964271261}
   - component: {fileID: 6052375093331442577}
+  - component: {fileID: 1625910583690896819}
   m_Layer: 8
   m_Name: Player
   m_TagString: Player
@@ -8119,6 +8120,21 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 9222ea2b-7ad9-4b72-af65-1193dc9e41df
     m_ActionName: Player/MouseAiming[/Mouse/position]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3724449836013695809}
+        m_MethodName: BagOfHoldingItemSwap
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 66585002-09f8-4a76-851e-b00259794ef9
+    m_ActionName: Player/ItemSwapping[/Keyboard/leftShift]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: Keyboard&Mouse
   m_DefaultActionMap: Player
@@ -8182,9 +8198,13 @@ MonoBehaviour:
   FootSlot: {fileID: 0}
   PocketSlot1: {fileID: 0}
   PocketSlot2: {fileID: 0}
+  BagOfHoldingSlot: {fileID: 0}
   touchingItem: 0
   pickupItem: 0
   canAffordItem: 0
+  hasRedHerb: 0
+  hasBagOfHolding: 0
+  isItemSwapping: 0
 --- !u!114 &7832425625355179358
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8267,6 +8287,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   safePos: {x: 0, y: 0, z: 0}
+--- !u!114 &1625910583690896819
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2840811441833693247}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0b89725da04c0d48a5decbc3d1b83cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2950511466916089085
 GameObject:
   m_ObjectHideFlags: 0
@@ -23244,15 +23276,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1ef9d489551575449a77dcd841ebea59, type: 3}
---- !u!1 &2938754257525807427 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7083563200013932914, guid: 1ef9d489551575449a77dcd841ebea59,
-    type: 3}
-  m_PrefabInstance: {fileID: 5369788696153423921}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2938754257525807438 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7083563200013932927, guid: 1ef9d489551575449a77dcd841ebea59,
+    type: 3}
+  m_PrefabInstance: {fileID: 5369788696153423921}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &2938754257525807427 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7083563200013932914, guid: 1ef9d489551575449a77dcd841ebea59,
     type: 3}
   m_PrefabInstance: {fileID: 5369788696153423921}
   m_PrefabAsset: {fileID: 0}
