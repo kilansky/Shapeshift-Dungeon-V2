@@ -37,7 +37,7 @@ public class StatusEffects : MonoBehaviour
         fireEffect.SetActive(true); //Activates the fire effect object on the object
 
         //While the tracker is less than the duration the function will run and every second deal a single damage to the player or the enemy that this script is attached to.
-        while (currTime < duration)
+        while (currTime <= duration)
         {
             //If the object is an enemy (Contains the enemy base script) than deal the damage
             if (GetComponent<EnemyBase>())

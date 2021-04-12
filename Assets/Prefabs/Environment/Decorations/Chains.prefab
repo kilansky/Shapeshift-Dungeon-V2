@@ -168,6 +168,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5599813578827905170}
   - component: {fileID: 5115341970440610347}
+  - component: {fileID: 5727129344207402582}
   m_Layer: 2
   m_Name: Chains
   m_TagString: Untagged
@@ -206,6 +207,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e2848302ab029947a41ef23fb0488ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &5727129344207402582
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5115341970440610344}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54db07d4bc427aa4bae4a0dcc6b924cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  propType: 2
+  forceTileSwap: 0
+  mask:
+    serializedVersion: 2
+    m_Bits: 1024
 --- !u!1 &6667615218385525318
 GameObject:
   m_ObjectHideFlags: 0

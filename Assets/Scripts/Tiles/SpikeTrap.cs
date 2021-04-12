@@ -105,7 +105,7 @@ public class SpikeTrap : MonoBehaviour
     {
         foreach (GameObject entity in entitiesOnSpike)
         {
-            if(entity.tag == "Player")
+            if(entity.GetComponent<PlayerController>())
             {
                 if (!PlayerHealth.Instance.isInvincible)
                     AnalyticsEvents.Instance.PlayerDamaged("Spikes"); //Sends analytics event about damage source

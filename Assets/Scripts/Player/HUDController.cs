@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using TMPro;
 
 [System.Serializable]
@@ -73,8 +74,6 @@ public class HUDController : SingletonPattern<HUDController>
     [Header("Player Damaged Overlay")]
     public GameObject runTimer;
 
-    public bool ShowLevelReview { get; set; }
-
     private PlayerController player;
     private PlayerInput playerInput;
     private string currentControlScheme;
@@ -82,11 +81,21 @@ public class HUDController : SingletonPattern<HUDController>
     private bool pocketSlot1Used = false;
     private bool pocketSlot2Used = false;
 
+    public bool ShowLevelReview { get; set; }
+    public string CurrentControlScheme { get { return currentControlScheme; } }
+
     void Start()
     {
         ShowLevelReview = true;
         player = PlayerController.Instance;
         playerInput = player.gameObject.GetComponent<PlayerInput>();
+
+        HidePotionsPanel();
+        HideGemCounter();
+        HideEquipmentPanel();
+        HideSpecialItemPanel();
+        HideQuickHint();
+
         ControlSchemeChanged();
     }
 
@@ -134,6 +143,13 @@ public class HUDController : SingletonPattern<HUDController>
         //Using Keyboard
         if (playerInput.currentControlScheme == "Keyboard&Mouse")
         {
+            //Set Cursor to be visible
+            Cursor.visible = true;
+
+            //Clear selected buttons
+            GetComponent<EventSystem>().SetSelectedGameObject(null);
+
+            //Update up button icons
             potionsPanel.image.sprite = potionsPanel.keyboardButton;
             quickHintPanel.image.sprite = quickHintPanel.keyboardButton;
 
@@ -146,9 +162,13 @@ public class HUDController : SingletonPattern<HUDController>
         //Using Controller
         else
         {
+            //Set Cursor to not be visible
+            Cursor.visible = false;
+
             //Using PS4 Controller
             if (Gamepad.current.device.ToString().Contains("DualShock"))
             {
+                //Update up button icons
                 potionsPanel.image.sprite = potionsPanel.psButton;
                 quickHintPanel.image.sprite = quickHintPanel.psButton;
 
@@ -161,6 +181,7 @@ public class HUDController : SingletonPattern<HUDController>
             //Using Xbox Controller
             else
             {
+                //Update up button icons
                 potionsPanel.image.sprite = potionsPanel.xboxButton;
                 quickHintPanel.image.sprite = quickHintPanel.xboxButton;
 
@@ -344,6 +365,12 @@ public class HUDController : SingletonPattern<HUDController>
         player.gameObject.GetComponent<PlayerInput>().SwitchCurrentActionMap("UI");
         Time.timeScale = 0;
         statPotionPanel.SetActive(true);
+
+        //Set initial selected button if using controller
+        if (playerInput.currentControlScheme != "Keyboard&Mouse")
+            statPotionPanel.GetComponent<Buttons>().SetSelectedButton();
+        else
+            statPotionPanel.GetComponent<Buttons>().ClearSelectedButtons();
     }
 
     public void HideStatPotionPanel()
@@ -387,7 +414,15 @@ public class HUDController : SingletonPattern<HUDController>
     {
         player.gameObject.GetComponent<PlayerInput>().SwitchCurrentActionMap("UI");
         gameOverScreen.SetActive(true);
-        playerDamagedOverlay.SetActive(false);      
+        playerDamagedOverlay.SetActive(false);
+        GameOverStats.Instance.SetGameOverStats();
+
+        //Set initial selected button if using controller
+        if (playerInput.currentControlScheme != "Keyboard&Mouse")
+            gameOverScreen.GetComponent<Buttons>().SetSelectedButton();
+        else
+            gameOverScreen.GetComponent<Buttons>().ClearSelectedButtons();
+
         StartCoroutine(gameOverScreen.GetComponent<Buttons>().WaitToDisplayReview());
     }
 
@@ -403,18 +438,30 @@ public class HUDController : SingletonPattern<HUDController>
         winScreen.SetActive(true);
         Time.timeScale = 0;
         playerDamagedOverlay.SetActive(false);
+
+        //Set initial selected button if using controller
+        if (playerInput.currentControlScheme != "Keyboard&Mouse")
+            winScreen.GetComponent<Buttons>().SetSelectedButton();
+        else
+            winScreen.GetComponent<Buttons>().ClearSelectedButtons();
     }
 
     public void HideWinScreen()
     {
         player.gameObject.GetComponent<PlayerInput>().SwitchCurrentActionMap("Player");
-        winScreen.SetActive(false);
+        winScreen.SetActive(false);       
     }
 
     public void ShowPauseScreen()
     {
         player.gameObject.GetComponent<PlayerInput>().SwitchCurrentActionMap("UI");
         pauseScreen.SetActive(true);
+
+        //Set initial selected button if using controller
+        if (playerInput.currentControlScheme != "Keyboard&Mouse")
+            pauseScreen.GetComponent<Buttons>().SetSelectedButton();
+        else
+            pauseScreen.GetComponent<Buttons>().ClearSelectedButtons();
     }
 
     public void HidePauseScreen()
@@ -445,7 +492,7 @@ public class HUDController : SingletonPattern<HUDController>
         float lerpSpeed = 3f;
 
         //Set color to lerp to based on if player is at low health
-        if (PlayerHealth.Instance.Health < PlayerHealth.Instance.maxHealth / 3)
+        if (PlayerHealth.Instance.Health < PlayerHealth.Instance.maxHealth / 4)
         {
             lerpFromColor = lowHealth;
             lerpToColor = lowHealthHurt;
@@ -471,7 +518,7 @@ public class HUDController : SingletonPattern<HUDController>
         lerpFromColor = lerpToColor;
 
         //Set color to lerp to based on if player is at low health
-        if (PlayerHealth.Instance.Health < PlayerHealth.Instance.maxHealth / 3)
+        if (PlayerHealth.Instance.Health < PlayerHealth.Instance.maxHealth / 4)
             lerpToColor = lowHealth;
         else
             lerpToColor = noAlpha;

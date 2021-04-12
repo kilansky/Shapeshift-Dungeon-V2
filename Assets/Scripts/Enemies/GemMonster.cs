@@ -14,6 +14,7 @@ public class GemMonster : MonoBehaviour
 
     public bool isGemMonster = false;
     public GameObject gemDisplay;
+    public float healthMod = 1.5f;
 
     public void SetGemMonster()
     {

@@ -26,7 +26,10 @@ public class Tile : MonoBehaviour
         arcane,
         bridge,
         rail,
-        laser
+        laser,
+        stoneGrass,
+        dirtGrass,
+        torch
     }
     public tileTypes tileType;
 
@@ -34,6 +37,9 @@ public class Tile : MonoBehaviour
     public GameObject spawnerIndicator;
     public GameObject rewardIndicator;
     public LayerMask mask;
+
+    public bool hasDecor = false;
+    public bool forceSwap = false;
 
     private GameObject nextTile;
 
@@ -103,7 +109,7 @@ public class Tile : MonoBehaviour
             return false;
         }
 
-        if (newTile.GetComponent<Tile>().tileType != tileType) //If the next tile is of a different type than this tile, do some stuff
+        if (newTile.GetComponent<Tile>().tileType != tileType || (!hasDecor && newTile.GetComponent<Tile>().hasDecor) || newTile.GetComponent<Tile>().forceSwap || tileType == tileTypes.torch) //If the next tile is of a different type than this tile or has decor, do some stuff
         {            
             return true;
         }
@@ -140,7 +146,7 @@ public class Tile : MonoBehaviour
 
         RaycastHit hit;
 
-        while (NoOrientation() && transform.GetChild(1).gameObject.activeInHierarchy && Physics.BoxCast(transform.position, transform.localScale, transform.TransformDirection(Vector3.up), out hit)) //Sends a boxcast to look for an object above this one if it is flagged as a shop
+        while (NoOrientation() && rewardIndicator.activeInHierarchy && Physics.BoxCast(transform.position, transform.localScale, transform.TransformDirection(Vector3.up), out hit)) //Sends a boxcast to look for an object above this one if it is flagged as a shop
         {
             if (hit.transform.CompareTag("Player")) //If boxcast finds player on top of tile, delay the transition
             {
@@ -203,12 +209,12 @@ public class Tile : MonoBehaviour
     /// <returns></returns>
     private bool CheckForSpawner(GameObject newTile)
     {
-        return newTile.transform.GetChild(0).gameObject.activeInHierarchy;
+        return newTile.GetComponent<Tile>().spawnerIndicator.activeInHierarchy;
     }
 
     private bool CheckForReward(GameObject newTile)
     {
-        return newTile.transform.GetChild(1).gameObject.activeInHierarchy;
+        return newTile.GetComponent<Tile>().rewardIndicator.activeInHierarchy;
     }
 
     /// <summary>
@@ -217,7 +223,7 @@ public class Tile : MonoBehaviour
     /// <returns></returns>
     private bool NoOrientation()
     {
-        return (tileType == tileTypes.stone || tileType == tileTypes.sand || tileType == tileTypes.dirt);
+        return (tileType == tileTypes.stone || tileType == tileTypes.sand || tileType == tileTypes.dirt || tileType == tileTypes.stoneGrass || tileType == tileTypes.dirtGrass);
     }
 
     [ContextMenu("Test Transition")]

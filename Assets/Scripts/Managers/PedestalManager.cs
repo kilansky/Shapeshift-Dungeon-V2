@@ -13,6 +13,7 @@ public class PedestalManager : SingletonPattern<PedestalManager>
      */
 
     public int numberofRandomPedestals = 1;
+    public int secondItemPrice = 3;
 
     private List<GameObject> pedestals = new List<GameObject>();
 
@@ -86,10 +87,13 @@ public class PedestalManager : SingletonPattern<PedestalManager>
         foreach (GameObject pedestal in pedestals)
         {
             if (pedestal.GetComponent<ItemPedestal>().item != null)
-                Destroy(pedestal.GetComponent<ItemPedestal>().item);           
+            {
+                //Destroy(pedestal.GetComponent<ItemPedestal>().item);
+                pedestal.GetComponent<ItemPedestal>().item.GetComponent<Item>().SetPrice(secondItemPrice);
+            }
         }
 
-        ClearPedestals();
+        //ClearPedestals();
     }
 
     /// <summary>

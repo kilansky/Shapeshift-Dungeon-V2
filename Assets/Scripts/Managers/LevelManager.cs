@@ -14,6 +14,7 @@ public class LevelManager : SingletonPattern<LevelManager>
      */
 
     public GameObject activeLevel;
+    public GameObject forceLevelOne;
     public bool disableSpawning;
     [Header("Level Sets")]
     public List<GameObject> levelSet1;
@@ -65,7 +66,15 @@ public class LevelManager : SingletonPattern<LevelManager>
 
         //LoadNextLevel(levelSet1); //Loads next level
         ++currFloor;
-        LoadNextLevel(SelectLevelList());
+        if(forceLevelOne)
+        {
+            Debug.LogWarning("Force loading level: " + forceLevelOne.name);
+            forceLevelOne.SetActive(true);
+            forceLevelOne = null;
+        }
+        else
+            LoadNextLevel(SelectLevelList());
+
         Transform[] allChildrenCurrLevel = activeLevel.GetComponentsInChildren<Transform>(); //Puts all tiles into an array
         foreach(Transform tile in allChildrenCurrLevel) //Cycles through all tiles in the newly created array
         {
@@ -171,16 +180,7 @@ public class LevelManager : SingletonPattern<LevelManager>
             Debug.LogError("Level out of range!");
             return null;
         }
-    }
-
-    /// <summary>
-    /// Runs the entire transition process for testing purposes
-    /// </summary>
-    [ContextMenu("Test Scene Loading")]
-    private void DoLevelStuff()
-    {
-        TransitionLevel();
-    }
+    }  
 
     /// <summary>
     /// Waits until the transition is done to do more logic
@@ -196,13 +196,17 @@ public class LevelManager : SingletonPattern<LevelManager>
         {
             MonsterSpawner.Instance.BeginSpawingMonsters(); //Start spawning monsters
         }
+        //Set camera zoom & shadows
         CameraController.Instance.ZoomIn();
-        Debug.Log("Current map is: " + currMapName);
+        CameraController.Instance.SetShadows();
 
-        //UnityEditor.AI.NavMeshBuilder.BuildNavMesh(); // <<------- Editor Only :(
+        //Build Navigation Mesh
         GetComponent<NavMeshSurface>().BuildNavMesh();
 
+        //Activate hazards in the map
         ToggleHazards(true);
+
+        Debug.Log("Current map is: " + currMapName);
     }
 
     /// <summary>
@@ -234,5 +238,20 @@ public class LevelManager : SingletonPattern<LevelManager>
     {
         CenterTile.Instance.SetFloorText(currFloor); //Ensures the level display is set correctly on start
         CenterTile.Instance.SetTextState(); //Enables the glow of the center tile number
+    }
+
+    /// <summary>
+    /// Runs the entire transition process for testing purposes
+    /// </summary>
+    [ContextMenu("Test Scene Loading")]
+    private void DoLevelStuff()
+    {
+        TransitionLevel();
+    }
+
+    [ContextMenu("EnableHazards")]
+    private void ForceStartHazards()
+    {
+        ToggleHazards(true);
     }
 }
