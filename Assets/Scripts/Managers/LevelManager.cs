@@ -14,6 +14,7 @@ public class LevelManager : SingletonPattern<LevelManager>
      */
 
     public GameObject activeLevel;
+    public GameObject forceLevelOne;
     public bool disableSpawning;
     [Header("Level Sets")]
     public List<GameObject> levelSet1;
@@ -65,7 +66,15 @@ public class LevelManager : SingletonPattern<LevelManager>
 
         //LoadNextLevel(levelSet1); //Loads next level
         ++currFloor;
-        LoadNextLevel(SelectLevelList());
+        if(forceLevelOne)
+        {
+            Debug.LogWarning("Force loading level: " + forceLevelOne.name);
+            forceLevelOne.SetActive(true);
+            forceLevelOne = null;
+        }
+        else
+            LoadNextLevel(SelectLevelList());
+
         Transform[] allChildrenCurrLevel = activeLevel.GetComponentsInChildren<Transform>(); //Puts all tiles into an array
         foreach(Transform tile in allChildrenCurrLevel) //Cycles through all tiles in the newly created array
         {
