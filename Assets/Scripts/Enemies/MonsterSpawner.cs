@@ -5,9 +5,9 @@ using UnityEngine;
 [System.Serializable]
 public class MonsterInfo
 {
-    public string name;
-    public GameObject monster;
-    [Range(0f, 100f)] public float spawnChance;
+    public string name; //Just used to make inspector elements easier to read
+    public GameObject monster; //Monster prefab
+    [Range(0f, 20f)] public float spawnWeight; //Chance for monster to be selected
 }
 
 [System.Serializable]
@@ -17,6 +17,31 @@ public class FloorSpawnInfo
     [Range(0, 100)] public int totalMonsters; //total # of monsters to spawn
     [Range(0, 30)] public int maxMonsters; //# of monsters that can be in the room at once
     public int gemsOnFloor;
+
+    private List<GameObject> monsterRaffle = new List<GameObject>();
+
+    /// <summary>
+    /// Generates a list of monsters based on their spawn weights for random selection
+    /// </summary>
+    public void CreateSpawnList()
+    {
+        foreach (MonsterInfo monster in monsters)
+        {
+            for (int i = 0; i < monster.spawnWeight; i++)
+            {
+                monsterRaffle.Add(monster.monster);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Selects a monster from the raffle
+    /// </summary>
+    /// <returns></returns>
+    public GameObject GetMonsterToSpawn()
+    {
+        return monsterRaffle[Random.Range(0, monsterRaffle.Count)];
+    }
 }
 
 public class MonsterSpawner : SingletonPattern<MonsterSpawner>
@@ -105,8 +130,8 @@ public class MonsterSpawner : SingletonPattern<MonsterSpawner>
             int randSpawnPoint = Random.Range(0, monsterSpawnPoints.Count);
 
             //Get a random monster to spawn
-            int randMonster = Random.Range(0, currFloorInfo.monsters.Length);
-            GameObject monsterToSpawn = currFloorInfo.monsters[randMonster].monster;
+            //int randMonster = Random.Range(0, currFloorInfo.monsters.Length);
+            GameObject monsterToSpawn = currFloorInfo.GetMonsterToSpawn();
 
             //Spawn the monster and disable the spawn point temporarily
             monsterSpawnPoints[randSpawnPoint].SpawnMonster(monsterToSpawn, CheckForGem());
