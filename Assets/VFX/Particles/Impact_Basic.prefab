@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &164523252353802531
+--- !u!1 &331117896044982230
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,9 +8,8 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 164523252353802528}
-  - component: {fileID: 164523252353802529}
-  - component: {fileID: 164523252353802530}
+  - component: {fileID: 6462321010585938912}
+  - component: {fileID: 8896316296894082393}
   m_Layer: 0
   m_Name: Impact_Basic
   m_TagString: Untagged
@@ -18,29 +17,75 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &164523252353802528
+--- !u!4 &6462321010585938912
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 164523252353802531}
+  m_GameObject: {fileID: 331117896044982230}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 1793464330108918041}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!2083052967 &164523252353802529
+--- !u!114 &8896316296894082393
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 331117896044982230}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6e3fe09dd6be70429ab6cd2cf26bd29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  destroyTime: 1
+--- !u!1 &2500989923748159754
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1793464330108918041}
+  - component: {fileID: 5849308155929779864}
+  - component: {fileID: 6505782759224481202}
+  m_Layer: 0
+  m_Name: Impact_1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1793464330108918041
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2500989923748159754}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1.25, y: 1.25, z: 1.25}
+  m_Children: []
+  m_Father: {fileID: 6462321010585938912}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!2083052967 &5849308155929779864
 VisualEffect:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 164523252353802531}
+  m_GameObject: {fileID: 2500989923748159754}
   m_Enabled: 1
-  m_Asset: {fileID: 8926484042661614526, guid: 87f5f4b212458424da215d4fb3c6ebca, type: 3}
+  m_Asset: {fileID: 8926484042661614526, guid: a1c4b84ced310ae4a9d4b0e4af5d8710, type: 3}
   m_InitialEventName: OnPlay
   m_InitialEventNameOverriden: 0
   m_StartSeed: 0
@@ -68,13 +113,13 @@ VisualEffect:
       m_Array: []
     m_Bool:
       m_Array: []
---- !u!73398921 &164523252353802530
+--- !u!73398921 &6505782759224481202
 VFXRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 164523252353802531}
+  m_GameObject: {fileID: 2500989923748159754}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0

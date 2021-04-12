@@ -492,6 +492,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1041153086579517090}
+  - component: {fileID: 704113844871264285}
   - component: {fileID: 5034499310700451444}
   m_Layer: 0
   m_Name: DemoMap
@@ -523,6 +524,31 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &704113844871264285
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8155796316149671473}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 531192fac9141bb48944a3efe23730aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnInfo:
+    monsters:
+    - name: Skull
+      monster: {fileID: 3285207134206969448, guid: b0000f853a2ad1e49bbb03a316767d9b,
+        type: 3}
+      spawnChance: 75
+    - name: Crystal
+      monster: {fileID: 1044970987093620923, guid: a157b0b2f26e46246a1d5d8154499cb1,
+        type: 3}
+      spawnChance: 25
+    totalMonsters: 7
+    maxMonsters: 3
+    gemsOnFloor: 1
 --- !u!114 &5034499310700451444
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -536,12 +562,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   propList:
-  - type: 9
+  - type: 7
     spawnChance: 100
   - type: 3
-    spawnChance: 50
+    spawnChance: 40
   - type: 0
-    spawnChance: 50
+    spawnChance: 40
   - type: 5
     spawnChance: 50
   - type: 4
