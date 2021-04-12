@@ -6,10 +6,15 @@ public class TileRotator : MonoBehaviour
 {
     void Start()
     {
-        transform.Rotate(0, 90 * Random.Range(0, 4), 0);
-        if(GetComponent<Tile>().tileType == Tile.tileTypes.torch)
+        if(transform.localEulerAngles == Vector3.zero)//only perform random rotation if tile has not been rotated manually
         {
-            GetComponentInChildren<Torch>().ResetRotation();
+            transform.Rotate(0, 90 * Random.Range(0, 4), 0);//Rotate tile randomly
+
+            //reset the rotation of torches if this is a torch tile
+            if (GetComponent<Tile>().tileType == Tile.tileTypes.torch)
+            {
+                GetComponentInChildren<Torch>().ResetRotation();
+            }
         }
     }
 }
