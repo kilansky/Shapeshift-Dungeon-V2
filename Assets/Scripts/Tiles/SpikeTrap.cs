@@ -129,9 +129,11 @@ public class SpikeTrap : MonoBehaviour
 
         foreach(GameObject entity in entitiesToKill)
         {
-            entitiesOnSpike.Remove(entity);
+            entitiesOnSpike.Remove(entity);            
             entity.GetComponent<EnemyBase>().Damage(damage);
         }
+
+        entitiesToKill.Clear();
     }
 
     public void ToggleSpike(bool enabled)
