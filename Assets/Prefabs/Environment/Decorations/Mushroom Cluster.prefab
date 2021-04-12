@@ -129,9 +129,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e2848302ab029947a41ef23fb0488ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  decorChance: 0
-  mustBePresent: 0
-  proplist: []
 --- !u!114 &1019798964969256805
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -158,6 +155,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   propType: 4
   forceTileSwap: 0
+  mask:
+    serializedVersion: 2
+    m_Bits: 1024
 --- !u!1 &1399876598031788932
 GameObject:
   m_ObjectHideFlags: 0

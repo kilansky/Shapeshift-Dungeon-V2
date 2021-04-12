@@ -26,7 +26,10 @@ public class Tile : MonoBehaviour
         arcane,
         bridge,
         rail,
-        laser
+        laser,
+        stoneGrass,
+        dirtGrass,
+        torch
     }
     public tileTypes tileType;
 
