@@ -30,6 +30,7 @@ public class PlayerController : SingletonPattern<PlayerController>
     [Header("Attack Stats")]
     public PlayerStats baseAttackDamage; //Attack Damage Variable used for AttackDam in ItemsEquipment
     public PlayerStats attackTime; //ItemsEquipment for Attack Speed
+    public float attackMoveSpeedMod = 1/4;
     public float attack3DmgModifier = 1.5f; //increases damage of third attack
     //public float targetMonsterDist = 4f;
 
@@ -305,6 +306,9 @@ public class PlayerController : SingletonPattern<PlayerController>
 
     private void RotatePlayer()
     {
+        if (!canMove)
+            return;
+
         //Smoothly Rotate Character in movement direction (if moving)
         if (Mathf.Abs(movementVector.x) > 0 || Mathf.Abs(movementVector.z) > 0)
         {
@@ -589,32 +593,30 @@ public class PlayerController : SingletonPattern<PlayerController>
     {
         inputQueue.Dequeue();
         attackComboState++;
+        Debug.Log("attackComboState is: " + attackComboState);
 
         if (attackComboState > 3)
             attackComboState = 1;
 
-        //canAttack = false;
         isAttacking = true;
 
         switch (attackComboState)
         {
             case 1:
                 animator.SetBool("attack1", true);
-                currAttackDamage = baseAttackDamage.Value;
                 break;
             case 2:
                 animator.SetBool("attack2", true);
-                currAttackDamage = baseAttackDamage.Value;
                 break;
             case 3:
                 animator.SetBool("attack3", true);
+                canAttack = false;
                 break;
             default:
                 break;
         }
 
-        currMoveSpeed = baseMoveSpeed.Value / 3f; //slows movment while attacking
-        //CineShake.Instance.Shake(5f, 0.2f);
+        currMoveSpeed = baseMoveSpeed.Value * attackMoveSpeedMod; //slows movment while attacking
     }
 
     //Ends an Attack - called from attack animation event
@@ -636,8 +638,6 @@ public class PlayerController : SingletonPattern<PlayerController>
                 Debug.LogError("Invalid attack number called to end");
                 break;
         }
-
-        //canAttack = true;
     }
 
     //Resets the attack combo
@@ -646,7 +646,7 @@ public class PlayerController : SingletonPattern<PlayerController>
         attackComboState = 0;
         isAttacking = false;
         //isDashAttacking = false;
-        //canAttack = true;
+        canAttack = true;
         canMove = true;
         animator.SetBool("attack1", false);
         animator.SetBool("attack2", false);
@@ -655,7 +655,7 @@ public class PlayerController : SingletonPattern<PlayerController>
         PlayerAttackController.Instance.DeactivateAllHitboxes();
         currAttackDamage = baseAttackDamage.Value;
 
-        if(!isDashing)
+        if(!IsDashing)
             currMoveSpeed = baseMoveSpeed.Value;
     }
 

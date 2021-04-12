@@ -31,6 +31,7 @@ public class PlayerAttackController : SingletonPattern<PlayerAttackController>
     //Activate the radial hitbox - called from attack animation event
     public void ActivateRadialHitbox()
     {
+        CineShake.Instance.Shake(2.5f, 0.1f);
         StartCoroutine(LerpRadialHitbox());
     }
 
