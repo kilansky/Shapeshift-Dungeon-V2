@@ -109,7 +109,7 @@ public class Tile : MonoBehaviour
             return false;
         }
 
-        if (newTile.GetComponent<Tile>().tileType != tileType || (!hasDecor && newTile.GetComponent<Tile>().hasDecor) || newTile.GetComponent<Tile>().forceSwap) //If the next tile is of a different type than this tile or has decor, do some stuff
+        if (newTile.GetComponent<Tile>().tileType != tileType || (!hasDecor && newTile.GetComponent<Tile>().hasDecor) || newTile.GetComponent<Tile>().forceSwap || tileType == tileTypes.torch) //If the next tile is of a different type than this tile or has decor, do some stuff
         {            
             return true;
         }
