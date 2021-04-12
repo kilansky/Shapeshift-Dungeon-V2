@@ -3,9 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
+public class MonsterInfo
+{
+    public string name;
+    public GameObject monster;
+    [Range(0f, 100f)] public float spawnChance;
+}
+
+[System.Serializable]
 public class FloorSpawnInfo
 {
-    public GameObject[] monsters; //the list of potential monsters to spawn
+    public MonsterInfo[] monsters; //the list of potential monsters to spawn
     [Range(0, 100)] public int totalMonsters; //total # of monsters to spawn
     [Range(0, 30)] public int maxMonsters; //# of monsters that can be in the room at once
     public int gemsOnFloor;
@@ -14,11 +22,12 @@ public class FloorSpawnInfo
 public class MonsterSpawner : SingletonPattern<MonsterSpawner>
 {
     //public variables
-    public FloorSpawnInfo[] floorSpawnInfo = new FloorSpawnInfo[31];
+    //public FloorSpawnInfo[] floorSpawnInfo = new FloorSpawnInfo[31];
     [Range(0,3)] public float timeBetweenSpawns = 0.5f; //How long to wait before allowing another monster to spawn
     [Range(0, 10)] public float disableSpawnerTime = 5f; //How long before a spawner can be used again
     [HideInInspector] public bool floorCleared = false; //Room is cleared of monsters
     public int gemMonstersToSpawn = 2;
+    public FloorSpawnInfo currFloorInfo;
 
     //private variables
     private List<SpawnPoint> monsterSpawnPoints = new List<SpawnPoint>();
@@ -32,14 +41,15 @@ public class MonsterSpawner : SingletonPattern<MonsterSpawner>
     private void Start()
     {
         isSpawningMonsters = false;
-        BeginSpawingMonsters();
+        //BeginSpawingMonsters();
     }
 
     public void BeginSpawingMonsters()
     {
+        Debug.Log("Spawning monsters!");
         currFloor = LevelManager.Instance.currFloor;
 
-        gemMonstersToSpawn = floorSpawnInfo[currFloor].gemsOnFloor;
+        gemMonstersToSpawn = currFloorInfo.gemsOnFloor;
 
         if (LevelManager.Instance.currFloor % 5 != 0)//Check if current floor is not a shop
         {
@@ -89,14 +99,14 @@ public class MonsterSpawner : SingletonPattern<MonsterSpawner>
         isSpawningMonsters = true;
 
         //Only spawn if the # of monsters in the room is less than maxMonsters
-        if (monstersInRoom < floorSpawnInfo[currFloor].maxMonsters && monsterSpawnPoints.Count > 0)
+        if (monstersInRoom < currFloorInfo.maxMonsters && monsterSpawnPoints.Count > 0)
         {
             //Get a random spawn point index
             int randSpawnPoint = Random.Range(0, monsterSpawnPoints.Count);
 
             //Get a random monster to spawn
-            int randMonster = Random.Range(0, floorSpawnInfo[currFloor].monsters.Length);
-            GameObject monsterToSpawn = floorSpawnInfo[currFloor].monsters[randMonster];
+            int randMonster = Random.Range(0, currFloorInfo.monsters.Length);
+            GameObject monsterToSpawn = currFloorInfo.monsters[randMonster].monster;
 
             //Spawn the monster and disable the spawn point temporarily
             monsterSpawnPoints[randSpawnPoint].SpawnMonster(monsterToSpawn, CheckForGem());
@@ -106,7 +116,7 @@ public class MonsterSpawner : SingletonPattern<MonsterSpawner>
         }
 
         //Recursively attempt to spawn until the total # of monsters to spawn have been killed
-        if (monstersSpawned < floorSpawnInfo[currFloor].totalMonsters)
+        if (monstersSpawned < currFloorInfo.totalMonsters)
             StartCoroutine(WaitToSpawnAgain());
         else
             isSpawningMonsters = false;
@@ -126,7 +136,7 @@ public class MonsterSpawner : SingletonPattern<MonsterSpawner>
         else
         {
             //Uses a roll check to see if a monster will be spawned as a gem monster
-            int random = Random.Range(1, floorSpawnInfo[currFloor].totalMonsters - monstersSpawned);
+            int random = Random.Range(1, currFloorInfo.totalMonsters - monstersSpawned);
 
             //A successful roll lands when the random number rolls less than or equal to the gem monsters remaining amount
             //Rolls from 1 (always at least 1 enemy to spawn if enemy is being spawned) to enemies left to spawn
@@ -150,7 +160,7 @@ public class MonsterSpawner : SingletonPattern<MonsterSpawner>
         monstersKilled += 1;
         monstersInRoom -= 1;
 
-        if(monstersKilled == floorSpawnInfo[currFloor].totalMonsters)
+        if(monstersKilled == currFloorInfo.totalMonsters)
         {
             monstersKilled = 0;
             monstersSpawned = 0;
@@ -178,5 +188,15 @@ public class MonsterSpawner : SingletonPattern<MonsterSpawner>
         yield return new WaitForSeconds(disableSpawnerTime);
 
         monsterSpawnPoints.Add(disabledSpawnQueue.Dequeue());
+    }
+
+    public void SetSpawnInfo(FloorSpawnInfo info)
+    {
+        currFloorInfo = info;
+        Debug.Log("Received new spawn info: Contains");
+        foreach(MonsterInfo monsterInfo in currFloorInfo.monsters)
+        {
+            Debug.Log(monsterInfo.monster);
+        }
     }
 }

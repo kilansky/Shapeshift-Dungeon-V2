@@ -70,6 +70,7 @@ public class LevelManager : SingletonPattern<LevelManager>
         {
             Debug.LogWarning("Force loading level: " + forceLevelOne.name);
             forceLevelOne.SetActive(true);
+            MonsterSpawner.Instance.SetSpawnInfo(forceLevelOne.GetComponent<SpawnInfo>().spawnInfo);
             forceLevelOne = null;
         }
         else
@@ -111,6 +112,8 @@ public class LevelManager : SingletonPattern<LevelManager>
         //Debug.Log("Index Selected: " + rnd + "     Total Levels in List: " + mainLevels.Count);
         levelList[rnd].SetActive(true); //Sets the selected level to active
         currMapName = levelList[rnd].name;
+        //MonsterSpawner.Instance.currFloorInfo = levelList[rnd].GetComponent<SpawnInfo>().spawnInfo;
+        MonsterSpawner.Instance.SetSpawnInfo(levelList[rnd].GetComponent<SpawnInfo>().spawnInfo);
         levelList.RemoveAt(rnd); //Removes selected level from list so it cannot be selected again in the future
     }
 
