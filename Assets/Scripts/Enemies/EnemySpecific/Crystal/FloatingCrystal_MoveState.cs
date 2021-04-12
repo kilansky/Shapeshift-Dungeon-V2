@@ -38,6 +38,7 @@ public class FloatingCrystal_MoveState : MoveState
         base.Enter();
         isAttacking = false;
         entity.SetVelocity(stateData.moveSpeed);
+
         laser = enemy.GetComponent<LaserDispenser>();
         enemy.GetComponent<LaserDispenser>().ToggleLaser(false);
         //timeToAttack = Random.Range(minAttackDelay, maxAttackDelay);

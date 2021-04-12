@@ -19,6 +19,7 @@ public class Goblin_MoveState : MoveState
     public override void Enter()
     {
         base.Enter();
+        Debug.Log("oh he movin");
 
         entity.SetVelocity(stateData.moveSpeed);
     }
@@ -34,6 +35,7 @@ public class Goblin_MoveState : MoveState
 
         if (enemy.CheckPlayerInMinAttackRange())
         {
+            Debug.Log("I'm swingin!!");
             stateMachine.ChangeState(enemy.attackState);
         }
     }
@@ -44,5 +46,9 @@ public class Goblin_MoveState : MoveState
 
         //set destination to the player, look check should go here
         entity.SetDestination();
+
+        //create a random number generator 1-10
+        //set back to be #1-5, sides to be #6-8, front to be #9,10
+        
     }
 }
