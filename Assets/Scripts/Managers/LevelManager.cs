@@ -222,7 +222,13 @@ public class LevelManager : SingletonPattern<LevelManager>
         ToggleHazards(true);
 
         if (currFloor % 5 == 0)
+        {
+            //Debug.Log("Starting Floor " + currFloor);
+            //Debug.Log("Cleared Floor " + currFloor);
+            AnalyticsEvents.Instance.FloorStarted();//Send Level Rated Analytics Event
+            AnalyticsEvents.Instance.FloorCompleted(); //Send Floor Completed Analytics Event
             MusicManager.Instance.Shop();
+        }
         else
             MusicManager.Instance.Combat();
 

@@ -183,7 +183,6 @@ public class PlayerHealth : SingletonPattern<PlayerHealth>, IDamageable
     //Game is over, display game over screen and level review
     public virtual void Kill()
     {
-        GetComponent<DamageTracker>().displayDamage(); //Displays the amount of damage that the player took throughout the game and from what sources
         AnalyticsEvents.Instance.PlayerDied(); //Send Player Died Analytics Event
         AnalyticsEvents.Instance.ItemsOnDeath(); //Send Items On Death Analytics Event
         //StartCoroutine(AnalyticsEvents.Instance.DamageSourcesData()); //Send Damage source data Analytics Event

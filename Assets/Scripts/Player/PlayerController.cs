@@ -30,8 +30,8 @@ public class PlayerController : SingletonPattern<PlayerController>
     [Header("Attack Stats")]
     public PlayerStats baseAttackDamage; //Attack Damage Variable used for AttackDam in ItemsEquipment
     public PlayerStats attackTime; //ItemsEquipment for Attack Speed
-    public float attackMoveSpeedMod = 1/4;
-    public float attack3DmgModifier = 1.5f; //increases damage of third attack
+    public float attackSpeedMod = 0.25f;
+    public float attack3DmgMod = 1.5f; //increases damage of third attack
     //public float targetMonsterDist = 4f;
 
     [Header("Dash Attack Stats")]
@@ -294,10 +294,12 @@ public class PlayerController : SingletonPattern<PlayerController>
         else
             moveVelocity = 0;
 
+        Vector3 attackVector = new Vector3(transform.forward.x, vSpeed, transform.forward.z);
+
         if (IsDashing)
             controller.Move(transform.forward * currMoveSpeed * SandSpeedMod * Time.deltaTime);
         else if (IsAttacking || IsChargeAttacking)
-            controller.Move(transform.forward * moveVelocity * currMoveSpeed * SandSpeedMod * Time.deltaTime);
+            controller.Move(attackVector * moveVelocity * currMoveSpeed * SandSpeedMod * Time.deltaTime);
         else
             controller.Move(movementVector * currMoveSpeed * SandSpeedMod * Time.deltaTime);
     }
@@ -642,7 +644,7 @@ public class PlayerController : SingletonPattern<PlayerController>
     {
         inputQueue.Dequeue();
         attackComboState++;
-        Debug.Log("attackComboState is: " + attackComboState);
+        //Debug.Log("attackComboState is: " + attackComboState);
 
         if (attackComboState > 3)
             attackComboState = 1;
@@ -659,14 +661,13 @@ public class PlayerController : SingletonPattern<PlayerController>
                 break;
             case 3:
                 animator.SetBool("attack3", true);
-                
                 canAttack = false;
                 break;
             default:
                 break;
         }
 
-        currMoveSpeed = baseMoveSpeed.Value * attackMoveSpeedMod; //slows movment while attacking
+        currMoveSpeed = baseMoveSpeed.Value * attackSpeedMod; //slows movment while attacking
     }
 
     //Ends an Attack - called from attack animation event

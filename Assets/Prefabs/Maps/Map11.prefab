@@ -110,6 +110,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3479344565981817093}
   - component: {fileID: -2239778553808583748}
+  - component: {fileID: 2317908691377762192}
   m_Layer: 0
   m_Name: Map11
   m_TagString: Untagged
@@ -153,14 +154,27 @@ MonoBehaviour:
     - name: Skull
       monster: {fileID: 3285207134206969448, guid: b0000f853a2ad1e49bbb03a316767d9b,
         type: 3}
-      spawnWeight: 0
+      spawnWeight: 10
     - name: Crystal
       monster: {fileID: 1044970987093620923, guid: a157b0b2f26e46246a1d5d8154499cb1,
         type: 3}
-      spawnWeight: 0
-    totalMonsters: 7
-    maxMonsters: 3
-    gemsOnFloor: 1
+      spawnWeight: 6
+    totalMonsters: 19
+    maxMonsters: 7
+    gemsOnFloor: 3
+--- !u!114 &2317908691377762192
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 873543193483249019}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f25eb3bdddc39ef47a71378991bf9647, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  propList: []
 --- !u!1 &1649555975620897666
 GameObject:
   m_ObjectHideFlags: 0

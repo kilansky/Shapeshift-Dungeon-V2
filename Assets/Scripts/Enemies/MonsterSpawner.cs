@@ -78,6 +78,7 @@ public class MonsterSpawner : SingletonPattern<MonsterSpawner>
 
         if (LevelManager.Instance.currFloor % 5 != 0)//Check if current floor is not a shop
         {
+            //Debug.Log("Starting Floor " + currFloor);
             AnalyticsEvents.Instance.FloorStarted();//Send Level Rated Analytics Event
 
             //Clear the spawn point list of any previously set spawn points
@@ -91,8 +92,6 @@ public class MonsterSpawner : SingletonPattern<MonsterSpawner>
         }
         else //if floor is a shop, don't spawn monster, instantly clear the floor
         {
-            AnalyticsEvents.Instance.FloorStarted();//Send Level Rated Analytics Event
-            AnalyticsEvents.Instance.FloorCompleted(); //Send Floor Completed Analytics Event
             floorCleared = true;
             CenterTile.Instance.SetTextState();
         }
@@ -188,6 +187,8 @@ public class MonsterSpawner : SingletonPattern<MonsterSpawner>
             floorCleared = true;
             PedestalManager.Instance.LoadPedestals(); //Activate the item pedestals
             LevelManager.Instance.ToggleHazards(false); //Disabled level hazards
+
+            //Debug.Log("Cleared Floor " + currFloor);
             AnalyticsEvents.Instance.FloorCompleted(); //Send Floor Completed Analytics Event
 
             AudioManager.Instance.Play("BigBell");
