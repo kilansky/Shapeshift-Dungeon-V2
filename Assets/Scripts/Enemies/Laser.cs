@@ -30,6 +30,13 @@ public class Laser : MonoBehaviour
     {
         beam = laser.gameObject.GetComponent<LineRenderer>();
         capsuleCollider = GetComponent<CapsuleCollider>();
+
+        //If statement to adjust some values if this is used for the player weapon
+        if(parentObject.name == "Player")
+        {
+            damage = 4f;
+            Destroy(gameObject, 0.3f);
+        }
     }
 
     private void FixedUpdate()
@@ -70,9 +77,20 @@ public class Laser : MonoBehaviour
     /// Detects when something enters the laser's collider
     /// </summary>
     /// <param name="other"></param>
+    private void OnTriggerEnter(Collider other)
+    {
+        if(parentObject.name == "Player")
+            StartCoroutine(LaserCycle(other.gameObject));
+    }
+
+    /// <summary>
+    /// Detects when something enters the laser's collider
+    /// </summary>
+    /// <param name="other"></param>
     private void OnTriggerStay(Collider other)
     {
-        StartCoroutine(LaserCycle(other.gameObject));
+        if (parentObject.name != "Player")
+            StartCoroutine(LaserCycle(other.gameObject));
     }
 
     /// <summary>
@@ -82,14 +100,27 @@ public class Laser : MonoBehaviour
     /// <returns></returns>
     private IEnumerator LaserCycle(GameObject target)
     {
-        if (target.GetComponent<PlayerController>() && !PlayerController.Instance.IsDashing)
+        if(parentObject.name != "Player")
         {
-            if (!PlayerHealth.Instance.isInvincible)
-                AnalyticsEvents.Instance.PlayerDamaged("Laser"); //Sends analytics event about damage source
+            if (target.GetComponent<PlayerController>() && !PlayerController.Instance.IsDashing)
+            {
+                if (!PlayerHealth.Instance.isInvincible)
+                    AnalyticsEvents.Instance.PlayerDamaged("Laser"); //Sends analytics event about damage source
 
-            PlayerHealth.Instance.Damage(damage, parentObject);
-            yield return new WaitForSeconds(tickRate);
+                PlayerHealth.Instance.Damage(damage, parentObject);
+                yield return new WaitForSeconds(tickRate);
+            }
         }
+
+        else
+        {
+            //If the other object is Monster (Contains the enemy base script) then go on with the rest of the damage then destroys itself
+            if (target.GetComponent<EnemyBase>())
+            {
+                target.GetComponent<EnemyBase>().Damage(damage);
+            }
+        }
+        
     }
 
     /// <summary>
