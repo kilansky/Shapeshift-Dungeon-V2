@@ -830,6 +830,22 @@ public class PlayerController : SingletonPattern<PlayerController>
                 SpecialSlot.prefab.GetComponent<FireWand>().spawnFireBall(transform.position, spawnDirection, spawnRotation);
             }
 
+            //Lazer Wand Item
+            else if (SpecialSlot.ItemName == "Lazer Wand")
+            {
+                Vector3 spawnDirection = transform.forward;
+                Quaternion spawnRotation = lastTargetRotation;
+
+                if (IsUsingMouse)//Spawn in direction of mouse pointer if using a mouse
+                {
+                    spawnDirection = new Vector3(mouseTargetPoint.position.x, 0, mouseTargetPoint.position.z) - new Vector3(transform.position.x, 0, transform.position.z);
+                    spawnDirection = spawnDirection.normalized / 2;
+
+                    spawnRotation = Quaternion.LookRotation(spawnDirection);
+                }
+
+                SpecialSlot.prefab.GetComponent<LazerWand>().spawnLazer(transform.position, spawnDirection, spawnRotation);
+            }
         }
 
         SpecialCharge = 0;
