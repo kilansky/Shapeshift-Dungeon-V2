@@ -47,7 +47,9 @@ public class HUDController : SingletonPattern<HUDController>
     [Header("Special Item Panel")]
     public UIPanel specialItemPanel;
     public Image speicalItemIcon;
+    public GameObject speicalItemIcon2;
     public Image chargeBarFill;
+    public UIPanel swapItemPanel;
 
     [Header("Equipment Panel")]
     public GameObject equipmentPanel;
@@ -158,6 +160,7 @@ public class HUDController : SingletonPattern<HUDController>
             attackPanel.image.sprite = attackPanel.keyboardButton;
             chargePanel.image.sprite = chargePanel.keyboardButton;
             specialItemPanel.image.sprite = specialItemPanel.keyboardButton;
+            swapItemPanel.image.sprite = swapItemPanel.keyboardButton;
         }
         //Using Controller
         else
@@ -177,6 +180,7 @@ public class HUDController : SingletonPattern<HUDController>
                 attackPanel.image.sprite = attackPanel.psButton;
                 chargePanel.image.sprite = chargePanel.psButton;
                 specialItemPanel.image.sprite = specialItemPanel.psButton;
+                swapItemPanel.image.sprite = swapItemPanel.psButton;
             }
             //Using Xbox Controller
             else
@@ -190,6 +194,7 @@ public class HUDController : SingletonPattern<HUDController>
                 attackPanel.image.sprite = attackPanel.xboxButton;
                 chargePanel.image.sprite = chargePanel.xboxButton;
                 specialItemPanel.image.sprite = specialItemPanel.xboxButton;
+                swapItemPanel.image.sprite = swapItemPanel.xboxButton;
             }
         }
     }
@@ -262,7 +267,8 @@ public class HUDController : SingletonPattern<HUDController>
         float maxValue = PlayerController.Instance.specialCooldownTime.Value;
         float value = PlayerController.Instance.SpecialCharge;
 
-        chargeBarFill.fillAmount = value / maxValue;
+        if(PlayerController.Instance.isItemSwapping == false)
+            chargeBarFill.fillAmount = value / maxValue;
     }
 
     public void ShowHealthBar()
@@ -385,12 +391,42 @@ public class HUDController : SingletonPattern<HUDController>
         specialItemPanel.panel.SetActive(true);
         speicalItemIcon.sprite = PlayerController.Instance.SpecialSlot.sprite;
         PlayerController.Instance.SpecialCharge = PlayerController.Instance.specialCooldownTime.Value;
+
+        if(PlayerController.Instance.hasBagOfHolding && PlayerController.Instance.BagOfHoldingSlot)
+            speicalItemIcon2.GetComponent<Image>().sprite = PlayerController.Instance.BagOfHoldingSlot.sprite;
+
         UpdateSpecialCharge();
     }
 
     public void HideSpecialItemPanel()
     {
         specialItemPanel.panel.SetActive(false);
+    }
+
+    public void ShowBagOfHoldingSlot()
+    {
+        speicalItemIcon2.SetActive(true);
+    }
+
+    public void HideBagOfHoldingSlot()
+    {
+        speicalItemIcon2.SetActive(false);
+    }
+
+    public void SetNewSpecialItemIcons()
+    {
+        speicalItemIcon.sprite = PlayerController.Instance.SpecialSlot.sprite;
+        speicalItemIcon2.GetComponent<Image>().sprite = PlayerController.Instance.BagOfHoldingSlot.sprite;
+    }
+
+    public void ShowSpecialSwapPanel()
+    {
+        swapItemPanel.panel.SetActive(true);
+    }
+
+    public void HideSpecialSwapPanel()
+    {
+        swapItemPanel.panel.SetActive(false);
     }
 
     public void ShowLevelReviewPanel()

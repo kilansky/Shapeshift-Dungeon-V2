@@ -76,6 +76,14 @@
                     "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "ItemSwapping",
+                    "type": "Button",
+                    "id": "66585002-09f8-4a76-851e-b00259794ef9",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -373,6 +381,28 @@
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "MouseAiming",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "842d7e40-cd3d-4774-b566-ba12fa13fbcc",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "ItemSwapping",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d904e37f-9855-4c7a-b00e-d0e6c2ba990d",
+                    "path": "<Gamepad>/leftShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "ItemSwapping",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

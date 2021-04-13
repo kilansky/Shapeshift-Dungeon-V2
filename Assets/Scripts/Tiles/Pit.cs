@@ -29,7 +29,7 @@ public class Pit : MonoBehaviour
                 if (!PlayerHealth.Instance.isInvincible)
                     AnalyticsEvents.Instance.PlayerDamaged("Pit"); //Sends analytics event about damage source
 
-                PlayerHealth.Instance.Damage(pitDamage);
+                PlayerHealth.Instance.Damage(pitDamage, gameObject);
             }
 
         }

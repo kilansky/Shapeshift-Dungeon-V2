@@ -10,15 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 614538dc814d046429c1d3bece288708, type: 3}
-  m_Name: AA Battery
+  m_Name: Bag Of Holding
   m_EditorClassIdentifier: 
-  sprite: {fileID: 21300000, guid: eee054f118855b849aeb8659b24074c5, type: 3}
-  prefab: {fileID: 899707105724907947, guid: e385a8eb3e5a7af4aba5a36c865ce13c, type: 3}
+  sprite: {fileID: 21300000, guid: da7c22739336d544691771f092ba6846, type: 3}
+  prefab: {fileID: 4231290142189432005, guid: 6ef25c2a81c42ac46914910153dfcd24, type: 3}
   _itemSlotType: 4
   slotSprite: {fileID: 21300000, guid: 708ddc30b9c66da4282828ef3793f33f, type: 3}
-  _itemName: AA Battery
-  itemDescription: Decreases the charge time of Speical items
-  statMods:
-  - adjustableValue: -0.35
-    statModifier: 200
-    statType: 12
+  _itemName: Bag Of Holding
+  itemDescription: Allows you to hold an additional Special item and swap them out
+    at will
+  statMods: []

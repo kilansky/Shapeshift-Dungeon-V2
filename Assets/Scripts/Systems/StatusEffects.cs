@@ -37,7 +37,7 @@ public class StatusEffects : MonoBehaviour
         fireEffect.SetActive(true); //Activates the fire effect object on the object
 
         //While the tracker is less than the duration the function will run and every second deal a single damage to the player or the enemy that this script is attached to.
-        while (currTime <= duration)
+        while (currTime < duration)
         {
             //If the object is an enemy (Contains the enemy base script) than deal the damage
             if (GetComponent<EnemyBase>())
@@ -45,7 +45,7 @@ public class StatusEffects : MonoBehaviour
 
             //If the object is the palyer than deal the damage
             if (GetComponent<PlayerHealth>())
-                GetComponent<PlayerHealth>().Damage(1);
+                PlayerHealth.Instance.Damage(1, gameObject);
 
             currTime++; //Adds 1 to the current time to help with the while statement
 
@@ -57,5 +57,6 @@ public class StatusEffects : MonoBehaviour
         }
 
         fireEffect.SetActive(false); //Deactivates the fire effect on the current object
+        currTime = 0; //Resets timer to 0 to start the coroutine up again for the next attack
     }
 }

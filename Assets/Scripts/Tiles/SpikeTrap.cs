@@ -23,6 +23,7 @@ public class SpikeTrap : MonoBehaviour
     private bool isTriggered = false;
     private bool isEnabled = true;
     [SerializeField]private List<GameObject> entitiesOnSpike;
+    private List<GameObject> entitiesToKill = new List<GameObject>();
 
     private IEnumerator SpikeCycle()
     {
@@ -55,6 +56,8 @@ public class SpikeTrap : MonoBehaviour
             yield return null;
         }
         DealDamage();
+
+        print("Spikes dealt damage and are now going back down");
 
         //Wait for some amount of time
         yield return new WaitForSeconds(idleTime);
@@ -110,11 +113,24 @@ public class SpikeTrap : MonoBehaviour
                 if (!PlayerHealth.Instance.isInvincible)
                     AnalyticsEvents.Instance.PlayerDamaged("Spikes"); //Sends analytics event about damage source
 
-                PlayerHealth.Instance.Damage(damage);
+                PlayerHealth.Instance.Damage(damage,gameObject);
             }
 
             if (entity.GetComponent<EnemyBase>())
-                entity.GetComponent<EnemyBase>().Damage(damage);
+            {
+                if(entity.GetComponent<EnemyBase>().Health - damage <= 0)
+                {
+                    entitiesToKill.Add(entity);
+                }
+                else
+                    entity.GetComponent<EnemyBase>().Damage(damage);
+            }                
+        }
+
+        foreach(GameObject entity in entitiesToKill)
+        {
+            entitiesOnSpike.Remove(entity);
+            entity.GetComponent<EnemyBase>().Damage(damage);
         }
     }
 

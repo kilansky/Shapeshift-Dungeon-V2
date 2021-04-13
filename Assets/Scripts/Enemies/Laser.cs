@@ -24,6 +24,8 @@ public class Laser : MonoBehaviour
     private LineRenderer beam;
     private CapsuleCollider capsuleCollider;
 
+    [HideInInspector] public GameObject parentObject; //Variable to hold the parent Object to make sure the Damage Tracker is able to track the damage correctly
+
     private void Start()
     {
         beam = laser.gameObject.GetComponent<LineRenderer>();
@@ -85,7 +87,7 @@ public class Laser : MonoBehaviour
             if (!PlayerHealth.Instance.isInvincible)
                 AnalyticsEvents.Instance.PlayerDamaged("Laser"); //Sends analytics event about damage source
 
-            PlayerHealth.Instance.Damage(damage);
+            PlayerHealth.Instance.Damage(damage, parentObject);
             yield return new WaitForSeconds(tickRate);
         }
     }
