@@ -987,6 +987,9 @@ public class PlayerController : SingletonPattern<PlayerController>
                 else if(LevelManager.Instance.currFloor != 0)
                     AnalyticsEvents.Instance.ItemPurchased(other.GetComponentInParent<Item>().item.ItemName); //Send Item Purchased analytics event
 
+                if (other.GetComponentInParent<Item>().IsSecondItem())
+                    PedestalManager.Instance.secondItemPrice += 2;
+
                 Destroy(other.gameObject); //Destroy the instance of the item in the gamescene
                 pickupItem = false; //Set pickup to false
 

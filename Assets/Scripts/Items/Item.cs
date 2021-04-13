@@ -11,6 +11,8 @@ public class Item : MonoBehaviour
 
     public GameObject priceCanvas;
 
+    private bool isSecondItem = false;
+
     /// <summary>
     /// AHL - 4/8/21
     /// Equip function to have the item be attached to the player and adjusts their stats by using the StatModifier script
@@ -489,6 +491,12 @@ public class Item : MonoBehaviour
     {
         price = value;
         itemBase.GetComponent<ItemUI>().SetPriceCanvas();
+        isSecondItem = true;
+    }
+
+    public bool IsSecondItem()
+    {
+        return isSecondItem;
     }
 
 
