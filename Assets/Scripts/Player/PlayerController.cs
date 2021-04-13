@@ -30,8 +30,8 @@ public class PlayerController : SingletonPattern<PlayerController>
     [Header("Attack Stats")]
     public PlayerStats baseAttackDamage; //Attack Damage Variable used for AttackDam in ItemsEquipment
     public PlayerStats attackTime; //ItemsEquipment for Attack Speed
-    public float attackMoveSpeedMod = 1/4;
-    public float attack3DmgModifier = 1.5f; //increases damage of third attack
+    public float attackSpeedMod = 0.25f;
+    public float attack3DmgMod = 1.5f; //increases damage of third attack
     //public float targetMonsterDist = 4f;
 
     [Header("Dash Attack Stats")]
@@ -276,9 +276,6 @@ public class PlayerController : SingletonPattern<PlayerController>
 
     private void MovePlayer()
     {
-        if(!canMove)
-            return;
-
         //Set vertical speed to zero if grouned or dashing
         if (controller.isGrounded || isDashing)
             vSpeed = 0;
@@ -287,15 +284,22 @@ public class PlayerController : SingletonPattern<PlayerController>
 
         movementVector.y = vSpeed;
 
-        //Set velocity based on highest value directional input
-        moveVelocity = Mathf.Abs(movementVector.x);
-        if (moveVelocity < Mathf.Abs(movementVector.z))
-            moveVelocity = Mathf.Abs(movementVector.z);
+        if(canMove)
+        {
+            //Set velocity based on highest value directional input
+            moveVelocity = Mathf.Abs(movementVector.x);
+            if (moveVelocity < Mathf.Abs(movementVector.z))
+                moveVelocity = Mathf.Abs(movementVector.z);
+        }
+        else
+            moveVelocity = 0;
+
+        Vector3 attackVector = new Vector3(transform.forward.x, vSpeed, transform.forward.z);
 
         if (IsDashing)
             controller.Move(transform.forward * currMoveSpeed * SandSpeedMod * Time.deltaTime);
         else if (IsAttacking || IsChargeAttacking)
-            controller.Move(transform.forward * moveVelocity * currMoveSpeed * SandSpeedMod * Time.deltaTime);
+            controller.Move(attackVector * moveVelocity * currMoveSpeed * SandSpeedMod * Time.deltaTime);
         else
             controller.Move(movementVector * currMoveSpeed * SandSpeedMod * Time.deltaTime);
     }
@@ -640,7 +644,7 @@ public class PlayerController : SingletonPattern<PlayerController>
     {
         inputQueue.Dequeue();
         attackComboState++;
-        Debug.Log("attackComboState is: " + attackComboState);
+        //Debug.Log("attackComboState is: " + attackComboState);
 
         if (attackComboState > 3)
             attackComboState = 1;
@@ -663,7 +667,7 @@ public class PlayerController : SingletonPattern<PlayerController>
                 break;
         }
 
-        currMoveSpeed = baseMoveSpeed.Value * attackMoveSpeedMod; //slows movment while attacking
+        currMoveSpeed = baseMoveSpeed.Value * attackSpeedMod; //slows movment while attacking
     }
 
     //Ends an Attack - called from attack animation event
@@ -722,7 +726,8 @@ public class PlayerController : SingletonPattern<PlayerController>
 
         //Charge input is held down
         chargeArrow.SetActive(true);
-        float arrowScale = chargeArrow.transform.localScale.y;
+        float arrowLength = chargeArrow.transform.localScale.y;
+        float arrowWidth = chargeArrow.transform.localScale.x;
         float chargeSpeed = minChargeSpeed;
         currAttackDamage = baseAttackDamage.Value * minChargeDmgModifier;
 
@@ -734,8 +739,9 @@ public class PlayerController : SingletonPattern<PlayerController>
             chargeSpeed = Mathf.Lerp(minChargeSpeed, maxChargeSpeed, timeElapsed / timeToFullCharge);
             currAttackDamage = Mathf.Lerp(baseAttackDamage.Value * minChargeDmgModifier, baseAttackDamage.Value * chargeDmgModifier.Value, timeElapsed / timeToFullCharge);
 
-            arrowScale = Mathf.Lerp(0.5f, 2.5f, timeElapsed / timeToFullCharge);
-            chargeArrow.transform.localScale = new Vector3(1, arrowScale, 1);
+            arrowLength = Mathf.Lerp(0.5f, 3.5f, timeElapsed / timeToFullCharge);
+            arrowWidth = Mathf.Lerp(0.8f, 1.2f, timeElapsed / timeToFullCharge);
+            chargeArrow.transform.localScale = new Vector3(arrowWidth, arrowLength, arrowWidth);
 
             timeElapsed += Time.deltaTime;
             if (timeElapsed > timeToFullCharge)
@@ -916,6 +922,7 @@ public class PlayerController : SingletonPattern<PlayerController>
                 RunTimer.Instance.IncreaseTimer = false;
                 Time.timeScale = 0;
                 HUDController.Instance.ShowWinScreen();
+                HUDController.Instance.ShowLevelReviewPanel();
             }
             else
             {

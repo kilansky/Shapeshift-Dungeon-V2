@@ -559,6 +559,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6557713196604366248}
+  - component: {fileID: 3542074495846268827}
+  - component: {fileID: 1953642171121050900}
   m_Layer: 0
   m_Name: Map18
   m_TagString: Untagged
@@ -585,6 +587,44 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3542074495846268827
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6557713196604365911}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 531192fac9141bb48944a3efe23730aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnInfo:
+    monsters:
+    - name: Skull
+      monster: {fileID: 3285207134206969448, guid: b0000f853a2ad1e49bbb03a316767d9b,
+        type: 3}
+      spawnWeight: 10
+    - name: Crystal
+      monster: {fileID: 1044970987093620923, guid: a157b0b2f26e46246a1d5d8154499cb1,
+        type: 3}
+      spawnWeight: 5
+    totalMonsters: 13
+    maxMonsters: 5
+    gemsOnFloor: 2
+--- !u!114 &1953642171121050900
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6557713196604365911}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f25eb3bdddc39ef47a71378991bf9647, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  propList: []
 --- !u!1001 &786211343952713853
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -162,6 +162,15 @@ public class Tile : MonoBehaviour
 
         Vector3 originalPos = transform.position;
 
+        if (this.tileType == tileTypes.item && GetComponent<ItemPedestal>().item)
+        {
+            GameObject itemBase = GetComponent<ItemPedestal>().item.transform.GetChild(0).gameObject;
+            foreach (Transform canvas in itemBase.transform)
+            {
+                canvas.gameObject.layer = 5;//Set UI layer on each child
+            }
+        }
+
         float counter = 0f; //Counter to keep track of time elapsed
         while (counter < timeToMove) //This while loop moves the object to new position over a set amount of time
         {
@@ -191,6 +200,15 @@ public class Tile : MonoBehaviour
             float yPos = Mathf.Lerp(0, 20, counter / timeToMove);
             transform.position = new Vector3(originalPos.x, originalPos.y + yPos, originalPos.z);
             yield return null;
+        }
+
+        if(this.tileType == tileTypes.item && GetComponent<ItemPedestal>().item)
+        {
+            GameObject itemBase = GetComponent<ItemPedestal>().item.transform.GetChild(0).gameObject;
+            foreach (Transform canvas in itemBase.transform)
+            {
+                canvas.gameObject.layer = 16;//Set world GUI layer on each child
+            }
         }
     }
 

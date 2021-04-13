@@ -11,7 +11,7 @@ public class TileRotator : MonoBehaviour
             transform.Rotate(0, 90 * Random.Range(0, 4), 0);//Rotate tile randomly
 
             //reset the rotation of torches if this is a torch tile
-            if (GetComponent<Tile>().tileType == Tile.tileTypes.torch)
+            if (GetComponent<Tile>() && GetComponent<Tile>().tileType == Tile.tileTypes.torch)
             {
                 GetComponentInChildren<Torch>().ResetRotation();
             }

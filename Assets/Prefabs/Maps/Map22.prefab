@@ -549,6 +549,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5070275247077077537}
+  - component: {fileID: -2283360125174292490}
+  - component: {fileID: 8531977553539078734}
   m_Layer: 0
   m_Name: Map22
   m_TagString: Untagged
@@ -575,6 +577,44 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-2283360125174292490
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5070275247077077982}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 531192fac9141bb48944a3efe23730aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnInfo:
+    monsters:
+    - name: Skull
+      monster: {fileID: 3285207134206969448, guid: b0000f853a2ad1e49bbb03a316767d9b,
+        type: 3}
+      spawnWeight: 10
+    - name: Crystal
+      monster: {fileID: 1044970987093620923, guid: a157b0b2f26e46246a1d5d8154499cb1,
+        type: 3}
+      spawnWeight: 5
+    totalMonsters: 13
+    maxMonsters: 5
+    gemsOnFloor: 2
+--- !u!114 &8531977553539078734
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5070275247077077982}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f25eb3bdddc39ef47a71378991bf9647, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  propList: []
 --- !u!1001 &489012809702099523
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -611,6 +651,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 372808732521421642, guid: 35dcdc3ab81416b46815e5fd640ab69c,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 372808732521421642, guid: 35dcdc3ab81416b46815e5fd640ab69c,
         type: 3}
@@ -724,6 +769,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 372808732521421642, guid: 35dcdc3ab81416b46815e5fd640ab69c,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 372808732521421642, guid: 35dcdc3ab81416b46815e5fd640ab69c,
+        type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 0}
@@ -834,6 +884,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 372808732521421642, guid: 35dcdc3ab81416b46815e5fd640ab69c,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 372808732521421642, guid: 35dcdc3ab81416b46815e5fd640ab69c,
+        type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 0}
@@ -916,6 +971,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalPosition.y
       value: -3.35
+      objectReference: {fileID: 0}
+    - target: {fileID: 372808732521421642, guid: 35dcdc3ab81416b46815e5fd640ab69c,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 372808732521421642, guid: 35dcdc3ab81416b46815e5fd640ab69c,
         type: 3}
@@ -1079,6 +1139,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 372808732521421642, guid: 35dcdc3ab81416b46815e5fd640ab69c,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 372808732521421642, guid: 35dcdc3ab81416b46815e5fd640ab69c,
+        type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 0}
@@ -1161,6 +1226,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalPosition.y
       value: -3.35
+      objectReference: {fileID: 0}
+    - target: {fileID: 372808732521421642, guid: 35dcdc3ab81416b46815e5fd640ab69c,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 372808732521421642, guid: 35dcdc3ab81416b46815e5fd640ab69c,
         type: 3}
@@ -1399,6 +1469,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -1481,6 +1556,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lava (79)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
@@ -1569,6 +1649,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -1651,6 +1736,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lava (138)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
@@ -1739,6 +1829,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -1824,6 +1919,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -1906,6 +2006,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lava (93)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
@@ -2069,6 +2174,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -2151,6 +2261,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lava (159)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
@@ -2239,6 +2354,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -2321,6 +2441,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lava (127)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
@@ -2409,6 +2534,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -2491,6 +2621,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lava (28)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
@@ -2579,6 +2714,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -2661,6 +2801,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lava (38)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
@@ -2749,6 +2894,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -2831,6 +2981,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lava (63)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
@@ -2919,6 +3074,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -3001,6 +3161,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lava (150)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
@@ -3089,6 +3254,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -3174,6 +3344,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -3256,6 +3431,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lava (12)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
@@ -3434,6 +3614,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -3519,6 +3704,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -3601,6 +3791,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lava (158)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
@@ -3764,6 +3959,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -3846,6 +4046,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lava (18)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
@@ -3934,6 +4139,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -4016,6 +4226,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lava (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
@@ -4104,6 +4319,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -4186,6 +4406,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lava (59)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
@@ -4274,6 +4499,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -4359,6 +4589,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -4441,6 +4676,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lava (88)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
@@ -4619,6 +4859,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -4701,6 +4946,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lava (146)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
@@ -4789,6 +5039,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -4871,6 +5126,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lava (45)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
@@ -5034,6 +5294,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -5116,6 +5381,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lava (148)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
@@ -5204,6 +5474,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -5289,6 +5564,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -5371,6 +5651,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lava (77)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
@@ -5531,6 +5816,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lava (155)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
@@ -5709,6 +5999,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -5794,6 +6089,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -5876,6 +6176,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lava (97)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
@@ -6129,6 +6434,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -6211,6 +6521,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lava (32)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
@@ -6374,6 +6689,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -6459,6 +6779,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -6541,6 +6866,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lava (134)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
@@ -6719,6 +7049,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -6801,6 +7136,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lava (131)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
@@ -6889,6 +7229,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -6971,6 +7316,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lava (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
@@ -7149,6 +7499,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -7309,6 +7664,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -7391,6 +7751,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lava (14)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
@@ -7479,6 +7844,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -7561,6 +7931,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lava (80)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
@@ -7649,6 +8024,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -7731,6 +8111,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lava (61)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
@@ -7909,6 +8294,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -7991,6 +8381,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lava (52)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
@@ -8154,6 +8549,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -8236,6 +8636,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lava (78)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
@@ -8324,6 +8729,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -8406,6 +8816,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lava (57)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
@@ -8494,6 +8909,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -8579,6 +8999,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -8661,6 +9086,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lava (55)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
@@ -9019,6 +9449,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -9101,6 +9536,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lava (8)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
@@ -9189,6 +9629,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -9271,6 +9716,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lava (141)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
@@ -9359,6 +9809,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -9441,6 +9896,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lava (156)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
@@ -9529,6 +9989,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -9611,6 +10076,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lava (68)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
@@ -9699,6 +10169,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -9781,6 +10256,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lava (101)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
@@ -9869,6 +10349,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -9951,6 +10436,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lava (157)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
@@ -10114,6 +10604,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -10196,6 +10691,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lava (25)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
@@ -10284,6 +10784,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -10366,6 +10871,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lava (142)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
@@ -10454,6 +10964,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -10536,6 +11051,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalPosition.y
       value: -3.35
+      objectReference: {fileID: 0}
+    - target: {fileID: 372808732521421642, guid: 35dcdc3ab81416b46815e5fd640ab69c,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 372808732521421642, guid: 35dcdc3ab81416b46815e5fd640ab69c,
         type: 3}
@@ -10624,6 +11144,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -10706,6 +11231,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lava (154)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
@@ -10869,6 +11399,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -11029,6 +11564,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -11111,6 +11651,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lava (74)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
@@ -11364,6 +11909,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -11446,6 +11996,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lava (133)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
@@ -11534,6 +12089,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -11616,6 +12176,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lava (91)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
@@ -11779,6 +12344,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -11861,6 +12431,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lava (95)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
@@ -11949,6 +12524,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -12031,6 +12611,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lava (41)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
@@ -12119,6 +12704,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -12201,6 +12791,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lava (149)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
@@ -12289,6 +12884,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -12371,6 +12971,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lava (30)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
@@ -12459,6 +13064,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -12541,6 +13151,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lava (19)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
@@ -12719,6 +13334,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -12801,6 +13421,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lava (31)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
@@ -12889,6 +13514,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -12971,6 +13601,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lava (84)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
@@ -13059,6 +13694,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -13141,6 +13781,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lava (9)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
@@ -13229,6 +13874,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -13311,6 +13961,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lava (69)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
@@ -13399,6 +14054,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -13481,6 +14141,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lava (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
@@ -13569,6 +14234,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -13651,6 +14321,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lava (53)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
@@ -13739,6 +14414,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -13824,6 +14504,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -13906,6 +14591,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lava (119)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
@@ -14066,6 +14756,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lava (50)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
@@ -14394,6 +15089,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -14476,6 +15176,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lava (73)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
@@ -14564,6 +15269,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -14649,6 +15359,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -14731,6 +15446,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lava (27)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
@@ -14844,6 +15564,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 372808732521421642, guid: 35dcdc3ab81416b46815e5fd640ab69c,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 372808732521421642, guid: 35dcdc3ab81416b46815e5fd640ab69c,
+        type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 0}
@@ -14926,6 +15651,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lava (17)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
@@ -15014,6 +15744,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -15096,6 +15831,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lava (140)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
@@ -15334,6 +16074,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -15416,6 +16161,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lava (42)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
@@ -15504,6 +16254,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -15586,6 +16341,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lava (67)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
@@ -15674,6 +16434,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -15756,6 +16521,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lava (11)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
@@ -15844,6 +16614,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -15926,6 +16701,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lava (89)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
@@ -16104,6 +16884,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -16186,6 +16971,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lava (71)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
@@ -16274,6 +17064,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -16356,6 +17151,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Lava (122)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2409393654754523722, guid: 50c26800835598f498ed830f1bb800ff,
         type: 3}
@@ -16516,6 +17316,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalPosition.y
       value: -3.35
+      objectReference: {fileID: 0}
+    - target: {fileID: 372808732521421642, guid: 35dcdc3ab81416b46815e5fd640ab69c,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 372808732521421642, guid: 35dcdc3ab81416b46815e5fd640ab69c,
         type: 3}
@@ -16701,6 +17506,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 372808732521421642, guid: 35dcdc3ab81416b46815e5fd640ab69c,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 372808732521421642, guid: 35dcdc3ab81416b46815e5fd640ab69c,
         type: 3}
@@ -16961,6 +17771,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 372808732521421642, guid: 35dcdc3ab81416b46815e5fd640ab69c,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 372808732521421642, guid: 35dcdc3ab81416b46815e5fd640ab69c,
         type: 3}
@@ -28949,6 +29764,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 372808732521421642, guid: 35dcdc3ab81416b46815e5fd640ab69c,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 372808732521421642, guid: 35dcdc3ab81416b46815e5fd640ab69c,
+        type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 0}
@@ -29059,6 +29879,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 372808732521421642, guid: 35dcdc3ab81416b46815e5fd640ab69c,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 372808732521421642, guid: 35dcdc3ab81416b46815e5fd640ab69c,
+        type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 0}
@@ -29141,6 +29966,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalPosition.y
       value: -3.35
+      objectReference: {fileID: 0}
+    - target: {fileID: 372808732521421642, guid: 35dcdc3ab81416b46815e5fd640ab69c,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 372808732521421642, guid: 35dcdc3ab81416b46815e5fd640ab69c,
         type: 3}
@@ -29379,6 +30209,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 372808732521421642, guid: 35dcdc3ab81416b46815e5fd640ab69c,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 372808732521421642, guid: 35dcdc3ab81416b46815e5fd640ab69c,
+        type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 0}
@@ -29461,6 +30296,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalPosition.y
       value: -3.35
+      objectReference: {fileID: 0}
+    - target: {fileID: 372808732521421642, guid: 35dcdc3ab81416b46815e5fd640ab69c,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 372808732521421642, guid: 35dcdc3ab81416b46815e5fd640ab69c,
         type: 3}
@@ -29574,6 +30414,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 372808732521421642, guid: 35dcdc3ab81416b46815e5fd640ab69c,
         type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 372808732521421642, guid: 35dcdc3ab81416b46815e5fd640ab69c,
+        type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 0}
@@ -29656,6 +30501,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalPosition.y
       value: -3.35
+      objectReference: {fileID: 0}
+    - target: {fileID: 372808732521421642, guid: 35dcdc3ab81416b46815e5fd640ab69c,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 372808732521421642, guid: 35dcdc3ab81416b46815e5fd640ab69c,
         type: 3}

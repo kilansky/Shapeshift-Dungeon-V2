@@ -14,6 +14,16 @@ public class PlayerAttackController : SingletonPattern<PlayerAttackController>
     public void ActivateSlashHitbox()
     {
         slashHitbox.GetComponent<MeshCollider>().enabled = true;
+        AudioManager.Instance.Play("Swing1");
+
+        if (showHitboxes)
+            slashHitbox.GetComponent<MeshRenderer>().enabled = true;
+    }
+
+    public void ActivateSlashHitbox2()
+    {
+        slashHitbox.GetComponent<MeshCollider>().enabled = true;
+        AudioManager.Instance.Play("Swing2");
 
         if (showHitboxes)
             slashHitbox.GetComponent<MeshRenderer>().enabled = true;
@@ -32,6 +42,7 @@ public class PlayerAttackController : SingletonPattern<PlayerAttackController>
     public void ActivateRadialHitbox()
     {
         CineShake.Instance.Shake(3f, 0.15f);
+        AudioManager.Instance.Play("Swing3");
         StartCoroutine(LerpRadialHitbox());
     }
 
