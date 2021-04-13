@@ -38,7 +38,12 @@ public class BombAttack : MonoBehaviour
                     AnalyticsEvents.Instance.PlayerDamaged("Bomb"); //Sends analytics event about damage source
 
                 PlayerHealth.Instance.Damage(damage, gameObject);
-            }             
+            }
+
+            if (other.GetComponent<DestructibleProp>())
+            {
+                other.GetComponent<DestructibleProp>().DestroyObject();
+            }
         }
     }
 

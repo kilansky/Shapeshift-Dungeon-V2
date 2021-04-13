@@ -19,17 +19,16 @@ public class MusicManager : SingletonPattern<MusicManager>
         ac.volume = volume;
     }
 
-    [ContextMenu("Combat2")]
+    [ContextMenu("Combat")]
     public void Combat()
     {
         STOP();
         ac.clip = combat;
         ac.volume = volume;
         ac.Play();
-        //ac.PlayOneShot(combat2, volume);
     }
 
-    [ContextMenu("FloorCleared2")]
+    [ContextMenu("FloorCleared")]
     public void FloorCleared()
     {
         STOP();
@@ -63,12 +62,12 @@ public class MusicManager : SingletonPattern<MusicManager>
     {
         float counter = 0f; //Counter to keep track of time elapsed
         float originalVolume = ac.volume;
-        Debug.Log(originalVolume);
+        //Debug.Log(originalVolume);
         while (counter < duration) //This while loop moves the object to new position over a set amount of time
         {
             counter += Time.deltaTime;
             float newVol = Mathf.Lerp(originalVolume, end, counter / duration);
-            Debug.Log(newVol);
+            //Debug.Log(newVol);
             ac.volume = originalVolume + newVol;
             yield return null;
         }
@@ -83,12 +82,12 @@ public class MusicManager : SingletonPattern<MusicManager>
     {
         float counter = 0f; //Counter to keep track of time elapsed
         float originalVolume = ac.volume;
-        Debug.Log(originalVolume);
+        //Debug.Log(originalVolume);
         while (counter < duration) //This while loop moves the object to new position over a set amount of time
         {
             counter += Time.deltaTime;
             float newVol = Mathf.Lerp(end, originalVolume, counter / duration);
-            Debug.Log(newVol);
+            //Debug.Log(newVol);
             ac.volume = originalVolume - newVol;
             yield return null;
         }

@@ -71,7 +71,7 @@ public class MonsterSpawner : SingletonPattern<MonsterSpawner>
 
     public void BeginSpawingMonsters()
     {
-        Debug.Log("Spawning monsters!");
+        //Debug.Log("Spawning monsters!");
         currFloor = LevelManager.Instance.currFloor;
 
         gemMonstersToSpawn = currFloorInfo.gemsOnFloor;
@@ -88,11 +88,6 @@ public class MonsterSpawner : SingletonPattern<MonsterSpawner>
                 monsterSpawnPoints.Add(spawnPoint);
 
             SpawnMonsters();
-        }
-        else if(currFloor == 0) //if floor is the starting room, don't clear the floor (player must pick up potions)
-        {
-            floorCleared = false;
-            CenterTile.Instance.SetTextState();
         }
         else //if floor is a shop, don't spawn monster, instantly clear the floor
         {

@@ -916,6 +916,7 @@ public class PlayerController : SingletonPattern<PlayerController>
                 RunTimer.Instance.IncreaseTimer = false;
                 Time.timeScale = 0;
                 HUDController.Instance.ShowWinScreen();
+                HUDController.Instance.ShowLevelReviewPanel();
             }
             else
             {

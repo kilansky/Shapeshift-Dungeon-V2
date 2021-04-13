@@ -216,7 +216,7 @@ public class LevelManager : SingletonPattern<LevelManager>
 
         //Build Navigation Mesh
         GetComponent<NavMeshSurface>().BuildNavMesh();
-        navMeshHazards.GetComponent<NavMeshSurface>().BuildNavMesh();
+        //navMeshHazards.GetComponent<NavMeshSurface>().BuildNavMesh();
 
         //Activate hazards in the map
         ToggleHazards(true);
@@ -256,6 +256,7 @@ public class LevelManager : SingletonPattern<LevelManager>
 
     private void Start()
     {
+        MonsterSpawner.Instance.floorCleared = false;
         CenterTile.Instance.SetFloorText(currFloor); //Ensures the level display is set correctly on start
         CenterTile.Instance.SetTextState(); //Enables the glow of the center tile number
     }
