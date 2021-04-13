@@ -27,6 +27,7 @@ public class Sword : MonoBehaviour
             //Apply damage to enemy
             other.GetComponent<EnemyBase>().Damage(damageToDeal);
 
+            AudioManager.Instance.Play("Hit");
         }
 
         if (other.GetComponent<DestructibleProp>())

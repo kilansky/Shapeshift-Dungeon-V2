@@ -131,6 +131,23 @@ MonoBehaviour:
     spawnChance: 40
   - type: 3
     spawnChance: 40
+--- !u!114 &1507849752
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2271326119727263357}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f25eb3bdddc39ef47a71378991bf9647, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  propList:
+  - type: 0
+    spawnChance: 50
+  - type: 3
+    spawnChance: 50
 --- !u!114 &1507849753
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -156,23 +173,6 @@ MonoBehaviour:
     totalMonsters: 8
     maxMonsters: 3
     gemsOnFloor: 1
---- !u!114 &1507849752
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2271326119727263357}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f25eb3bdddc39ef47a71378991bf9647, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  propList:
-  - type: 0
-    spawnChance: 50
-  - type: 3
-    spawnChance: 50
 --- !u!1 &2345862844983506692
 GameObject:
   m_ObjectHideFlags: 0
@@ -328,6 +328,27 @@ MonoBehaviour:
     source: {fileID: 0}
   - name: WoodBreak
     clip: {fileID: 8300000, guid: bbc47f2adcfc79e409c24653e4968a6d, type: 3}
+    volume: 0.5
+    pitch: 1
+    spacialBlend: 0
+    loop: 0
+    source: {fileID: 0}
+  - name: Swing1
+    clip: {fileID: 8300000, guid: f52ee6a642c50a240ba4d5fa29425e3d, type: 3}
+    volume: 0.5
+    pitch: 1
+    spacialBlend: 0
+    loop: 0
+    source: {fileID: 0}
+  - name: Swing2
+    clip: {fileID: 8300000, guid: 17cbc3268ce887e4e803f8bf3e40b240, type: 3}
+    volume: 0.5
+    pitch: 1
+    spacialBlend: 0
+    loop: 0
+    source: {fileID: 0}
+  - name: Swing3
+    clip: {fileID: 8300000, guid: 6435d883abfa9ac44b01be944c894c15, type: 3}
     volume: 0.5
     pitch: 1
     spacialBlend: 0
@@ -523,6 +544,23 @@ MonoBehaviour:
     totalMonsters: 26
     maxMonsters: 9
     gemsOnFloor: 4
+--- !u!114 &24208155
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8695468479111258084}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f25eb3bdddc39ef47a71378991bf9647, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  propList:
+  - type: 0
+    spawnChance: 50
+  - type: 3
+    spawnChance: 50
 --- !u!114 &24208156
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -548,23 +586,6 @@ MonoBehaviour:
     totalMonsters: 8
     maxMonsters: 3
     gemsOnFloor: 1
---- !u!114 &24208155
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8695468479111258084}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f25eb3bdddc39ef47a71378991bf9647, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  propList:
-  - type: 0
-    spawnChance: 50
-  - type: 3
-    spawnChance: 50
 --- !u!1001 &214161760
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -657,6 +657,7 @@ public class PlayerController : SingletonPattern<PlayerController>
                 break;
             case 3:
                 animator.SetBool("attack3", true);
+                
                 canAttack = false;
                 break;
             default:
