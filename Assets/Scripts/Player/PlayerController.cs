@@ -831,7 +831,7 @@ public class PlayerController : SingletonPattern<PlayerController>
             }
 
             //Lazer Wand Item
-            else if (SpecialSlot.ItemName == "Lazer Wand")
+            else if (SpecialSlot.ItemName == "Laser Wand")
             {
                 Vector3 spawnDirection = transform.forward;
                 Quaternion spawnRotation = lastTargetRotation;
