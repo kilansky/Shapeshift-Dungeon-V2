@@ -224,7 +224,7 @@ public class LevelManager : SingletonPattern<LevelManager>
         if (currFloor % 5 == 0)
             MusicManager.Instance.Shop();
         else
-            MusicManager.Instance.Combat2();
+            MusicManager.Instance.Combat();
 
         Debug.Log("Current map is: " + currMapName);
     }

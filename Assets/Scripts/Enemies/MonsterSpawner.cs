@@ -197,7 +197,7 @@ public class MonsterSpawner : SingletonPattern<MonsterSpawner>
 
             AudioManager.Instance.Play("BigBell");
             CineShake.Instance.Shake(1f, 2f);
-            MusicManager.Instance.FloorCleared2();
+            MusicManager.Instance.FloorCleared();
         }
     }
 

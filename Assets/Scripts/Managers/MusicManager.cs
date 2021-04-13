@@ -6,13 +6,8 @@ using UnityEngine.Audio;
 //Manages the background music in the game
 public class MusicManager : SingletonPattern<MusicManager>
 {
-    public AudioClip startMenu;
-    public AudioClip combat1;
-    public AudioClip combat2;
-    public AudioClip combat3;
-    public AudioClip floorCleared1;
-    public AudioClip floorCleared2;
-    public AudioClip floorCleared3;
+    public AudioClip combat;
+    public AudioClip floorCleared;
     public AudioClip shop;
     public float volume = 0.6f;
 
@@ -24,60 +19,25 @@ public class MusicManager : SingletonPattern<MusicManager>
         ac.volume = volume;
     }
 
-    [ContextMenu("StartMenu")]
-    public void StartMenu()
-    {
-        STOP();
-        ac.PlayOneShot(startMenu, volume);
-    }
-
-    [ContextMenu("Combat1")]
-    public void Combat1()
-    {
-        STOP();
-        ac.PlayOneShot(combat1, volume);
-    }
-
     [ContextMenu("Combat2")]
-    public void Combat2()
+    public void Combat()
     {
         STOP();
-        ac.clip = combat2;
+        ac.clip = combat;
         ac.volume = volume;
         ac.Play();
         //ac.PlayOneShot(combat2, volume);
     }
 
-    [ContextMenu("Combat3")]
-    public void Combat3()
-    {
-        STOP();
-        ac.PlayOneShot(combat3, volume);
-    }
-
-    [ContextMenu("FloorCleared1")]
-    public void FloorCleared1()
-    {
-        STOP();
-        ac.PlayOneShot(floorCleared1, volume);
-    }
-
     [ContextMenu("FloorCleared2")]
-    public void FloorCleared2()
+    public void FloorCleared()
     {
         STOP();
         ac.volume = 0f;
         FadeIn(volume, 1f);
-        ac.clip = floorCleared2;
+        ac.clip = floorCleared;
         ac.volume = volume;
         ac.Play();
-    }
-
-    [ContextMenu("FloorCleared3")]
-    public void FloorCleared3()
-    {
-        STOP();
-        ac.PlayOneShot(floorCleared3, volume);
     }
 
     [ContextMenu("Shop")]
