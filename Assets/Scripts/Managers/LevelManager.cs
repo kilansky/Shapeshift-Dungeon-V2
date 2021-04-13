@@ -201,6 +201,7 @@ public class LevelManager : SingletonPattern<LevelManager>
     /// <returns></returns>
     private IEnumerator WaitForTransition()
     {
+        MusicManager.Instance.FadeOut(0f, 1.5f * transitionTime + maxStartTime);
         yield return new WaitForSeconds(2 * transitionTime + maxStartTime);
         //Debug.Log("TransitionComplete!");
         isTransitioning = false; //Sets boolean back to false so transition can occur again
@@ -219,6 +220,11 @@ public class LevelManager : SingletonPattern<LevelManager>
 
         //Activate hazards in the map
         ToggleHazards(true);
+
+        if (currFloor % 5 == 0)
+            MusicManager.Instance.Shop();
+        else
+            MusicManager.Instance.Combat2();
 
         Debug.Log("Current map is: " + currMapName);
     }

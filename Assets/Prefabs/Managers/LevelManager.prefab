@@ -247,8 +247,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sounds:
   - name: Rumble
-    clip: {fileID: 8300000, guid: af7b1c5a87744ee4cb53e23de9d0f404, type: 3}
+    clip: {fileID: 8300000, guid: 4d2c284e71f62f644984e59ead48c6f4, type: 3}
     volume: 0.25
+    pitch: 1
+    spacialBlend: 0
+    loop: 0
+    source: {fileID: 0}
+  - name: BigBell
+    clip: {fileID: 8300000, guid: df3341fb30a54a34fa48b3edc0c56947, type: 3}
+    volume: 0.2
+    pitch: 1
+    spacialBlend: 0
+    loop: 0
+    source: {fileID: 0}
+  - name: TileSlide
+    clip: {fileID: 8300000, guid: 21ea11d86808dab4d9746711b99dcb7d, type: 3}
+    volume: 0.25
+    pitch: 0.75
+    spacialBlend: 0
+    loop: 0
+    source: {fileID: 0}
+  - name: WoodBreak
+    clip: {fileID: 8300000, guid: bbc47f2adcfc79e409c24653e4968a6d, type: 3}
+    volume: 0.5
     pitch: 1
     spacialBlend: 0
     loop: 0

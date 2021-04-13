@@ -194,8 +194,10 @@ public class MonsterSpawner : SingletonPattern<MonsterSpawner>
             PedestalManager.Instance.LoadPedestals(); //Activate the item pedestals
             LevelManager.Instance.ToggleHazards(false); //Disabled level hazards
             AnalyticsEvents.Instance.FloorCompleted(); //Send Floor Completed Analytics Event
+
             AudioManager.Instance.Play("BigBell");
             CineShake.Instance.Shake(1f, 2f);
+            MusicManager.Instance.FloorCleared2();
         }
     }
 

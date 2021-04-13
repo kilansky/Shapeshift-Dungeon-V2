@@ -21,7 +21,7 @@ public class MusicManager : SingletonPattern<MusicManager>
     private void Start()
     {
         ac = GetComponent<AudioSource>();
-        FloorCleared1();
+        ac.volume = volume;
     }
 
     [ContextMenu("StartMenu")]
@@ -42,7 +42,10 @@ public class MusicManager : SingletonPattern<MusicManager>
     public void Combat2()
     {
         STOP();
-        ac.PlayOneShot(combat2, volume);
+        ac.clip = combat2;
+        ac.volume = volume;
+        ac.Play();
+        //ac.PlayOneShot(combat2, volume);
     }
 
     [ContextMenu("Combat3")]
@@ -63,7 +66,11 @@ public class MusicManager : SingletonPattern<MusicManager>
     public void FloorCleared2()
     {
         STOP();
-        ac.PlayOneShot(floorCleared2, volume);
+        ac.volume = 0f;
+        FadeIn(volume, 1f);
+        ac.clip = floorCleared2;
+        ac.volume = volume;
+        ac.Play();
     }
 
     [ContextMenu("FloorCleared3")]
@@ -77,11 +84,53 @@ public class MusicManager : SingletonPattern<MusicManager>
     public void Shop()
     {
         STOP();
-        ac.PlayOneShot(shop, volume);
+        ac.clip = shop;
+        ac.volume = volume;
+        ac.Play();
     }
 
     public void STOP()
     {
         ac.Stop();
+    }
+
+    public void FadeIn(float newValue, float duration)
+    {
+        StartCoroutine(FaderIn(newValue, duration));
+    }
+
+    private IEnumerator FaderIn(float end, float duration)
+    {
+        float counter = 0f; //Counter to keep track of time elapsed
+        float originalVolume = ac.volume;
+        Debug.Log(originalVolume);
+        while (counter < duration) //This while loop moves the object to new position over a set amount of time
+        {
+            counter += Time.deltaTime;
+            float newVol = Mathf.Lerp(originalVolume, end, counter / duration);
+            Debug.Log(newVol);
+            ac.volume = originalVolume + newVol;
+            yield return null;
+        }
+    }
+
+    public void FadeOut(float newValue, float duration)
+    {
+        StartCoroutine(FaderOut(newValue, duration));
+    }
+
+    private IEnumerator FaderOut(float end, float duration)
+    {
+        float counter = 0f; //Counter to keep track of time elapsed
+        float originalVolume = ac.volume;
+        Debug.Log(originalVolume);
+        while (counter < duration) //This while loop moves the object to new position over a set amount of time
+        {
+            counter += Time.deltaTime;
+            float newVol = Mathf.Lerp(end, originalVolume, counter / duration);
+            Debug.Log(newVol);
+            ac.volume = originalVolume - newVol;
+            yield return null;
+        }
     }
 }
