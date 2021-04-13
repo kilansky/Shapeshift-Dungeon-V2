@@ -243,7 +243,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a68e07a9868478a41afe7408baf59fe6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sounds: []
+  sounds:
+  - name: Rumble
+    clip: {fileID: 8300000, guid: af7b1c5a87744ee4cb53e23de9d0f404, type: 3}
+    volume: 0.25
+    pitch: 1
+    spacialBlend: 0
+    loop: 0
+    source: {fileID: 0}
 --- !u!114 &368792401
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -257,7 +264,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   numberofRandomPedestals: 1
-  secondItemPrice: 3
+  secondItemPrice: 2
 --- !u!114 &368792402
 MonoBehaviour:
   m_ObjectHideFlags: 0

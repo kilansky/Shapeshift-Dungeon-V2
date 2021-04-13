@@ -13,7 +13,7 @@ public class PedestalManager : SingletonPattern<PedestalManager>
      */
 
     public int numberofRandomPedestals = 1;
-    public int secondItemPrice = 3;
+    public int secondItemPrice = 2;
 
     private List<GameObject> pedestals = new List<GameObject>();
 
