@@ -62,20 +62,23 @@ public class Goblin_MoveState : MoveState
         {
             //attack back
             enemy.SetNewTarget(enemy.BackTarget);
+            entity.SetDestination();
             Debug.Log("I'm gonna backstab you");
         }else if (num > 5 || num < 9)
         {
             //attack sides
             enemy.SetNewTarget(enemy.SideTarget);
+            entity.SetDestination();
             Debug.Log("Imma attack from the side");
         }else if (num > 8)
         {
             //attack front
             enemy.SetNewTarget(enemy.FrontTarget);
+            entity.SetDestination();
             Debug.Log("I'm going straight at the player");
         }
         //set destination to the player, look check should go here
-        entity.SetDestination();
+        //entity.SetDestination();
 
     }
 }
