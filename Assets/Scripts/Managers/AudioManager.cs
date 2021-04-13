@@ -53,6 +53,6 @@ public class AudioManager : SingletonPattern<AudioManager>
             Debug.LogWarning("Sound " + name + " not found!");
             return;
         }
-        s.source.Stop();
-    }
+        s.source.Stop();       
+    } 
 }

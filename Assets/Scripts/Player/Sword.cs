@@ -40,6 +40,7 @@ public class Sword : MonoBehaviour
 
             //Destroy Prop
             other.GetComponent<DestructibleProp>().DestroyObject();
+            AudioManager.Instance.Play("WoodBreak");
         }
     }
 }
