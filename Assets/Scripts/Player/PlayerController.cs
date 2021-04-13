@@ -79,7 +79,6 @@ public class PlayerController : SingletonPattern<PlayerController>
     [HideInInspector] public bool hasRedHerb = false; //Variable to make sure that the player has the red herb (makes for less checking of both pocker slots) so they are able to regain health when they start a new level
     [HideInInspector] public bool hasBagOfHolding = false; //Variable to make sure that the player has the bag of holding item (makes for less checking of both pocker slots) so they are able to store/swap special items
     [HideInInspector] public bool isItemSwapping = false; //Variable to be used to check if the itms are currently being swapped or not
-    private float specialCharge2 = 0; //Varaible to hold the special charge of the item in the bag of holding
 
     //Settable properties
     //Keep track of the amount of times that a stat was upgraded
@@ -109,6 +108,8 @@ public class PlayerController : SingletonPattern<PlayerController>
     private int attackComboState = 0; //0 = not attacking, 1 = attack1, 2 = attack2, 3 = attack3
     private float currAttackDamage;
     private int priceOfLastTouchedItem = 0; //I need this to store prices -Justin
+    private float specialCharge2 = 0; //Varaible to hold the special charge of the item in the bag of holding
+    private bool specialIsCharging = false;
 
     //Allow/prevent input actions
     private bool canMove = true;
@@ -478,7 +479,7 @@ public class PlayerController : SingletonPattern<PlayerController>
     //Bag Of Holding Item Swap Button Pressed - AHL (4/8/21)
     public void BagOfHoldingItemSwap(InputAction.CallbackContext context)
     {
-        if (context.performed && hasBagOfHolding == true && BagOfHoldingSlot != null) //This action is only performed when the Bag of Holding Item is equipped and there is an item in the slot
+        if (context.performed && hasBagOfHolding && BagOfHoldingSlot) //This action is only performed when the Bag of Holding Item is equipped and there is an item in the slot
         {
             //Adjusts bool to make sure things work as intended during this process
             isItemSwapping = true;
@@ -502,12 +503,15 @@ public class PlayerController : SingletonPattern<PlayerController>
             
             specialCharge2 = tempSpecial;
 
-            //Starts the Corutine if the special charge is not equal to the value
-            if (SpecialCharge != specialCooldownTime.Value)
-                StartCoroutine(RechargeSpecial());
-
             //Adjusts the bool to make sure things work as inteded after this process
             isItemSwapping = false;
+
+            //Starts the Corutine if the special charge is not equal to the value
+            StartCoroutine(RechargeSpecial());
+
+            //Sets the new current item in the active special slot
+            HUDController.Instance.SetNewSpecialItemIcons();
+
             HUDController.Instance.UpdateSpecialCharge();
         }
     }
@@ -832,15 +836,28 @@ public class PlayerController : SingletonPattern<PlayerController>
 
     IEnumerator RechargeSpecial()
     {
-        while (SpecialCharge < specialCooldownTime.Value && !isItemSwapping)
+        if(!specialIsCharging)
         {
-            SpecialCharge += Time.deltaTime;
-            HUDController.Instance.UpdateSpecialCharge();
-            yield return new WaitForEndOfFrame();
-        }
+            while (SpecialCharge < specialCooldownTime.Value && !isItemSwapping)
+            {
+                specialIsCharging = true;
 
-        if (!isItemSwapping)
-            canUseSpecial = true;
+                SpecialCharge += Time.deltaTime;
+                HUDController.Instance.UpdateSpecialCharge();
+
+                if (isItemSwapping)
+                    break;
+
+                yield return new WaitForEndOfFrame();
+            }
+            specialIsCharging = false;
+
+            if (!isItemSwapping && SpecialCharge >= specialCooldownTime.Value)
+            {
+                canUseSpecial = true;
+                HUDController.Instance.UpdateSpecialCharge();
+            }
+        }           
     }
 
     //Starts and Ends using a Potion

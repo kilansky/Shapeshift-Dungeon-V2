@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.VFX;
 
 public class BombAttack : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class BombAttack : MonoBehaviour
     public float destroyTime; //This is the time that it will take before the bomb gets destroyed
     public float explosionTime; //Variable to keep track of how long it takes to explode after the destroy time goes off
     public float explosionRadius; //The radius of the overall explosion/bomb
+    public GameObject explosionEffect;
     private bool isDamage = false; //Bool to keep track of if the bomb went off and what would take damage
 
     //Called before the first frame to start the IEnumerator so the bomb goes off at the specified time
@@ -36,8 +38,7 @@ public class BombAttack : MonoBehaviour
                     AnalyticsEvents.Instance.PlayerDamaged("Bomb"); //Sends analytics event about damage source
 
                 PlayerHealth.Instance.Damage(damage, gameObject);
-            }
-                
+            }             
         }
     }
 
@@ -51,8 +52,12 @@ public class BombAttack : MonoBehaviour
         Vector3 finalScale = initialScale * 100f * explosionRadius; //Sets the final size of the hitbox
 
         yield return new WaitForSeconds(destroyTime); //Wait until it is time to destroy the bomb to grow the explosion radius (It go boom now)
-        
-        isDamage = true; //Sets it to damage the player **Might want to try this in the while loop?
+
+        //Spawn explosion vfx
+        Instantiate(explosionEffect, transform.position, Quaternion.identity);
+
+        //Sets it to damage the player
+        isDamage = true;
 
         //While loop to lerp the scale of the explosion hitbox
         while (timer <= 1)
@@ -61,10 +66,9 @@ public class BombAttack : MonoBehaviour
             timer += Time.deltaTime / explosionTime;
             yield return null;
         }
-
         //Makes sure the hitbox scale is set to the final scale
         transform.localScale = finalScale;
 
-         Destroy(transform.root.gameObject); //Destroys the bomb parent object
+        Destroy(transform.root.gameObject); //Destroys the bomb parent object
     }
 }

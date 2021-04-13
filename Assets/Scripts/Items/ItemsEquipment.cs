@@ -73,6 +73,7 @@ public class ItemsEquipment : ScriptableObject
     //List of choices to be adjusted for the items - AHL (2/16/21)
     [SerializeField]
     private ItemType _itemSlotType; //Choice of what slot this item goes in
+    public Sprite slotSprite; //Holds the slot sprite
     [SerializeField]
     private string _itemName; //Name of the item
     public string itemDescription; //Text field in the inspector to add in item descriptions
