@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2401711943063442317}
   - component: {fileID: 2401711943063442353}
+  - component: {fileID: 3235090616922011350}
   m_Layer: 0
   m_Name: Lazer Wand
   m_TagString: Item
@@ -24,7 +25,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2401711943063442352}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 2.94, y: 6, z: -9.48}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -48,6 +49,18 @@ MonoBehaviour:
   item: {fileID: 11400000, guid: 40b7f22cd154d74438f4ae96465e09bb, type: 2}
   itemBase: {fileID: 932186727543935028}
   priceCanvas: {fileID: 1379790856668090091}
+--- !u!114 &3235090616922011350
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2401711943063442352}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 846aecb4c24389546ba9bb9507b1da61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &2981928223823710999
 PrefabInstance:
   m_ObjectHideFlags: 0
