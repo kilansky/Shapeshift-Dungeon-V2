@@ -843,7 +843,11 @@ public class PlayerController : SingletonPattern<PlayerController>
         }
 
         if (!isItemSwapping && SpecialCharge >= specialCooldownTime.Value)
+        {
             canUseSpecial = true;
+            HUDController.Instance.UpdateSpecialCharge();
+        }
+            
     }
 
     //Starts and Ends using a Potion
