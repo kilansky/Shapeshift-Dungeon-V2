@@ -276,9 +276,6 @@ public class PlayerController : SingletonPattern<PlayerController>
 
     private void MovePlayer()
     {
-        if(!canMove)
-            return;
-
         //Set vertical speed to zero if grouned or dashing
         if (controller.isGrounded || isDashing)
             vSpeed = 0;
@@ -287,10 +284,15 @@ public class PlayerController : SingletonPattern<PlayerController>
 
         movementVector.y = vSpeed;
 
-        //Set velocity based on highest value directional input
-        moveVelocity = Mathf.Abs(movementVector.x);
-        if (moveVelocity < Mathf.Abs(movementVector.z))
-            moveVelocity = Mathf.Abs(movementVector.z);
+        if(canMove)
+        {
+            //Set velocity based on highest value directional input
+            moveVelocity = Mathf.Abs(movementVector.x);
+            if (moveVelocity < Mathf.Abs(movementVector.z))
+                moveVelocity = Mathf.Abs(movementVector.z);
+        }
+        else
+            moveVelocity = 0;
 
         if (IsDashing)
             controller.Move(transform.forward * currMoveSpeed * SandSpeedMod * Time.deltaTime);
@@ -723,7 +725,8 @@ public class PlayerController : SingletonPattern<PlayerController>
 
         //Charge input is held down
         chargeArrow.SetActive(true);
-        float arrowScale = chargeArrow.transform.localScale.y;
+        float arrowLength = chargeArrow.transform.localScale.y;
+        float arrowWidth = chargeArrow.transform.localScale.x;
         float chargeSpeed = minChargeSpeed;
         currAttackDamage = baseAttackDamage.Value * minChargeDmgModifier;
 
@@ -735,8 +738,9 @@ public class PlayerController : SingletonPattern<PlayerController>
             chargeSpeed = Mathf.Lerp(minChargeSpeed, maxChargeSpeed, timeElapsed / timeToFullCharge);
             currAttackDamage = Mathf.Lerp(baseAttackDamage.Value * minChargeDmgModifier, baseAttackDamage.Value * chargeDmgModifier.Value, timeElapsed / timeToFullCharge);
 
-            arrowScale = Mathf.Lerp(0.5f, 2.5f, timeElapsed / timeToFullCharge);
-            chargeArrow.transform.localScale = new Vector3(1, arrowScale, 1);
+            arrowLength = Mathf.Lerp(0.5f, 3.5f, timeElapsed / timeToFullCharge);
+            arrowWidth = Mathf.Lerp(0.8f, 1.2f, timeElapsed / timeToFullCharge);
+            chargeArrow.transform.localScale = new Vector3(arrowWidth, arrowLength, arrowWidth);
 
             timeElapsed += Time.deltaTime;
             if (timeElapsed > timeToFullCharge)
