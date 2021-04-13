@@ -478,7 +478,7 @@ public class PlayerController : SingletonPattern<PlayerController>
     //Bag Of Holding Item Swap Button Pressed - AHL (4/8/21)
     public void BagOfHoldingItemSwap(InputAction.CallbackContext context)
     {
-        if (context.performed && hasBagOfHolding == true && BagOfHoldingSlot != null) //This action is only performed when the Bag of Holding Item is equipped and there is an item in the slot
+        if (context.performed && hasBagOfHolding && BagOfHoldingSlot) //This action is only performed when the Bag of Holding Item is equipped and there is an item in the slot
         {
             //Adjusts bool to make sure things work as intended during this process
             isItemSwapping = true;
@@ -503,8 +503,7 @@ public class PlayerController : SingletonPattern<PlayerController>
             specialCharge2 = tempSpecial;
 
             //Starts the Corutine if the special charge is not equal to the value
-            if (SpecialCharge != specialCooldownTime.Value)
-                StartCoroutine(RechargeSpecial());
+            StartCoroutine(RechargeSpecial());
 
             //Adjusts the bool to make sure things work as inteded after this process
             isItemSwapping = false;
@@ -843,7 +842,7 @@ public class PlayerController : SingletonPattern<PlayerController>
             yield return new WaitForEndOfFrame();
         }
 
-        if (!isItemSwapping)
+        if (!isItemSwapping && SpecialCharge >= specialCooldownTime.Value)
             canUseSpecial = true;
     }
 

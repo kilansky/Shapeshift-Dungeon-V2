@@ -32,7 +32,7 @@ public class Item : MonoBehaviour
             if (c.SpecialSlot == null) //If the player doesn't have a special item then equip one
                 c.SpecialSlot = this.item;
 
-            else if(c.hasBagOfHolding == true && c.BagOfHoldingSlot == null) //If the player has a special item and the bag of holding but nothing in the bag of holding then we place the item in the bag
+            else if(c.hasBagOfHolding && !c.BagOfHoldingSlot) //If the player has a special item and the bag of holding but nothing in the bag of holding then we place the item in the bag
             {
                 c.BagOfHoldingSlot = this.item;
             }
