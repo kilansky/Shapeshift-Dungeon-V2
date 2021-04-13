@@ -37,4 +37,23 @@ public class ItemPool : SingletonPattern<ItemPool>
 
         return currentItem;
     }
+
+    public ItemsEquipment randomSpecialSpawn()
+    {
+        List<ItemsEquipment> specialItems = new List<ItemsEquipment>();
+        foreach(ItemsEquipment item in items)
+        {
+            if(item.ItemSlot == 0)
+            {
+                specialItems.Add(item);
+            }          
+        }
+
+        int currIndex = Random.Range(0, specialItems.Count);
+
+        ItemsEquipment currentItem = specialItems[currIndex]; //Gets a random item of the item list and removes it but sets it to another ItemEquipment variable
+
+        items.Remove(currentItem);
+        return currentItem;
+    }
 }

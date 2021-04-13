@@ -50,6 +50,12 @@ public class LaserDispenser : MonoBehaviour
         laser.SetActive(false);
     }
 
+    [ContextMenu("StartLaser")]
+    private void StartLaser()
+    {
+        ToggleLaser(true);
+    }
+
     /// <summary>
     /// Either enables or disables the laser spawning tile
     /// </summary>
