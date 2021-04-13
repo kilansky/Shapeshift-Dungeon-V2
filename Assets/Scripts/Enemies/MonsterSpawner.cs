@@ -7,7 +7,7 @@ public class MonsterInfo
 {
     public string name; //Just used to make inspector elements easier to read
     public GameObject monster; //Monster prefab
-    [Range(0f, 20f)] public float spawnWeight; //Chance for monster to be selected
+    [Range(1, 20)] public int spawnWeight; //Chance for monster to be selected
 }
 
 [System.Serializable]
@@ -194,6 +194,8 @@ public class MonsterSpawner : SingletonPattern<MonsterSpawner>
             PedestalManager.Instance.LoadPedestals(); //Activate the item pedestals
             LevelManager.Instance.ToggleHazards(false); //Disabled level hazards
             AnalyticsEvents.Instance.FloorCompleted(); //Send Floor Completed Analytics Event
+            AudioManager.Instance.Play("BigBell");
+            CineShake.Instance.Shake(1f, 2f);
         }
     }
 
