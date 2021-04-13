@@ -75,7 +75,16 @@ public class Buttons : MonoBehaviour
     //Show that the player died, wait, then show level review panel
     public IEnumerator WaitToDisplayReview()
     {
-        yield return new WaitForSecondsRealtime(2f);
+        yield return new WaitForSecondsRealtime(1f);
+
+        //Send the damage the player took as an email - only if in build, not editor
+        if (!Application.isEditor)
+        {
+            //print("We are running this from inside of the editor!");
+            PlayerController.Instance.GetComponent<DamageTracker>().DisplayDamage();
+        }
+
+        yield return new WaitForSecondsRealtime(1f);
 
         buttonsPanel.SetActive(true);
 

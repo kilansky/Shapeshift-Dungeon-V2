@@ -21,7 +21,7 @@ public class AudioManager : SingletonPattern<AudioManager>
 {
     public Sound[] sounds;
 
-    private void Awake()
+    private void Start()
     {
         foreach(Sound s in sounds)
         {
@@ -53,11 +53,6 @@ public class AudioManager : SingletonPattern<AudioManager>
             Debug.LogWarning("Sound " + name + " not found!");
             return;
         }
-        s.source.Stop();
-    }
-
-    private void Start()
-    {
-        Play("test");
-    }
+        s.source.Stop();       
+    } 
 }

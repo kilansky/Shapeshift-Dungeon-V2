@@ -84,6 +84,8 @@ public class LevelManager : SingletonPattern<LevelManager>
         else
             LoadNextLevel(SelectLevelList());
 
+        CineShake.Instance.Shake(1.5f, 2* transitionTime + maxStartTime);
+        AudioManager.Instance.Play("Rumble");
         Transform[] allChildrenCurrLevel = activeLevel.GetComponentsInChildren<Transform>(); //Puts all tiles into an array
         foreach(Transform tile in allChildrenCurrLevel) //Cycles through all tiles in the newly created array
         {
@@ -199,6 +201,7 @@ public class LevelManager : SingletonPattern<LevelManager>
     /// <returns></returns>
     private IEnumerator WaitForTransition()
     {
+        MusicManager.Instance.FadeOut(0f, 1.5f * transitionTime + maxStartTime);
         yield return new WaitForSeconds(2 * transitionTime + maxStartTime);
         //Debug.Log("TransitionComplete!");
         isTransitioning = false; //Sets boolean back to false so transition can occur again
@@ -213,10 +216,21 @@ public class LevelManager : SingletonPattern<LevelManager>
 
         //Build Navigation Mesh
         GetComponent<NavMeshSurface>().BuildNavMesh();
-        navMeshHazards.GetComponent<NavMeshSurface>().BuildNavMesh();
+        //navMeshHazards.GetComponent<NavMeshSurface>().BuildNavMesh();
 
         //Activate hazards in the map
         ToggleHazards(true);
+
+        if (currFloor % 5 == 0)
+        {
+            //Debug.Log("Starting Floor " + currFloor);
+            //Debug.Log("Cleared Floor " + currFloor);
+            AnalyticsEvents.Instance.FloorStarted();//Send Level Rated Analytics Event
+            AnalyticsEvents.Instance.FloorCompleted(); //Send Floor Completed Analytics Event
+            MusicManager.Instance.Shop();
+        }
+        else
+            MusicManager.Instance.Combat();
 
         Debug.Log("Current map is: " + currMapName);
     }
@@ -248,6 +262,7 @@ public class LevelManager : SingletonPattern<LevelManager>
 
     private void Start()
     {
+        MonsterSpawner.Instance.floorCleared = false;
         CenterTile.Instance.SetFloorText(currFloor); //Ensures the level display is set correctly on start
         CenterTile.Instance.SetTextState(); //Enables the glow of the center tile number
     }

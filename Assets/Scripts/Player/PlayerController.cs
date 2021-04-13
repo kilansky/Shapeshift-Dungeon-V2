@@ -30,8 +30,8 @@ public class PlayerController : SingletonPattern<PlayerController>
     [Header("Attack Stats")]
     public PlayerStats baseAttackDamage; //Attack Damage Variable used for AttackDam in ItemsEquipment
     public PlayerStats attackTime; //ItemsEquipment for Attack Speed
-    public float attackMoveSpeedMod = 1/4;
-    public float attack3DmgModifier = 1.5f; //increases damage of third attack
+    public float attackSpeedMod = 0.25f;
+    public float attack3DmgMod = 1.5f; //increases damage of third attack
     //public float targetMonsterDist = 4f;
 
     [Header("Dash Attack Stats")]
@@ -79,7 +79,6 @@ public class PlayerController : SingletonPattern<PlayerController>
     [HideInInspector] public bool hasRedHerb = false; //Variable to make sure that the player has the red herb (makes for less checking of both pocker slots) so they are able to regain health when they start a new level
     [HideInInspector] public bool hasBagOfHolding = false; //Variable to make sure that the player has the bag of holding item (makes for less checking of both pocker slots) so they are able to store/swap special items
     [HideInInspector] public bool isItemSwapping = false; //Variable to be used to check if the itms are currently being swapped or not
-    private float specialCharge2 = 0; //Varaible to hold the special charge of the item in the bag of holding
 
     //Settable properties
     //Keep track of the amount of times that a stat was upgraded
@@ -109,6 +108,8 @@ public class PlayerController : SingletonPattern<PlayerController>
     private int attackComboState = 0; //0 = not attacking, 1 = attack1, 2 = attack2, 3 = attack3
     private float currAttackDamage;
     private int priceOfLastTouchedItem = 0; //I need this to store prices -Justin
+    private float specialCharge2 = 0; //Varaible to hold the special charge of the item in the bag of holding
+    private bool specialIsCharging = false;
 
     //Allow/prevent input actions
     private bool canMove = true;
@@ -275,9 +276,6 @@ public class PlayerController : SingletonPattern<PlayerController>
 
     private void MovePlayer()
     {
-        if(!canMove)
-            return;
-
         //Set vertical speed to zero if grouned or dashing
         if (controller.isGrounded || isDashing)
             vSpeed = 0;
@@ -286,15 +284,22 @@ public class PlayerController : SingletonPattern<PlayerController>
 
         movementVector.y = vSpeed;
 
-        //Set velocity based on highest value directional input
-        moveVelocity = Mathf.Abs(movementVector.x);
-        if (moveVelocity < Mathf.Abs(movementVector.z))
-            moveVelocity = Mathf.Abs(movementVector.z);
+        if(canMove)
+        {
+            //Set velocity based on highest value directional input
+            moveVelocity = Mathf.Abs(movementVector.x);
+            if (moveVelocity < Mathf.Abs(movementVector.z))
+                moveVelocity = Mathf.Abs(movementVector.z);
+        }
+        else
+            moveVelocity = 0;
+
+        Vector3 attackVector = new Vector3(transform.forward.x, vSpeed, transform.forward.z);
 
         if (IsDashing)
             controller.Move(transform.forward * currMoveSpeed * SandSpeedMod * Time.deltaTime);
         else if (IsAttacking || IsChargeAttacking)
-            controller.Move(transform.forward * moveVelocity * currMoveSpeed * SandSpeedMod * Time.deltaTime);
+            controller.Move(attackVector * moveVelocity * currMoveSpeed * SandSpeedMod * Time.deltaTime);
         else
             controller.Move(movementVector * currMoveSpeed * SandSpeedMod * Time.deltaTime);
     }
@@ -502,11 +507,11 @@ public class PlayerController : SingletonPattern<PlayerController>
             
             specialCharge2 = tempSpecial;
 
-            //Starts the Corutine if the special charge is not equal to the value
-            StartCoroutine(RechargeSpecial());
-
             //Adjusts the bool to make sure things work as inteded after this process
             isItemSwapping = false;
+
+            //Starts the Corutine if the special charge is not equal to the value
+            StartCoroutine(RechargeSpecial());
 
             //Sets the new current item in the active special slot
             HUDController.Instance.SetNewSpecialItemIcons();
@@ -639,7 +644,7 @@ public class PlayerController : SingletonPattern<PlayerController>
     {
         inputQueue.Dequeue();
         attackComboState++;
-        Debug.Log("attackComboState is: " + attackComboState);
+        //Debug.Log("attackComboState is: " + attackComboState);
 
         if (attackComboState > 3)
             attackComboState = 1;
@@ -662,7 +667,7 @@ public class PlayerController : SingletonPattern<PlayerController>
                 break;
         }
 
-        currMoveSpeed = baseMoveSpeed.Value * attackMoveSpeedMod; //slows movment while attacking
+        currMoveSpeed = baseMoveSpeed.Value * attackSpeedMod; //slows movment while attacking
     }
 
     //Ends an Attack - called from attack animation event
@@ -721,7 +726,8 @@ public class PlayerController : SingletonPattern<PlayerController>
 
         //Charge input is held down
         chargeArrow.SetActive(true);
-        float arrowScale = chargeArrow.transform.localScale.y;
+        float arrowLength = chargeArrow.transform.localScale.y;
+        float arrowWidth = chargeArrow.transform.localScale.x;
         float chargeSpeed = minChargeSpeed;
         currAttackDamage = baseAttackDamage.Value * minChargeDmgModifier;
 
@@ -733,8 +739,9 @@ public class PlayerController : SingletonPattern<PlayerController>
             chargeSpeed = Mathf.Lerp(minChargeSpeed, maxChargeSpeed, timeElapsed / timeToFullCharge);
             currAttackDamage = Mathf.Lerp(baseAttackDamage.Value * minChargeDmgModifier, baseAttackDamage.Value * chargeDmgModifier.Value, timeElapsed / timeToFullCharge);
 
-            arrowScale = Mathf.Lerp(0.5f, 2.5f, timeElapsed / timeToFullCharge);
-            chargeArrow.transform.localScale = new Vector3(1, arrowScale, 1);
+            arrowLength = Mathf.Lerp(0.5f, 3.5f, timeElapsed / timeToFullCharge);
+            arrowWidth = Mathf.Lerp(0.8f, 1.2f, timeElapsed / timeToFullCharge);
+            chargeArrow.transform.localScale = new Vector3(arrowWidth, arrowLength, arrowWidth);
 
             timeElapsed += Time.deltaTime;
             if (timeElapsed > timeToFullCharge)
@@ -835,19 +842,28 @@ public class PlayerController : SingletonPattern<PlayerController>
 
     IEnumerator RechargeSpecial()
     {
-        while (SpecialCharge < specialCooldownTime.Value && !isItemSwapping)
+        if(!specialIsCharging)
         {
-            SpecialCharge += Time.deltaTime;
-            HUDController.Instance.UpdateSpecialCharge();
-            yield return new WaitForEndOfFrame();
-        }
+            while (SpecialCharge < specialCooldownTime.Value && !isItemSwapping)
+            {
+                specialIsCharging = true;
 
-        if (!isItemSwapping && SpecialCharge >= specialCooldownTime.Value)
-        {
-            canUseSpecial = true;
-            HUDController.Instance.UpdateSpecialCharge();
-        }
-            
+                SpecialCharge += Time.deltaTime;
+                HUDController.Instance.UpdateSpecialCharge();
+
+                if (isItemSwapping)
+                    break;
+
+                yield return new WaitForEndOfFrame();
+            }
+            specialIsCharging = false;
+
+            if (!isItemSwapping && SpecialCharge >= specialCooldownTime.Value)
+            {
+                canUseSpecial = true;
+                HUDController.Instance.UpdateSpecialCharge();
+            }
+        }           
     }
 
     //Starts and Ends using a Potion
@@ -906,6 +922,7 @@ public class PlayerController : SingletonPattern<PlayerController>
                 RunTimer.Instance.IncreaseTimer = false;
                 Time.timeScale = 0;
                 HUDController.Instance.ShowWinScreen();
+                HUDController.Instance.ShowLevelReviewPanel();
             }
             else
             {
@@ -976,6 +993,9 @@ public class PlayerController : SingletonPattern<PlayerController>
                     AnalyticsEvents.Instance.ItemTaken(other.GetComponentInParent<Item>().item.ItemName); //Send Item Taken analytics event
                 else if(LevelManager.Instance.currFloor != 0)
                     AnalyticsEvents.Instance.ItemPurchased(other.GetComponentInParent<Item>().item.ItemName); //Send Item Purchased analytics event
+
+                if (other.GetComponentInParent<Item>().IsSecondItem())
+                    PedestalManager.Instance.secondItemPrice += 2;
 
                 Destroy(other.gameObject); //Destroy the instance of the item in the gamescene
                 pickupItem = false; //Set pickup to false

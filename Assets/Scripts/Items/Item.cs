@@ -11,6 +11,8 @@ public class Item : MonoBehaviour
 
     public GameObject priceCanvas;
 
+    private bool isSecondItem = false;
+
     /// <summary>
     /// AHL - 4/8/21
     /// Equip function to have the item be attached to the player and adjusts their stats by using the StatModifier script
@@ -109,10 +111,8 @@ public class Item : MonoBehaviour
                 {
                     c.hasBagOfHolding = false;
 
-                    if (c.hasBagOfHolding && c.SpecialSlot != null)//if player already has the bag of holding and a special item, show the swap panel
-                        HUDController.Instance.HideSpecialSwapPanel();
-
-                    HUDController.Instance.ShowBagOfHoldingSlot();
+                    HUDController.Instance.HideSpecialSwapPanel();
+                    HUDController.Instance.HideBagOfHoldingSlot();
                 }
 
                 Instantiate(c.PocketSlot1.prefab, transform.position, transform.rotation, transform.parent);
@@ -130,6 +130,9 @@ public class Item : MonoBehaviour
             {
                 c.hasBagOfHolding = true;
                 HUDController.Instance.ShowBagOfHoldingSlot();
+
+                if(c.BagOfHoldingSlot)
+                    HUDController.Instance.ShowSpecialSwapPanel();
             }
         }
 
@@ -488,6 +491,12 @@ public class Item : MonoBehaviour
     {
         price = value;
         itemBase.GetComponent<ItemUI>().SetPriceCanvas();
+        isSecondItem = true;
+    }
+
+    public bool IsSecondItem()
+    {
+        return isSecondItem;
     }
 
 
