@@ -51,8 +51,8 @@ public class MonsterSpawner : SingletonPattern<MonsterSpawner>
     [Range(0,3)] public float timeBetweenSpawns = 0.5f; //How long to wait before allowing another monster to spawn
     [Range(0, 10)] public float disableSpawnerTime = 5f; //How long before a spawner can be used again
     [HideInInspector] public bool floorCleared = false; //Room is cleared of monsters
-    public int gemMonstersToSpawn = 2;
-    public FloorSpawnInfo currFloorInfo;
+    [HideInInspector] public int gemMonstersToSpawn;
+    [HideInInspector] public FloorSpawnInfo currFloorInfo;
 
     //private variables
     private List<SpawnPoint> monsterSpawnPoints = new List<SpawnPoint>();
