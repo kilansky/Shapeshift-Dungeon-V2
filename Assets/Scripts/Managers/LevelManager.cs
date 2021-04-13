@@ -84,6 +84,8 @@ public class LevelManager : SingletonPattern<LevelManager>
         else
             LoadNextLevel(SelectLevelList());
 
+        CineShake.Instance.Shake(1.5f, 2* transitionTime + maxStartTime);
+        AudioManager.Instance.Play("Rumble");
         Transform[] allChildrenCurrLevel = activeLevel.GetComponentsInChildren<Transform>(); //Puts all tiles into an array
         foreach(Transform tile in allChildrenCurrLevel) //Cycles through all tiles in the newly created array
         {

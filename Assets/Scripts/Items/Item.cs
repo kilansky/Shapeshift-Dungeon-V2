@@ -11,6 +11,8 @@ public class Item : MonoBehaviour
 
     public GameObject priceCanvas;
 
+    private bool isSecondItem = false;
+
     /// <summary>
     /// AHL - 4/8/21
     /// Equip function to have the item be attached to the player and adjusts their stats by using the StatModifier script
@@ -32,7 +34,7 @@ public class Item : MonoBehaviour
             if (c.SpecialSlot == null) //If the player doesn't have a special item then equip one
                 c.SpecialSlot = this.item;
 
-            else if(c.hasBagOfHolding == true && c.BagOfHoldingSlot == null) //If the player has a special item and the bag of holding but nothing in the bag of holding then we place the item in the bag
+            else if(c.hasBagOfHolding && !c.BagOfHoldingSlot) //If the player has a special item and the bag of holding but nothing in the bag of holding then we place the item in the bag
             {
                 c.BagOfHoldingSlot = this.item;
             }
@@ -108,6 +110,9 @@ public class Item : MonoBehaviour
                 if (c.PocketSlot1.ItemName == "Bag Of Holding") //Checks if the pocket slot 1 item is the Bag Of Holding item so we can adjust the bool variable in the player controller since we are dropping it
                 {
                     c.hasBagOfHolding = false;
+
+                    HUDController.Instance.HideSpecialSwapPanel();
+                    HUDController.Instance.HideBagOfHoldingSlot();
                 }
 
                 Instantiate(c.PocketSlot1.prefab, transform.position, transform.rotation, transform.parent);
@@ -124,6 +129,10 @@ public class Item : MonoBehaviour
             if (item.ItemName == "Bag Of Holding") //Checks if the item being equipped is the Bag Of Holding itme so we can adjust the bool variable in the player controller
             {
                 c.hasBagOfHolding = true;
+                HUDController.Instance.ShowBagOfHoldingSlot();
+
+                if(c.BagOfHoldingSlot)
+                    HUDController.Instance.ShowSpecialSwapPanel();
             }
         }
 
@@ -346,7 +355,12 @@ public class Item : MonoBehaviour
                     c.specialCooldownTime.AddModifiers(new StatModifier(item.statMods[i].adjustableValue, StatModType.PercentMult, item.prefab));
 
                 if(item.ItemName != "AA Battery")
+                {
                     HUDController.Instance.ShowSpecialItemPanel();
+
+                    if(c.hasBagOfHolding && c.SpecialSlot != null)//if player already has the bag of holding and a special item, show the swap panel
+                        HUDController.Instance.ShowSpecialSwapPanel();
+                }
 
                 Debug.Log("This item " + item.ItemName + " has been equipped so Special Item Recharge Time has been adjusted.");
                 Debug.Log("The new Special Item Recharge Time is " + c.specialCooldownTime.Value);
@@ -477,6 +491,12 @@ public class Item : MonoBehaviour
     {
         price = value;
         itemBase.GetComponent<ItemUI>().SetPriceCanvas();
+        isSecondItem = true;
+    }
+
+    public bool IsSecondItem()
+    {
+        return isSecondItem;
     }
 
 
