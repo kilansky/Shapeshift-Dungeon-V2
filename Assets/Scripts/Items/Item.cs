@@ -109,10 +109,8 @@ public class Item : MonoBehaviour
                 {
                     c.hasBagOfHolding = false;
 
-                    if (c.hasBagOfHolding && c.SpecialSlot != null)//if player already has the bag of holding and a special item, show the swap panel
-                        HUDController.Instance.HideSpecialSwapPanel();
-
-                    HUDController.Instance.ShowBagOfHoldingSlot();
+                    HUDController.Instance.HideSpecialSwapPanel();
+                    HUDController.Instance.HideBagOfHoldingSlot();
                 }
 
                 Instantiate(c.PocketSlot1.prefab, transform.position, transform.rotation, transform.parent);
@@ -130,6 +128,9 @@ public class Item : MonoBehaviour
             {
                 c.hasBagOfHolding = true;
                 HUDController.Instance.ShowBagOfHoldingSlot();
+
+                if(c.BagOfHoldingSlot)
+                    HUDController.Instance.ShowSpecialSwapPanel();
             }
         }
 

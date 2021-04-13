@@ -49,7 +49,7 @@ public class HUDController : SingletonPattern<HUDController>
     public Image speicalItemIcon;
     public GameObject speicalItemIcon2;
     public Image chargeBarFill;
-    public GameObject swapItemPanel;
+    public UIPanel swapItemPanel;
 
     [Header("Equipment Panel")]
     public GameObject equipmentPanel;
@@ -160,6 +160,7 @@ public class HUDController : SingletonPattern<HUDController>
             attackPanel.image.sprite = attackPanel.keyboardButton;
             chargePanel.image.sprite = chargePanel.keyboardButton;
             specialItemPanel.image.sprite = specialItemPanel.keyboardButton;
+            swapItemPanel.image.sprite = swapItemPanel.keyboardButton;
         }
         //Using Controller
         else
@@ -179,6 +180,7 @@ public class HUDController : SingletonPattern<HUDController>
                 attackPanel.image.sprite = attackPanel.psButton;
                 chargePanel.image.sprite = chargePanel.psButton;
                 specialItemPanel.image.sprite = specialItemPanel.psButton;
+                swapItemPanel.image.sprite = swapItemPanel.psButton;
             }
             //Using Xbox Controller
             else
@@ -192,6 +194,7 @@ public class HUDController : SingletonPattern<HUDController>
                 attackPanel.image.sprite = attackPanel.xboxButton;
                 chargePanel.image.sprite = chargePanel.xboxButton;
                 specialItemPanel.image.sprite = specialItemPanel.xboxButton;
+                swapItemPanel.image.sprite = swapItemPanel.xboxButton;
             }
         }
     }
@@ -418,12 +421,12 @@ public class HUDController : SingletonPattern<HUDController>
 
     public void ShowSpecialSwapPanel()
     {
-        swapItemPanel.SetActive(true);
+        swapItemPanel.panel.SetActive(true);
     }
 
     public void HideSpecialSwapPanel()
     {
-        swapItemPanel.SetActive(false);
+        swapItemPanel.panel.SetActive(false);
     }
 
     public void ShowLevelReviewPanel()
