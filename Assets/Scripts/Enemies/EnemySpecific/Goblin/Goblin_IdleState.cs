@@ -19,7 +19,7 @@ public class Goblin_IdleState : IdleState
     public override void Enter()
     {
         base.Enter();
-        Debug.Log("i'm waiting for " + idleTime + " seconds");
+        //Debug.Log("i'm waiting for " + idleTime + " seconds");
     }
 
     public override void Exit()
@@ -34,12 +34,12 @@ public class Goblin_IdleState : IdleState
         //is player in attack range
         if (enemy.CheckPlayerInMinAgroRange())
         {
-            Debug.Log("I see the player");
+            //Debug.Log("I see the player");
             stateMachine.ChangeState(enemy.playerDetectedState);
         }
         else if (isIdleTimeOver) //if player out of attack range, move
         {
-            Debug.Log("Imma move now");
+            //Debug.Log("Imma move now");
             stateMachine.ChangeState(enemy.moveState);
         }
     }

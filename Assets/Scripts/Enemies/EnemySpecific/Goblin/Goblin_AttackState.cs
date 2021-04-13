@@ -45,8 +45,8 @@ public class Goblin_AttackState : AttackState
         }
         else
         {
-            stateMachine.ChangeState(enemy.moveState);
-            //stateMachine.ChangeState(enemy.lookForPlayerState);
+            //stateMachine.ChangeState(enemy.moveState);
+            stateMachine.ChangeState(enemy.lookForPlayerState);
         }
     }
 

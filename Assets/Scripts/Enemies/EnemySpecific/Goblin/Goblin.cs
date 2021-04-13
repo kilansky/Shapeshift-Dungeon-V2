@@ -31,7 +31,9 @@ public class Goblin : EnemyBase
     private D_StunState stunStateData;
 
     //will have a melee range instead of fireball
-    
+    public GameObject FrontTarget;
+    public GameObject SideTarget;
+    public GameObject BackTarget;
 
     public override void Start()
     {
@@ -46,10 +48,10 @@ public class Goblin : EnemyBase
         stunState = new Goblin_StunState(this, stateMachine, "stun", stunStateData, this);
 
         //initialize the goblin in the idle state
-        stateMachine.Initialize(idleState);
+        //stateMachine.Initialize(idleState);
 
         //this line is what got rid of my NullReferenceExceptions
-        //stateMachine.Initialize(moveState);
+        stateMachine.Initialize(moveState);
 
     }
 
@@ -66,5 +68,12 @@ public class Goblin : EnemyBase
         {
             stateMachine.ChangeState(stunState);
         }
+    }
+
+    public override void SetNewTarget(GameObject newTarget)
+    {
+        //this will be used for the dummy item
+        target = newTarget.transform;
+
     }
 }

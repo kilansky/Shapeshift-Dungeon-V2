@@ -25,10 +25,10 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     public float dmgInvincibilityTime = 0.5f;
     public float sightRange = 20f;
-    public float minAttackRange = 15f;
+    public float minAttackRange;
     //public float maxAttackRange = 20f;
     public float timeBetweenAttacks = 3f;
-    public float minAgroRange = 10f;
+    public float minAgroRange;
     public GameObject deathEffect;
     public GameObject gemPrefab;
 
@@ -64,7 +64,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
     #region Private Variables
     private float currentStunResistance;
     private float lastTimeAttacked;
-    private Transform target;
+    
     private Vector3 velocityWorkspace;
     
     //private bool isAttacking = false;
@@ -73,6 +73,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
     #endregion
 
     #region Protected Variables nothing in here atm
+    protected Transform target;
     //protected bool canAttack = true;
     //protected bool isPlayerInMinAgroRange;
     //protected bool isPlayerInMinAttackRange;
@@ -301,7 +302,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
     }
 
     //Change the target object for the enemy to move to
-    public void SetNewTarget(GameObject newTarget)
+    public virtual void SetNewTarget(GameObject newTarget)
     {
         //this will be used for the dummy item
         target = newTarget.transform;

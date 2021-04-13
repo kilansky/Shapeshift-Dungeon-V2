@@ -35,6 +35,9 @@ public class Goblin_LookForPlayer : LookForPlayerState
         {
             //TODO: double check logic here
             stateMachine.ChangeState(enemy.playerDetectedState);
+        }else if (!isPlayerInMinAgroRange)
+        {
+            stateMachine.ChangeState(enemy.moveState);
         }
     }
 
