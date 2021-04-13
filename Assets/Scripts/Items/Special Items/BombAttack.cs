@@ -10,6 +10,7 @@ public class BombAttack : MonoBehaviour
     public float destroyTime; //This is the time that it will take before the bomb gets destroyed
     public float explosionTime; //Variable to keep track of how long it takes to explode after the destroy time goes off
     public float explosionRadius; //The radius of the overall explosion/bomb
+    public GameObject explosionEffect;
     private bool isDamage = false; //Bool to keep track of if the bomb went off and what would take damage
 
     //Called before the first frame to start the IEnumerator so the bomb goes off at the specified time
@@ -38,8 +39,7 @@ public class BombAttack : MonoBehaviour
                     AnalyticsEvents.Instance.PlayerDamaged("Bomb"); //Sends analytics event about damage source
 
                 PlayerHealth.Instance.Damage(damage, gameObject);
-            }
-                
+            }             
         }
     }
 
@@ -54,6 +54,12 @@ public class BombAttack : MonoBehaviour
 
         yield return new WaitForSeconds(destroyTime); //Wait until it is time to destroy the bomb to grow the explosion radius (It go boom now)
 
+        //Spawn explosion vfx
+        Instantiate(explosionEffect, transform.position, Quaternion.identity);
+
+        //Sets it to damage the player
+        isDamage = true;
+
         //While loop to lerp the scale of the explosion hitbox
         while (timer <= 1)
         {
@@ -61,19 +67,8 @@ public class BombAttack : MonoBehaviour
             timer += Time.deltaTime / explosionTime;
             yield return null;
         }
-
         //Makes sure the hitbox scale is set to the final scale
         transform.localScale = finalScale;
-
-        isDamage = true; //Sets it to damage the player
-
-        GetComponentInParent<VisualEffect>().Play(); //Plays the Explosion Effect
-
-        yield return new WaitForSeconds(0.1f); //Waits a little bit to deal appropriate damage and to get the effect playing
-
-        isDamage = false; //Turns off the damage so the player doesn't get hit more then once, same for all other enemies.
-
-        yield return new WaitForSeconds(0.2f); //Waits a little bit more to finish the effect that is playing
 
         Destroy(transform.root.gameObject); //Destroys the bomb parent object
     }

@@ -47,7 +47,9 @@ public class HUDController : SingletonPattern<HUDController>
     [Header("Special Item Panel")]
     public UIPanel specialItemPanel;
     public Image speicalItemIcon;
+    public GameObject speicalItemIcon2;
     public Image chargeBarFill;
+    public GameObject swapItemPanel;
 
     [Header("Equipment Panel")]
     public GameObject equipmentPanel;
@@ -386,12 +388,42 @@ public class HUDController : SingletonPattern<HUDController>
         specialItemPanel.panel.SetActive(true);
         speicalItemIcon.sprite = PlayerController.Instance.SpecialSlot.sprite;
         PlayerController.Instance.SpecialCharge = PlayerController.Instance.specialCooldownTime.Value;
+
+        if(PlayerController.Instance.hasBagOfHolding)
+            speicalItemIcon2.GetComponent<Image>().sprite = PlayerController.Instance.BagOfHoldingSlot.sprite;
+
         UpdateSpecialCharge();
     }
 
     public void HideSpecialItemPanel()
     {
         specialItemPanel.panel.SetActive(false);
+    }
+
+    public void ShowBagOfHoldingSlot()
+    {
+        speicalItemIcon2.SetActive(true);
+    }
+
+    public void HideBagOfHoldingSlot()
+    {
+        speicalItemIcon2.SetActive(false);
+    }
+
+    public void SetNewSpecialItemIcons()
+    {
+        speicalItemIcon.sprite = PlayerController.Instance.SpecialSlot.sprite;
+        speicalItemIcon2.GetComponent<Image>().sprite = PlayerController.Instance.BagOfHoldingSlot.sprite;
+    }
+
+    public void ShowSpecialSwapPanel()
+    {
+        swapItemPanel.SetActive(true);
+    }
+
+    public void HideSpecialSwapPanel()
+    {
+        swapItemPanel.SetActive(false);
     }
 
     public void ShowLevelReviewPanel()

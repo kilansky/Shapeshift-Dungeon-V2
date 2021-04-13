@@ -108,6 +108,11 @@ public class Item : MonoBehaviour
                 if (c.PocketSlot1.ItemName == "Bag Of Holding") //Checks if the pocket slot 1 item is the Bag Of Holding item so we can adjust the bool variable in the player controller since we are dropping it
                 {
                     c.hasBagOfHolding = false;
+
+                    if (c.hasBagOfHolding && c.SpecialSlot != null)//if player already has the bag of holding and a special item, show the swap panel
+                        HUDController.Instance.HideSpecialSwapPanel();
+
+                    HUDController.Instance.ShowBagOfHoldingSlot();
                 }
 
                 Instantiate(c.PocketSlot1.prefab, transform.position, transform.rotation, transform.parent);
@@ -124,6 +129,7 @@ public class Item : MonoBehaviour
             if (item.ItemName == "Bag Of Holding") //Checks if the item being equipped is the Bag Of Holding itme so we can adjust the bool variable in the player controller
             {
                 c.hasBagOfHolding = true;
+                HUDController.Instance.ShowBagOfHoldingSlot();
             }
         }
 
@@ -346,7 +352,12 @@ public class Item : MonoBehaviour
                     c.specialCooldownTime.AddModifiers(new StatModifier(item.statMods[i].adjustableValue, StatModType.PercentMult, item.prefab));
 
                 if(item.ItemName != "AA Battery")
+                {
                     HUDController.Instance.ShowSpecialItemPanel();
+
+                    if(c.hasBagOfHolding && c.SpecialSlot != null)//if player already has the bag of holding and a special item, show the swap panel
+                        HUDController.Instance.ShowSpecialSwapPanel();
+                }
 
                 Debug.Log("This item " + item.ItemName + " has been equipped so Special Item Recharge Time has been adjusted.");
                 Debug.Log("The new Special Item Recharge Time is " + c.specialCooldownTime.Value);
