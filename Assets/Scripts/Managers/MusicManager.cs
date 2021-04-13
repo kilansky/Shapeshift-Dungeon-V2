@@ -14,6 +14,7 @@ public class MusicManager : SingletonPattern<MusicManager>
     public AudioClip floorCleared2;
     public AudioClip floorCleared3;
     public AudioClip shop;
+    public float volume = 0.6f;
 
     private AudioSource ac;
 
@@ -23,52 +24,60 @@ public class MusicManager : SingletonPattern<MusicManager>
         FloorCleared1();
     }
 
+    [ContextMenu("StartMenu")]
     public void StartMenu()
     {
         STOP();
-        ac.PlayOneShot(startMenu);
+        ac.PlayOneShot(startMenu, volume);
     }
 
+    [ContextMenu("Combat1")]
     public void Combat1()
     {
         STOP();
-        ac.PlayOneShot(combat1);
+        ac.PlayOneShot(combat1, volume);
     }
 
+    [ContextMenu("Combat2")]
     public void Combat2()
     {
         STOP();
-        ac.PlayOneShot(combat2);
+        ac.PlayOneShot(combat2, volume);
     }
 
+    [ContextMenu("Combat3")]
     public void Combat3()
     {
         STOP();
-        ac.PlayOneShot(combat3);
+        ac.PlayOneShot(combat3, volume);
     }
 
+    [ContextMenu("FloorCleared1")]
     public void FloorCleared1()
     {
         STOP();
-        ac.PlayOneShot(floorCleared1);
+        ac.PlayOneShot(floorCleared1, volume);
     }
 
+    [ContextMenu("FloorCleared2")]
     public void FloorCleared2()
     {
         STOP();
-        ac.PlayOneShot(floorCleared2);
+        ac.PlayOneShot(floorCleared2, volume);
     }
 
+    [ContextMenu("FloorCleared3")]
     public void FloorCleared3()
     {
         STOP();
-        ac.PlayOneShot(floorCleared3);
+        ac.PlayOneShot(floorCleared3, volume);
     }
 
+    [ContextMenu("Shop")]
     public void Shop()
     {
         STOP();
-        ac.PlayOneShot(shop);
+        ac.PlayOneShot(shop, volume);
     }
 
     public void STOP()
