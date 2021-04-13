@@ -16,7 +16,6 @@ public class BombAttack : MonoBehaviour
     //Called before the first frame to start the IEnumerator so the bomb goes off at the specified time
     private void Awake()
     {
-        GetComponentInParent<VisualEffect>().Stop();
         StartCoroutine(BombTimer());
     }
 

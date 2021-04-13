@@ -389,7 +389,7 @@ public class HUDController : SingletonPattern<HUDController>
         speicalItemIcon.sprite = PlayerController.Instance.SpecialSlot.sprite;
         PlayerController.Instance.SpecialCharge = PlayerController.Instance.specialCooldownTime.Value;
 
-        if(PlayerController.Instance.hasBagOfHolding)
+        if(PlayerController.Instance.hasBagOfHolding && PlayerController.Instance.BagOfHoldingSlot)
             speicalItemIcon2.GetComponent<Image>().sprite = PlayerController.Instance.BagOfHoldingSlot.sprite;
 
         UpdateSpecialCharge();
