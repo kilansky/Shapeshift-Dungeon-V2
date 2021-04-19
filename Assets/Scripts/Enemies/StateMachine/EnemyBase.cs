@@ -17,6 +17,13 @@ public class EnemyBase : MonoBehaviour, IDamageable
     public GameObject aliveGO;
     public GameObject player;
     public float health;
+    
+    //public Renderer renderer;
+    //public SkinnedMeshRenderer renderer;
+
+    public Material hitMat;
+    public Material normalMat;
+    
     //public GameObject firePoint;
 
     public Slider healthBar;
@@ -31,6 +38,8 @@ public class EnemyBase : MonoBehaviour, IDamageable
     public float minAgroRange;
     public GameObject deathEffect;
     public GameObject gemPrefab;
+
+    
 
     [HideInInspector] public float distanceToPlayer;
     [HideInInspector] public NavMeshAgent agent;
@@ -188,7 +197,6 @@ public class EnemyBase : MonoBehaviour, IDamageable
             return true;
         else
             return false;
-        //return Physics.CheckSphere(playerCheck.position, minAgroRange, entityData.whatIsPlayer);
     }
 
     /*public virtual bool CheckPlayerInMaxAgroRange()
@@ -206,7 +214,6 @@ public class EnemyBase : MonoBehaviour, IDamageable
             return true;
         else
             return false;
-        //return Physics.CheckSphere(playerCheck.position, minAttackRange, entityData.whatIsPlayer);
     }
 
     /*public virtual bool CheckInSightRange()
@@ -244,13 +251,18 @@ public class EnemyBase : MonoBehaviour, IDamageable
         //subtract the players damage from the enemies stun resistance
         currentStunResistance -= damage;
 
+        Flash();
+        //renderer.material.color = Color.Lerp(Color.red,Color.white, 1f);
+        //hitColor = Color.Lerp(Color.red, Color.white, Time.time);
+
+
         if (!isInvincible)
         {
             //enemy takes damage from the player
             Health -= damage;
             UpdateUI();
 
-            Debug.Log("Enemy Took Damage");
+            //Debug.Log("Enemy Took Damage");
 
             if (Health <= 0)
                 Kill();
@@ -266,6 +278,19 @@ public class EnemyBase : MonoBehaviour, IDamageable
             //prevent from taking damage temporarily
             StartCoroutine(InvincibilityFrames());
         }
+    }
+
+    public virtual void Flash()
+    {
+        //sets enemy's color to the hitMat (red)
+        //renderer.material = hitMat;
+        StartCoroutine(WaitToResetColor());
+
+    }
+
+    public virtual void ResetColor()
+    {
+
     }
 
     public virtual void Heal(float heal)
@@ -355,6 +380,15 @@ public class EnemyBase : MonoBehaviour, IDamageable
         yield return new WaitForSeconds(dmgInvincibilityTime);
         isInvincible = false;
     }
+
+    public IEnumerator WaitToResetColor()
+    {
+        //reset enemy's color to normalMat
+        yield return new WaitForSeconds(dmgInvincibilityTime);
+        //renderer.material = normalMat;
+        ResetColor();
+    }
+
 
     public void OnDrawGizmos()
     {

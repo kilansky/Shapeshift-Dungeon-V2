@@ -16,7 +16,6 @@ public class Goblin : EnemyBase
     public Goblin_LookForPlayer lookForPlayerState { get; private set; }
     public Goblin_StunState stunState { get; private set; }
 
-
     [SerializeField]
     private D_IdleState idleStateData;
     [SerializeField]
@@ -31,9 +30,16 @@ public class Goblin : EnemyBase
     private D_StunState stunStateData;
 
     //will have a melee range instead of fireball
+    public float AttackDamage { get { return attackDamage; } }
+
     public GameObject FrontTarget;
     public GameObject SideTarget;
     public GameObject BackTarget;
+
+    public SkinnedMeshRenderer renderer;
+
+    private float attackDamage;
+
 
     public override void Start()
     {
@@ -49,7 +55,7 @@ public class Goblin : EnemyBase
 
         //initialize the goblin in the idle state
         //stateMachine.Initialize(idleState);
-
+        Debug.Log("my color is " + renderer.material.color);
         //this line is what got rid of my NullReferenceExceptions
         stateMachine.Initialize(moveState);
 
@@ -59,7 +65,7 @@ public class Goblin : EnemyBase
     public override void Damage(float damage)
     {
         base.Damage(damage);
-
+        Flash();
         /*if (isDead)
         {
             stateMachine.ChangeState(deadState);
@@ -74,6 +80,32 @@ public class Goblin : EnemyBase
     {
         //this will be used for the dummy item
         target = newTarget.transform;
+
+    }
+
+    public bool HaveLineOfSight()
+    {
+        RaycastHit sightHit;
+
+        //vector3 drawn from the goblin to the player
+        Vector3 direction = player.transform.position - transform.position;
+        //Debug.DrawRay(transform.position, direction, Color.red);
+        if(Physics.Raycast(transform.position, direction, out sightHit/*, may need distance var here*/))
+        {
+            //if we see our target gameObject, draw the line
+            //if(sightHit.transform.gameObject.name.Equals.BackTarget)
+                //Debug.DrawRay(transform.position, direction, Color.red);
+        }
+
+
+        return false;
+    }
+
+    public override void Flash()
+    {
+        //sets enemy's color to the hitMat (red)
+        renderer.material = hitMat;
+        StartCoroutine(WaitToResetColor());
 
     }
 }

@@ -33,7 +33,7 @@ public class FloatingCrystal : EnemyBase
     public Transform firePointFront;
     public Transform firePointBack;
     //public Transform target;
-
+    public MeshRenderer renderer;
     //public GameObject laser;
     //public GameObject laserSpawnPoint;
     //public GameObject crystal;
@@ -83,16 +83,25 @@ public class FloatingCrystal : EnemyBase
         Debug.Log("Floating Crytal Damage called");
         base.Damage(damage);
 
-        /*if (isDead)
-        {
-            stateMachine.ChangeState(deadState);
-        }*/
         if (isStunned && stateMachine.currentState != stunState)
         {
             stateMachine.ChangeState(stunState);
         }
     }
 
+    public override void Flash()
+    {
+        //sets enemy's color to the hitMat (red)
+        renderer.material = hitMat;
+        StartCoroutine(WaitToResetColor());
+
+    }
+
+    public override void ResetColor()
+    {
+        base.ResetColor();
+        renderer.material = normalMat;
+    }
 
     /*public virtual bool HaveLineOfSight()
     {

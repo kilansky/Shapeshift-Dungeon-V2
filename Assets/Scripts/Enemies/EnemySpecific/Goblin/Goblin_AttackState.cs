@@ -58,7 +58,7 @@ public class Goblin_AttackState : AttackState
     public override void TriggerAttack()
     {
         base.TriggerAttack();
-        Debug.Log("he triggering the attack rn");
+        //Debug.Log("he triggering the attack rn");
         enemy.Anim.SetBool("isAttacking", true);
         //hit the player
         //meleeHitBox.GetComponent<MeshCollider>().enabled = true;

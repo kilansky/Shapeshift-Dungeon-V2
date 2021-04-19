@@ -23,8 +23,8 @@ public class Goblin_MoveState : MoveState
     public override void Enter()
     {
         base.Enter();
-        Debug.Log("oh he movin");
-        Debug.Log("num is equal to " + num);
+        //Debug.Log("oh he movin");
+        //Debug.Log("num is equal to " + num);
 
         entity.SetVelocity(stateData.moveSpeed);
     }
@@ -45,7 +45,7 @@ public class Goblin_MoveState : MoveState
         }
         if (enemy.CheckPlayerInMinAttackRange())
         {
-            Debug.Log("I'm swingin!!");
+            //Debug.Log("I'm attacking!!");
             stateMachine.ChangeState(enemy.attackState);
         }
         
@@ -63,22 +63,26 @@ public class Goblin_MoveState : MoveState
             //attack back
             enemy.SetNewTarget(enemy.BackTarget);
             entity.SetDestination();
-            Debug.Log("I'm gonna backstab you");
-        }else if (num > 5 || num < 9)
+            enemy.HaveLineOfSight();
+            //Debug.Log("I'm going to backstab the player");
+        }else if (num >= 6 || num < 9)
         {
             //attack sides
             enemy.SetNewTarget(enemy.SideTarget);
             entity.SetDestination();
-            Debug.Log("Imma attack from the side");
-        }else if (num > 8)
+            enemy.HaveLineOfSight();
+            //Debug.Log("I'm attacking from the side");
+        }else if (num >= 9)
         {
             //attack front
             enemy.SetNewTarget(enemy.FrontTarget);
             entity.SetDestination();
-            Debug.Log("I'm going straight at the player");
+            enemy.HaveLineOfSight();
+            //Debug.Log("I'm going straight at the player");
         }
         //set destination to the player, look check should go here
         //entity.SetDestination();
-
     }
+
+    
 }
