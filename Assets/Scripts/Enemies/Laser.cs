@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.VFX;
 using UnityEngine;
 
 public class Laser : MonoBehaviour
@@ -19,10 +20,12 @@ public class Laser : MonoBehaviour
 
     [Header("Misc")]
     public GameObject laser;
+    public GameObject hitEffects;
     public LayerMask mask;
 
     private LineRenderer beam;
     private CapsuleCollider capsuleCollider;
+    private VisualEffect visuals;
 
     [HideInInspector] public GameObject parentObject; //Variable to hold the parent Object to make sure the Damage Tracker is able to track the damage correctly
 
@@ -30,6 +33,8 @@ public class Laser : MonoBehaviour
     {
         beam = laser.gameObject.GetComponent<LineRenderer>();
         capsuleCollider = GetComponent<CapsuleCollider>();
+        visuals = hitEffects.GetComponent<VisualEffect>();
+        StartCoroutine(VFXPlayCycle());
     }
 
     private void FixedUpdate()
@@ -64,6 +69,7 @@ public class Laser : MonoBehaviour
         beam.SetPosition(1, new Vector3(0, 0, legnth));
         capsuleCollider.center = Vector3.forward * legnth / 2;
         capsuleCollider.height = legnth;
+        hitEffects.transform.localPosition = new Vector3(0, 0, legnth);
     }
 
     /// <summary>
@@ -90,6 +96,13 @@ public class Laser : MonoBehaviour
             PlayerHealth.Instance.Damage(damage, parentObject);
             yield return new WaitForSeconds(tickRate);
         }
+    }
+
+    private IEnumerator VFXPlayCycle()
+    {
+        visuals.Play();
+        yield return new WaitForSeconds(.15f);
+        StartCoroutine(VFXPlayCycle());
     }
 
     /// <summary>
