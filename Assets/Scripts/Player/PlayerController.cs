@@ -502,10 +502,15 @@ public class PlayerController : SingletonPattern<PlayerController>
             TemporarySlot = null;
 
             //Swaps the charge values
-            if(specialCharge2 != 0)
+            if (specialCharge2 != 0)
                 SpecialCharge = specialCharge2;
-            
+
+            else if(specialCharge2 == 0 && SpecialSlot.ItemName == "Kapala")
+                SpecialCharge = 0;
+
             specialCharge2 = tempSpecial;
+
+            canUseSpecial = false;
 
             //Adjusts the bool to make sure things work as inteded after this process
             isItemSwapping = false;
@@ -790,77 +795,101 @@ public class PlayerController : SingletonPattern<PlayerController>
         //If there is an item in the special slot then we trigger the specific program assigned to the item
         if (SpecialSlot != null)
         {
-            //IF statement chain to see what special item is currently being used
-
-            //Bowling Ball Item
-            if (SpecialSlot.ItemName == "Bowling Ball")
+            //If the item is the Kapala then we check for healing properties
+            //Kapala Item
+            if (SpecialSlot.ItemName == "Kapala")
             {
-                Vector3 spawnDirection = transform.forward;
-                Quaternion spawnRotation = lastTargetRotation;
-
-                if (IsUsingMouse)//Spawn in direction of mouse pointer if using a mouse
+                //Checks to make sure that the player needs to heal
+                if (PlayerHealth.Instance.Health < PlayerHealth.Instance.maxHealth)
                 {
-                    spawnDirection = new Vector3(mouseTargetPoint.position.x, 0, mouseTargetPoint.position.z) - new Vector3(transform.position.x, 0, transform.position.z);
-                    spawnDirection = spawnDirection.normalized /2;
-
-                    spawnRotation = Quaternion.LookRotation(spawnDirection);
+                    //Heals the player for 5 HP then sets the special charge to 0 **This is based on the Kapala item on the GDD** - AHL (4/20/21)
+                    PlayerHealth.Instance.Heal(5);
+                    SpecialCharge = 0;
+                    HUDController.Instance.UpdateSpecialCharge();
                 }
 
-                SpecialSlot.prefab.GetComponent<BowlingBall>().spawnBowlingBall(transform.position + new Vector3(0, 0.35f, 0), spawnDirection, spawnRotation);
+                else
+                    canUseSpecial = true;
+
             }
 
-            //Bomb Item
-            else if (SpecialSlot.ItemName == "Bomb Bag")
-                SpecialSlot.prefab.GetComponent<BombBag>().spawnBomb(transform.position, transform.rotation);
 
-            //Fire Wand Item
-            else if (SpecialSlot.ItemName == "Fire Wand")
+
+            //Else - Not the Kapala so we go through the rest of the special items like normal
+            else
             {
-                Vector3 spawnDirection = transform.forward;
-                Quaternion spawnRotation = lastTargetRotation;
+                //IF statement chain to see what special item is currently being used
 
-                if (IsUsingMouse)//Spawn in direction of mouse pointer if using a mouse
+                //Bowling Ball Item
+                if (SpecialSlot.ItemName == "Bowling Ball")
                 {
-                    spawnDirection = new Vector3(mouseTargetPoint.position.x, 0, mouseTargetPoint.position.z) - new Vector3(transform.position.x, 0, transform.position.z);
-                    spawnDirection = spawnDirection.normalized / 2;
+                    Vector3 spawnDirection = transform.forward;
+                    Quaternion spawnRotation = lastTargetRotation;
 
-                    spawnRotation = Quaternion.LookRotation(spawnDirection);
+                    if (IsUsingMouse)//Spawn in direction of mouse pointer if using a mouse
+                    {
+                        spawnDirection = new Vector3(mouseTargetPoint.position.x, 0, mouseTargetPoint.position.z) - new Vector3(transform.position.x, 0, transform.position.z);
+                        spawnDirection = spawnDirection.normalized / 2;
+
+                        spawnRotation = Quaternion.LookRotation(spawnDirection);
+                    }
+
+                    SpecialSlot.prefab.GetComponent<BowlingBall>().spawnBowlingBall(transform.position + new Vector3(0, 0.35f, 0), spawnDirection, spawnRotation);
                 }
 
-                SpecialSlot.prefab.GetComponent<FireWand>().spawnFireBall(transform.position, spawnDirection, spawnRotation);
-            }
+                //Bomb Item
+                else if (SpecialSlot.ItemName == "Bomb Bag")
+                    SpecialSlot.prefab.GetComponent<BombBag>().spawnBomb(transform.position, transform.rotation);
 
-            //Lazer Wand Item
-            else if (SpecialSlot.ItemName == "Laser Wand")
-            {
-                Vector3 spawnDirection = transform.forward;
-                Quaternion spawnRotation = lastTargetRotation;
-
-                if (IsUsingMouse)//Spawn in direction of mouse pointer if using a mouse
+                //Fire Wand Item
+                else if (SpecialSlot.ItemName == "Fire Wand")
                 {
-                    spawnDirection = new Vector3(mouseTargetPoint.position.x, 0, mouseTargetPoint.position.z) - new Vector3(transform.position.x, 0, transform.position.z);
-                    spawnDirection = spawnDirection.normalized / 2;
+                    Vector3 spawnDirection = transform.forward;
+                    Quaternion spawnRotation = lastTargetRotation;
 
-                    spawnRotation = Quaternion.LookRotation(spawnDirection);
+                    if (IsUsingMouse)//Spawn in direction of mouse pointer if using a mouse
+                    {
+                        spawnDirection = new Vector3(mouseTargetPoint.position.x, 0, mouseTargetPoint.position.z) - new Vector3(transform.position.x, 0, transform.position.z);
+                        spawnDirection = spawnDirection.normalized / 2;
+
+                        spawnRotation = Quaternion.LookRotation(spawnDirection);
+                    }
+
+                    SpecialSlot.prefab.GetComponent<FireWand>().spawnFireBall(transform.position, spawnDirection, spawnRotation);
                 }
 
-                SpecialSlot.prefab.GetComponent<LazerWand>().spawnLazer(transform.position, spawnDirection, spawnRotation);
+                //Lazer Wand Item
+                else if (SpecialSlot.ItemName == "Laser Wand")
+                {
+                    Vector3 spawnDirection = transform.forward;
+                    Quaternion spawnRotation = lastTargetRotation;
+
+                    if (IsUsingMouse)//Spawn in direction of mouse pointer if using a mouse
+                    {
+                        spawnDirection = new Vector3(mouseTargetPoint.position.x, 0, mouseTargetPoint.position.z) - new Vector3(transform.position.x, 0, transform.position.z);
+                        spawnDirection = spawnDirection.normalized / 2;
+
+                        spawnRotation = Quaternion.LookRotation(spawnDirection);
+                    }
+
+                    SpecialSlot.prefab.GetComponent<LazerWand>().spawnLazer(transform.position, spawnDirection, spawnRotation);
+                }
+
+                SpecialCharge = 0; //Resets the Special Charge
+                StartCoroutine(RechargeSpecial());
             }
         }
 
-        SpecialCharge = 0;
-
-        yield return new WaitForSeconds(useSpecialTime);
         isUsingSpecial = false;
-
-        StartCoroutine(RechargeSpecial());
+        yield return new WaitForSeconds(useSpecialTime);
     }
 
     IEnumerator RechargeSpecial()
     {
+        //The special only recharges if the current special item isn't the Kapala
         if(!specialIsCharging)
         {
-            while (SpecialCharge < specialCooldownTime.Value && !isItemSwapping)
+            while (SpecialCharge < specialCooldownTime.Value && !isItemSwapping && SpecialSlot.ItemName != "Kapala")
             {
                 specialIsCharging = true;
 
@@ -880,6 +909,24 @@ public class PlayerController : SingletonPattern<PlayerController>
                 HUDController.Instance.UpdateSpecialCharge();
             }
         }           
+    }
+
+    /// <summary>
+    /// Function to be called by EnemyBase to recharge the Special Charge only if the Kapala is equipped - AHL (4/20/21)
+    /// </summary>
+    public void KapalaSpecialRecharge()
+    {
+        //The special only recharges if the current special item is the Kapala
+        if (SpecialSlot.ItemName == "Kapala")
+        {
+            if (SpecialCharge < specialCooldownTime.Value && !isItemSwapping)
+                SpecialCharge++; //Adds 1 to the special charge since this is when an enemy dies
+
+            if (!isItemSwapping && SpecialCharge >= specialCooldownTime.Value)
+                canUseSpecial = true;
+
+            HUDController.Instance.UpdateSpecialCharge();
+        }
     }
 
     //Starts and Ends using a Potion
