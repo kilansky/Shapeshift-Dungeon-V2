@@ -5,7 +5,7 @@ using UnityEngine;
 public class FireWand : MonoBehaviour
 {
     //Variable Initialization/Declaration
-    public GameObject PlayerFireBall; //Sets the bowling ball ItemEquipment so we can get the prefab for the actual attack 
+    public GameObject PlayerFireBall; //Sets the Firewand ItemEquipment so we can get the prefab for the actual attack 
 
     /// <summary>
     /// Function to get have the fire ball spawn and begin moving in the direction that the player is facing - AHL (3/29/21)

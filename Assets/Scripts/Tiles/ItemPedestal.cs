@@ -24,6 +24,12 @@ public class ItemPedestal : MonoBehaviour
         if (isRandomSpecial)
         {
             item = Instantiate(ItemPool.Instance.randomSpecialSpawn().prefab, transform.position + new Vector3(0, 7.2f, 0), transform.rotation, transform);
+
+            GameObject itemBase = item.transform.GetChild(0).gameObject;
+            foreach (Transform canvas in itemBase.transform)
+            {
+                canvas.gameObject.layer = 16;//Set world GUI layer on each child
+            }
         }
     }
 
