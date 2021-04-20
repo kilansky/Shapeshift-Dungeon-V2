@@ -506,7 +506,7 @@ public class PlayerController : SingletonPattern<PlayerController>
                 SpecialCharge = specialCharge2;
 
             //Checks if the Kapala was the other item in the bag of holding and if it had a 0 value then we just keep it 0 in the special item slot
-            else if(specialCharge2 == 0 && SpecialSlot.ItemName == "Kapala")
+            else if (specialCharge2 == 0 && SpecialSlot.ItemName == "Kapala")
                 SpecialCharge = 0;
 
             specialCharge2 = tempSpecial;
