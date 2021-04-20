@@ -505,6 +505,7 @@ public class PlayerController : SingletonPattern<PlayerController>
             if (specialCharge2 != 0)
                 SpecialCharge = specialCharge2;
 
+            //Checks if the Kapala was the other item in the bag of holding and if it had a 0 value then we just keep it 0 in the special item slot
             else if(specialCharge2 == 0 && SpecialSlot.ItemName == "Kapala")
                 SpecialCharge = 0;
 
@@ -809,7 +810,7 @@ public class PlayerController : SingletonPattern<PlayerController>
                 }
 
                 else
-                    canUseSpecial = true;
+                    canUseSpecial = true; //Needs this or else it will get stuck in an infinite loop
 
             }
 
@@ -889,6 +890,7 @@ public class PlayerController : SingletonPattern<PlayerController>
         //The special only recharges if the current special item isn't the Kapala
         if(!specialIsCharging)
         {
+            //While loop to check about the Kapala because if not then it will recharge using the time variables
             while (SpecialCharge < specialCooldownTime.Value && !isItemSwapping && SpecialSlot.ItemName != "Kapala")
             {
                 specialIsCharging = true;
@@ -901,6 +903,7 @@ public class PlayerController : SingletonPattern<PlayerController>
 
                 yield return new WaitForEndOfFrame();
             }
+
             specialIsCharging = false;
 
             if (!isItemSwapping && SpecialCharge >= specialCooldownTime.Value)
