@@ -34,6 +34,9 @@ public class FloatingSkull : EnemyBase
     public GameObject fireball;
     public float chargeRate = 1f;
 
+    public SkinnedMeshRenderer renderSkull;
+    public SkinnedMeshRenderer renderJaw;
+
     public override void Start()
     {
         SetNewTarget(player);
@@ -56,13 +59,26 @@ public class FloatingSkull : EnemyBase
     {
         base.Damage(damage);
 
-        /*if (isDead)
-        {
-            stateMachine.ChangeState(deadState);
-        }*/
         if (isStunned && stateMachine.currentState != stunState)
         {
             stateMachine.ChangeState(stunState);
         }
+    }
+
+    public override void Flash()
+    {
+        base.Flash();
+        //sets enemy's color to the hitMat (red)
+        renderSkull.material = hitMat;
+        renderJaw.material = hitMat;
+        StartCoroutine(WaitToResetColor());
+
+    }
+
+    public override void ResetColor()
+    {
+        base.ResetColor();
+        renderSkull.material = normalMat;
+        renderJaw.material = normalMat;
     }
 }

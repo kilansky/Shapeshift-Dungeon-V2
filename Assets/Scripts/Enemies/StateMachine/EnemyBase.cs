@@ -17,11 +17,14 @@ public class EnemyBase : MonoBehaviour, IDamageable
     public GameObject aliveGO;
     public GameObject player;
     public float health;
-    //public GameObject firePoint;
+    
+    //public Renderer renderer;
+    //public SkinnedMeshRenderer renderer;
 
-    //may need to change this
-    //was firePoint, moved to Floating Skull script
-    //public GameObject shootPoint;
+    public Material hitMat;
+    public Material normalMat;
+    
+    //public GameObject firePoint;
 
     public Slider healthBar;
     public D_Entity entityData;
@@ -29,12 +32,14 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     public float dmgInvincibilityTime = 0.5f;
     public float sightRange = 20f;
-    public float minAttackRange = 15f;
+    public float minAttackRange;
     //public float maxAttackRange = 20f;
     public float timeBetweenAttacks = 3f;
-    public float minAgroRange = 10f;
+    public float minAgroRange;
     public GameObject deathEffect;
     public GameObject gemPrefab;
+
+    
 
     [HideInInspector] public float distanceToPlayer;
     [HideInInspector] public NavMeshAgent agent;
@@ -68,7 +73,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
     #region Private Variables
     private float currentStunResistance;
     private float lastTimeAttacked;
-    private Transform target;
+    
     private Vector3 velocityWorkspace;
     
     //private bool isAttacking = false;
@@ -77,6 +82,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
     #endregion
 
     #region Protected Variables nothing in here atm
+    protected Transform target;
     //protected bool canAttack = true;
     //protected bool isPlayerInMinAgroRange;
     //protected bool isPlayerInMinAttackRange;
@@ -191,7 +197,6 @@ public class EnemyBase : MonoBehaviour, IDamageable
             return true;
         else
             return false;
-        //return Physics.CheckSphere(playerCheck.position, minAgroRange, entityData.whatIsPlayer);
     }
 
     /*public virtual bool CheckPlayerInMaxAgroRange()
@@ -209,7 +214,6 @@ public class EnemyBase : MonoBehaviour, IDamageable
             return true;
         else
             return false;
-        //return Physics.CheckSphere(playerCheck.position, minAttackRange, entityData.whatIsPlayer);
     }
 
     /*public virtual bool CheckInSightRange()
@@ -247,13 +251,18 @@ public class EnemyBase : MonoBehaviour, IDamageable
         //subtract the players damage from the enemies stun resistance
         currentStunResistance -= damage;
 
+        Flash();
+        //renderer.material.color = Color.Lerp(Color.red,Color.white, 1f);
+        //hitColor = Color.Lerp(Color.red, Color.white, Time.time);
+
+
         if (!isInvincible)
         {
             //enemy takes damage from the player
             Health -= damage;
             UpdateUI();
 
-            Debug.Log("Enemy Took Damage");
+            //Debug.Log("Enemy Took Damage");
 
             //When the enemy takes enough damage and is killed it will do the kill function then the player kapala item special item charge function from player controller - AHL (4/20/21)
             if (Health <= 0)
@@ -274,6 +283,19 @@ public class EnemyBase : MonoBehaviour, IDamageable
             //prevent from taking damage temporarily
             StartCoroutine(InvincibilityFrames());
         }
+    }
+
+    public virtual void Flash()
+    {
+        //sets enemy's color to the hitMat (red)
+        //renderer.material = hitMat;
+        StartCoroutine(WaitToResetColor());
+
+    }
+
+    public virtual void ResetColor()
+    {
+
     }
 
     public virtual void Heal(float heal)
@@ -310,7 +332,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
     }
 
     //Change the target object for the enemy to move to
-    public void SetNewTarget(GameObject newTarget)
+    public virtual void SetNewTarget(GameObject newTarget)
     {
         //this will be used for the dummy item
         target = newTarget.transform;
@@ -332,11 +354,6 @@ public class EnemyBase : MonoBehaviour, IDamageable
         //transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
         #endregion
     }
-
-    /*public void Patrol()
-    {
-
-    }*/
 
     public virtual void Attack()
     {
@@ -368,6 +385,15 @@ public class EnemyBase : MonoBehaviour, IDamageable
         yield return new WaitForSeconds(dmgInvincibilityTime);
         isInvincible = false;
     }
+
+    public IEnumerator WaitToResetColor()
+    {
+        //reset enemy's color to normalMat
+        yield return new WaitForSeconds(dmgInvincibilityTime);
+        //renderer.material = normalMat;
+        ResetColor();
+    }
+
 
     public void OnDrawGizmos()
     {
