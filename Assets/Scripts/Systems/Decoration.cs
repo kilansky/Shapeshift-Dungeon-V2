@@ -8,6 +8,7 @@ public class Decoration : MonoBehaviour
     {
         barrel,
         blood,
+        bonePile,
         chains,
         crate,
         mushroomCluster,
