@@ -17,7 +17,8 @@ public class Decoration : MonoBehaviour
         rockCluster,
         rockSingle,
         torch,
-        webs
+        webs,
+        explosiveBarrel
     }
     public decorTypes propType;
     public bool forceTileSwap;
