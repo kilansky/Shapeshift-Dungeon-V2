@@ -390,7 +390,15 @@ public class HUDController : SingletonPattern<HUDController>
     {
         specialItemPanel.panel.SetActive(true);
         speicalItemIcon.sprite = PlayerController.Instance.SpecialSlot.sprite;
-        PlayerController.Instance.SpecialCharge = PlayerController.Instance.specialCooldownTime.Value;
+
+        //If the picked up item wasn't due to item swapping and it isn't the Kapala then we set its special charge to full
+        if (!PlayerController.Instance.isItemSwapping && PlayerController.Instance.SpecialSlot.ItemName != "Kapala")
+            PlayerController.Instance.SpecialCharge = PlayerController.Instance.specialCooldownTime.Value;
+
+        //Where if the item picked up wasn't due to item swapping and it is the Kapala then we set it initially to 0
+        else if (!PlayerController.Instance.isItemSwapping && PlayerController.Instance.SpecialSlot.ItemName == "Kapala")
+            PlayerController.Instance.SpecialCharge = 0;
+
 
         if(PlayerController.Instance.hasBagOfHolding && PlayerController.Instance.BagOfHoldingSlot)
             speicalItemIcon2.GetComponent<Image>().sprite = PlayerController.Instance.BagOfHoldingSlot.sprite;
