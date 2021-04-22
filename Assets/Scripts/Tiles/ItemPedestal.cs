@@ -15,8 +15,23 @@ public class ItemPedestal : MonoBehaviour
     public ItemsEquipment itemToDisplay;
     public GameObject colliderBox;
     public bool isRandom;
+    public bool isRandomSpecial;
 
     [HideInInspector] public GameObject item;
+
+    private void Start()
+    {
+        if (isRandomSpecial)
+        {
+            item = Instantiate(ItemPool.Instance.randomSpecialSpawn().prefab, transform.position + new Vector3(0, 7.2f, 0), transform.rotation, transform);
+
+            GameObject itemBase = item.transform.GetChild(0).gameObject;
+            foreach (Transform canvas in itemBase.transform)
+            {
+                canvas.gameObject.layer = 16;//Set world GUI layer on each child
+            }
+        }
+    }
 
     /// <summary>
     /// Toggles the collider that prevents the player from falling into the hole created when pedestals are rising up
@@ -31,7 +46,7 @@ public class ItemPedestal : MonoBehaviour
     /// Determines which item to spawn based on boolean and current floor
     /// </summary>
     public void SpawnItem()
-    {
+    {       
         if(isRandom) //Checks if pedestal is set to spawn random item
         {
             if(LevelManager.Instance.currFloor >= 5) //Checks if the current level is passed floor 5

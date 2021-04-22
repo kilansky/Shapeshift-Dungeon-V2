@@ -5,9 +5,9 @@ using UnityEngine;
 [System.Serializable]
 public class MonsterInfo
 {
-    public string name;
-    public GameObject monster;
-    [Range(0f, 100f)] public float spawnChance;
+    public string name; //Just used to make inspector elements easier to read
+    public GameObject monster; //Monster prefab
+    [Range(1, 20)] public int spawnWeight; //Chance for monster to be selected
 }
 
 [System.Serializable]
@@ -17,6 +17,31 @@ public class FloorSpawnInfo
     [Range(0, 100)] public int totalMonsters; //total # of monsters to spawn
     [Range(0, 30)] public int maxMonsters; //# of monsters that can be in the room at once
     public int gemsOnFloor;
+
+    private List<GameObject> monsterRaffle = new List<GameObject>();
+
+    /// <summary>
+    /// Generates a list of monsters based on their spawn weights for random selection
+    /// </summary>
+    public void CreateSpawnList()
+    {
+        foreach (MonsterInfo monster in monsters)
+        {
+            for (int i = 0; i < monster.spawnWeight; i++)
+            {
+                monsterRaffle.Add(monster.monster);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Selects a monster from the raffle
+    /// </summary>
+    /// <returns></returns>
+    public GameObject GetMonsterToSpawn()
+    {
+        return monsterRaffle[Random.Range(0, monsterRaffle.Count)];
+    }
 }
 
 public class MonsterSpawner : SingletonPattern<MonsterSpawner>
@@ -26,8 +51,8 @@ public class MonsterSpawner : SingletonPattern<MonsterSpawner>
     [Range(0,3)] public float timeBetweenSpawns = 0.5f; //How long to wait before allowing another monster to spawn
     [Range(0, 10)] public float disableSpawnerTime = 5f; //How long before a spawner can be used again
     [HideInInspector] public bool floorCleared = false; //Room is cleared of monsters
-    public int gemMonstersToSpawn = 2;
-    public FloorSpawnInfo currFloorInfo;
+    [HideInInspector] public int gemMonstersToSpawn;
+    [HideInInspector] public FloorSpawnInfo currFloorInfo;
 
     //private variables
     private List<SpawnPoint> monsterSpawnPoints = new List<SpawnPoint>();
@@ -46,13 +71,14 @@ public class MonsterSpawner : SingletonPattern<MonsterSpawner>
 
     public void BeginSpawingMonsters()
     {
-        Debug.Log("Spawning monsters!");
+        //Debug.Log("Spawning monsters!");
         currFloor = LevelManager.Instance.currFloor;
 
         gemMonstersToSpawn = currFloorInfo.gemsOnFloor;
 
         if (LevelManager.Instance.currFloor % 5 != 0)//Check if current floor is not a shop
         {
+            //Debug.Log("Starting Floor " + currFloor);
             AnalyticsEvents.Instance.FloorStarted();//Send Level Rated Analytics Event
 
             //Clear the spawn point list of any previously set spawn points
@@ -64,15 +90,8 @@ public class MonsterSpawner : SingletonPattern<MonsterSpawner>
 
             SpawnMonsters();
         }
-        else if(currFloor == 0) //if floor is the starting room, don't clear the floor (player must pick up potions)
-        {
-            floorCleared = false;
-            CenterTile.Instance.SetTextState();
-        }
         else //if floor is a shop, don't spawn monster, instantly clear the floor
         {
-            AnalyticsEvents.Instance.FloorStarted();//Send Level Rated Analytics Event
-            AnalyticsEvents.Instance.FloorCompleted(); //Send Floor Completed Analytics Event
             floorCleared = true;
             CenterTile.Instance.SetTextState();
         }
@@ -105,8 +124,8 @@ public class MonsterSpawner : SingletonPattern<MonsterSpawner>
             int randSpawnPoint = Random.Range(0, monsterSpawnPoints.Count);
 
             //Get a random monster to spawn
-            int randMonster = Random.Range(0, currFloorInfo.monsters.Length);
-            GameObject monsterToSpawn = currFloorInfo.monsters[randMonster].monster;
+            //int randMonster = Random.Range(0, currFloorInfo.monsters.Length);
+            GameObject monsterToSpawn = currFloorInfo.GetMonsterToSpawn();
 
             //Spawn the monster and disable the spawn point temporarily
             monsterSpawnPoints[randSpawnPoint].SpawnMonster(monsterToSpawn, CheckForGem());
@@ -168,7 +187,13 @@ public class MonsterSpawner : SingletonPattern<MonsterSpawner>
             floorCleared = true;
             PedestalManager.Instance.LoadPedestals(); //Activate the item pedestals
             LevelManager.Instance.ToggleHazards(false); //Disabled level hazards
+
+            //Debug.Log("Cleared Floor " + currFloor);
             AnalyticsEvents.Instance.FloorCompleted(); //Send Floor Completed Analytics Event
+
+            AudioManager.Instance.Play("BigBell");
+            CineShake.Instance.Shake(1f, 2f);
+            MusicManager.Instance.FloorCleared();
         }
     }
 

@@ -5,11 +5,13 @@ using UnityEngine;
 public class FloatingCrystal_AttackState : AttackState
 {
     private FloatingCrystal enemy;
-    [HideInInspector] public float rotateSpeed = 1.5f;
+    [HideInInspector] public float rotateSpeed = 1.2f;
     private LaserDispenser laser;
     float timeElapsed;
     float attackDuration = 8f;
-    bool isAttacking = true;
+    float attackStartupTime;
+    bool isAttacking = false;
+    bool isChargingUp = true;
 
     public FloatingCrystal_AttackState(EnemyBase entity, FiniteStateMachine stateMachine, string animBoolName, D_AttackState stateData, FloatingCrystal enemy) : base(entity, stateMachine, animBoolName, stateData)
     {
@@ -25,8 +27,11 @@ public class FloatingCrystal_AttackState : AttackState
     {
         //attack the player
         base.Enter();
-        isAttacking = true;
+
+        //Debug.Log("enemy is " + enemy.name);
         laser = enemy.GetComponent<LaserDispenser>();
+        attackStartupTime = laser.startupTime;
+        isChargingUp = true;
         TriggerAttack();
     }
 
@@ -42,22 +47,40 @@ public class FloatingCrystal_AttackState : AttackState
         //if no other crystals in the room fire 2 beams from front
         //and back that are a fixed length, and spin
 
-        if (isAttacking)
+        //Increase time elapsed
+        if (isAttacking || isChargingUp)
             timeElapsed += Time.deltaTime;
 
-        if (timeElapsed >= attackDuration && isAttacking)
+        //Brighten crystal pointlight while charging
+        if (isChargingUp && timeElapsed < attackStartupTime)
+            enemy.pointLight.intensity = Mathf.Lerp(5f, 8f, timeElapsed / attackStartupTime);
+
+        //Charging Up Laser Attack - Wait to begin rotating
+        if (isChargingUp && timeElapsed >= attackStartupTime)
+        {
+            isChargingUp = false;
+            isAttacking = true;
+            enemy.pointLight.intensity = 10f;
+
+            timeElapsed = 0;
+        }
+
+        //Waiting for attack duration to end the laser attack
+        if (isAttacking && timeElapsed >= attackDuration)
         {
             isAttacking = false;
             enemy.Anim.SetBool("isAttacking", false);
+            enemy.pointLight.intensity = 5f;
+
             timeElapsed = 0;
             stateMachine.ChangeState(enemy.moveState);
         }
-
     }
 
     public override void PhysicsUpdate()
     {
         base.PhysicsUpdate();
+
         if(isAttacking)
             enemy.transform.Rotate(0, rotateSpeed, 0);
     }
@@ -67,9 +90,8 @@ public class FloatingCrystal_AttackState : AttackState
         //canAttack = false;
         base.TriggerAttack();
         enemy.Anim.SetBool("isAttacking", true);
-        
-        //fire the lasers from the front and back
+
+        //fire the laser
         enemy.GetComponent<LaserDispenser>().ToggleLaser(true);
     }
-
 }

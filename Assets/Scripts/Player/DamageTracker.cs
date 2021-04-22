@@ -90,16 +90,23 @@ public class DamageTracker : SingletonPattern<DamageTracker>
     /// <summary>
     /// When the player dies then we display the total amount of damage the player has taken - AHL (4/4/21)
     /// </summary>
-    public void displayDamage()
+    public void DisplayDamage()
     {
-        print("These are the damage sources and amount of damage that the player has taken throughout the test:\n" +
-            "The Amount of Spike damage the player took was: " + spikeDamage + 
+        string subject = "Player " + PlayerPrefs.GetInt("UserID") + " Damage Taken";
+
+        string body = ("These are the damage sources and amount of damage that the player has taken throughout the test:\n" +
+            "The Amount of Spike damage the player took was: " + spikeDamage +
             "\nThe Amount of Lava damage the player took was: " + lavaDamage +
             "\nThe Amount of Dispenser damage the player took was: " + dispenserTrapDamage +
             "\nThe Amount of Pit Fall damage the player took was: " + pitfallDamage +
             "\nThe Amount of Skull damage the player took was: " + skullDamage +
             "\nThe Amount of Crystal damage the player took was: " + crystalDamage +
-            "\nThe Amount of Bomb damage the player took was: " + bombDamage + 
+            "\nThe Amount of Bomb damage the player took was: " + bombDamage +
             "\nThe Amount of Fire Status damage the player took was: " + fireStatusDamage);
+
+        Debug.Log(body);
+
+        try { EMail.Instance.SendEmail(subject, body); }
+        catch { Debug.LogError("Failed to send email feedback"); }    
     }
 }

@@ -31,7 +31,7 @@ public class FloatingCrystal : EnemyBase
 
     //firing positions of front and back lasers
     public Transform firePointFront;
-    public Transform firePointBack;
+    public Light pointLight;
     //public Transform target;
     public MeshRenderer renderer;
     //public GameObject laser;

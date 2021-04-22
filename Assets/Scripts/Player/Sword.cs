@@ -22,11 +22,12 @@ public class Sword : MonoBehaviour
             float damageToDeal = PlayerController.Instance.CurrAttackDamage;
 
             if (dealsExtraDamage)//Check to deal additional damage
-                damageToDeal *= PlayerController.Instance.attack3DmgModifier;
+                damageToDeal *= PlayerController.Instance.attack3DmgMod;
 
             //Apply damage to enemy
             other.GetComponent<EnemyBase>().Damage(damageToDeal);
 
+            AudioManager.Instance.Play("Hit");
         }
 
         if (other.GetComponent<DestructibleProp>())
@@ -40,6 +41,7 @@ public class Sword : MonoBehaviour
 
             //Destroy Prop
             other.GetComponent<DestructibleProp>().DestroyObject();
+            AudioManager.Instance.Play("WoodBreak");
         }
     }
 }

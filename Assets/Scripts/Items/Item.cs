@@ -11,6 +11,8 @@ public class Item : MonoBehaviour
 
     public GameObject priceCanvas;
 
+    private bool isSecondItem = false;
+
     /// <summary>
     /// AHL - 4/8/21
     /// Equip function to have the item be attached to the player and adjusts their stats by using the StatModifier script
@@ -31,11 +33,10 @@ public class Item : MonoBehaviour
         {
             if (c.SpecialSlot == null) //If the player doesn't have a special item then equip one
                 c.SpecialSlot = this.item;
+                
 
             else if(c.hasBagOfHolding && !c.BagOfHoldingSlot) //If the player has a special item and the bag of holding but nothing in the bag of holding then we place the item in the bag
-            {
                 c.BagOfHoldingSlot = this.item;
-            }
 
             else //If the player does have a special item and No Bag of Holding OR if the player has the bag of holding and it is filled as well then unequip their current one and equip the new one
             {
@@ -489,6 +490,12 @@ public class Item : MonoBehaviour
     {
         price = value;
         itemBase.GetComponent<ItemUI>().SetPriceCanvas();
+        isSecondItem = true;
+    }
+
+    public bool IsSecondItem()
+    {
+        return isSecondItem;
     }
 
 

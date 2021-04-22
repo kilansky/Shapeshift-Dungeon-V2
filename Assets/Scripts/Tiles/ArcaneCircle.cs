@@ -7,13 +7,11 @@ public class ArcaneCircle : MonoBehaviour
 {
     private void OnTriggerEnter(Collider other)
     {
-        Image arcaneCircle = GetComponent<Image>();
-        arcaneCircle.color = Color.white;
+        //Teleport Player (& monsters?? - probably not)
     }
 
     private void OnTriggerExit(Collider other)
     {
-        Image arcaneCircle = GetComponent<Image>();
-        arcaneCircle.color = Color.black;
+        
     }
 }

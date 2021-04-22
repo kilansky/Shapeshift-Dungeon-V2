@@ -13,7 +13,7 @@ public class Laser : MonoBehaviour
      */
 
     [Header("Laser Parameters")]
-    public float legnth = 7f;
+    public float length = 7f;
     public float damage = 1f;
     public float tickRate = .4f;
 
@@ -30,6 +30,13 @@ public class Laser : MonoBehaviour
     {
         beam = laser.gameObject.GetComponent<LineRenderer>();
         capsuleCollider = GetComponent<CapsuleCollider>();
+
+        //If statement to adjust some values if this is used for the player weapon
+        if(parentObject.name == "Player")
+        {
+            damage = 4f;
+            Destroy(gameObject, 0.3f);
+        }
     }
 
     private void FixedUpdate()
@@ -52,7 +59,7 @@ public class Laser : MonoBehaviour
         if(Physics.Raycast(laser.transform.position, laser.transform.TransformDirection(Vector3.forward), out hit, Mathf.Infinity, mask))
         {
             //Debug.Log("Hit " + hit.transform.gameObject.name);
-            legnth = hit.distance;
+            length = hit.distance;
         }
     }
 
@@ -61,9 +68,19 @@ public class Laser : MonoBehaviour
     /// </summary>
     private void UpdateLaser()
     {
-        beam.SetPosition(1, new Vector3(0, 0, legnth));
-        capsuleCollider.center = Vector3.forward * legnth / 2;
-        capsuleCollider.height = legnth;
+        beam.SetPosition(1, new Vector3(0, 0, length));
+        capsuleCollider.center = Vector3.forward * length / 2;
+        capsuleCollider.height = length;
+    }
+
+    /// <summary>
+    /// Detects when something enters the laser's collider
+    /// </summary>
+    /// <param name="other"></param>
+    private void OnTriggerEnter(Collider other)
+    {
+        if(parentObject.name == "Player" && damage > 0)
+            StartCoroutine(LaserCycle(other.gameObject));
     }
 
     /// <summary>
@@ -72,7 +89,8 @@ public class Laser : MonoBehaviour
     /// <param name="other"></param>
     private void OnTriggerStay(Collider other)
     {
-        StartCoroutine(LaserCycle(other.gameObject));
+        if (parentObject.name != "Player")
+            StartCoroutine(LaserCycle(other.gameObject));
     }
 
     /// <summary>
@@ -82,14 +100,27 @@ public class Laser : MonoBehaviour
     /// <returns></returns>
     private IEnumerator LaserCycle(GameObject target)
     {
-        if (target.GetComponent<PlayerController>() && !PlayerController.Instance.IsDashing)
+        if(parentObject.name != "Player")
         {
-            if (!PlayerHealth.Instance.isInvincible)
-                AnalyticsEvents.Instance.PlayerDamaged("Laser"); //Sends analytics event about damage source
+            if (target.GetComponent<PlayerController>() && !PlayerController.Instance.IsDashing)
+            {
+                if (!PlayerHealth.Instance.isInvincible)
+                    AnalyticsEvents.Instance.PlayerDamaged("Laser"); //Sends analytics event about damage source
 
-            PlayerHealth.Instance.Damage(damage, parentObject);
-            yield return new WaitForSeconds(tickRate);
+                PlayerHealth.Instance.Damage(damage, parentObject);
+                yield return new WaitForSeconds(tickRate);
+            }
         }
+
+        else
+        {
+            //If the other object is Monster (Contains the enemy base script) then go on with the rest of the damage then destroys itself
+            if (target.GetComponent<EnemyBase>())
+            {
+                target.GetComponent<EnemyBase>().Damage(damage);
+            }
+        }
+        
     }
 
     /// <summary>
