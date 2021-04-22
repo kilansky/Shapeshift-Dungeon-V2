@@ -44,6 +44,11 @@ public class BombAttack : MonoBehaviour
             {
                 other.GetComponent<DestructibleProp>().DestroyObject();
             }
+
+            if(other.GetComponent<ExplodingBarrel>())
+            {
+                other.GetComponent<ExplodingBarrel>().TriggerFuse();
+            }
         }
     }
 
@@ -74,6 +79,6 @@ public class BombAttack : MonoBehaviour
         //Makes sure the hitbox scale is set to the final scale
         transform.localScale = finalScale;
 
-        Destroy(transform.root.gameObject); //Destroys the bomb parent object
+        Destroy(transform.parent.gameObject); //Destroys the bomb parent object
     }
 }
