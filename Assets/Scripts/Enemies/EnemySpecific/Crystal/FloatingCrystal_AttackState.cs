@@ -26,7 +26,6 @@ public class FloatingCrystal_AttackState : AttackState
         //attack the player
         base.Enter();
         isAttacking = true;
-        Debug.Log("enemy is " + enemy.name);
         laser = enemy.GetComponent<LaserDispenser>();
         TriggerAttack();
     }

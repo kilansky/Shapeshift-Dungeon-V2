@@ -60,25 +60,34 @@ public class Goblin_MoveState : MoveState
         //set new target to whichever target gets chosen from the number generator
         if (num < 6)
         {
-            //attack back
-            enemy.SetNewTarget(enemy.BackTarget);
-            entity.SetDestination();
-            enemy.HaveLineOfSight();
-            //Debug.Log("I'm going to backstab the player");
-        }else if (num >= 6 || num < 9)
+            if (!enemy.isKnockedBack)
+            {
+                //attack back
+                enemy.SetNewTarget(enemy.BackTarget);
+                entity.SetDestination();
+                enemy.HaveLineOfSight();
+                //Debug.Log("I'm going to backstab the player");
+            }
+        }else if (num >= 6 || num < 9 && !enemy.isKnockedBack)
         {
             //attack sides
-            enemy.SetNewTarget(enemy.SideTarget);
-            entity.SetDestination();
-            enemy.HaveLineOfSight();
-            //Debug.Log("I'm attacking from the side");
-        }else if (num >= 9)
+            if (!enemy.isKnockedBack)
+            {
+                enemy.SetNewTarget(enemy.SideTarget);
+                entity.SetDestination();
+                enemy.HaveLineOfSight();
+                //Debug.Log("I'm attacking from the side");
+            }
+        }else if (num >= 9 && !enemy.isKnockedBack)
         {
-            //attack front
-            enemy.SetNewTarget(enemy.FrontTarget);
-            entity.SetDestination();
-            enemy.HaveLineOfSight();
-            //Debug.Log("I'm going straight at the player");
+            if (!enemy.isKnockedBack)
+            {
+                //attack front
+                enemy.SetNewTarget(enemy.FrontTarget);
+                entity.SetDestination();
+                enemy.HaveLineOfSight();
+                //Debug.Log("I'm going straight at the player");
+            }
         }
         //set destination to the player, look check should go here
         //entity.SetDestination();

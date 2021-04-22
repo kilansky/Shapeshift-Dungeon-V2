@@ -23,8 +23,6 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     public Material hitMat;
     public Material normalMat;
-    
-    //public GameObject firePoint;
 
     public Slider healthBar;
     public D_Entity entityData;
@@ -39,6 +37,9 @@ public class EnemyBase : MonoBehaviour, IDamageable
     public GameObject deathEffect;
     public GameObject gemPrefab;
 
+    public Vector3 knockbackDirection;
+    public float knockbackForce = 10f;
+    public bool isKnockedBack = false;
     
 
     [HideInInspector] public float distanceToPlayer;
@@ -252,8 +253,6 @@ public class EnemyBase : MonoBehaviour, IDamageable
         currentStunResistance -= damage;
 
         Flash();
-        //renderer.material.color = Color.Lerp(Color.red,Color.white, 1f);
-        //hitColor = Color.Lerp(Color.red, Color.white, Time.time);
 
 
         if (!isInvincible)
@@ -261,8 +260,6 @@ public class EnemyBase : MonoBehaviour, IDamageable
             //enemy takes damage from the player
             Health -= damage;
             UpdateUI();
-
-            //Debug.Log("Enemy Took Damage");
 
             if (Health <= 0)
                 Kill();
@@ -285,7 +282,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
         //sets enemy's color to the hitMat (red)
         //renderer.material = hitMat;
         StartCoroutine(WaitToResetColor());
-
+        
     }
 
     public virtual void ResetColor()
@@ -336,7 +333,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     public void SetDestination()
     {
-        if (target != null)
+        if (target != null && !isKnockedBack)
         {
             //target the player
             agent.SetDestination(target.position);
@@ -387,6 +384,29 @@ public class EnemyBase : MonoBehaviour, IDamageable
         yield return new WaitForSeconds(dmgInvincibilityTime);
         //renderer.material = normalMat;
         ResetColor();
+    }
+
+    public IEnumerator EnemyKnockBack()
+    {
+        Debug.Log("enemybase script called");
+
+        isKnockedBack = true;
+        agent.enabled = false;
+        RB.isKinematic = false;
+
+        //where do they get knocked back too?
+        knockbackDirection.y = 0;
+        knockbackDirection = (transform.position - player.transform.position).normalized;
+
+        RB.velocity = knockbackDirection * knockbackForce;
+        RB.AddForce(knockbackDirection.normalized * knockbackForce, ForceMode.Impulse);
+
+
+        yield return new WaitForSeconds(0.5f);
+
+        agent.enabled = true;
+        RB.isKinematic = true;
+        isKnockedBack = false;
     }
 
 

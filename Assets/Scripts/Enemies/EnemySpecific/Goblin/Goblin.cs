@@ -55,7 +55,7 @@ public class Goblin : EnemyBase
 
         //initialize the goblin in the idle state
         //stateMachine.Initialize(idleState);
-        Debug.Log("my color is " + renderer.material.color);
+
         //this line is what got rid of my NullReferenceExceptions
         stateMachine.Initialize(moveState);
 
@@ -107,5 +107,11 @@ public class Goblin : EnemyBase
         renderer.material = hitMat;
         StartCoroutine(WaitToResetColor());
 
+    }
+
+    public override void ResetColor()
+    {
+        base.ResetColor();
+        renderer.material = normalMat;
     }
 }
