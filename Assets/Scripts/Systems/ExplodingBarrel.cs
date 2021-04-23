@@ -22,6 +22,7 @@ public class ExplodingBarrel : MonoBehaviour
     private void Start()
     {
         radiusIndicator = explosionRadius.GetComponent<Image>();
+        radiusIndicator.color = new Color(1, 0, 0, 0);
         if (detonateOnStart)
             TriggerFuse();
     }
