@@ -69,6 +69,9 @@ public class BombAttack : MonoBehaviour
         //Sets it to damage the player
         isDamage = true;
 
+        //Shakes Camera
+        CineShake.Instance.Shake(3f, explosionTime * 2);
+
         //While loop to lerp the scale of the explosion hitbox
         while (timer <= 1)
         {

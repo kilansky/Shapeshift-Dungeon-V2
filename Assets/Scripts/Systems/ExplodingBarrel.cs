@@ -5,9 +5,10 @@ using UnityEngine;
 
 public class ExplodingBarrel : MonoBehaviour
 {
-    [Header("Barrel Parameters")]
+    [Header("Parameters")]
     public float fuseTime = 3f;
     public int warningCycles = 3;
+    public bool detonateOnStart = false;
 
     [Header("Pointers")]
     public GameObject explosion;
@@ -15,14 +16,14 @@ public class ExplodingBarrel : MonoBehaviour
     public GameObject fireFX;
 
     private Renderer warningRenderer;
-    private Color full;
-    private Color transparent;
     private Image radiusIndicator;
     private bool isExploding = false;
 
     private void Start()
     {
         radiusIndicator = explosionRadius.GetComponent<Image>();
+        if (detonateOnStart)
+            TriggerFuse();
     }
 
     [ContextMenu("Trigger Fuse")]
@@ -67,7 +68,8 @@ public class ExplodingBarrel : MonoBehaviour
         }
 
         GetComponent<MeshRenderer>().enabled = false;
-        GetComponent<CapsuleCollider>().enabled = false;
+        if(GetComponent<CapsuleCollider>())
+            GetComponent<CapsuleCollider>().enabled = false;
         fireFX.SetActive(false);
         explosion.SetActive(true);
     }
