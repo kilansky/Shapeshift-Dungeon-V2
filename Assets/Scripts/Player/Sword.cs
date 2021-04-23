@@ -43,5 +43,10 @@ public class Sword : MonoBehaviour
             other.GetComponent<DestructibleProp>().DestroyObject();
             AudioManager.Instance.Play("WoodBreak");
         }
+
+        if(other.GetComponent<ExplodingBarrel>())
+        {
+            other.GetComponent<ExplodingBarrel>().TriggerFuse();
+        }
     }
 }

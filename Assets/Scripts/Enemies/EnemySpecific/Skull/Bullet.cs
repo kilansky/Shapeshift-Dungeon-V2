@@ -130,6 +130,6 @@ public class Bullet : MonoBehaviour
         voidVar.transform.localScale = original_voidVar * scaleFactor;
         line.transform.localScale = original_line * scaleFactor;
 
-        //Debug.Log("Original scale of beamLight is " + original_beamLight);
+        //Debug.Log("Set scale of VFX to " + scaleFactor);
     }
 }
