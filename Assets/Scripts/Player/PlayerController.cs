@@ -130,6 +130,8 @@ public class PlayerController : SingletonPattern<PlayerController>
     private bool isUsingSpecial = false;
     private bool isPaused = false;
     private bool isUsingMouse = false;
+    private bool isZoomingIn = false;
+    private bool isZoomingOut = false;
 
     //================Properties================
     //read only - can be read from other functions
@@ -140,6 +142,7 @@ public class PlayerController : SingletonPattern<PlayerController>
     //public bool IsDashAttacking { get { return isDashAttacking; } } //True during dash attack
     public bool IsCharging { get { return isCharging; } }           //True while charge attack button is held
     public bool IsChargeAttacking { get { return isChargeAttacking; } } //True when charge attack button released
+    public bool IsZooming { get { return isZoomingIn || isZoomingOut; } }
     public bool IsUsingPotion { get { return isUsingPotion; } }     //True while drinking a potion
     public bool IsUsingSpecial { get { return isUsingSpecial; } }   //True while using a Special Item
     public bool IsPaused { get { return isPaused; } }               //True while game is paused
@@ -173,6 +176,7 @@ public class PlayerController : SingletonPattern<PlayerController>
         MovePlayer();
         RotatePlayer();
         AnimatePlayer();
+        ZoomCamera();
 
         //Set mouse target pos if using M&K
         if (GetComponent<PlayerInput>().currentControlScheme == "Keyboard&Mouse")
@@ -390,6 +394,21 @@ public class PlayerController : SingletonPattern<PlayerController>
         animator.SetFloat("velocity", moveVelocity);
     }
 
+    private void ZoomCamera()
+    {
+        if(isZoomingIn)
+        {
+            Debug.Log("Zoom In Called");
+            CameraController.Instance.ZoomIn();
+        }
+
+        if (isZoomingOut)
+        {
+            Debug.Log("Zoom Out Called");
+            CameraController.Instance.ZoomOut();
+        }
+    }
+
     private bool IsGrounded()
     {
         float distToGround = GetComponent<CharacterController>().bounds.extents.y;
@@ -477,6 +496,24 @@ public class PlayerController : SingletonPattern<PlayerController>
             newInput.inputButton = inputButtons.Potion;
             newInput.inputTime = Time.time;
             inputQueue.Enqueue(newInput);
+        }
+    }
+
+    //Zoom Axis Used
+    public void Zoom(InputAction.CallbackContext context)
+    {
+        float zoomInput = context.ReadValue<Vector2>().y;
+
+        if (context.performed && zoomInput > 0)
+            isZoomingIn = true;
+
+        if (context.performed && zoomInput < 0)
+            isZoomingOut = true;
+
+        if(zoomInput == 0)
+        {
+            isZoomingIn = false;
+            isZoomingOut = false;
         }
     }
 

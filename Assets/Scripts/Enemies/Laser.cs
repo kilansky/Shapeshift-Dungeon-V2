@@ -32,7 +32,7 @@ public class Laser : MonoBehaviour
         capsuleCollider = GetComponent<CapsuleCollider>();
 
         //If statement to adjust some values if this is used for the player weapon
-        if(parentObject.name == "Player")
+        if(parentObject.GetComponent<PlayerController>())
         {
             damage = 4f;
             Destroy(gameObject, 0.3f);
@@ -79,7 +79,7 @@ public class Laser : MonoBehaviour
     /// <param name="other"></param>
     private void OnTriggerEnter(Collider other)
     {
-        if(parentObject.name == "Player" && damage > 0)
+        if(parentObject.GetComponent<PlayerController>())
             StartCoroutine(LaserCycle(other.gameObject));
     }
 
@@ -89,7 +89,7 @@ public class Laser : MonoBehaviour
     /// <param name="other"></param>
     private void OnTriggerStay(Collider other)
     {
-        if (parentObject.name != "Player")
+        if (!parentObject.GetComponent<PlayerController>() && damage > 0)
             StartCoroutine(LaserCycle(other.gameObject));
     }
 
@@ -100,7 +100,7 @@ public class Laser : MonoBehaviour
     /// <returns></returns>
     private IEnumerator LaserCycle(GameObject target)
     {
-        if(parentObject.name != "Player")
+        if(!parentObject.GetComponent<PlayerController>())
         {
             if (target.GetComponent<PlayerController>() && !PlayerController.Instance.IsDashing)
             {
