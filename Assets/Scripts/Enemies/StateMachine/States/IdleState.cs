@@ -63,5 +63,4 @@ public class IdleState : State
     {
         idleTime = Random.Range(stateData.minIdleTime, stateData.maxIdleTime); 
     }
-
 }

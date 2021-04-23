@@ -54,7 +54,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1609583206902729986
 Transform:
   m_ObjectHideFlags: 0
@@ -115,13 +115,13 @@ MonoBehaviour:
   propList:
   - type: 0
     spawnChance: 50
-  - type: 3
+  - type: 4
     spawnChance: 50
+  - type: 6
+    spawnChance: 80
   - type: 5
     spawnChance: 80
-  - type: 4
-    spawnChance: 80
-  - type: 6
+  - type: 7
     spawnChance: 80
 --- !u!1 &798686891593113744
 GameObject:
@@ -340,8 +340,8 @@ Transform:
   - {fileID: 2852425732700692432}
   - {fileID: 5826892088650180341}
   - {fileID: 9113424261639560027}
-  - {fileID: 104777519700357729}
   - {fileID: 8280259752092803223}
+  - {fileID: 104777519700357729}
   m_Father: {fileID: 1609583206902729986}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5559,7 +5559,7 @@ PrefabInstance:
     - target: {fileID: 1566162736464456689, guid: dc0b2421a8e6caf4b9f4dbf776118909,
         type: 3}
       propertyPath: m_RootOrder
-      value: 40
+      value: 41
       objectReference: {fileID: 0}
     - target: {fileID: 1566162736464456689, guid: dc0b2421a8e6caf4b9f4dbf776118909,
         type: 3}
@@ -25634,7 +25634,7 @@ PrefabInstance:
     - target: {fileID: 1740233292187197265, guid: d39e61152d8d455458c0eb8273f3d9f4,
         type: 3}
       propertyPath: m_RootOrder
-      value: 41
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 1740233292187197265, guid: d39e61152d8d455458c0eb8273f3d9f4,
         type: 3}

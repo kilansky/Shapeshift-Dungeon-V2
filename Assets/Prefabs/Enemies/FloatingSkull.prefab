@@ -750,6 +750,8 @@ MonoBehaviour:
   aliveGO: {fileID: 1656225346805746181}
   player: {fileID: 6827406435468743520, guid: ac84a2fd4a138be4ca452353dd420a4b, type: 3}
   health: 8
+  hitMat: {fileID: 2100000, guid: 8e628ab3673526648b68be922de630f2, type: 2}
+  normalMat: {fileID: 2100000, guid: 8c44a6f787ec1d74198407ab2aa71838, type: 2}
   healthBar: {fileID: 8531734560222423607}
   entityData: {fileID: 11400000, guid: 421632450167ebd499eafb6e84d01c25, type: 2}
   dmgInvincibilityTime: 0.25
@@ -781,6 +783,8 @@ MonoBehaviour:
   fireball: {fileID: 6239542489288251911, guid: e54e494cf3b69074c81cee6b6b3387bc,
     type: 3}
   chargeRate: 0.8
+  renderSkull: {fileID: 3887458703284805807}
+  renderJaw: {fileID: 830904142032710772}
 --- !u!136 &7547200278732577573
 CapsuleCollider:
   m_ObjectHideFlags: 0
