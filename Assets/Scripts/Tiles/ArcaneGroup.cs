@@ -7,16 +7,19 @@ public class ArcaneGroup : MonoBehaviour
     public float cooldown = 5f;
     public GameObject circleOne;
     public GameObject circleTwo;
+    public Material inactive;
 
     private GameObject player;
     private FindSafeTile teleportScript;
     private GameObject target;
     private bool onCooldown = false;
+    private Material active;
 
     private void Start()
     {
         player = PlayerController.Instance.gameObject;
         teleportScript = player.GetComponent<FindSafeTile>();
+        active = circleOne.GetComponent<Renderer>().material;
     }
 
     [ContextMenu("Test Teleport")]
@@ -40,8 +43,6 @@ public class ArcaneGroup : MonoBehaviour
         {
             Debug.LogWarning("Player not on arcane circles!");
         }
-
-        Debug.Log("Target: " + target);
         if(target != null)
         {
             teleportScript.TeleportPlayer(target.GetComponent<ArcaneCircle>().teleportPoint.transform.position);
@@ -61,12 +62,20 @@ public class ArcaneGroup : MonoBehaviour
     private IEnumerator DoCooldown()
     {
         onCooldown = true;
+        ChangeMaterial(inactive);
         yield return new WaitForSeconds(cooldown);
         onCooldown = false;
+        ChangeMaterial(active);
     }
 
     public void DestroyGroup()
     {
         Destroy(gameObject);
+    }
+
+    private void ChangeMaterial(Material newMat)
+    {
+        circleOne.GetComponent<Renderer>().material = newMat;
+        circleTwo.GetComponent<Renderer>().material = newMat;
     }
 }
