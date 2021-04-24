@@ -70,7 +70,7 @@ public class LevelManager : SingletonPattern<LevelManager>
 
         isTransitioning = true;
         CenterTile.Instance.SetInvisibleWall(true);
-        CameraController.Instance.ZoomOut();
+        CameraController.Instance.ZoomOutLevelTransition();
 
         //LoadNextLevel(levelSet1); //Loads next level
         ++currFloor;
@@ -211,7 +211,7 @@ public class LevelManager : SingletonPattern<LevelManager>
             MonsterSpawner.Instance.BeginSpawingMonsters(); //Start spawning monsters
         }
         //Set camera zoom & shadows
-        CameraController.Instance.ZoomIn();
+        CameraController.Instance.ZoomInLevelTransition();
         CameraController.Instance.SetShadows();
 
         //Build Navigation Mesh

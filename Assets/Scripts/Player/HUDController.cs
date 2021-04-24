@@ -41,6 +41,7 @@ public class HUDController : SingletonPattern<HUDController>
     public UIPanel dashPanel;
     public UIPanel attackPanel;
     public UIPanel chargePanel;
+    public UIPanel zoomPanel;
     public GameObject controllerRecText;
     public Color grayedTextColor;
 
@@ -114,6 +115,7 @@ public class HUDController : SingletonPattern<HUDController>
                 dashPanel.textBox.color = Color.white;
                 attackPanel.textBox.color = Color.white;
                 chargePanel.textBox.color = Color.white;
+                zoomPanel.textBox.color = Color.white;
 
                 if (playerInput.currentControlScheme == "Keyboard&Mouse")
                     controllerRecText.SetActive(true);
@@ -134,6 +136,8 @@ public class HUDController : SingletonPattern<HUDController>
                 attackPanel.textBox.color = grayedTextColor;
             if (player.IsCharging)
                 chargePanel.textBox.color = grayedTextColor;
+            if (player.IsZooming)
+                zoomPanel.textBox.color = grayedTextColor;
         }
     }
 
@@ -159,6 +163,7 @@ public class HUDController : SingletonPattern<HUDController>
             dashPanel.image.sprite = dashPanel.keyboardButton;
             attackPanel.image.sprite = attackPanel.keyboardButton;
             chargePanel.image.sprite = chargePanel.keyboardButton;
+            zoomPanel.image.sprite = zoomPanel.keyboardButton;
             specialItemPanel.image.sprite = specialItemPanel.keyboardButton;
             swapItemPanel.image.sprite = swapItemPanel.keyboardButton;
         }
@@ -179,6 +184,7 @@ public class HUDController : SingletonPattern<HUDController>
                 dashPanel.image.sprite = dashPanel.psButton;
                 attackPanel.image.sprite = attackPanel.psButton;
                 chargePanel.image.sprite = chargePanel.psButton;
+                zoomPanel.image.sprite = zoomPanel.psButton;
                 specialItemPanel.image.sprite = specialItemPanel.psButton;
                 swapItemPanel.image.sprite = swapItemPanel.psButton;
             }
@@ -193,6 +199,7 @@ public class HUDController : SingletonPattern<HUDController>
                 dashPanel.image.sprite = dashPanel.xboxButton;
                 attackPanel.image.sprite = attackPanel.xboxButton;
                 chargePanel.image.sprite = chargePanel.xboxButton;
+                zoomPanel.image.sprite = zoomPanel.xboxButton;
                 specialItemPanel.image.sprite = specialItemPanel.xboxButton;
                 swapItemPanel.image.sprite = swapItemPanel.xboxButton;
             }
@@ -390,7 +397,15 @@ public class HUDController : SingletonPattern<HUDController>
     {
         specialItemPanel.panel.SetActive(true);
         speicalItemIcon.sprite = PlayerController.Instance.SpecialSlot.sprite;
-        PlayerController.Instance.SpecialCharge = PlayerController.Instance.specialCooldownTime.Value;
+
+        //If the picked up item wasn't due to item swapping and it isn't the Kapala then we set its special charge to full
+        if (!PlayerController.Instance.isItemSwapping && PlayerController.Instance.SpecialSlot.ItemName != "Kapala")
+            PlayerController.Instance.SpecialCharge = PlayerController.Instance.specialCooldownTime.Value;
+
+        //Where if the item picked up wasn't due to item swapping and it is the Kapala then we set it initially to 0
+        else if (!PlayerController.Instance.isItemSwapping && PlayerController.Instance.SpecialSlot.ItemName == "Kapala")
+            PlayerController.Instance.SpecialCharge = 0;
+
 
         if(PlayerController.Instance.hasBagOfHolding && PlayerController.Instance.BagOfHoldingSlot)
             speicalItemIcon2.GetComponent<Image>().sprite = PlayerController.Instance.BagOfHoldingSlot.sprite;

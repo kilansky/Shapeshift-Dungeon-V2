@@ -53,11 +53,12 @@ public class FloatingCrystal_MoveState : MoveState
 
         //should be if no other crystals in the scene, move to attack state
         //for now attack every 5 - 8 seconds
-        /*if(!isAttacking)
-            timeElapsed += Time.deltaTime;*/
+
+        if(!isAttacking)
+            timeElapsed += Time.deltaTime;
 
         //if enough time has passed, or the player is in agro range change to attack
-        if (!isAttacking && entity.distanceToPlayer < entity.minAgroRange)
+        if (!isAttacking && timeElapsed >= timeToAttack && entity.distanceToPlayer < entity.minAgroRange)
         {
             isAttacking = true;
             stateMachine.ChangeState(enemy.attackState);

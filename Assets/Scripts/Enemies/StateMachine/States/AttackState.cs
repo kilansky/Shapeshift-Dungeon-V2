@@ -7,8 +7,6 @@ public class AttackState : State
     protected D_AttackState stateData;
 
     protected bool playerInAttackRange;
-    //charge fireball attack
-    //[HideInInspector] public bool isChargeTimeOver;
 
     public AttackState(EnemyBase entity, FiniteStateMachine stateMachine, string animBoolName, D_AttackState stateData) : base(entity, stateMachine, animBoolName)
     {
