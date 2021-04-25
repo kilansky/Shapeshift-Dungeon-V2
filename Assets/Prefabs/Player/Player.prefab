@@ -6241,7 +6241,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.526, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 10.600037, y: -19.19873}
+  m_AnchoredPosition: {x: 10.600067, y: -19.19873}
   m_SizeDelta: {x: 16.060608, y: -37.361397}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2233085908992879035
@@ -8264,14 +8264,15 @@ MonoBehaviour:
     BaseValue: 0.15
   baseAttackDamage:
     BaseValue: 3.5
+  baseAttackSpeed:
+    BaseValue: 0
   attackTime:
     BaseValue: 0.4
   attackSpeedMod: 0.3
   attack3DmgMod: 1.5
   dashAttackInputWindow: 0.6
   chargeArrow: {fileID: 1484773621025215269}
-  chargeRate:
-    BaseValue: 10
+  timeToFullCharge: 1.25
   minChargeSpeed: 20
   maxChargeSpeed: 35
   chargeDeceleration: 65
@@ -8279,7 +8280,8 @@ MonoBehaviour:
   minChargeDmgModifier: 0.5
   chargeDmgModifier:
     BaseValue: 1.5
-  timeToFullCharge: 1.25
+  chargeRate:
+    BaseValue: 10
   useSpecialTime: 0
   specialCooldownTime:
     BaseValue: 0
@@ -8320,6 +8322,11 @@ MonoBehaviour:
   radialHitbox: {fileID: 44299111}
   swordImpactPoint: {fileID: 4973588393197182947}
   showHitboxes: 1
+  sword: {fileID: 7177321529169124666}
+  slashVFX1: {fileID: 3062160430862534258, guid: 1caed66b86324804bb6048366542f515,
+    type: 3}
+  slashVFX2: {fileID: 8707108930022002940, guid: d382c83143ccde9469171fd14a670dca,
+    type: 3}
 --- !u!114 &7018915122062433107
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19908,7 +19915,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6827406435918421407}
   m_LocalRotation: {x: 0.46174863, y: -0, z: -0, w: 0.8870109}
-  m_LocalPosition: {x: 0, y: 16.787977, z: -7.8861313}
+  m_LocalPosition: {x: 0, y: 16.787977, z: -31.886135}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6900241166240612964}
@@ -23924,7 +23931,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackIncreaseValue: 0
-  moveIncreaseValue: 0
+  attackSpeedIncreaseValue: 0
+  moveSpeedIncreaseValue: 0
   dashIncreaseValue: 0
   attackText: {fileID: 3539092263070203706}
   speedText: {fileID: 4950893363935634376}
