@@ -28,6 +28,11 @@ public class FireWandAttack : MonoBehaviour
 
         else if (other.gameObject.layer == 2 || other.gameObject.layer == 9 || other.gameObject.layer == 10)
             Destroy(gameObject);
+
+        if(other.GetComponent<ExplodingBarrel>())
+        {
+            other.GetComponent<ExplodingBarrel>().TriggerFuse();
+        }
     }
 
     
