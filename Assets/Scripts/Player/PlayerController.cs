@@ -29,6 +29,7 @@ public class PlayerController : SingletonPattern<PlayerController>
 
     [Header("Attack Stats")]
     public PlayerStats baseAttackDamage; //Attack Damage Variable used for AttackDam in ItemsEquipment
+    public PlayerStats baseAttackSpeed; //Attack Speed Variable used for AttackSpd in ItemsEquipment
     public PlayerStats attackTime; //ItemsEquipment for Attack Speed
     public float attackSpeedMod = 0.25f;
     public float attack3DmgMod = 1.5f; //increases damage of third attack
@@ -40,14 +41,16 @@ public class PlayerController : SingletonPattern<PlayerController>
 
     [Header("Charge Attack Stats")]
     public GameObject chargeArrow; //GameObject to hold the arrow underneath the player during charge attacks
-    public PlayerStats chargeRate; //ItemsEquipment for Charge Attack Time
+    public float timeToFullCharge = 1.25f;
     public float minChargeSpeed = 20f;
     public float maxChargeSpeed = 35f;
     public float chargeDeceleration = 55f;
     public float chargeCooldownTime = 0.2f;
     public float minChargeDmgModifier;
     public PlayerStats chargeDmgModifier; //ItemsEquipment for Dash Damage Modifier
-    public float timeToFullCharge = 3f;
+
+    //OBSOLETE: Use timeToFullCharge instead
+    public PlayerStats chargeRate; //ItemsEquipment for Charge Attack Time
 
     [Header("Special Stats")]
     public float useSpecialTime = 0.5f;
@@ -107,6 +110,7 @@ public class PlayerController : SingletonPattern<PlayerController>
     private float moveVelocity; //based on controller movement input, used for walk/run blending
     private int attackComboState = 0; //0 = not attacking, 1 = attack1, 2 = attack2, 3 = attack3
     private float currAttackDamage;
+    private float currAttackSpeed;
     private int priceOfLastTouchedItem = 0; //I need this to store prices -Justin
     private float specialCharge2 = 0; //Varaible to hold the special charge of the item in the bag of holding
     private bool specialIsCharging = false;
@@ -137,6 +141,7 @@ public class PlayerController : SingletonPattern<PlayerController>
     //read only - can be read from other functions
     public float MoveSpeed { get { return currMoveSpeed; } }        //Set to the current move speed of the player
     public float CurrAttackDamage { get { return currAttackDamage; } } //Set to the current attack speed of the player
+    public float CurrAttackSpeed { get { return currAttackSpeed; } } //Set to the current attack speed of the player
     public bool IsDashing { get { return isDashing; } }             //True during entire dash
     public bool IsAttacking { get { return isAttacking; } }         //True during combo attacks until hitbox is deactiviated
     //public bool IsDashAttacking { get { return isDashAttacking; } } //True during dash attack
@@ -152,10 +157,14 @@ public class PlayerController : SingletonPattern<PlayerController>
     {
         controller = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
-        currMoveSpeed = baseMoveSpeed.Value;
         lastTargetRotation = Quaternion.identity;
         dashAttackWindow = dashAttackInputWindow;
         chargeArrow.SetActive(false);
+
+        currMoveSpeed = baseMoveSpeed.Value;
+        currAttackSpeed = baseAttackSpeed.Value;
+        currAttackDamage = baseAttackDamage.Value;
+        SetAttackSpeed();
 
         StatMaxHealthCount = 0;
         StatAttackCount = 0;
@@ -170,7 +179,7 @@ public class PlayerController : SingletonPattern<PlayerController>
         //Debug.Log("User ID is: " + PlayerPrefs.GetInt("UserID"));
     }
 
-    void Update()
+    private void Update()
     {
         //Move, Rotate, & Animate Player
         MovePlayer();
@@ -299,12 +308,15 @@ public class PlayerController : SingletonPattern<PlayerController>
             moveVelocity = 0;
 
         Vector3 attackVector = new Vector3(transform.forward.x, vSpeed, transform.forward.z);
+        Vector3 chargingVector = new Vector3(0, vSpeed, 0);
 
-        if (IsDashing)
+        if (IsDashing) //Movement when Dashing or Charge Attacking
             controller.Move(transform.forward * currMoveSpeed * SandSpeedMod * Time.deltaTime);
-        else if (IsAttacking || IsChargeAttacking)
+        else if (IsCharging || (IsAttacking && !canMove)) //Movement when Charging or at the end of Attack3
+            controller.Move(chargingVector * currMoveSpeed * SandSpeedMod * Time.deltaTime);
+        else if (IsAttacking) //Movement when Attacking
             controller.Move(attackVector * moveVelocity * currMoveSpeed * SandSpeedMod * Time.deltaTime);
-        else
+        else if (!IsChargeAttacking)//Standard Movement
             controller.Move(movementVector * currMoveSpeed * SandSpeedMod * Time.deltaTime);
     }
 
@@ -333,7 +345,7 @@ public class PlayerController : SingletonPattern<PlayerController>
             //Change rotation speed based on player state
             float rotSpeed = rotateSpeed;
 
-            if (IsDashing)
+            if (IsDashing || IsChargeAttacking)
                 rotSpeed = dashRotateSpeed;
 
             //Smoothly Rotate Player
@@ -394,25 +406,28 @@ public class PlayerController : SingletonPattern<PlayerController>
         animator.SetFloat("velocity", moveVelocity);
     }
 
+    //Checks to call the funtions to zoom the camera in & out
     private void ZoomCamera()
     {
         if(isZoomingIn)
-        {
-            Debug.Log("Zoom In Called");
             CameraController.Instance.ZoomIn();
-        }
 
         if (isZoomingOut)
-        {
-            Debug.Log("Zoom Out Called");
             CameraController.Instance.ZoomOut();
-        }
     }
 
+    //Returns true if the player is standing on the ground
     private bool IsGrounded()
     {
         float distToGround = GetComponent<CharacterController>().bounds.extents.y;
         return Physics.Raycast(transform.position, -Vector3.up, distToGround + 0.1f);
+    }
+
+    //Sets the attackSpeed parameter of the Animator in order to increase the player's attack speed
+    public void SetAttackSpeed()
+    {
+        currAttackSpeed = baseAttackSpeed.Value;
+        animator.SetFloat("attackSpeed", currAttackSpeed);
     }
 
     //---------------------------------------------------------------------------
@@ -566,7 +581,12 @@ public class PlayerController : SingletonPattern<PlayerController>
     /// Pause function to pause the game based on the isPause variable and will stop the game time while displaying the pause screen
     public void Pause(InputAction.CallbackContext context)
     {
-        if(context.performed && PlayerHealth.Instance.Health > 0 && !HUDController.Instance.levelReviewPanel.activeSelf) //prevent pausing when dead
+        bool levelReviewActive = HUDController.Instance.levelReviewPanel.activeSelf;
+        bool statPotionPanelActive = HUDController.Instance.statPotionPanel.activeSelf;
+        bool playerIsAlive = PlayerHealth.Instance.Health > 0;
+
+        //Pause the game if the input is performed, the player is alive, and there are no active panels on the screen
+        if (context.performed && playerIsAlive && !levelReviewActive && !statPotionPanelActive) 
         {
             if (!IsPaused) //If the game is not paused then pause the game
             {
@@ -650,19 +670,29 @@ public class PlayerController : SingletonPattern<PlayerController>
             //canDashAttack = true;
             animator.SetBool("isDashing", true);
             currMoveSpeed = dashSpeed.Value; //set dash speed
-            PlayerHealth.Instance.isInvincible = true;
+            StartCoroutine(DashInvincibility());
 
-            yield return new WaitForSeconds(dashInvincibilityTime.Value); //wait to disable invincibility
-            PlayerHealth.Instance.isInvincible = false;
-
-            yield return new WaitForSeconds(dashTime.Value - dashInvincibilityTime.Value); //wait for end of dash & restore base speed
-            currMoveSpeed = baseMoveSpeed.Value;
-            isDashing = false;
+            yield return new WaitForEndOfFrame(); //Wait for a frame before allowing the dash to be cancelled
             animator.SetBool("isDashing", false);
 
+            yield return new WaitForSeconds(dashTime.Value); //wait for end of dash & restore base speed
+            currMoveSpeed = baseMoveSpeed.Value;
+            isDashing = false;
+
             yield return new WaitForSeconds(dashCooldownTime.Value); //wait to refresh dash
+
+            while(!IsGrounded()) //wait until player is on the ground to refresh the dash
+                yield return new WaitForEndOfFrame();
+
             canDash = true;
         }
+    }
+
+    IEnumerator DashInvincibility()
+    {
+        PlayerHealth.Instance.isInvincible = true;
+        yield return new WaitForSeconds(dashInvincibilityTime.Value); //wait to disable invincibility
+        PlayerHealth.Instance.isInvincible = false;
     }
 
     /*
@@ -687,7 +717,7 @@ public class PlayerController : SingletonPattern<PlayerController>
     {
         inputQueue.Dequeue();
         attackComboState++;
-        //Debug.Log("attackComboState is: " + attackComboState);
+        //Debug.Log("ActivateAttack Called, attackComboState is: " + attackComboState);
 
         if (attackComboState > 3)
             attackComboState = 1;
@@ -777,7 +807,7 @@ public class PlayerController : SingletonPattern<PlayerController>
         float timeElapsed = 0;
         while (isCharging) //Increase charge speed & arrow UI until button is released
         {
-            currMoveSpeed = 0; //prevent movement while charging
+            //currMoveSpeed = 0; //prevent movement while charging
 
             chargeSpeed = Mathf.Lerp(minChargeSpeed, maxChargeSpeed, timeElapsed / timeToFullCharge);
             currAttackDamage = Mathf.Lerp(baseAttackDamage.Value * minChargeDmgModifier, baseAttackDamage.Value * chargeDmgModifier.Value, timeElapsed / timeToFullCharge);
@@ -818,7 +848,7 @@ public class PlayerController : SingletonPattern<PlayerController>
         isChargeAttacking = false;
         yield return new WaitForSeconds(chargeCooldownTime); //wait for charge anim to play out before going back to normal
         canChargeAttack = true;
-        currMoveSpeed = baseMoveSpeed.Value;
+        //currMoveSpeed = baseMoveSpeed.Value;
         currAttackDamage = baseAttackDamage.Value; //reset attack damage
     }
 

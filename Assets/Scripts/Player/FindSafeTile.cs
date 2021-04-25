@@ -14,6 +14,8 @@ public class FindSafeTile : SingletonPattern<FindSafeTile>
 
     [HideInInspector]public Vector3 safePos;
 
+    private bool respawningPlayer = false;
+
     private void Start()
     {
         StartCoroutine(LocateSafePosition());
@@ -62,11 +64,16 @@ public class FindSafeTile : SingletonPattern<FindSafeTile>
     /// <returns></returns>
     private IEnumerator RespawnPlayer()
     {
-        yield return new WaitForSeconds(1f);
-        GetComponent<CharacterController>().enabled = false;
-        yield return new WaitForEndOfFrame();
-        transform.position = safePos;
-        yield return new WaitForEndOfFrame();
-        GetComponent<CharacterController>().enabled = true;
+        if(!respawningPlayer) //Make sure two pits don't both try to respawn the player
+        {
+            respawningPlayer = true;
+            yield return new WaitForSeconds(1f);
+            GetComponent<CharacterController>().enabled = false;
+            yield return new WaitForEndOfFrame();
+            transform.position = safePos;
+            yield return new WaitForEndOfFrame();
+            GetComponent<CharacterController>().enabled = true;
+            respawningPlayer = false;
+        }
     }
 }

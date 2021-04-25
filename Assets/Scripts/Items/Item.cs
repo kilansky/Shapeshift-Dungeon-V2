@@ -212,15 +212,15 @@ public class Item : MonoBehaviour
             {
                 //Flat Value
                 if ((int)item.statMods[i].statModifier == 100)
-                    c.attackTime.AddModifiers(new StatModifier(item.statMods[i].adjustableValue, StatModType.Flat, item.prefab));
+                    c.baseAttackSpeed.AddModifiers(new StatModifier(item.statMods[i].adjustableValue, StatModType.Flat, item.prefab));
 
                 //Percent Add Value
                 if ((int)item.statMods[i].statModifier == 200)
-                    c.attackTime.AddModifiers(new StatModifier(item.statMods[i].adjustableValue, StatModType.PercentAdd, item.prefab));
+                    c.baseAttackSpeed.AddModifiers(new StatModifier(item.statMods[i].adjustableValue, StatModType.PercentAdd, item.prefab));
 
                 //Percent Mult Value
                 if ((int)item.statMods[i].statModifier == 300)
-                    c.attackTime.AddModifiers(new StatModifier(item.statMods[i].adjustableValue, StatModType.PercentMult, item.prefab));
+                    c.baseAttackSpeed.AddModifiers(new StatModifier(item.statMods[i].adjustableValue, StatModType.PercentMult, item.prefab));
 
                 Debug.Log("This item " + item.ItemName + " has been equipped so Attack has been adjusted.");
                 Debug.Log("The new Attack Speed is " + c.attackTime.Value);

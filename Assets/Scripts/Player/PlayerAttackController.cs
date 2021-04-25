@@ -13,6 +13,8 @@ public class PlayerAttackController : SingletonPattern<PlayerAttackController>
     //Activate the slash hitbox - called from attack animation event
     public void ActivateSlashHitbox()
     {
+        DeactivateThrustHitbox();
+
         slashHitbox.GetComponent<MeshCollider>().enabled = true;
         AudioManager.Instance.Play("Swing1");
 
@@ -22,6 +24,8 @@ public class PlayerAttackController : SingletonPattern<PlayerAttackController>
 
     public void ActivateSlashHitbox2()
     {
+        DeactivateThrustHitbox();
+
         slashHitbox.GetComponent<MeshCollider>().enabled = true;
         AudioManager.Instance.Play("Swing2");
 
@@ -32,6 +36,8 @@ public class PlayerAttackController : SingletonPattern<PlayerAttackController>
     //Activate the thrust hitbox - called from attack animation event
     public void ActivateThustHitbox()
     {
+        DeactivateSlashHitbox();
+
         thrustHitbox.GetComponent<MeshCollider>().enabled = true;
 
         if (showHitboxes)
