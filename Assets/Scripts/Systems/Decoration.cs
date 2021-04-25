@@ -8,6 +8,7 @@ public class Decoration : MonoBehaviour
     {
         barrel,
         blood,
+        bonePile,
         chains,
         crate,
         mushroomCluster,
@@ -17,7 +18,7 @@ public class Decoration : MonoBehaviour
         rockSingle,
         torch,
         webs,
-        explodingBarrel
+        explosiveBarrel
     }
     public decorTypes propType;
     public bool forceTileSwap;

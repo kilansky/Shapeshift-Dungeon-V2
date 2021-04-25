@@ -76,4 +76,18 @@ public class FindSafeTile : SingletonPattern<FindSafeTile>
             respawningPlayer = false;
         }
     }
+
+    public void TeleportPlayer(Vector3 pos)
+    {
+        StartCoroutine(MovePlayer(pos));
+    }
+
+    private IEnumerator MovePlayer(Vector3 pos)
+    {
+        GetComponent<CharacterController>().enabled = false;
+        yield return new WaitForEndOfFrame();
+        transform.position = pos;
+        yield return new WaitForEndOfFrame();
+        GetComponent<CharacterController>().enabled = true;
+    }
 }

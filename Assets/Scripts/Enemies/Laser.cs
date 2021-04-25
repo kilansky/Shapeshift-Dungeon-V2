@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.VFX;
 using UnityEngine;
 
 public class Laser : MonoBehaviour
@@ -14,18 +13,16 @@ public class Laser : MonoBehaviour
      */
 
     [Header("Laser Parameters")]
-    public float legnth = 7f;
+    public float length = 7f;
     public float damage = 1f;
     public float tickRate = .4f;
 
     [Header("Misc")]
     public GameObject laser;
-    public GameObject hitEffects;
     public LayerMask mask;
 
     private LineRenderer beam;
     private CapsuleCollider capsuleCollider;
-    private VisualEffect visuals;
 
     [HideInInspector] public GameObject parentObject; //Variable to hold the parent Object to make sure the Damage Tracker is able to track the damage correctly
 
@@ -33,8 +30,13 @@ public class Laser : MonoBehaviour
     {
         beam = laser.gameObject.GetComponent<LineRenderer>();
         capsuleCollider = GetComponent<CapsuleCollider>();
-        visuals = hitEffects.GetComponent<VisualEffect>();
-        StartCoroutine(VFXPlayCycle());
+
+        //If statement to adjust some values if this is used for the player weapon
+        if(parentObject.GetComponent<PlayerController>())
+        {
+            damage = 4f;
+            Destroy(gameObject, 0.3f);
+        }
     }
 
     private void FixedUpdate()
@@ -57,7 +59,7 @@ public class Laser : MonoBehaviour
         if(Physics.Raycast(laser.transform.position, laser.transform.TransformDirection(Vector3.forward), out hit, Mathf.Infinity, mask))
         {
             //Debug.Log("Hit " + hit.transform.gameObject.name);
-            legnth = hit.distance;
+            length = hit.distance;
         }
     }
 
@@ -66,10 +68,19 @@ public class Laser : MonoBehaviour
     /// </summary>
     private void UpdateLaser()
     {
-        beam.SetPosition(1, new Vector3(0, 0, legnth));
-        capsuleCollider.center = Vector3.forward * legnth / 2;
-        capsuleCollider.height = legnth;
-        hitEffects.transform.localPosition = new Vector3(0, 0, legnth);
+        beam.SetPosition(1, new Vector3(0, 0, length));
+        capsuleCollider.center = Vector3.forward * length / 2;
+        capsuleCollider.height = length;
+    }
+
+    /// <summary>
+    /// Detects when something enters the laser's collider
+    /// </summary>
+    /// <param name="other"></param>
+    private void OnTriggerEnter(Collider other)
+    {
+        if(parentObject.GetComponent<PlayerController>())
+            StartCoroutine(LaserCycle(other.gameObject));
     }
 
     /// <summary>
@@ -78,7 +89,8 @@ public class Laser : MonoBehaviour
     /// <param name="other"></param>
     private void OnTriggerStay(Collider other)
     {
-        StartCoroutine(LaserCycle(other.gameObject));
+        if (!parentObject.GetComponent<PlayerController>() && damage > 0)
+            StartCoroutine(LaserCycle(other.gameObject));
     }
 
     /// <summary>
@@ -88,21 +100,27 @@ public class Laser : MonoBehaviour
     /// <returns></returns>
     private IEnumerator LaserCycle(GameObject target)
     {
-        if (target.GetComponent<PlayerController>() && !PlayerController.Instance.IsDashing)
+        if(!parentObject.GetComponent<PlayerController>())
         {
-            if (!PlayerHealth.Instance.isInvincible)
-                AnalyticsEvents.Instance.PlayerDamaged("Laser"); //Sends analytics event about damage source
+            if (target.GetComponent<PlayerController>() && !PlayerController.Instance.IsDashing)
+            {
+                if (!PlayerHealth.Instance.isInvincible)
+                    AnalyticsEvents.Instance.PlayerDamaged("Laser"); //Sends analytics event about damage source
 
-            PlayerHealth.Instance.Damage(damage, parentObject);
-            yield return new WaitForSeconds(tickRate);
+                PlayerHealth.Instance.Damage(damage, parentObject);
+                yield return new WaitForSeconds(tickRate);
+            }
         }
-    }
 
-    private IEnumerator VFXPlayCycle()
-    {
-        visuals.Play();
-        yield return new WaitForSeconds(.15f);
-        StartCoroutine(VFXPlayCycle());
+        else
+        {
+            //If the other object is Monster (Contains the enemy base script) then go on with the rest of the damage then destroys itself
+            if (target.GetComponent<EnemyBase>())
+            {
+                target.GetComponent<EnemyBase>().Damage(damage);
+            }
+        }
+        
     }
 
     /// <summary>
