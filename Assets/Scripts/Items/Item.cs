@@ -32,7 +32,18 @@ public class Item : MonoBehaviour
         if (item.ItemSlot == 0)
         {
             if (c.SpecialSlot == null) //If the player doesn't have a special item then equip one
+            {
                 c.SpecialSlot = this.item;
+
+                //If the item is the Kapala then we set the CanUseSpecial to false as you can't use the Kapala out of the gate and resets the sprite - AHL (4/25/21)
+                if (item.ItemName == "Kapala")
+                {
+                    c.canUseSpecial = false;
+                    item.prefab.GetComponent<KapalaSwap>().KapalaSpriteSwap(0);
+                }
+                    
+            }
+                
                 
 
             else if(c.hasBagOfHolding && !c.BagOfHoldingSlot) //If the player has a special item and the bag of holding but nothing in the bag of holding then we place the item in the bag
@@ -212,15 +223,15 @@ public class Item : MonoBehaviour
             {
                 //Flat Value
                 if ((int)item.statMods[i].statModifier == 100)
-                    c.attackTime.AddModifiers(new StatModifier(item.statMods[i].adjustableValue, StatModType.Flat, item.prefab));
+                    c.baseAttackSpeed.AddModifiers(new StatModifier(item.statMods[i].adjustableValue, StatModType.Flat, item.prefab));
 
                 //Percent Add Value
                 if ((int)item.statMods[i].statModifier == 200)
-                    c.attackTime.AddModifiers(new StatModifier(item.statMods[i].adjustableValue, StatModType.PercentAdd, item.prefab));
+                    c.baseAttackSpeed.AddModifiers(new StatModifier(item.statMods[i].adjustableValue, StatModType.PercentAdd, item.prefab));
 
                 //Percent Mult Value
                 if ((int)item.statMods[i].statModifier == 300)
-                    c.attackTime.AddModifiers(new StatModifier(item.statMods[i].adjustableValue, StatModType.PercentMult, item.prefab));
+                    c.baseAttackSpeed.AddModifiers(new StatModifier(item.statMods[i].adjustableValue, StatModType.PercentMult, item.prefab));
 
                 Debug.Log("This item " + item.ItemName + " has been equipped so Attack has been adjusted.");
                 Debug.Log("The new Attack Speed is " + c.attackTime.Value);

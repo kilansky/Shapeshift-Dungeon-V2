@@ -4,34 +4,63 @@ using UnityEngine;
 
 public class PlayerAttackController : SingletonPattern<PlayerAttackController>
 {
+    [Header("Hitboxes")]
     [SerializeField] private GameObject slashHitbox; //GameObject to hold slash attack hitbox
     [SerializeField] private GameObject thrustHitbox; //GameObject to hold thrust attack hitbox
     [SerializeField] private GameObject radialHitbox; //GameObject to hold radial attack hitbox
     [SerializeField] private GameObject swordImpactPoint; //GameObject to hold point of impact on third attack
     [SerializeField] private bool showHitboxes = false;
 
+    [Header("VFX")]
+    [SerializeField] private Transform sword; //Transform to hold sword position/rotation info
+    [SerializeField] private GameObject slashVFX1; //GameObject to hold slash vfx1
+    [SerializeField] private GameObject slashVFX2; //GameObject to hold slash vfx2
+
+    private Transform player;
+
+    private void Start()
+    {
+        player = PlayerController.Instance.transform;
+    }
+
     //Activate the slash hitbox - called from attack animation event
     public void ActivateSlashHitbox()
     {
+        DeactivateThrustHitbox();
+
         slashHitbox.GetComponent<MeshCollider>().enabled = true;
         AudioManager.Instance.Play("Swing1");
 
         if (showHitboxes)
             slashHitbox.GetComponent<MeshRenderer>().enabled = true;
+
+        Vector3 vfxSpawnPos = new Vector3(player.position.x, slashHitbox.transform.position.y, player.position.z);
+        GameObject vfx = Instantiate(slashVFX2, vfxSpawnPos, player.rotation, player);
+        vfx.transform.Rotate(90, 0, 45);
+        Destroy(vfx, 1);
     }
 
     public void ActivateSlashHitbox2()
     {
+        DeactivateThrustHitbox();
+
         slashHitbox.GetComponent<MeshCollider>().enabled = true;
         AudioManager.Instance.Play("Swing2");
 
         if (showHitboxes)
             slashHitbox.GetComponent<MeshRenderer>().enabled = true;
+
+        Vector3 vfxSpawnPos = new Vector3(player.position.x, slashHitbox.transform.position.y, player.position.z);
+        GameObject vfx = Instantiate(slashVFX1, vfxSpawnPos, player.rotation, player);
+        vfx.transform.Rotate(90, 0, 45);
+        Destroy(vfx, 1);
     }
 
     //Activate the thrust hitbox - called from attack animation event
     public void ActivateThustHitbox()
     {
+        DeactivateSlashHitbox();
+
         thrustHitbox.GetComponent<MeshCollider>().enabled = true;
 
         if (showHitboxes)

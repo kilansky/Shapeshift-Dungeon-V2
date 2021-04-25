@@ -46,7 +46,7 @@ public class LevelDecorator : MonoBehaviour
     {
         foreach(AdjustableDecor decorType in propList)
         {
-            Debug.Log("There are currently " + props.Count + " props in the list to scan");
+            //Debug.Log("There are currently " + props.Count + " props in the list to scan");
             foreach(Transform prop in props)
             {
                 if(prop.GetComponent<Decoration>().propType == decorType.type)

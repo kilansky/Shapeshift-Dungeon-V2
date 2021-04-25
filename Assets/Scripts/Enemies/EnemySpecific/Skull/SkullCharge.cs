@@ -53,7 +53,6 @@ public class SkullCharge : MonoBehaviour
 
         GameObject bullet = Instantiate(fireball, firePoint.transform.position, firePoint.transform.rotation, transform);
         Vector3 originalScale = bullet.transform.localScale;
-        float originalSpeed = bullet.GetComponent<Bullet>().moveSpeed;
         float vfxPercent = 0;
         //canAttack = false;
         isAttacking = true;
@@ -63,13 +62,12 @@ public class SkullCharge : MonoBehaviour
 
         //To be honest, I forgot why I needed to do this. But it works for the dispenser
         bullet.transform.GetChild(0).gameObject.SetActive(false);
+
         yield return new WaitForSeconds(.1f);
-        bullet.transform.GetChild(0).gameObject.SetActive(true);
-        bullet.transform.localScale = Vector3.one * .01f;
 
         //set scale of bullet to .1 scale up, doesn't scale vfx
-        //float currentScale = bullet.GetComponent<Bullet>().minBulletSize;
-        //float currentScale = .1f;
+        bullet.transform.GetChild(0).gameObject.SetActive(true);
+        bullet.transform.localScale = Vector3.one * .1f;
 
         //disable inner collider so it doesn't destroy while charging
         bullet.GetComponent<CapsuleCollider>().enabled = false;
@@ -122,7 +120,6 @@ public class SkullCharge : MonoBehaviour
         bullet.GetComponent<Bullet>().parentObject = transform.root.gameObject;
 
         //bullet.transform.localEulerAngles = Vector3.right;
-        bullet.GetComponent<Bullet>().moveSpeed = originalSpeed;
         bullet.GetComponent<Bullet>().canDamage = true;
         bullet.GetComponent<Bullet>().shotBy = "Skull";
         sparks.Play();

@@ -57,7 +57,7 @@ public class SpikeTrap : MonoBehaviour
         }
         DealDamage();
 
-        print("Spikes dealt damage and are now going back down");
+        //print("Spikes dealt damage and are now going back down");
 
         //Wait for some amount of time
         yield return new WaitForSeconds(idleTime);
@@ -138,7 +138,7 @@ public class SpikeTrap : MonoBehaviour
 
     public void ToggleSpike(bool enabled)
     {
-        Debug.Log("Spike traps have been toggled to " + enabled);
+        //Debug.Log("Spike traps have been toggled to " + enabled);
         isEnabled = enabled;
     }
 }

@@ -218,10 +218,10 @@ public class MonsterSpawner : SingletonPattern<MonsterSpawner>
     public void SetSpawnInfo(FloorSpawnInfo info)
     {
         currFloorInfo = info;
-        Debug.Log("Received new spawn info: Contains");
+        //Debug.Log("Received new spawn info: Contains");
         foreach(MonsterInfo monsterInfo in currFloorInfo.monsters)
         {
-            Debug.Log(monsterInfo.monster);
+            //Debug.Log(monsterInfo.monster);
         }
     }
 }
