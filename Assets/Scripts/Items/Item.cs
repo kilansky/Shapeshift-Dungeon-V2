@@ -32,7 +32,18 @@ public class Item : MonoBehaviour
         if (item.ItemSlot == 0)
         {
             if (c.SpecialSlot == null) //If the player doesn't have a special item then equip one
+            {
                 c.SpecialSlot = this.item;
+
+                //If the item is the Kapala then we set the CanUseSpecial to false as you can't use the Kapala out of the gate and resets the sprite - AHL (4/25/21)
+                if (item.ItemName == "Kapala")
+                {
+                    c.canUseSpecial = false;
+                    item.prefab.GetComponent<KapalaSwap>().KapalaSpriteSwap(0);
+                }
+                    
+            }
+                
                 
 
             else if(c.hasBagOfHolding && !c.BagOfHoldingSlot) //If the player has a special item and the bag of holding but nothing in the bag of holding then we place the item in the bag

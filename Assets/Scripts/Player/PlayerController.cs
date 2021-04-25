@@ -79,6 +79,7 @@ public class PlayerController : SingletonPattern<PlayerController>
     [HideInInspector] public bool hasRedHerb = false; //Variable to make sure that the player has the red herb (makes for less checking of both pocker slots) so they are able to regain health when they start a new level
     [HideInInspector] public bool hasBagOfHolding = false; //Variable to make sure that the player has the bag of holding item (makes for less checking of both pocker slots) so they are able to store/swap special items
     [HideInInspector] public bool isItemSwapping = false; //Variable to be used to check if the itms are currently being swapped or not
+    [HideInInspector] public bool canUseSpecial = true; //Keeps track of if the special item can be used
 
     //Settable properties
     //Keep track of the amount of times that a stat was upgraded
@@ -117,7 +118,6 @@ public class PlayerController : SingletonPattern<PlayerController>
     private bool canAttack = true;
     //private bool canDashAttack = false;
     private bool canChargeAttack = true;
-    private bool canUseSpecial = true;
     private bool canUsePotion = true;
 
     //Current action/state of the player
@@ -806,6 +806,7 @@ public class PlayerController : SingletonPattern<PlayerController>
                     //Heals the player for 5 HP then sets the special charge to 0 **This is based on the Kapala item on the GDD** - AHL (4/20/21)
                     PlayerHealth.Instance.Heal(5);
                     SpecialCharge = 0;
+                    SpecialSlot.prefab.GetComponent<KapalaSwap>().KapalaSpriteSwap(SpecialCharge); //Resets the Kapala sprite aas it was used
                     HUDController.Instance.UpdateSpecialCharge();
                 }
 
@@ -928,6 +929,10 @@ public class PlayerController : SingletonPattern<PlayerController>
             if (!isItemSwapping && SpecialCharge >= specialCooldownTime.Value)
                 canUseSpecial = true;
 
+            //Calculates the % value of the Special Charge compared to the SpecialCooldownTime.Value
+            float percent = SpecialCharge / specialCooldownTime.Value;
+
+            SpecialSlot.prefab.GetComponent<KapalaSwap>().KapalaSpriteSwap(percent); //Changes the sprite of the Kapala based on the Special Charge value
             HUDController.Instance.UpdateSpecialCharge();
         }
     }
