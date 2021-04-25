@@ -4828,7 +4828,7 @@ LineRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_Positions:
   - {x: 0, y: 0, z: 0}
   - {x: 0, y: 0, z: 7}
@@ -14511,11 +14511,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa3b6992cd9ea6e458a57849e470d1c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  legnth: 7
+  length: 7
   damage: 1
   tickRate: 0.2
   laser: {fileID: 1874401697615512639}
-  hitEffects: {fileID: 2482321879899516037}
   mask:
     serializedVersion: 2
     m_Bits: 1537
@@ -14613,12 +14612,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6abb9e3af91ac6f4c9735ef34cba68fc, type: 3}
---- !u!1 &2482321879899516037 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2093740659065579466, guid: 6abb9e3af91ac6f4c9735ef34cba68fc,
-    type: 3}
-  m_PrefabInstance: {fileID: 4574685872795044687}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2482321879899516038 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2093740659065579465, guid: 6abb9e3af91ac6f4c9735ef34cba68fc,

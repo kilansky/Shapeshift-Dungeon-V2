@@ -80,13 +80,13 @@ public class Bullet : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         //destroy the bullet if it hits the environment, walls, the player, or stairs
-        if(collision.gameObject.layer == 10 || collision.gameObject.layer == 9 || collision.gameObject.layer == 8 || collision.gameObject.layer == 2)
+        if(canDamage && collision.gameObject.layer == 10 || collision.gameObject.layer == 9 || collision.gameObject.layer == 8 || collision.gameObject.layer == 2)
         {
             Destroy(gameObject);
         }
 
         //if the bullet hit another enemy, damage the enemy & destroy the bullet
-        if (collision.gameObject.layer == 11)
+        if (canDamage && collision.gameObject.layer == 11)
         {
             collision.gameObject.GetComponent<EnemyBase>().Damage(bulletDamage);
             Destroy(gameObject);
