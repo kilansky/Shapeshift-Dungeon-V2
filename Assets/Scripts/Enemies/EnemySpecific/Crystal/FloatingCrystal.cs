@@ -32,15 +32,8 @@ public class FloatingCrystal : EnemyBase
     //firing positions of front and back lasers
     public Transform firePointFront;
     public Light pointLight;
-    //public Transform target;
     public MeshRenderer renderer;
-    //public GameObject laser;
-    //public GameObject laserSpawnPoint;
-    //public GameObject crystal;
     public float chargeRate = 1f;
-
-    
-    //public float rotateSpeed = 3f;
 
 
     public override void Awake()

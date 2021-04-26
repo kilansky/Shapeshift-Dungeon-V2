@@ -51,7 +51,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
     #endregion
 
     #region Getters and Setters
-    public Rigidbody RB { get; private set; }
+    //public Rigidbody RB { get; private set; }
     public Rigidbody topRB { get; private set; }
     public Animator Anim { get; private set; }
     //public float minAgroRange { get; private set; }
@@ -109,7 +109,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
         currentStunResistance = entityData.stunResistance;
 
         agent = GetComponent<NavMeshAgent>();
-        RB = aliveGO.GetComponent<Rigidbody>();
+        //RB = aliveGO.GetComponent<Rigidbody>();
         topRB = GetComponent<Rigidbody>();
         Anim = aliveGO.GetComponent<Animator>();
 
@@ -175,8 +175,8 @@ public class EnemyBase : MonoBehaviour, IDamageable
     public virtual void SetVelocity(float velocity)
     {
         //may need to change this
-        velocityWorkspace.Set(FacingDirection * velocity * Time.fixedDeltaTime, RB.velocity.y, RB.velocity.x);
-        RB.velocity = velocityWorkspace;
+        //velocityWorkspace.Set(FacingDirection * velocity * Time.fixedDeltaTime, RB.velocity.y, RB.velocity.x);
+        //RB.velocity = velocityWorkspace;
     }
 
     public virtual bool CheckWall()

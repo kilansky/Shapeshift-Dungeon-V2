@@ -19,6 +19,7 @@ public class StartMenu : MonoBehaviour
     public float fadeInTime = 2f;
     public float fadeOutTime = 2f;
 
+    private GameObject activeCanvas;
     private float startPos;
     private float endPos;
 
@@ -28,37 +29,76 @@ public class StartMenu : MonoBehaviour
         startCanvas.SetActive(true);
         playCanvas.SetActive(false);
 
+        activeCanvas = startCanvas;
+
         startPos = transform.position.y;
         endPos = transform.position.y - 6f;
 
-        StartCoroutine(FadeFromBlack());
+        StartCoroutine(FadeInToMenu());
     }
 
+    //Transitions to the play game canvas
     public void PlayGame()
     {
-        //StartCoroutine(FadeToBlack(2));
+        StartCoroutine(TransitionMenu(playCanvas));
     }
 
+    //Loads the game from floor 0
+    public void StartFloor0()
+    {
+        StartCoroutine(FadeOutToLevel(2));
+    }
+
+    //Goes back to the start canvas
+    public void Back()
+    {
+        StartCoroutine(TransitionMenu(startCanvas));
+    }
+
+    //Exits the games entirely
     public void QuitGame()
     {
         Application.Quit();
     }
 
-    private IEnumerator TransitionMenu()
+    //Have the tile slide down & up to transition to the next menu
+    private IEnumerator TransitionMenu(GameObject nextMenu)
     {
         float timeElapsed = 0;
         float currPos = startPos;
+
+        CineShake.Instance.Shake(2f, (menuTransitionTime / 2));
         while (timeElapsed < (menuTransitionTime / 2))
         {
-            currPos = Mathf.Lerp(startPos, endPos, (menuTransitionTime / 2) / timeElapsed);
+            currPos = Mathf.Lerp(startPos, endPos, timeElapsed / (menuTransitionTime / 2));
             transform.position = new Vector3(transform.position.x, currPos, transform.position.z);
             timeElapsed += Time.deltaTime;
+            
             yield return new WaitForEndOfFrame();
         }
         transform.position = new Vector3(transform.position.x, endPos, transform.position.z);
+
+        activeCanvas.SetActive(false);
+        nextMenu.SetActive(true);
+        activeCanvas = nextMenu;
+
+        yield return new WaitForSeconds(0.25f);
+
+        timeElapsed = 0;
+        CineShake.Instance.Shake(2f, (menuTransitionTime / 2));
+        while (timeElapsed < (menuTransitionTime / 2))
+        {
+            currPos = Mathf.Lerp(endPos, startPos, timeElapsed / (menuTransitionTime / 2));
+            transform.position = new Vector3(transform.position.x, currPos, transform.position.z);
+            timeElapsed += Time.deltaTime;
+
+            yield return new WaitForEndOfFrame();
+        }
+        transform.position = new Vector3(transform.position.x, startPos, transform.position.z);
     }
 
-    private IEnumerator FadeFromBlack()
+    //Fade into the start menu
+    private IEnumerator FadeInToMenu()
     {
         float alpha = 1;
         blackScreenOverlay.color = new Color(0, 0, 0, alpha);
@@ -74,7 +114,8 @@ public class StartMenu : MonoBehaviour
         blackScreenOverlay.color = new Color(0, 0, 0, 0);
     }
 
-    private IEnumerator FadeToBlack(int sceneToLoad)
+    //Fade out to load a specified scene
+    private IEnumerator FadeOutToLevel(int sceneToLoad)
     {
         float alpha = 0;
         blackScreenOverlay.color = new Color(0, 0, 0, alpha);

@@ -32,7 +32,6 @@ public class FloatingCrystal_AttackState : AttackState
         laser = enemy.GetComponent<LaserDispenser>();
         attackStartupTime = laser.startupTime;
         isChargingUp = true;
-        TriggerAttack();
     }
 
     public override void Exit()
@@ -69,7 +68,7 @@ public class FloatingCrystal_AttackState : AttackState
         if (isAttacking && timeElapsed >= attackDuration)
         {
             isAttacking = false;
-            enemy.Anim.SetBool("isAttacking", false);
+            //enemy.Anim.SetBool("isAttacking", false);
             enemy.pointLight.intensity = 5f;
 
             timeElapsed = 0;
@@ -88,8 +87,7 @@ public class FloatingCrystal_AttackState : AttackState
     public override void TriggerAttack()
     {
         //canAttack = false;
-        base.TriggerAttack();
-        enemy.Anim.SetBool("isAttacking", true);
+        //enemy.Anim.SetBool("isAttacking", true);
 
         //fire the laser
         enemy.GetComponent<LaserDispenser>().ToggleLaser(true);

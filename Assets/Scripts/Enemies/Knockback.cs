@@ -67,15 +67,15 @@ public class Knockback : MonoBehaviour
     public IEnumerator EnemyKnockBack()
     {
         Debug.Log("knockback script called");
-        Debug.Log("RB is equal to " + enemy.RB);
+        //Debug.Log("RB is equal to " + enemy.RB);
 
-        OGposition = enemy.RB.transform.position;
+        //OGposition = enemy.RB.transform.position;
         Debug.Log("OG chillin at " + OGposition);
 
         enemy.isKnockedBack = true;
         enemy.agent.enabled = false;
         enemy.agent.isStopped = true;
-        enemy.RB.isKinematic = false;
+        //enemy.RB.isKinematic = false;
 
         //don't knock them back in the air
         
@@ -84,12 +84,12 @@ public class Knockback : MonoBehaviour
         knockbackDirection.y = 0;
         Debug.Log("obects involved are " + enemy.transform + ", " + gameObject.transform);
         
-        enemy.RB.velocity = knockbackDirection * knockBackStrength;
+        //enemy.RB.velocity = knockbackDirection * knockBackStrength;
         //enemy.RB.AddForce(knockbackDirection.normalized * knockBackStrength, ForceMode.Impulse);
 
         //enemy.transform.position = enemy.RB.transform.localPosition;
         
-        enemy.RB.transform.position = OGposition;
+        //enemy.RB.transform.position = OGposition;
         //Debug.Log("OG now chillin at " + OGposition);
         //Debug.Log("the RB is at " + enemy.RB.transform.position);
 
@@ -98,7 +98,7 @@ public class Knockback : MonoBehaviour
         enemy.isKnockedBack = false;
         enemy.agent.enabled = true;
         enemy.agent.isStopped = false;
-        enemy.RB.isKinematic = true;
+        //enemy.RB.isKinematic = true;
     }
 
 }
