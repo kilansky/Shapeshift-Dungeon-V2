@@ -33,8 +33,7 @@ public class FloatingCrystal : EnemyBase
     public Transform firePointFront;
     public Light pointLight;
     public MeshRenderer renderer;
-    public float chargeRate = 1f;
-
+    public float rotateSpeed = 1.2f;
 
     public override void Awake()
     {

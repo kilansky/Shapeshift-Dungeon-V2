@@ -43,6 +43,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
     public float knockBackStrength = 1000f;
 
     private Vector3 knockbackDirection;
+    private bool isBeingKnockedBack = false;
 
     [HideInInspector] public float distanceToPlayer;
     [HideInInspector] public NavMeshAgent agent;
@@ -405,41 +406,50 @@ public class EnemyBase : MonoBehaviour, IDamageable
     //public IEnumerator EnemyKnockBack()
     public IEnumerator EnemyKnockBack()
     {
-        //Debug.Log("knockback script called");
-        Debug.Log("topRB is equal to " + topRB);
+        if (!isBeingKnockedBack)
+        {
+            isBeingKnockedBack = true;
 
-        OGposition = topRB.transform.position;
-        OGrotation = topRB.transform.rotation;
-        Debug.Log("OG chillin at " + OGposition);
+            //Debug.Log("knockback script called");
+            //Debug.Log("topRB is equal to " + topRB);
 
-        isKnockedBack = true;
-        agent.enabled = false;
-        topRB.isKinematic = false;
+            OGposition = topRB.transform.position;
+            OGrotation = topRB.transform.rotation;
+            //Debug.Log("OG chillin at " + OGposition);
 
-        //don't knock them back in the air
+            isKnockedBack = true;
+            agent.enabled = false;
+            topRB.isKinematic = false;
 
-        //TODO: double check the logic here should be enemy - knockbacker object
-        knockbackDirection = (transform.position - player.transform.position).normalized;
-        knockbackDirection.y = 0;
-        Debug.Log("knockbackdirection is " + knockbackDirection);
+            //don't knock them back in the air
 
-        //topRB.velocity = knockbackDirection * knockBackStrength;
-        Debug.Log("my strength is " + knockBackStrength);
-        
-        topRB.AddForce(knockbackDirection * knockBackStrength, ForceMode.Impulse);
-        Debug.Log("what's my velocity? " + topRB.velocity);
-        //enemy.transform.position = enemy.RB.transform.localPosition;
+            //TODO: double check the logic here should be enemy - knockbacker object
+            knockbackDirection = (transform.position - player.transform.position).normalized;
+            knockbackDirection.y = 0;
+            //Debug.Log("knockbackdirection is " + knockbackDirection);
 
-        topRB.transform.position = OGposition;
-        topRB.transform.rotation = OGrotation;
-        //Debug.Log("OG now chillin at " + OGposition);
-        //Debug.Log("the RB is at " + enemy.RB.transform.position);
+            //topRB.velocity = knockbackDirection * knockBackStrength;
+            //Debug.Log("my strength is " + knockBackStrength);
 
-        yield return new WaitForSeconds(0.5f);
+            topRB.AddForce(knockbackDirection * knockBackStrength, ForceMode.Impulse);
+            //Debug.Log("what's my velocity? " + topRB.velocity);
+            //enemy.transform.position = enemy.RB.transform.localPosition;
 
-        isKnockedBack = false;
-        agent.enabled = true;
-        topRB.isKinematic = true;
+            topRB.transform.position = OGposition;
+            topRB.transform.rotation = OGrotation;
+            //Debug.Log("OG now chillin at " + OGposition);
+            //Debug.Log("the RB is at " + enemy.RB.transform.position);
+
+            yield return new WaitForSeconds(0.5f);
+
+            if(Health > 0)
+            {
+                isKnockedBack = false;
+                agent.enabled = true;
+                topRB.isKinematic = true;
+                isBeingKnockedBack = false;
+            }
+        }
     }
 
 
@@ -464,13 +474,16 @@ public class EnemyBase : MonoBehaviour, IDamageable
         //Debug.Log("rb is equal to " + rb);
 
         //straight line knockback
-        if (other.gameObject.CompareTag("Item") || other.gameObject.layer == 14)
+        /*
+        if (other.gameObject.CompareTag("Item") || other.gameObject.layer == 14) //layer 14 = swordHitbox
         {
             Debug.Log("hey look i'm triggered");
-            //Vector3 direction = (other.transform.position - transform.position).normalized;
-            StartCoroutine(EnemyKnockBack());
-            //rb.AddForce(knockbackDirection.normalized * knockBackStrength, ForceMode.Impulse);
+            Vector3 direction = (other.transform.position - transform.position).normalized;
+            if(!isBeingKnockedBack)
+                StartCoroutine(EnemyKnockBack());
+            rb.AddForce(knockbackDirection.normalized * knockBackStrength, ForceMode.Impulse);
         }
+        */
     }
 
     private void OnTriggerStay(Collider other)

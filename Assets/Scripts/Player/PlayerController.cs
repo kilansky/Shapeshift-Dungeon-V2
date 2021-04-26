@@ -988,7 +988,7 @@ public class PlayerController : SingletonPattern<PlayerController>
     public void KapalaSpecialRecharge()
     {
         //The special only recharges if the current special item is the Kapala
-        if (SpecialSlot.ItemName == "Kapala")
+        if (SpecialSlot && SpecialSlot.ItemName == "Kapala")
         {
             if (SpecialCharge < specialCooldownTime.Value && !isItemSwapping)
                 SpecialCharge++; //Adds 1 to the special charge since this is when an enemy dies
