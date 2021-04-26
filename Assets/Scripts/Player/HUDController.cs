@@ -47,9 +47,12 @@ public class HUDController : SingletonPattern<HUDController>
 
     [Header("Special Item Panel")]
     public UIPanel specialItemPanel;
+    public GameObject specialItem2Panel;
     public Image speicalItemIcon;
-    public GameObject speicalItemIcon2;
+    public Image specialItemIcon2;
+    public GameObject speicalItemEmptyIcon;
     public Image chargeBarFill;
+    public Image chargeBar2Fill;
     public UIPanel swapItemPanel;
 
     [Header("Equipment Panel")]
@@ -275,7 +278,21 @@ public class HUDController : SingletonPattern<HUDController>
         float value = PlayerController.Instance.SpecialCharge;
 
         if(PlayerController.Instance.isItemSwapping == false)
+        {
             chargeBarFill.fillAmount = value / maxValue;
+
+            //If statement to make sure that the second item only gets filled in if there is an item and we can get a value
+            if (PlayerController.Instance.BagOfHoldingSlot != null)
+            {
+                //If there is a value in the second max value charge variable then we set it like the normal charge bar
+                if (PlayerController.Instance.specialCharge2MaxValue > 0)
+                    chargeBar2Fill.fillAmount = PlayerController.Instance.specialCharge2 / PlayerController.Instance.specialCharge2MaxValue;
+
+                //else if the value is less than 0 (meaning it wasn't set yet) then we set it to be divided by itself (This is to make sure the Kapala doesn't start with a value of 1
+                else
+                    chargeBar2Fill.fillAmount = PlayerController.Instance.specialCharge2 / PlayerController.Instance.specialCharge2;
+            }
+        }
     }
 
     public void ShowHealthBar()
@@ -408,7 +425,21 @@ public class HUDController : SingletonPattern<HUDController>
 
 
         if(PlayerController.Instance.hasBagOfHolding && PlayerController.Instance.BagOfHoldingSlot)
-            speicalItemIcon2.GetComponent<Image>().sprite = PlayerController.Instance.BagOfHoldingSlot.sprite;
+        {
+            if(speicalItemEmptyIcon)
+            {
+                //Deactivate the SpecialItemEmptyIcon
+                speicalItemEmptyIcon.SetActive(false);
+
+                //Activate the second charge wheel and adjust the values
+                specialItem2Panel.SetActive(true);
+            }
+
+            //If the picked up item wasn't due to item swapping and it isn't the Kapala then we set its special charge to full (Which is just a very high number as it is hard to get the actual value
+            if (!PlayerController.Instance.isItemSwapping && PlayerController.Instance.BagOfHoldingSlot.ItemName != "Kapala")
+                PlayerController.Instance.specialCharge2 = 15;
+        }
+            
 
         UpdateSpecialCharge();
     }
@@ -420,18 +451,18 @@ public class HUDController : SingletonPattern<HUDController>
 
     public void ShowBagOfHoldingSlot()
     {
-        speicalItemIcon2.SetActive(true);
+        speicalItemEmptyIcon.SetActive(true);
     }
 
     public void HideBagOfHoldingSlot()
     {
-        speicalItemIcon2.SetActive(false);
+        speicalItemEmptyIcon.SetActive(false);
     }
 
     public void SetNewSpecialItemIcons()
     {
         speicalItemIcon.sprite = PlayerController.Instance.SpecialSlot.sprite;
-        speicalItemIcon2.GetComponent<Image>().sprite = PlayerController.Instance.BagOfHoldingSlot.sprite;
+        specialItemIcon2.GetComponent<Image>().sprite = PlayerController.Instance.BagOfHoldingSlot.sprite;
     }
 
     public void ShowSpecialSwapPanel()

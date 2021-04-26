@@ -83,6 +83,8 @@ public class PlayerController : SingletonPattern<PlayerController>
     [HideInInspector] public bool hasBagOfHolding = false; //Variable to make sure that the player has the bag of holding item (makes for less checking of both pocker slots) so they are able to store/swap special items
     [HideInInspector] public bool isItemSwapping = false; //Variable to be used to check if the itms are currently being swapped or not
     [HideInInspector] public bool canUseSpecial = true; //Keeps track of if the special item can be used
+    [HideInInspector] public float specialCharge2 = 0; //Varaible to hold the special charge of the item in the bag of holding
+    [HideInInspector] public float specialCharge2MaxValue = -1; //Variable to hold the max value for the secondary special item charge
 
     //Settable properties
     //Keep track of the amount of times that a stat was upgraded
@@ -113,7 +115,6 @@ public class PlayerController : SingletonPattern<PlayerController>
     private float currAttackDamage;
     private float currAttackSpeed;
     private int priceOfLastTouchedItem = 0; //I need this to store prices -Justin
-    private float specialCharge2 = 0; //Varaible to hold the special charge of the item in the bag of holding
     private bool specialIsCharging = false;
 
     //Allow/prevent input actions
@@ -545,6 +546,7 @@ public class PlayerController : SingletonPattern<PlayerController>
 
             //Assigns the secondary special charge to here
             float tempSpecial = SpecialCharge;
+            float tempSpecialMax = specialCooldownTime.Value;
 
             //Equips the Bag Of Holding Item
             BagOfHoldingSlot.prefab.GetComponent<Item>().Equip(this, PlayerHealth.Instance);
@@ -562,6 +564,7 @@ public class PlayerController : SingletonPattern<PlayerController>
                 SpecialCharge = 0;
 
             specialCharge2 = tempSpecial;
+            specialCharge2MaxValue = tempSpecialMax;
 
             canUseSpecial = false;
 
