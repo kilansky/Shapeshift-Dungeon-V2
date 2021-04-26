@@ -34,7 +34,7 @@ public class Laser : MonoBehaviour
         //If statement to adjust some values if this is used for the player weapon
         if(parentObject.GetComponent<PlayerController>())
         {
-            damage = 4f;
+            damage = 5f;
             Destroy(gameObject, 0.3f);
         }
     }
