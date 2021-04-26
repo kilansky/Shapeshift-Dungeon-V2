@@ -765,6 +765,8 @@ MonoBehaviour:
     type: 3}
   gemPrefab: {fileID: 1679218149131978045, guid: 269ad815a67e12f4d86befaa2ccef290,
     type: 3}
+  isKnockedBack: 0
+  knockBackStrength: 10
   distanceToPlayer: 0
   agent: {fileID: 0}
   isStunned: 0
@@ -809,13 +811,13 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3285207134206969448}
   serializedVersion: 2
-  m_Mass: 10000
+  m_Mass: 1
   m_Drag: 1
   m_AngularDrag: 0.05
   m_UseGravity: 1
   m_IsKinematic: 1
   m_Interpolate: 0
-  m_Constraints: 126
+  m_Constraints: 116
   m_CollisionDetection: 0
 --- !u!114 &7148665511968356611
 MonoBehaviour:

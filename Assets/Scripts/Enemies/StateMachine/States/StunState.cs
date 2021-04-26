@@ -47,7 +47,7 @@ public class StunState : State
         if(Time.time >= startTime + stateData.stunKnockbackTime && !isStopped)
         {
             isStopped = true;
-            entity.SetVelocity(0f);
+            //entity.SetVelocity(0f);
         }  
     }
 

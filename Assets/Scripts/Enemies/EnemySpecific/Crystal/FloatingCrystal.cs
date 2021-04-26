@@ -69,7 +69,7 @@ public class FloatingCrystal : EnemyBase
         //set target to any other crystals position
         foreach (FloatingCrystal floatingCrystal in crystals)
         {
-            Debug.Log("there are " + crystals.Length + " crystals in the scene");
+            //Debug.Log("there are " + crystals.Length + " crystals in the scene");
         }
 
         //this line is what got rid of my NullReferenceExceptions
@@ -80,7 +80,7 @@ public class FloatingCrystal : EnemyBase
     //set current state to stunState if isStunned
     public override void Damage(float damage)
     {
-        Debug.Log("Floating Crytal Damage called");
+
         base.Damage(damage);
 
         if (isStunned && stateMachine.currentState != stunState)
