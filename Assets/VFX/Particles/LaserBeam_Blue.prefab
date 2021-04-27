@@ -198,6 +198,9 @@ MonoBehaviour:
   mask:
     serializedVersion: 2
     m_Bits: 1537
+  hitFX: {fileID: 2093740659809281131}
+  setOnFire: 0
+  heal: 0
   parentObject: {fileID: 0}
 --- !u!136 &7533403553304664422
 CapsuleCollider:
@@ -14617,6 +14620,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6abb9e3af91ac6f4c9735ef34cba68fc, type: 3}
+--- !u!1 &2093740659809281131 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2093740659065579466, guid: 6abb9e3af91ac6f4c9735ef34cba68fc,
+    type: 3}
+  m_PrefabInstance: {fileID: 1021051809}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2093740659809281128 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2093740659065579465, guid: 6abb9e3af91ac6f4c9735ef34cba68fc,
