@@ -440,6 +440,7 @@ public class HUDController : SingletonPattern<HUDController>
 
                 //Activate the second charge wheel and adjust the values
                 specialItem2Panel.SetActive(true);
+                SetNewSpecialItemIcons();
             }
 
             //If the picked up item wasn't due to item swapping and it isn't the Kapala then we set its special charge to full (Which is just a very high number as it is hard to get the actual value
@@ -469,7 +470,7 @@ public class HUDController : SingletonPattern<HUDController>
     public void SetNewSpecialItemIcons()
     {
         speicalItemIcon.sprite = PlayerController.Instance.SpecialSlot.sprite;
-        specialItemIcon2.GetComponent<Image>().sprite = PlayerController.Instance.BagOfHoldingSlot.sprite;
+        specialItemIcon2.sprite = PlayerController.Instance.BagOfHoldingSlot.sprite;
     }
 
     public void ShowSpecialSwapPanel()
