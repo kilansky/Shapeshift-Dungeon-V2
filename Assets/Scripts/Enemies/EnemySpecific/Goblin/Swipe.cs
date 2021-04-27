@@ -42,6 +42,7 @@ public class Swipe : MonoBehaviour
 
     public void EndAttack()
     {
+        Debug.Log("End Attack Called");
         attackAnim.SetBool("isAttacking", false);
     }
 

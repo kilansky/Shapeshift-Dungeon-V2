@@ -11,8 +11,8 @@ public class EnemyHitBox : MonoBehaviour
     {
         if (other.GetComponent<PlayerController>())
         {
-            //Spawn hit effect on enemy
-            Vector3 playerPos = other.transform.position;
+            //Spawn hit effect on player
+            Vector3 playerPos = PlayerController.Instance.transform.position;
             Instantiate(hitEffect, new Vector3(playerPos.x, transform.position.y, playerPos.z), Quaternion.identity);
 
             //Apply slight camera shake
@@ -20,17 +20,18 @@ public class EnemyHitBox : MonoBehaviour
 
             //Determine dameage to deal based on player's current attack damage
             float damageToDeal = transform.parent.GetComponent<EnemyBase>().meleeDamage;
+            Debug.Log("damageToDeal set to: " + damageToDeal);
 
             //if (dealsExtraDamage)//Check to deal additional damage
             //  damageToDeal *= PlayerController.Instance.attack3DmgMod;
 
-            //Apply damage to enemy
+            //Apply damage to player
             other.GetComponent<PlayerHealth>().Damage(damageToDeal);
 
             //Apply Knockback to enemy
             //StartCoroutine(other.GetComponent<EnemyBase>().EnemyKnockBack());
 
-            AudioManager.Instance.Play("Hit");
+            //AudioManager.Instance.Play("Hit");
         }
 
         if (other.GetComponent<DestructibleProp>())
