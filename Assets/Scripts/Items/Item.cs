@@ -181,6 +181,12 @@ public class Item : MonoBehaviour
                 //print("Alright time to open up the stat potion upgrade panel!");
                 HUDController.Instance.ShowStatPotionPanel(); //Opens up the Upgrade Stat Potion Panel
             }
+
+            //Gem Bag
+            else if (item.ItemName == "Gem Bag")
+            {
+                PlayerController.Instance.GetComponent<PlayerGems>().AddGems(5);
+            }
         }
 
 

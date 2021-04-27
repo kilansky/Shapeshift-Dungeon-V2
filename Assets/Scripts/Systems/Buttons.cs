@@ -80,11 +80,13 @@ public class Buttons : MonoBehaviour
         yield return new WaitForSecondsRealtime(1f);
 
         //Send the damage the player took as an email - only if in build, not editor
+        /*
         if (!Application.isEditor)
         {
             //print("We are running this from inside of the editor!");
             PlayerController.Instance.GetComponent<DamageTracker>().DisplayDamage();
         }
+        */
 
         yield return new WaitForSecondsRealtime(1f);
 
