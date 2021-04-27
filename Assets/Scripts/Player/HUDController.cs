@@ -290,7 +290,14 @@ public class HUDController : SingletonPattern<HUDController>
 
                 //else if the value is less than 0 (meaning it wasn't set yet) then we set it to be divided by itself (This is to make sure the Kapala doesn't start with a value of 1
                 else
-                    chargeBar2Fill.fillAmount = PlayerController.Instance.specialCharge2 / PlayerController.Instance.specialCharge2;
+                {
+                    if (PlayerController.Instance.BagOfHoldingSlot.ItemName != "Kapala")
+                        chargeBar2Fill.fillAmount = 1;
+
+                    else
+                        chargeBar2Fill.fillAmount = 0;
+                }
+                    
             }
         }
     }
@@ -433,11 +440,8 @@ public class HUDController : SingletonPattern<HUDController>
 
                 //Activate the second charge wheel and adjust the values
                 specialItem2Panel.SetActive(true);
+                SetNewSpecialItemIcons();
             }
-
-            //If the picked up item wasn't due to item swapping and it isn't the Kapala then we set its special charge to full (Which is just a very high number as it is hard to get the actual value
-            if (!PlayerController.Instance.isItemSwapping && PlayerController.Instance.BagOfHoldingSlot.ItemName != "Kapala")
-                PlayerController.Instance.specialCharge2 = 15;
         }
             
 
@@ -451,18 +455,27 @@ public class HUDController : SingletonPattern<HUDController>
 
     public void ShowBagOfHoldingSlot()
     {
-        speicalItemEmptyIcon.SetActive(true);
+        if(!PlayerController.Instance.BagOfHoldingSlot)
+            speicalItemEmptyIcon.SetActive(true);
+        else
+            specialItem2Panel.SetActive(true);
     }
 
     public void HideBagOfHoldingSlot()
     {
         speicalItemEmptyIcon.SetActive(false);
+        specialItem2Panel.SetActive(false);
+    }
+
+    public void SetNewSpecialItemIcon()
+    {
+        speicalItemIcon.sprite = PlayerController.Instance.SpecialSlot.sprite;
     }
 
     public void SetNewSpecialItemIcons()
     {
         speicalItemIcon.sprite = PlayerController.Instance.SpecialSlot.sprite;
-        specialItemIcon2.GetComponent<Image>().sprite = PlayerController.Instance.BagOfHoldingSlot.sprite;
+        specialItemIcon2.sprite = PlayerController.Instance.BagOfHoldingSlot.sprite;
     }
 
     public void ShowSpecialSwapPanel()

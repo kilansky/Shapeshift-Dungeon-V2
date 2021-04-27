@@ -12,6 +12,7 @@ public class Item : MonoBehaviour
     public GameObject priceCanvas;
 
     private bool isSecondItem = false;
+    private bool isNewBOHItem = false;
 
     /// <summary>
     /// AHL - 4/8/21
@@ -41,13 +42,29 @@ public class Item : MonoBehaviour
                     c.canUseSpecial = false;
                     item.prefab.GetComponent<KapalaSwap>().KapalaSpriteSwap(0);
                 }
-                    
             }
                 
                 
-
+            //If the BOH Slot is being set for the first time then we have some special aspecst to do with setting values
             else if(c.hasBagOfHolding && !c.BagOfHoldingSlot) //If the player has a special item and the bag of holding but nothing in the bag of holding then we place the item in the bag
+            {
                 c.BagOfHoldingSlot = this.item;
+                isNewBOHItem = true;
+
+                //If the item is the Kapala then we need to reset it's sprite  - AHL (4/25/21)
+                if (item.ItemName == "Kapala")
+                {
+                    item.prefab.GetComponent<KapalaSwap>().KapalaSpriteSwap(0);
+                    c.specialCharge2MaxValue = 10;
+                }
+
+                //If the item is anything but the Kapala then we need to set its special charge 2 max value to whatever it's value is
+                else
+                {
+                    c.specialCharge2 = item.statMods[0].adjustableValue;
+                    c.specialCharge2MaxValue = c.specialCharge2;
+                }
+            }
 
             else //If the player does have a special item and No Bag of Holding OR if the player has the bag of holding and it is filled as well then unequip their current one and equip the new one
             {
@@ -352,18 +369,23 @@ public class Item : MonoBehaviour
             //Special Item Recharge Time Adjustment
             else if ((int)item.statMods[i].statType == 12)
             {
-                //Flat Value
-                if ((int)item.statMods[i].statModifier == 100)
-                    c.specialCooldownTime.AddModifiers(new StatModifier(item.statMods[i].adjustableValue, StatModType.Flat, item.prefab));
+                //This item equips only if this is the main item and not for the BOH original pick up
+                if (!isNewBOHItem)
+                {
+                    //Flat Value
+                    if ((int)item.statMods[i].statModifier == 100)
+                        c.specialCooldownTime.AddModifiers(new StatModifier(item.statMods[i].adjustableValue, StatModType.Flat, item.prefab));
 
-                //Percent Add Value
-                if ((int)item.statMods[i].statModifier == 200)
-                    c.specialCooldownTime.AddModifiers(new StatModifier(item.statMods[i].adjustableValue, StatModType.PercentAdd, item.prefab));
+                    //Percent Add Value
+                    if ((int)item.statMods[i].statModifier == 200)
+                        c.specialCooldownTime.AddModifiers(new StatModifier(item.statMods[i].adjustableValue, StatModType.PercentAdd, item.prefab));
 
-                //Percent Mult Value
-                if ((int)item.statMods[i].statModifier == 300)
-                    c.specialCooldownTime.AddModifiers(new StatModifier(item.statMods[i].adjustableValue, StatModType.PercentMult, item.prefab));
+                    //Percent Mult Value
+                    if ((int)item.statMods[i].statModifier == 300)
+                        c.specialCooldownTime.AddModifiers(new StatModifier(item.statMods[i].adjustableValue, StatModType.PercentMult, item.prefab));
+                }
 
+                //Shows the special swap panel
                 if(item.ItemName != "AA Battery")
                 {
                     HUDController.Instance.ShowSpecialItemPanel();
@@ -380,6 +402,9 @@ public class Item : MonoBehaviour
         HUDController.Instance.HideQuickHint();
         if(c.isItemSwapping == false) //Only Destroy a game object if there is no item swapping happening from the Bag of Holding button
             Destroy(gameObject);
+
+        if (isNewBOHItem)
+            isNewBOHItem = false;
     }
 
     /// <summary>
@@ -486,8 +511,8 @@ public class Item : MonoBehaviour
             else if ((int)item.statMods[i].statType == 12)
             {
                 c.specialCooldownTime.RemoveAllModifiersFromSource(item.prefab);
-                Debug.Log("This item " + item.ItemName + " has been removed so Damage From Enemies has been adjusted.");
-                Debug.Log("The new Damage From Enemies is " + c.specialCooldownTime.Value);
+                Debug.Log("This item " + item.ItemName + " has been removed so Special Item Recharge has been adjusted.");
+                Debug.Log("The new Special Item Recharge is " + c.specialCooldownTime.Value);
             }
         }
     }

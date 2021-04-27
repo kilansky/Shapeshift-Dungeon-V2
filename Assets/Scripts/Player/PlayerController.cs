@@ -121,6 +121,7 @@ public class PlayerController : SingletonPattern<PlayerController>
     private float currAttackSpeed;
     private int priceOfLastTouchedItem = 0; //I need this to store prices -Justin
     private bool specialIsCharging = false;
+    private bool specialIsCharging2 = false;
 
     //Allow/prevent input actions
     private bool canMove = true;
@@ -881,7 +882,7 @@ public class PlayerController : SingletonPattern<PlayerController>
                     //Heals the player for 5 HP then sets the special charge to 0 **This is based on the Kapala item on the GDD** - AHL (4/20/21)
                     PlayerHealth.Instance.Heal(5);
                     SpecialCharge = 0;
-                    SpecialSlot.prefab.GetComponent<KapalaSwap>().KapalaSpriteSwap(SpecialCharge); //Resets the Kapala sprite aas it was used
+                    SpecialSlot.prefab.GetComponent<KapalaSwap>().KapalaSpriteSwap(0); //Resets the Kapala sprite aas it was used
                     HUDController.Instance.UpdateSpecialCharge();
                 }
 
@@ -963,6 +964,10 @@ public class PlayerController : SingletonPattern<PlayerController>
 
     IEnumerator RechargeSpecial()
     {
+        //Starts the corutine to recharge the second special item is need be
+        if (hasBagOfHolding && !specialIsCharging2)
+            StartCoroutine(RechargeSpecial2());
+
         //The special only recharges if the current special item isn't the Kapala
         if(!specialIsCharging)
         {
@@ -990,6 +995,30 @@ public class PlayerController : SingletonPattern<PlayerController>
         }           
     }
 
+    //Bag of holding special bar
+    IEnumerator RechargeSpecial2()
+    {
+        //The special only recharges if the current special item isn't the Kapala
+        if (!specialIsCharging2)
+        {
+            //While loop to check about the Kapala because if not then it will recharge using the time variables
+            while (specialCharge2 < specialCharge2MaxValue && !isItemSwapping && BagOfHoldingSlot.ItemName != "Kapala")
+            {
+                specialIsCharging2 = true;
+
+                specialCharge2 += Time.deltaTime;
+                HUDController.Instance.UpdateSpecialCharge();
+
+                if (isItemSwapping)
+                    break;
+
+                yield return new WaitForEndOfFrame();
+            }
+
+            specialIsCharging2 = false;
+        }
+    }
+
     /// <summary>
     /// Function to be called by EnemyBase to recharge the Special Charge only if the Kapala is equipped - AHL (4/20/21)
     /// </summary>
@@ -1008,6 +1037,22 @@ public class PlayerController : SingletonPattern<PlayerController>
             float percent = SpecialCharge / specialCooldownTime.Value;
 
             SpecialSlot.prefab.GetComponent<KapalaSwap>().KapalaSpriteSwap(percent); //Changes the sprite of the Kapala based on the Special Charge value
+            HUDController.Instance.UpdateSpecialCharge();
+        }
+
+        //The special only recharges if the current BOH item is the Kapala
+        else if (BagOfHoldingSlot && BagOfHoldingSlot.ItemName == "Kapala")
+        {
+            //Calculates the % value of the Special Charge compared to the SpecialCooldownTime.Value
+            if (specialCharge2MaxValue == -1)
+                specialCharge2MaxValue = 10;
+
+            if ((specialCharge2 < specialCharge2MaxValue) && !isItemSwapping)
+                specialCharge2++; //Adds 1 to the special charge 2 since this is when an enemy dies
+
+            float percent = specialCharge2 / specialCharge2MaxValue;
+
+            BagOfHoldingSlot.prefab.GetComponent<KapalaSwap>().KapalaSpriteSwap(percent); //Changes the sprite of the Kapala based on the Special Charge value
             HUDController.Instance.UpdateSpecialCharge();
         }
     }
