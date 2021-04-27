@@ -49,13 +49,16 @@ MonoBehaviour:
   length: 7
   damage: 0
   tickRate: 0.2
+  isStartupLaser: 1
   laser: {fileID: 3525734081352839089}
   mask:
     serializedVersion: 2
     m_Bits: 1537
+  hitFX: {fileID: 0}
   setOnFire: 0
   heal: 0
   parentObject: {fileID: 0}
+  laserTriggered: 0
 --- !u!136 &286061345508353396
 CapsuleCollider:
   m_ObjectHideFlags: 0

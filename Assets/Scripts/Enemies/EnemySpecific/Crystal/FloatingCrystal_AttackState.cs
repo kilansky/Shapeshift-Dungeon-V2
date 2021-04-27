@@ -87,7 +87,7 @@ public class FloatingCrystal_AttackState : AttackState
             if (monseterToHeal)
             {
                 isChargingUp = true;
-                TriggerAttack();
+                base.Enter();
             }
 
             timeElapsed = 0;
@@ -112,11 +112,15 @@ public class FloatingCrystal_AttackState : AttackState
             //If the monster to heal reaches full health, set it to null and stop firing
             if(monseterToHeal.GetComponent<EnemyBase>().Health == monseterToHeal.GetComponent<EnemyBase>().healthBar.maxValue)
             {
-                monseterToHeal = null;
-                isAttacking = false;
-                enemy.pointLight.intensity = 5f;
-                timeElapsed = 0;
-                stateMachine.ChangeState(enemy.moveState);
+                monseterToHeal = GetMonsterToHeal();
+
+                if(monseterToHeal == null)
+                {
+                    isAttacking = false;
+                    enemy.pointLight.intensity = 5f;
+                    timeElapsed = 0;
+                    stateMachine.ChangeState(enemy.moveState);
+                }
             }
         }
     }
@@ -141,9 +145,17 @@ public class FloatingCrystal_AttackState : AttackState
         foreach (EnemyBase monster in monsters)
         {
             float monsterDist = Vector3.Distance(enemy.transform.position, monster.transform.position);
-            if (monsterDist <= 20f && monster.Health < monster.healthBar.maxValue)
+            //Check if there is an enemy within range in need of healing
+            if (monsterDist <= 15f && monster.Health < monster.healthBar.maxValue)
             {
-                return monster.transform;
+                //Check if there is line of sight between the green crystal and the enemy to heal
+                RaycastHit hit;
+                Vector3 rayDirection = monster.transform.position - enemy.transform.position;
+                if (Physics.Raycast(enemy.transform.position, rayDirection, out hit))
+                {
+                    if (hit.transform == monster.transform)
+                        return monster.transform;
+                }
             }
         }
         return null;

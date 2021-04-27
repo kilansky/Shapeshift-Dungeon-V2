@@ -128,6 +128,7 @@ public class LaserDispenser : MonoBehaviour
         startLaser.SetActive(false);
         laserStartupEffect.SetActive(false);
         laser.SetActive(true);
+        laser.GetComponent<Laser>().laserTriggered = false;
     }
 
     /// <summary>

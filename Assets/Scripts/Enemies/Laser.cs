@@ -17,6 +17,7 @@ public class Laser : MonoBehaviour
     public float length = 7f;
     public float damage = 1f;
     public float tickRate = .4f;
+    public bool isStartupLaser = false;
 
     [Header("Misc")]
     public GameObject laser;
@@ -29,16 +30,15 @@ public class Laser : MonoBehaviour
 
     private LineRenderer beam;
     private CapsuleCollider capsuleCollider;
-    private bool laserTriggered = false;
     private VisualEffect hitEffect;
 
     [HideInInspector] public GameObject parentObject; //Variable to hold the parent Object to make sure the Damage Tracker is able to track the damage correctly
+    [HideInInspector] public bool laserTriggered = false;
 
     private void Start()
     {
         beam = laser.gameObject.GetComponent<LineRenderer>();
         capsuleCollider = GetComponent<CapsuleCollider>();
-        hitEffect = hitFX.GetComponent<VisualEffect>();
         parentObject = transform.parent.gameObject;
 
         //If statement to adjust some values if this is used for the player weapon
@@ -48,7 +48,14 @@ public class Laser : MonoBehaviour
             Destroy(gameObject, 0.3f);
         }
 
-        StartCoroutine(PlayFX());
+        if(!isStartupLaser)
+        {
+            hitEffect = hitFX.GetComponent<VisualEffect>();
+            StartCoroutine(PlayFX());
+        }
+
+        if (heal)
+            tickRate = 0.6f;
     }
 
     private void FixedUpdate()
@@ -83,7 +90,9 @@ public class Laser : MonoBehaviour
         beam.SetPosition(1, new Vector3(0, 0, length));
         capsuleCollider.center = Vector3.forward * length / 2;
         capsuleCollider.height = length;
-        hitFX.transform.localPosition = new Vector3(0, 0, length);
+
+        if(!isStartupLaser)
+            hitFX.transform.localPosition = new Vector3(0, 0, length);
     }
 
     /// <summary>
@@ -92,7 +101,7 @@ public class Laser : MonoBehaviour
     /// <param name="other"></param>
     private void OnTriggerStay(Collider other)
     {
-        if(!laserTriggered)
+        if(!laserTriggered && other.transform != parentObject.transform)
         {
             if (!parentObject.GetComponent<PlayerController>() && !PlayerHealth.Instance.isInvincible && damage > 0)
                 StartCoroutine(LaserCycle(other.gameObject));
@@ -130,19 +139,19 @@ public class Laser : MonoBehaviour
             }
         }
 
+        //If the other object is Monster (Contains the enemy base script) then go on with the rest of the damage then destroys itself
         if (target.GetComponent<EnemyBase>())
         {
-            //If the other object is Monster (Contains the enemy base script) then go on with the rest of the damage then destroys itself
-            if (setOnFire)
-                target.GetComponent<EnemyBase>().transform.GetComponent<StatusEffects>().fireStatus(3f);
-
             if (heal)
                 target.GetComponent<EnemyBase>().Heal(1);
-            else
+            else if(!parentObject.GetComponent<EnemyBase>())
             {
                 //Starts the knockback coroutine
                 StartCoroutine(target.GetComponent<EnemyBase>().EnemyKnockBack());
                 target.GetComponent<EnemyBase>().Damage(damage);
+
+                if (setOnFire)
+                    target.GetComponent<EnemyBase>().transform.GetComponent<StatusEffects>().fireStatus(3f);
             }
 
             yield return new WaitForSeconds(tickRate);
@@ -153,7 +162,6 @@ public class Laser : MonoBehaviour
 
     private IEnumerator PlayFX()
     {
-        Debug.Log("Playing effect!");
         hitEffect.Play();
         yield return new WaitForSeconds(.15f);
         StartCoroutine(PlayFX());

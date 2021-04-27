@@ -750,9 +750,11 @@ MonoBehaviour:
     type: 3}
   isKnockedBack: 0
   knockBackStrength: 5
+  meleeDamage: 3
   distanceToPlayer: 0
   agent: {fileID: 0}
   isStunned: 0
+  isInvincible: 0
   whatIsPlayer:
     serializedVersion: 2
     m_Bits: 256
@@ -800,7 +802,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 1
   m_Interpolate: 0
-  m_Constraints: 116
+  m_Constraints: 126
   m_CollisionDetection: 0
 --- !u!114 &7148665511968356611
 MonoBehaviour:

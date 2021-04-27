@@ -113,37 +113,16 @@ public class FloatingCrystal_MoveState : MoveState
     public void SearchWalkPoint()
     {
         //find a walk point after you've moved to one already
-        walkPoint = new Vector3(Random.insideUnitSphere.x * walkPointRange, enemy.transform.position.y, Random.insideUnitSphere.z * walkPointRange);
-        //Debug.Log("my walkpoint is " + walkPoint);
-        walkPointSet = true;
-
-        /*float randomZ = Random.Range(-walkPointRange, walkPointRange);
-        float randomX = Random.Range(-walkPointRange, walkPointRange);
-
-        //walkPoint = new Vector3(transform.position.x + randomX, transform.position.y, transform.position.z + randomZ);
-        //walkPointSet = true;
-        Debug.Log("my walk point is " + walkPoint);*/
-
-        NavMeshHit hit;
-        Vector3 finalPosition = Vector3.zero;
-        if (NavMesh.SamplePosition(walkPoint, out hit, walkPointRange, 1))
+        while(!walkPointSet)
         {
+            walkPoint = new Vector3(Random.insideUnitSphere.x * walkPointRange, enemy.transform.position.y, Random.insideUnitSphere.z * walkPointRange);
 
-            finalPosition = hit.position;
-            walkPoint = finalPosition;
-
-            //Debug.Log("walkpointset is " + walkPointSet);
-            //Debug.Log("i'm going to " + finalPosition);
-
+            NavMeshHit hit;
+            if (NavMesh.SamplePosition(walkPoint, out hit, walkPointRange, 1))
+            {
+                walkPoint = hit.position;
+                walkPointSet = true;
+            }
         }
-
-        //may need a parameter for what is walkable ground or not
-        //walkPointSet = true;
-
-        /*if (Physics.Raycast(walkPoint, -transform.up, 2f))
-        {
-            walkPointSet = true;
-            Debug.Log("walkPoint set SHOULD be true, and it is " + walkPointSet);
-        }*/
     }
 }
