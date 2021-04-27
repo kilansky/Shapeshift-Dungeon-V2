@@ -6,6 +6,7 @@ public class StatusEffects : MonoBehaviour
 {
     private float currTime = 0; //CurrTime variable to be accessed by the fireStatus script
     private float timeLeft = 0; //TimeLeft variable to check how much time is left in the current coroutine if it is already running
+    private bool isBurning = false; 
 
     public GameObject fireEffect; //Assigns the Fire Effect so the player can see the enemies or themselves burning
 
@@ -37,7 +38,11 @@ public class StatusEffects : MonoBehaviour
         //While the tracker is less than the duration the function will run and every second deal a single damage to the player or the enemy that this script is attached to.
         while (currTime < duration)
         {
+            isBurning = true;
+
             fireEffect.SetActive(true); //Activates the fire effect object on the object
+
+            yield return new WaitForSeconds(1); //Waits for a single second before checking the while loop again
 
             //If the object is an enemy (Contains the enemy base script) than deal the damage
             if (GetComponent<EnemyBase>())
@@ -52,11 +57,15 @@ public class StatusEffects : MonoBehaviour
             timeLeft = duration - currTime; //Adjusts time left to show how much time is remaining (aka how much damage is left for the enemy to take)
 
             //print("This object: " + gameObject.name + " has this much time remaining for the fire status effect: " + timeLeft);
-
-            yield return new WaitForSeconds(1); //Waits for a single second before checking the while loop again
         }
 
-        fireEffect.SetActive(false); //Deactivates the fire effect on the current object
+        isBurning = false;
+
+        yield return new WaitForSeconds(0.5f); //Waits for a single second before checking the while loop again
+
+        if(!isBurning)
+            fireEffect.SetActive(false); //Deactivates the fire effect on the current object
+        
         currTime = 0; //Resets timer to 0 to start the coroutine up again for the next attack
     }
 }
