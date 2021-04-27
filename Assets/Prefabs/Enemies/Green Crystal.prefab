@@ -216,13 +216,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 942725481}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0.06975647, y: 0, z: 0, w: 0.9975641}
   m_LocalPosition: {x: 0, y: 2, z: 0.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 911771371}
   m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 8, y: 0, z: 0}
 --- !u!1 &681768504641416162
 GameObject:
   m_ObjectHideFlags: 0
@@ -483,6 +483,7 @@ MonoBehaviour:
     type: 3}
   isKnockedBack: 0
   knockBackStrength: 5
+  meleeDamage: 3
   distanceToPlayer: 0
   agent: {fileID: 0}
   isStunned: 0
