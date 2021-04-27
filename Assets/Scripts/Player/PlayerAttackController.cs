@@ -34,6 +34,7 @@ public class PlayerAttackController : SingletonPattern<PlayerAttackController>
         if (showHitboxes)
             slashHitbox.GetComponent<MeshRenderer>().enabled = true;
 
+        //Player slash vfx
         Vector3 vfxSpawnPos = new Vector3(player.position.x, slashHitbox.transform.position.y, player.position.z);
         GameObject vfx = Instantiate(slashVFX1, vfxSpawnPos, player.rotation, player);
         vfx.transform.Rotate(90, 0, 42.571f);
