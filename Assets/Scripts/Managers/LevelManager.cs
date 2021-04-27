@@ -16,6 +16,8 @@ public class LevelManager : SingletonPattern<LevelManager>
     public GameObject activeLevel;
     public GameObject forceLevelOne;
     public bool disableSpawning;
+    public int currFloor = 0;
+
     [Header("Level Sets")]
     public List<GameObject> levelSet1;
     public List<GameObject> levelSet2;
@@ -32,7 +34,7 @@ public class LevelManager : SingletonPattern<LevelManager>
     public GameObject shop5;
     public GameObject shop6;
 
-    [HideInInspector] public int currFloor = 0;
+    [HideInInspector] public int levelsCompleted = 0;
     [HideInInspector] public string currMapName; //Used for level feedback forms
 
     [Header("Transition Variables")]
@@ -95,6 +97,7 @@ public class LevelManager : SingletonPattern<LevelManager>
             }
         }
         //++currFloor;
+        ++levelsCompleted;
         MonsterSpawner.Instance.floorCleared = false;
         CenterTile.Instance.SetFloorText(currFloor);
         CenterTile.Instance.SetTextState(); //Disable the glow of the center tile number
@@ -262,6 +265,7 @@ public class LevelManager : SingletonPattern<LevelManager>
 
     private void Start()
     {
+        currFloor = PlayerPrefs.GetInt("startingLevel");
         MonsterSpawner.Instance.floorCleared = false;
         CenterTile.Instance.SetFloorText(currFloor); //Ensures the level display is set correctly on start
         CenterTile.Instance.SetTextState(); //Enables the glow of the center tile number
