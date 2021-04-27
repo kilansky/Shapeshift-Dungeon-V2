@@ -96,6 +96,25 @@ public class PlayerHealth : SingletonPattern<PlayerHealth>, IDamageable
         }
     }
 
+    public virtual void FireDamage(float damage)
+    {
+        if (Health > 0)
+        {
+            //deal damage to player
+            Health -= damage * damageModifier.Value;
+            Health = Mathf.Clamp(Health, 0, maxHealth);
+            StartCoroutine(HUDController.Instance.UpdateHealthBar(Health, maxHealth));
+            StartCoroutine(HUDController.Instance.ShowPlayerDamagedOverlay());
+
+            //Check if the player is dead
+            if (Health <= 0)
+            {
+                Kill();
+                return;
+            }
+        }
+    }
+
     //Uses a potion - REPLACE W/ BETTER SYSTEM LATER!
     public void UsePotion()
     {
