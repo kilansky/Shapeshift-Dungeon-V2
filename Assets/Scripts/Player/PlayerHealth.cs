@@ -155,7 +155,7 @@ public class PlayerHealth : SingletonPattern<PlayerHealth>, IDamageable
                     HUDController.Instance.ShowPotionsPanel();
 
                 //Once player has grabbed a potion on the starting floor, clear the floor
-                if (LevelManager.Instance.currFloor == 0)
+                if (LevelManager.Instance.levelsCompleted == 0)
                 {
                     MonsterSpawner.Instance.floorCleared = true;
                     CenterTile.Instance.SetTextState();

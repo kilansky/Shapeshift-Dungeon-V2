@@ -46,6 +46,31 @@ public class StartMenu : MonoBehaviour
     //Loads the game from floor 0
     public void StartFloor0()
     {
+        PlayerPrefs.SetInt("startingLevel", 0);
+        StartCoroutine(FadeOutToLevel(2));
+    }
+
+    public void StartFloor5()
+    {
+        PlayerPrefs.SetInt("startingLevel", 4);
+        StartCoroutine(FadeOutToLevel(2));
+    }
+
+    public void StartFloor10()
+    {
+        PlayerPrefs.SetInt("startingLevel", 9);
+        StartCoroutine(FadeOutToLevel(2));
+    }
+
+    public void StartFloor15()
+    {
+        PlayerPrefs.SetInt("startingLevel", 14);
+        StartCoroutine(FadeOutToLevel(2));
+    }
+
+    public void StartFloor20()
+    {
+        PlayerPrefs.SetInt("startingLevel", 19);
         StartCoroutine(FadeOutToLevel(2));
     }
 
