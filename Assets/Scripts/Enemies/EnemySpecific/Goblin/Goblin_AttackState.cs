@@ -64,8 +64,6 @@ public class Goblin_AttackState : AttackState
     {
         base.TriggerAttack();
 
-        Debug.Log("owen wilson says wow");
-
         enemy.Anim.SetBool("isAttacking", true);
         //enemy.isAttackOver = true;
         //attack.MeleeAttack();

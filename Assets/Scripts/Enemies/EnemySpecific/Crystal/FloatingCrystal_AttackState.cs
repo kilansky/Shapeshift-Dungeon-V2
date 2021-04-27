@@ -82,13 +82,13 @@ public class FloatingCrystal_AttackState : AttackState
         //If this crystal is green, search for an enemy to heal
         if(!monseterToHeal && enemy.isGreenCrystal && timeElapsed >= 1f)
         {
-            Debug.Log("Attempted to find new monseterToHeal");
-
             monseterToHeal = GetMonsterToHeal();
-            Debug.Log("monseterToHeal is: " + monseterToHeal);
 
             if (monseterToHeal)
+            {
                 isChargingUp = true;
+                TriggerAttack();
+            }
 
             timeElapsed = 0;
         }
@@ -141,7 +141,6 @@ public class FloatingCrystal_AttackState : AttackState
         foreach (EnemyBase monster in monsters)
         {
             float monsterDist = Vector3.Distance(enemy.transform.position, monster.transform.position);
-            Debug.Log("monsterDist is: " + monsterDist);
             if (monsterDist <= 20f && monster.Health < monster.healthBar.maxValue)
             {
                 return monster.transform;

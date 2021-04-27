@@ -50,7 +50,8 @@ public class EnemyBase : MonoBehaviour, IDamageable
     [HideInInspector] public float distanceToPlayer;
     [HideInInspector] public NavMeshAgent agent;
     [HideInInspector] public bool isStunned;
-    
+    [HideInInspector] public bool isInvincible = false;
+
     #endregion
 
     #region Getters and Setters
@@ -85,9 +86,8 @@ public class EnemyBase : MonoBehaviour, IDamageable
     
     //private bool isAttacking = false;
     private bool stopMoving = false;
-    public bool isInvincible = false;
-    #endregion
 
+    #endregion
     #region Protected Variables nothing in here atm
     protected Transform target;
 
@@ -332,6 +332,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
         //heal the enemy
         Health += heal;
+        Health = Mathf.Clamp(Health, 0, healthBar.maxValue);
         UpdateUI();
     }
 

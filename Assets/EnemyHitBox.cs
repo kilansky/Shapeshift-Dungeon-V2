@@ -5,6 +5,7 @@ using UnityEngine;
 public class EnemyHitBox : MonoBehaviour
 {
     public GameObject hitEffect;
+    public bool hasTorch = false;
     //public bool dealsExtraDamage; //deals extra damage based on player's attack3 dmg mod if true
 
     private void OnTriggerEnter(Collider other)
@@ -20,18 +21,24 @@ public class EnemyHitBox : MonoBehaviour
 
             //Determine dameage to deal based on player's current attack damage
             float damageToDeal = transform.parent.GetComponent<EnemyBase>().meleeDamage;
-            Debug.Log("damageToDeal set to: " + damageToDeal);
+
+            //Set player on fire if this enemy is holding a torch
+            if (hasTorch)
+            {
+                damageToDeal--;
+                other.GetComponent<StatusEffects>().fireStatus(4);
+            }
+            //Apply damage to player
+            other.GetComponent<PlayerHealth>().Damage(damageToDeal);
 
             //if (dealsExtraDamage)//Check to deal additional damage
             //  damageToDeal *= PlayerController.Instance.attack3DmgMod;
 
-            //Apply damage to player
-            other.GetComponent<PlayerHealth>().Damage(damageToDeal);
-
+            
             //Apply Knockback to enemy
             //StartCoroutine(other.GetComponent<EnemyBase>().EnemyKnockBack());
 
-            //AudioManager.Instance.Play("Hit");
+            AudioManager.Instance.Play("Hit");
         }
 
         if (other.GetComponent<DestructibleProp>())
