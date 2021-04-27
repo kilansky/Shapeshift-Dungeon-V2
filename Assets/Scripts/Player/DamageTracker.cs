@@ -5,7 +5,7 @@ using UnityEngine;
 public class DamageTracker : SingletonPattern<DamageTracker>
 {
     //Variable List
-    private float spikeDamage = 0, lavaDamage = 0, dispenserTrapDamage = 0, skullDamage = 0, crystalDamage = 0, bombDamage = 0, pitfallDamage = 0, fireStatusDamage = 0; //The different damage types to track the amount of damage taken on the player
+    private float spikeDamage = 0, lavaDamage = 0, dispenserTrapDamage = 0, skullDamage = 0, crystalDamage = 0, goblinDamage = 0, bombDamage = 0, pitfallDamage = 0, fireStatusDamage = 0; //The different damage types to track the amount of damage taken on the player
 
     /*
     //Enums
@@ -68,6 +68,16 @@ public class DamageTracker : SingletonPattern<DamageTracker>
                 damageSource.GetComponent<StatusEffects>().fireStatus(3);
         }
 
+        //Goblin
+        else if (damageSource.GetComponent<Goblin>())
+        {
+            goblinDamage += damageValue;
+
+            //If the player is wearing the Flame Crown then damage the enemy for 3 seconds
+            if (PlayerController.Instance.HeadSlot != null && PlayerController.Instance.HeadSlot.ItemName == "Flame Crown")
+                damageSource.GetComponent<StatusEffects>().fireStatus(3);
+        }
+
         //Bomb
         else if (damageSource.GetComponent<BombAttack>())
         {
@@ -101,6 +111,7 @@ public class DamageTracker : SingletonPattern<DamageTracker>
             "\nThe Amount of Pit Fall damage the player took was: " + pitfallDamage +
             "\nThe Amount of Skull damage the player took was: " + skullDamage +
             "\nThe Amount of Crystal damage the player took was: " + crystalDamage +
+            "\nThe Amount of Goblin damage the player took was: " + goblinDamage +
             "\nThe Amount of Bomb damage the player took was: " + bombDamage +
             "\nThe Amount of Fire Status damage the player took was: " + fireStatusDamage);
 
