@@ -9,7 +9,7 @@ public class CameraController : SingletonPattern<CameraController>
 {
     [SerializeField] private CinemachineVirtualCamera playerCam;
     [SerializeField] private VolumeProfile volProf;
-    [SerializeField] private float baseCamDist = 12;
+    //[SerializeField] private float baseCamDist = 12;
     [SerializeField] private float zoomOutCamDist = 25;
     [SerializeField] private float minZoom = 9;
     [SerializeField] private float maxZoom = 15;
