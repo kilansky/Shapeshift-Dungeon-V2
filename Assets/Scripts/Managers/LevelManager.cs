@@ -232,8 +232,12 @@ public class LevelManager : SingletonPattern<LevelManager>
             AnalyticsEvents.Instance.FloorCompleted(); //Send Floor Completed Analytics Event
             MusicManager.Instance.Shop();
         }
+        else if (currFloor < 5)
+            MusicManager.Instance.ExoticDangers();
+        else if (currFloor >= 11)
+            MusicManager.Instance.DungeonDestruction();
         else
-            MusicManager.Instance.Combat();
+            MusicManager.Instance.DungeonDecoration();
 
         Debug.Log("Current map is: " + currMapName);
     }
