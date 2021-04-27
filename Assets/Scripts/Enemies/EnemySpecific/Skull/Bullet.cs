@@ -86,6 +86,12 @@ public class Bullet : MonoBehaviour
 
             Destroy(gameObject);
         }
+
+        if(collider.GetComponent<ExplodingBarrel>())
+        {
+            collider.GetComponent<ExplodingBarrel>().TriggerFuse();
+            Destroy(gameObject);
+        }
     }
 
     private void OnCollisionEnter(Collision collision)
