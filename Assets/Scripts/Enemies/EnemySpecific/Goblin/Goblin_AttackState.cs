@@ -6,11 +6,13 @@ using UnityEngine.AI;
 public class Goblin_AttackState : AttackState
 {
     private Goblin enemy;
-    
-    protected Transform attackPosition;
+    private Swipe attack;
+
+
+    //protected Transform attackPosition;
 
     public GameObject meleeHitBox;
-    public GameObject meleeVFX;
+    //public GameObject meleeVFX;
     public bool showHitBoxes = false;
 
 
@@ -28,7 +30,7 @@ public class Goblin_AttackState : AttackState
     public override void Enter()
     {
         base.Enter();
-
+        attack = enemy.aliveGO.GetComponent<Swipe>();
         //how much damage do they do, and where does it come from
     }
 
@@ -61,15 +63,17 @@ public class Goblin_AttackState : AttackState
     public override void TriggerAttack()
     {
         base.TriggerAttack();
-        //Debug.Log("he triggering the attack rn");
+
         enemy.Anim.SetBool("isAttacking", true);
+        attack.MeleeAttack(enemy.meleeHitBox, enemy.hitPoint.transform);
+        /*
         //hit the player
         //turn on mesh collider hit box for melee attack
         meleeHitBox.GetComponent<MeshCollider>().enabled = true;
         //show the hitbox for the attack
         if (showHitBoxes)
             meleeHitBox.GetComponent<MeshRenderer>().enabled = true;
-
+        */
         //swipe at the player
 
     }

@@ -406,7 +406,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
 
     //Makes the enemy invincible briefly
-    IEnumerator InvincibilityFrames()
+    public IEnumerator InvincibilityFrames()
     {
         isInvincible = true;
         yield return new WaitForSeconds(dmgInvincibilityTime);

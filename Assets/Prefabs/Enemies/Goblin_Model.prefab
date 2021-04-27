@@ -972,6 +972,36 @@ Transform:
   m_Father: {fileID: 8285792053521893637}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2807312570330486482
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7913207042887885890}
+  m_Layer: 0
+  m_Name: hitPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7913207042887885890
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2807312570330486482}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.10266876, y: 0.09, z: 0.46}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 3319973031674892537}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2872602890156943085
 GameObject:
   m_ObjectHideFlags: 0
@@ -1768,6 +1798,7 @@ Transform:
   - {fileID: 4485514146851567152}
   - {fileID: 158294668234270117}
   - {fileID: 2990722657667414131}
+  - {fileID: 7913207042887885890}
   m_Father: {fileID: 5176235769105279448}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2543,6 +2574,8 @@ MonoBehaviour:
   FrontTarget: {fileID: 0}
   SideTarget: {fileID: 0}
   BackTarget: {fileID: 0}
+  meleeHitBox: {fileID: 0}
+  hitPoint: {fileID: 0}
   renderer: {fileID: 6247463789873980688}
 --- !u!114 &-4041397827124426621
 MonoBehaviour:
