@@ -10,7 +10,9 @@ public class FloatingCrystal_AttackState : AttackState
     float attackDuration = 8f;
     float attackStartupTime;
     bool isAttacking = false;
-    bool isChargingUp = true;
+    bool isChargingUp = false;
+
+    private Transform monseterToHeal;
 
     public FloatingCrystal_AttackState(EnemyBase entity, FiniteStateMachine stateMachine, string animBoolName, D_AttackState stateData, FloatingCrystal enemy) : base(entity, stateMachine, animBoolName, stateData)
     {
@@ -24,13 +26,16 @@ public class FloatingCrystal_AttackState : AttackState
 
     public override void Enter()
     {
-        //attack the player
-        base.Enter();
+        //attack the player (if not a green crystal)
+        if (!enemy.isGreenCrystal)
+        {
+            base.Enter();
+            isChargingUp = true;
+        }
 
         //Debug.Log("enemy is " + enemy.name);
         laser = enemy.GetComponent<LaserDispenser>();
         attackStartupTime = laser.startupTime;
-        isChargingUp = true;
     }
 
     public override void Exit()
@@ -46,7 +51,7 @@ public class FloatingCrystal_AttackState : AttackState
         //and back that are a fixed length, and spin
 
         //Increase time elapsed
-        if (isAttacking || isChargingUp)
+        if (isAttacking || isChargingUp || (enemy.isGreenCrystal && !monseterToHeal))
             timeElapsed += Time.deltaTime;
 
         //Brighten crystal pointlight while charging
@@ -64,7 +69,7 @@ public class FloatingCrystal_AttackState : AttackState
         }
 
         //Waiting for attack duration to end the laser attack
-        if (isAttacking && timeElapsed >= attackDuration)
+        if (isAttacking && timeElapsed >= attackDuration && !enemy.isGreenCrystal)
         {
             isAttacking = false;
             //enemy.Anim.SetBool("isAttacking", false);
@@ -73,14 +78,47 @@ public class FloatingCrystal_AttackState : AttackState
             timeElapsed = 0;
             stateMachine.ChangeState(enemy.moveState);
         }
+
+        //If this crystal is green, search for an enemy to heal
+        if(!monseterToHeal && enemy.isGreenCrystal && timeElapsed >= 1f)
+        {
+            Debug.Log("Attempted to find new monseterToHeal");
+
+            monseterToHeal = GetMonsterToHeal();
+            Debug.Log("monseterToHeal is: " + monseterToHeal);
+
+            if (monseterToHeal)
+                isChargingUp = true;
+
+            timeElapsed = 0;
+        }
     }
 
     public override void PhysicsUpdate()
     {
         base.PhysicsUpdate();
 
-        if(isAttacking)
+        if(isAttacking && !enemy.isGreenCrystal)
             enemy.transform.Rotate(0, enemy.rotateSpeed, 0);
+        else if(monseterToHeal && enemy.isGreenCrystal)//Have Green Crystal rotate towards enemy to heal
+        {
+            //Rotate Character in direction of mouse position
+            Vector3 targetPoint = new Vector3(monseterToHeal.position.x, 0, monseterToHeal.position.z) - new Vector3(enemy.transform.position.x, 0, enemy.transform.position.z);
+            //Debug.Log("targetPoint is: " + targetPoint);
+            Quaternion targetRotation = Quaternion.LookRotation(targetPoint);
+            //Debug.Log("targetRotation is: " + targetRotation);
+            enemy.transform.rotation = targetRotation;
+
+            //If the monster to heal reaches full health, set it to null and stop firing
+            if(monseterToHeal.GetComponent<EnemyBase>().Health == monseterToHeal.GetComponent<EnemyBase>().healthBar.maxValue)
+            {
+                monseterToHeal = null;
+                isAttacking = false;
+                enemy.pointLight.intensity = 5f;
+                timeElapsed = 0;
+                stateMachine.ChangeState(enemy.moveState);
+            }
+        }
     }
 
     public override void TriggerAttack()
@@ -90,5 +128,25 @@ public class FloatingCrystal_AttackState : AttackState
 
         //fire the laser
         enemy.GetComponent<LaserDispenser>().ToggleLaser(true);
+    }
+
+    //Returns the transform of a monster that can be healed
+    private Transform GetMonsterToHeal()
+    {
+        //Get all monsters in the scene, store in 'monsters' array
+        List<EnemyBase> monsters = new List<EnemyBase>(GameObject.FindObjectsOfType<EnemyBase>());
+        monsters.Remove(enemy.GetComponent<EnemyBase>());
+
+        //Search for a monster that is nearby and does not have full health
+        foreach (EnemyBase monster in monsters)
+        {
+            float monsterDist = Vector3.Distance(enemy.transform.position, monster.transform.position);
+            Debug.Log("monsterDist is: " + monsterDist);
+            if (monsterDist <= 20f && monster.Health < monster.healthBar.maxValue)
+            {
+                return monster.transform;
+            }
+        }
+        return null;
     }
 }

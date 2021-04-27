@@ -86,7 +86,7 @@ public class Laser : MonoBehaviour
         if (!parentObject.GetComponent<PlayerController>() && !PlayerHealth.Instance.isInvincible && damage > 0)
             StartCoroutine(LaserCycle(other.gameObject));
 
-        if(other.GetComponent<EnemyBase>() /* && other.GetComponent<EnemyBase>()*/)
+        if(other.GetComponent<EnemyBase>() && !other.GetComponent<EnemyBase>().isInvincible && damage > 0)
             StartCoroutine(LaserCycle(other.gameObject));
     }
 
@@ -104,7 +104,8 @@ public class Laser : MonoBehaviour
                 if (!PlayerHealth.Instance.isInvincible)
                     AnalyticsEvents.Instance.PlayerDamaged("Laser"); //Sends analytics event about damage source
 
-                PlayerHealth.Instance.Damage(damage, parentObject);
+                if(!heal)
+                    PlayerHealth.Instance.Damage(damage, parentObject);
 
                 if (setOnFire)
                     PlayerHealth.Instance.transform.GetComponent<StatusEffects>().fireStatus(3f);
@@ -112,19 +113,17 @@ public class Laser : MonoBehaviour
                 yield return new WaitForSeconds(tickRate);
             }
         }
-
         else
         {
             //If the other object is Monster (Contains the enemy base script) then go on with the rest of the damage then destroys itself
             if (target.GetComponent<EnemyBase>())
             {
-                target.GetComponent<EnemyBase>().Damage(damage);
-
                 if (setOnFire)
                     target.GetComponent<EnemyBase>().transform.GetComponent<StatusEffects>().fireStatus(3f);
-
-                if (heal)
+                if (!heal)
                     target.GetComponent<EnemyBase>().Heal(1);
+                else
+                    target.GetComponent<EnemyBase>().Damage(damage);
             }
         }
         
