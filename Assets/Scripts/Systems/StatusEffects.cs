@@ -28,9 +28,8 @@ public class StatusEffects : MonoBehaviour
     public void fireStatus(float time)
     {
         //Checks if the Coroutine isn't already running and then starts the coroutine
-        if(currTime == 0)
+        if(currTime == 0 && !isBurning)
             StartCoroutine(startFireStatus(time));
-    
         //If the Corutine is already running
         else
         {
@@ -46,6 +45,7 @@ public class StatusEffects : MonoBehaviour
     IEnumerator startFireStatus(float duration)
     {
         currTime = 0; //Tracker to make sure that the ticks only happen a certain amount of time as specified by the duration
+        timeLeft = duration - currTime; //Adjusts time left to show how much time is remaining (aka how much damage is left for the enemy to take)
 
         //While the tracker is less than the duration the function will run and every second deal a single damage to the player or the enemy that this script is attached to.
         while (currTime < duration)

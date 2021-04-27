@@ -85,6 +85,9 @@ public class Laser : MonoBehaviour
     {
         if (!parentObject.GetComponent<PlayerController>() && !PlayerHealth.Instance.isInvincible && damage > 0)
             StartCoroutine(LaserCycle(other.gameObject));
+
+        if(other.GetComponent<EnemyBase>() /* && other.GetComponent<EnemyBase>()*/)
+            StartCoroutine(LaserCycle(other.gameObject));
     }
 
     /// <summary>
@@ -119,6 +122,9 @@ public class Laser : MonoBehaviour
 
                 if (setOnFire)
                     target.GetComponent<EnemyBase>().transform.GetComponent<StatusEffects>().fireStatus(3f);
+
+                if (heal)
+                    target.GetComponent<EnemyBase>().Heal(1);
             }
         }
         
