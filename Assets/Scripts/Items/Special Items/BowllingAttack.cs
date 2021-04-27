@@ -9,6 +9,8 @@ public class BowllingAttack : MonoBehaviour
     //public float destroyTime; //This is the time that it will take before the bowling ball gets destroyed
     public float speed; //The speed that the bowling ball will go at
 
+    public bool isOverPit = false; //Bool to change the transform.translate 
+
     private void Start()
     {
         Destroy(gameObject, 8f);
@@ -40,9 +42,16 @@ public class BowllingAttack : MonoBehaviour
     //Update is called once a frame
     private void Update()
     {
+
         //Every frame the bowling ball will move forward
         transform.Translate(Vector3.forward * speed * Time.deltaTime);
+        
         //And rotate forward - Sky (3/29/21)
         //transform.RotateAround(transform.position, Vector3.right, speed * Time.deltaTime);
+    
+        
+    
+    
+    
     }
 }
