@@ -33,6 +33,7 @@ public class PlayerController : SingletonPattern<PlayerController>
     public PlayerStats attackTime; //ItemsEquipment for Attack Speed
     public float attackSpeedMod = 0.25f;
     public float attack3DmgMod = 1.5f; //increases damage of third attack
+    //public float autoAimRange = 4f;
     //public float targetMonsterDist = 4f;
 
     [Header("Dash Attack Stats")]
@@ -379,24 +380,21 @@ public class PlayerController : SingletonPattern<PlayerController>
     }
 
     //Returns the transform of the closest monster to the player
-    private Transform GetClosestMonster()
+    private Transform GetClosestMonster(Vector3 fromPoint, float autoAimRange)
     {
         //Get all monsters in the scene, store in 'monsters' array
-        GameObject[] monsters = GameObject.FindGameObjectsWithTag("Monster");
+        List<EnemyBase> monsters = new List<EnemyBase>(GameObject.FindObjectsOfType<EnemyBase>());
 
         //Get the distance to the first monster in the array, set as closest monster
-        float distToClosestMonster = Vector3.Distance(transform.position, monsters[0].transform.position);
-        Transform closestMonster = monsters[0].transform;
+        float distToClosestMonster = 10000f;
+        Transform closestMonster = null;
 
         //Determine which monster is closest to the player
-        foreach (GameObject monster in monsters)
+        foreach (EnemyBase monster in monsters)
         {
-            float monsterDist = Vector3.Distance(transform.position, monster.transform.position);
-            if (monsterDist <= distToClosestMonster)
-            {
+            float monsterDist = Vector3.Distance(fromPoint, monster.transform.position);
+            if (monsterDist <= autoAimRange && monsterDist <= distToClosestMonster)
                 closestMonster = monster.transform;
-                distToClosestMonster = monsterDist;
-            }
         }
         return closestMonster;
     }
@@ -901,16 +899,8 @@ public class PlayerController : SingletonPattern<PlayerController>
                 //Bowling Ball Item
                 if (SpecialSlot.ItemName == "Bowling Ball")
                 {
-                    Vector3 spawnDirection = transform.forward;
-                    Quaternion spawnRotation = lastTargetRotation;
-
-                    if (IsUsingMouse)//Spawn in direction of mouse pointer if using a mouse
-                    {
-                        spawnDirection = new Vector3(mouseTargetPoint.position.x, 0, mouseTargetPoint.position.z) - new Vector3(transform.position.x, 0, transform.position.z);
-                        spawnDirection = spawnDirection.normalized / 2;
-
-                        spawnRotation = Quaternion.LookRotation(spawnDirection);
-                    }
+                    Vector3 spawnDirection = GetItemSpawnDirection();
+                    Quaternion spawnRotation = Quaternion.LookRotation(spawnDirection);
 
                     SpecialSlot.prefab.GetComponent<BowlingBall>().spawnBowlingBall(transform.position + new Vector3(0, 0.35f, 0), spawnDirection, spawnRotation);
                 }
@@ -922,16 +912,8 @@ public class PlayerController : SingletonPattern<PlayerController>
                 //Fire Wand Item
                 else if (SpecialSlot.ItemName == "Fire Wand")
                 {
-                    Vector3 spawnDirection = transform.forward;
-                    Quaternion spawnRotation = lastTargetRotation;
-
-                    if (IsUsingMouse)//Spawn in direction of mouse pointer if using a mouse
-                    {
-                        spawnDirection = new Vector3(mouseTargetPoint.position.x, 0, mouseTargetPoint.position.z) - new Vector3(transform.position.x, 0, transform.position.z);
-                        spawnDirection = spawnDirection.normalized / 2;
-
-                        spawnRotation = Quaternion.LookRotation(spawnDirection);
-                    }
+                    Vector3 spawnDirection = GetItemSpawnDirection();
+                    Quaternion spawnRotation = Quaternion.LookRotation(spawnDirection);
 
                     SpecialSlot.prefab.GetComponent<FireWand>().spawnFireBall(transform.position, spawnDirection, spawnRotation);
                 }
@@ -939,16 +921,8 @@ public class PlayerController : SingletonPattern<PlayerController>
                 //Lazer Wand Item
                 else if (SpecialSlot.ItemName == "Laser Wand")
                 {
-                    Vector3 spawnDirection = transform.forward;
-                    Quaternion spawnRotation = lastTargetRotation;
-
-                    if (IsUsingMouse)//Spawn in direction of mouse pointer if using a mouse
-                    {
-                        spawnDirection = new Vector3(mouseTargetPoint.position.x, 0, mouseTargetPoint.position.z) - new Vector3(transform.position.x, 0, transform.position.z);
-                        spawnDirection = spawnDirection.normalized / 2;
-
-                        spawnRotation = Quaternion.LookRotation(spawnDirection);
-                    }
+                    Vector3 spawnDirection = GetItemSpawnDirection();
+                    Quaternion spawnRotation = Quaternion.LookRotation(spawnDirection);
 
                     SpecialSlot.prefab.GetComponent<LazerWand>().spawnLazer(transform.position, spawnDirection, spawnRotation);
                 }
@@ -960,6 +934,38 @@ public class PlayerController : SingletonPattern<PlayerController>
 
         isUsingSpecial = false;
         yield return new WaitForSeconds(useSpecialTime);
+    }
+
+    private Vector3 GetItemSpawnDirection()
+    {
+        Vector3 spawnDirection = transform.forward;
+        Quaternion spawnRotation = lastTargetRotation;
+
+        if (IsUsingMouse)//Spawn in direction of mouse pointer if using a mouse
+        {
+            Transform closestMonsterToMouse = GetClosestMonster(mouseTargetPoint.position, 4f);
+
+            if (closestMonsterToMouse != null)
+                spawnDirection = new Vector3(closestMonsterToMouse.position.x, 0, closestMonsterToMouse.position.z) - new Vector3(transform.position.x, 0, transform.position.z);
+            else
+                spawnDirection = new Vector3(mouseTargetPoint.position.x, 0, mouseTargetPoint.position.z) - new Vector3(transform.position.x, 0, transform.position.z);
+
+            spawnDirection = spawnDirection.normalized / 2;
+            spawnRotation = Quaternion.LookRotation(spawnDirection);
+        }
+        else
+        {
+            Vector3 controllerFirePoint = transform.position + transform.forward * 5f;
+            Transform closestMonsterController = GetClosestMonster(controllerFirePoint, 8f);
+
+            if (closestMonsterController != null)
+                spawnDirection = new Vector3(closestMonsterController.position.x, 0, closestMonsterController.position.z) - new Vector3(transform.position.x, 0, transform.position.z);
+
+            spawnDirection = spawnDirection.normalized / 2;
+
+        }
+
+        return spawnDirection;
     }
 
     IEnumerator RechargeSpecial()

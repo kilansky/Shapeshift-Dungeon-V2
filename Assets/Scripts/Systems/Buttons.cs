@@ -53,9 +53,9 @@ public class Buttons : MonoBehaviour
 
     public void QuitGame()
     {
-        Time.timeScale = 1;
-        SceneManager.LoadScene(0);
-        //Application.Quit();
+        //Time.timeScale = 1;
+        //SceneManager.LoadScene(0);
+        Application.Quit();
     }
 
     public void FormFeedback()
@@ -72,6 +72,12 @@ public class Buttons : MonoBehaviour
     {
         Time.timeScale = 1;
         SceneManager.LoadScene(1);
+    }
+
+    public void BackToMainMenu()
+    {
+        Time.timeScale = 1;
+        SceneManager.LoadScene(0);
     }
 
     //Show that the player died, wait, then show level review panel

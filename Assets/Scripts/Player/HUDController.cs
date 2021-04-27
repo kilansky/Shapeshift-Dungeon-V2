@@ -77,8 +77,12 @@ public class HUDController : SingletonPattern<HUDController>
     [Header("Player Damaged Overlay")]
     public GameObject playerDamagedOverlay;
 
-    [Header("Player Damaged Overlay")]
+    [Header("Run Timer")]
     public GameObject runTimer;
+
+    [Header("Black Screen Overlay")]
+    public GameObject blackScreenOverlay;
+    public float fadeInTime = 2f;
 
     private PlayerController player;
     private PlayerInput playerInput;
@@ -103,6 +107,8 @@ public class HUDController : SingletonPattern<HUDController>
         HideQuickHint();
 
         ControlSchemeChanged();
+
+        StartCoroutine(FadeFromBlack());
     }
 
     //Check for when the player changes controllers
@@ -645,5 +651,26 @@ public class HUDController : SingletonPattern<HUDController>
             yield return new WaitForEndOfFrame();
         }
         playerDamagedOverlay.SetActive(false);
+    }
+
+    //Fade from black into the game
+    private IEnumerator FadeFromBlack()
+    {
+        float alpha = 1;
+        Image blackScreenImage = blackScreenOverlay.GetComponent<Image>();
+        blackScreenImage.color = new Color(0, 0, 0, alpha);
+        float timeElapsed = 0;
+
+        while (timeElapsed < fadeInTime)
+        {
+            alpha = Mathf.Lerp(1, 0, timeElapsed / fadeInTime);
+            blackScreenImage.color = new Color(0, 0, 0, alpha);
+            timeElapsed += Time.deltaTime;
+            yield return new WaitForEndOfFrame();
+        }
+        blackScreenImage.color = new Color(0, 0, 0, 0);
+
+        yield return new WaitForEndOfFrame();
+        blackScreenOverlay.SetActive(false);
     }
 }

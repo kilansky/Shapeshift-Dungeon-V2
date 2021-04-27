@@ -74,6 +74,11 @@ public class StartMenu : MonoBehaviour
         StartCoroutine(FadeOutToLevel(2));
     }
 
+    public void FormFeedback()
+    {
+        Application.OpenURL("https://docs.google.com/forms/d/1yeWTvuf43eci_y8Tj1MR-Tj1UTHPfomzOjMlrw7A2mM/edit");
+    }
+
     //Goes back to the start canvas
     public void Back()
     {
@@ -154,6 +159,7 @@ public class StartMenu : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
         blackScreenOverlay.color = new Color(0, 0, 0, 1);
+        yield return new WaitForEndOfFrame();
 
         SceneManager.LoadScene(sceneToLoad);
     }

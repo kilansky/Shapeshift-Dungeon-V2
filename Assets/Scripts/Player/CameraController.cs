@@ -4,6 +4,7 @@ using UnityEngine;
 using Cinemachine;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.Rendering;
+using UnityEngine.SceneManagement;
 
 public class CameraController : SingletonPattern<CameraController>
 {
@@ -26,7 +27,14 @@ public class CameraController : SingletonPattern<CameraController>
     {
         volProf.TryGet(out DoF);
         volProf.TryGet(out shadMidHigh);
-        SetShadows();
+
+        //Set darkness of shadows based on current floor
+        for (int i = 0; i < LevelManager.Instance.currFloor + 1; i++)
+            SetShadows();
+
+        Scene scene = SceneManager.GetActiveScene();
+        if(scene.buildIndex == 0)
+            DoF.focalLength.value = 120;
     }
 
 
@@ -39,7 +47,7 @@ public class CameraController : SingletonPattern<CameraController>
         currentZoom = framingTransposer.m_CameraDistance;
         framingTransposer.m_CameraDistance = zoomOutCamDist;
 
-        DoF.focalLength.value = 185;
+        DoF.focalLength.value = 180;
     }
 
     //Decreases the camera's distance from the player to the normal amt after a level transition
@@ -50,7 +58,7 @@ public class CameraController : SingletonPattern<CameraController>
         var framingTransposer = playerCam.GetCinemachineComponent<CinemachineFramingTransposer>();
         framingTransposer.m_CameraDistance = currentZoom;
 
-        DoF.focalLength.value = 215;
+        DoF.focalLength.value = 210;
     }
 
     //Increases the camera's distance from the player - called from player controller w/ player input
