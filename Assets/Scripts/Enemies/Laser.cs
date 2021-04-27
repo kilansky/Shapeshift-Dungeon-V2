@@ -131,7 +131,11 @@ public class Laser : MonoBehaviour
             if (heal)
                 target.GetComponent<EnemyBase>().Heal(1);
             else
+            {
+                //Starts the knockback coroutine
+                StartCoroutine(target.GetComponent<EnemyBase>().EnemyKnockBack());
                 target.GetComponent<EnemyBase>().Damage(damage);
+            }
 
             yield return new WaitForSeconds(tickRate);
         }

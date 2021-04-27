@@ -29,7 +29,7 @@ public class EnemyHitBox : MonoBehaviour
                 other.GetComponent<StatusEffects>().fireStatus(4);
             }
             //Apply damage to player
-            other.GetComponent<PlayerHealth>().Damage(damageToDeal);
+            other.GetComponent<PlayerHealth>().Damage(damageToDeal, transform.parent.gameObject);
 
             //if (dealsExtraDamage)//Check to deal additional damage
             //  damageToDeal *= PlayerController.Instance.attack3DmgMod;

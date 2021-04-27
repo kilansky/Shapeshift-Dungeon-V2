@@ -12,7 +12,7 @@ public class LavaTile : MonoBehaviour
      * Date Last Edited: 2/22/2021
      **/
 
-    [SerializeField] private float damage = 2f;
+    [SerializeField] private float damage = 1f;
     //[SerializeField] private float rate = 1f;
     [SerializeField] private float damageDelay = .2f;
     private bool lavaHit = false;
@@ -23,20 +23,20 @@ public class LavaTile : MonoBehaviour
     /// <param name="other"></param>
     private void OnTriggerStay(Collider other)
     {
-        StartCoroutine(LavaCycle(other.gameObject));
+        if(!lavaHit && other.GetComponent<PlayerController>() && !PlayerController.Instance.IsDashing)
+            StartCoroutine(LavaCycle(other.gameObject));
     }
 
     private IEnumerator LavaCycle(GameObject target)
-    {        
-        if (!lavaHit && target.GetComponent<PlayerController>() && !PlayerController.Instance.IsDashing)
-        {
-            if (!PlayerHealth.Instance.isInvincible)
-                AnalyticsEvents.Instance.PlayerDamaged("Lava"); //Sends analytics event about damage source
+    {
+        lavaHit = true;
 
-            lavaHit = true;
-            PlayerHealth.Instance.Damage(damage, gameObject);
-            yield return new WaitForSeconds(damageDelay);
-            lavaHit = false;
-        }
+        if (!PlayerHealth.Instance.isInvincible)
+            AnalyticsEvents.Instance.PlayerDamaged("Lava"); //Sends analytics event about damage source
+
+        PlayerHealth.Instance.Damage(damage, gameObject);
+        PlayerHealth.Instance.FireDamage(1f);
+        yield return new WaitForSeconds(damageDelay);
+        lavaHit = false;
     }
 }
