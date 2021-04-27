@@ -27,6 +27,7 @@ public class Laser : MonoBehaviour
 
     private LineRenderer beam;
     private CapsuleCollider capsuleCollider;
+    private bool laserTriggered = false;
 
     [HideInInspector] public GameObject parentObject; //Variable to hold the parent Object to make sure the Damage Tracker is able to track the damage correctly
 
@@ -78,24 +79,21 @@ public class Laser : MonoBehaviour
     }
 
     /// <summary>
-    /// Used for the player laser beam made from the laser wand - AHL (4/26/21)
-    /// *Please don't remove because then the laser wand does nothing XD*
-    /// </summary>
-    /// <param name="other"></param>
-    private void OnTriggerEnter(Collider other)
-    {
-        if (parentObject.GetComponent<PlayerController>())
-            StartCoroutine(LaserCycle(other.gameObject));
-    }
-
-    /// <summary>
     /// Detects when something enters the laser's collider
     /// </summary>
     /// <param name="other"></param>
     private void OnTriggerStay(Collider other)
     {
-        if (!parentObject.GetComponent<PlayerController>() && !PlayerHealth.Instance.isInvincible && damage > 0)
-            StartCoroutine(LaserCycle(other.gameObject));
+        if(!laserTriggered)
+        {
+            if (!parentObject.GetComponent<PlayerController>() && !PlayerHealth.Instance.isInvincible && damage > 0)
+                StartCoroutine(LaserCycle(other.gameObject));
+
+            if (other.GetComponent<EnemyBase>() && !other.GetComponent<EnemyBase>().isInvincible && heal)
+            {
+                StartCoroutine(LaserCycle(other.gameObject));
+            }
+        }
     }
 
     /// <summary>
@@ -105,14 +103,17 @@ public class Laser : MonoBehaviour
     /// <returns></returns>
     private IEnumerator LaserCycle(GameObject target)
     {
-        if(!parentObject.GetComponent<PlayerController>())
+        laserTriggered = true;
+
+        if (!parentObject.GetComponent<PlayerController>())
         {
             if (target.GetComponent<PlayerController>() && !PlayerController.Instance.IsDashing)
             {
                 if (!PlayerHealth.Instance.isInvincible)
                     AnalyticsEvents.Instance.PlayerDamaged("Laser"); //Sends analytics event about damage source
 
-                PlayerHealth.Instance.Damage(damage, parentObject);
+                if(!heal)
+                    PlayerHealth.Instance.Damage(damage, parentObject);
 
                 if (setOnFire)
                     PlayerHealth.Instance.transform.GetComponent<StatusEffects>().fireStatus(3f);
@@ -121,18 +122,21 @@ public class Laser : MonoBehaviour
             }
         }
 
-        else
+        if (target.GetComponent<EnemyBase>())
         {
             //If the other object is Monster (Contains the enemy base script) then go on with the rest of the damage then destroys itself
-            if (target.GetComponent<EnemyBase>())
-            {
-                //Starts the knockback coroutine
-                StartCoroutine(target.GetComponent<EnemyBase>().EnemyKnockBack());
+            if (setOnFire)
+                target.GetComponent<EnemyBase>().transform.GetComponent<StatusEffects>().fireStatus(3f);
 
+            if (heal)
+                target.GetComponent<EnemyBase>().Heal(1);
+            else
                 target.GetComponent<EnemyBase>().Damage(damage);
-            }
+
+            yield return new WaitForSeconds(tickRate);
         }
-        
+
+        laserTriggered = false;
     }
 
     /// <summary>

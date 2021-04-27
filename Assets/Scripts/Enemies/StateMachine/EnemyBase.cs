@@ -42,13 +42,16 @@ public class EnemyBase : MonoBehaviour, IDamageable
     public bool isKnockedBack;
     public float knockBackStrength = 1000f;
 
+    public float meleeDamage = 3f;
+
     private Vector3 knockbackDirection;
     private bool isBeingKnockedBack = false;
 
     [HideInInspector] public float distanceToPlayer;
     [HideInInspector] public NavMeshAgent agent;
     [HideInInspector] public bool isStunned;
-    
+    [HideInInspector] public bool isInvincible = false;
+
     #endregion
 
     #region Getters and Setters
@@ -83,14 +86,14 @@ public class EnemyBase : MonoBehaviour, IDamageable
     
     //private bool isAttacking = false;
     private bool stopMoving = false;
-    private bool isInvincible = false;
-    #endregion
 
+    #endregion
     #region Protected Variables nothing in here atm
     protected Transform target;
 
     protected Vector3 OGposition;
     protected Quaternion OGrotation;
+
     //protected bool canAttack = true;
     //protected bool isPlayerInMinAgroRange;
     //protected bool isPlayerInMinAttackRange;
@@ -320,7 +323,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     public virtual void ResetColor()
     {
-
+        //base place holder function to reset color of enemies
     }
 
     public virtual void Heal(float heal)
@@ -329,6 +332,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
         //heal the enemy
         Health += heal;
+        Health = Mathf.Clamp(Health, 0, healthBar.maxValue);
         UpdateUI();
     }
 
@@ -403,8 +407,9 @@ public class EnemyBase : MonoBehaviour, IDamageable
         currentStunResistance = entityData.stunResistance;
     }
 
+
     //Makes the enemy invincible briefly
-    IEnumerator InvincibilityFrames()
+    public IEnumerator InvincibilityFrames()
     {
         isInvincible = true;
         yield return new WaitForSeconds(dmgInvincibilityTime);

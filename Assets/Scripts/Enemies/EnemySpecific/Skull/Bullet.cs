@@ -30,6 +30,9 @@ public class Bullet : MonoBehaviour
     public GameObject voidVar;
     public GameObject line;
 
+    [Header("Special Properties")]
+    public bool setOnFire;
+
     private Vector3 original_beamLight;
     private Vector3 original_beamDark;
     private Vector3 original_baseVar;
@@ -73,6 +76,10 @@ public class Bullet : MonoBehaviour
                 //AnalyticsEvents.Instance.PlayerDamaged(shotBy + " Projectile"); //Sends analytics event about damage source
 
             PlayerHealth.Instance.Damage(bulletDamage, parentObject);
+
+            if (setOnFire)
+                PlayerHealth.Instance.transform.GetComponent<StatusEffects>().fireStatus(3f);
+
             Destroy(gameObject);
         }
     }
@@ -89,6 +96,10 @@ public class Bullet : MonoBehaviour
         if (canDamage && collision.gameObject.layer == 11)
         {
             collision.gameObject.GetComponent<EnemyBase>().Damage(bulletDamage);
+
+            if (setOnFire)
+                collision.gameObject.GetComponent<StatusEffects>().fireStatus(3f);
+
             Destroy(gameObject);
         }
     }

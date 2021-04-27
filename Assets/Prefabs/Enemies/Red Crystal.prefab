@@ -467,7 +467,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   aliveGO: {fileID: 911771370}
   player: {fileID: 0}
-  health: 13
+  health: 15
   hitMat: {fileID: 2100000, guid: 8e628ab3673526648b68be922de630f2, type: 2}
   normalMat: {fileID: 2100000, guid: d99ed3fb3239ff34e9a2f68b5a5d314d, type: 2}
   healthBar: {fileID: 1009723376498997984}
@@ -502,7 +502,6 @@ MonoBehaviour:
   firePointFront: {fileID: 942725482}
   pointLight: {fileID: 6937152379845393604}
   renderer: {fileID: 2588655024629111615}
-  chargeRate: 1
   rotateSpeed: 0.8
 --- !u!54 &1655958689
 Rigidbody:
@@ -588,6 +587,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fireEffect: {fileID: 7083563199549147664}
+  fireIcon: {fileID: 0}
+  fireTimeText: {fileID: 0}
 --- !u!1 &1685075701894157085
 GameObject:
   m_ObjectHideFlags: 0

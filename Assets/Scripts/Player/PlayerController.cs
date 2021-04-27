@@ -86,6 +86,11 @@ public class PlayerController : SingletonPattern<PlayerController>
     [HideInInspector] public float specialCharge2 = 0; //Varaible to hold the special charge of the item in the bag of holding
     [HideInInspector] public float specialCharge2MaxValue = -1; //Variable to hold the max value for the secondary special item charge
 
+    [Header("Enemy Attack Points")]
+    public GameObject frontTarget;
+    public GameObject sideTarget;
+    public GameObject backTarget;
+
     //Settable properties
     //Keep track of the amount of times that a stat was upgraded
     public int StatMaxHealthCount {get; set;}

@@ -33,6 +33,7 @@ public class Goblin_PlayerDetected : PlayerDetectedState
         if (enemy.CheckPlayerInMinAttackRange())
         {
             //switch to attackstate
+            //enemy.isAttackOver = false;
             stateMachine.ChangeState(enemy.attackState);
         }
         else if (!enemy.CheckPlayerInMinAttackRange())
