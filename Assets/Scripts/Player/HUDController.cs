@@ -290,7 +290,14 @@ public class HUDController : SingletonPattern<HUDController>
 
                 //else if the value is less than 0 (meaning it wasn't set yet) then we set it to be divided by itself (This is to make sure the Kapala doesn't start with a value of 1
                 else
-                    chargeBar2Fill.fillAmount = PlayerController.Instance.specialCharge2 / PlayerController.Instance.specialCharge2;
+                {
+                    if (PlayerController.Instance.BagOfHoldingSlot.ItemName != "Kapala")
+                        chargeBar2Fill.fillAmount = 1;
+
+                    else
+                        chargeBar2Fill.fillAmount = 0;
+                }
+                    
             }
         }
     }
