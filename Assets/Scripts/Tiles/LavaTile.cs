@@ -35,7 +35,7 @@ public class LavaTile : MonoBehaviour
             AnalyticsEvents.Instance.PlayerDamaged("Lava"); //Sends analytics event about damage source
 
         PlayerHealth.Instance.Damage(damage, gameObject);
-        PlayerHealth.Instance.FireDamage(1f);
+        PlayerController.Instance.transform.GetComponent<StatusEffects>().fireStatus(1f);
         yield return new WaitForSeconds(damageDelay);
         lavaHit = false;
     }

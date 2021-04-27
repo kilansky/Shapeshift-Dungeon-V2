@@ -216,7 +216,7 @@ public class LevelManager : SingletonPattern<LevelManager>
 
         //Build Navigation Mesh
         GetComponent<NavMeshSurface>().BuildNavMesh();
-        //navMeshHazards.GetComponent<NavMeshSurface>().BuildNavMesh();
+        navMeshHazards.GetComponent<NavMeshSurface>().BuildNavMesh();
 
         //Activate hazards in the map
         ToggleHazards(true);

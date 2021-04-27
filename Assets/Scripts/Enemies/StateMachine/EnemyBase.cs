@@ -331,8 +331,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
         Debug.Log("Enemy Healed");
 
         //heal the enemy
-        Health += heal;
-        Health = Mathf.Clamp(Health, 0, healthBar.maxValue);
+        Health = Mathf.Clamp(Health + heal, 0, healthBar.maxValue);
         UpdateUI();
     }
 
