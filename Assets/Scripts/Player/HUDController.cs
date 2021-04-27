@@ -455,12 +455,16 @@ public class HUDController : SingletonPattern<HUDController>
 
     public void ShowBagOfHoldingSlot()
     {
-        speicalItemEmptyIcon.SetActive(true);
+        if(!PlayerController.Instance.BagOfHoldingSlot)
+            speicalItemEmptyIcon.SetActive(true);
+        else
+            specialItem2Panel.SetActive(true);
     }
 
     public void HideBagOfHoldingSlot()
     {
         speicalItemEmptyIcon.SetActive(false);
+        specialItem2Panel.SetActive(false);
     }
 
     public void SetNewSpecialItemIcon()
