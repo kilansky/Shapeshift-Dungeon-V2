@@ -6,24 +6,46 @@ public class Swipe : MonoBehaviour
 {
     private Goblin enemy;
 
-    public GameObject hitBox;
-    private MeshCollider hit;
+    public GameObject hitbox;
+    //private MeshCollider hit;
+
+    public Animator attackAnim;
 
     public bool showHitBoxes = false;
 
-
-    public void MeleeAttack(GameObject hitBox, Transform hitPoint)
+    private void Start()
     {
-        enemy.Anim.SetBool("isAttacking", true);
-        //hit the player
-        //turn on mesh collider hit box for melee attack
-        hitBox.GetComponent<MeshCollider>().enabled = true;
-        //show the hitbox for the attack
-        if (showHitBoxes)
-            hitBox.GetComponent<MeshRenderer>().enabled = true;
+        //attackAnim = GetComponent<Animator>();
     }
 
-    private void OnTriggerEnter(Collider other)
+    public void EnableHitBox()
+    {
+        //enemy.Anim.SetBool("isAttacking", true);
+        //hit the player
+        //turn on mesh collider hit box for melee attack
+        hitbox.GetComponent<MeshCollider>().enabled = true;
+        //show the hitbox for the attack
+        if (showHitBoxes)
+            hitbox.GetComponent<MeshRenderer>().enabled = true;
+    }
+
+    public void DisableHitBox()
+    {
+        //hit the player
+        //turn on mesh collider hit box for melee attack
+        hitbox.GetComponent<MeshCollider>().enabled = false;
+        
+        //show the hitbox for the attack
+        if (showHitBoxes)
+            hitbox.GetComponent<MeshRenderer>().enabled = false;
+    }
+
+    public void EndAttack()
+    {
+        attackAnim.SetBool("isAttacking", false);
+    }
+
+    /*private void OnTriggerEnter(Collider other)
     {
         if (other.GetComponent<PlayerController>())
         {
@@ -36,9 +58,9 @@ public class Swipe : MonoBehaviour
             //Apply damage to player
             //other.GetComponent<PlayerHealth>().Damage(damageDealt);
         }
-    }
+    }*/
 
-    IEnumerator SlashBox()
+    /*IEnumerator SlashBox()
     {
         //enable the swipe hitbox
         hit = GetComponent<MeshCollider>();
@@ -46,6 +68,6 @@ public class Swipe : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         //switch the meshCollider off
         hit.enabled = false;
-    }
+    }*/
 
 }

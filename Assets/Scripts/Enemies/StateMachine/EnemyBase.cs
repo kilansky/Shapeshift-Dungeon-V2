@@ -42,6 +42,8 @@ public class EnemyBase : MonoBehaviour, IDamageable
     public bool isKnockedBack;
     public float knockBackStrength = 1000f;
 
+    public float meleeDamage = 3f;
+
     private Vector3 knockbackDirection;
     private bool isBeingKnockedBack = false;
 

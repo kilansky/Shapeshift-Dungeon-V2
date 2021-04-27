@@ -32,12 +32,12 @@ public class Goblin : EnemyBase
     //will have a melee range instead of fireball
     public float AttackDamage { get { return attackDamage; } }
 
-    public GameObject FrontTarget;
-    public GameObject SideTarget;
-    public GameObject BackTarget;
+    [HideInInspector] public GameObject FrontTarget;
+    [HideInInspector] public GameObject SideTarget;
+    [HideInInspector] public GameObject BackTarget;
 
-    public GameObject meleeHitBox;
-    public Transform hitPoint;
+    //public GameObject meleeHitBox;
+    //public Transform hitPoint;
 
     public SkinnedMeshRenderer renderer;
 
@@ -62,6 +62,9 @@ public class Goblin : EnemyBase
         //this line is what got rid of my NullReferenceExceptions
         stateMachine.Initialize(moveState);
 
+        FrontTarget = PlayerController.Instance.frontTarget;
+        SideTarget = PlayerController.Instance.sideTarget;
+        BackTarget = PlayerController.Instance.backTarget;
     }
 
     //set current state to stunState if isStunned
