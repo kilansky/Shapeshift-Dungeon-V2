@@ -411,6 +411,8 @@ public class Item : MonoBehaviour
 
         if (isNewBOHItem)
             isNewBOHItem = false;
+
+        StartCoroutine(c.RechargeSpecial());
     }
 
     /// <summary>
