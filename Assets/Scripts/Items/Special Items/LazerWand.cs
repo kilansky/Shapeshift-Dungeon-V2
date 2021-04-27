@@ -16,8 +16,8 @@ public class LazerWand : MonoBehaviour
     {
         PlayerLazerAttack = Lazers[Random.Range(0, Lazers.Count)].gameObject;
 
-        Vector3 spawnPos = playerPos + playerDir; //Sets the vector position to spawn the Lazer attack in front of the player
-        spawnPos.y += 2f; //Adjusts the Lazer to spawn in the correct position to the player
+        Vector3 spawnPos = playerPos + playerDir * 1.5f; //Sets the vector position to spawn the Lazer attack in front of the player
+        spawnPos.y += 1f; //Adjusts the Lazer to spawn in the correct position to the player
 
         GameObject playerLazer = Instantiate(PlayerLazerAttack, spawnPos, playerRotation); //Spawns the Lazer attack
         playerLazer.GetComponent<Laser>().parentObject = PlayerController.Instance.gameObject;

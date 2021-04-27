@@ -78,6 +78,17 @@ public class Laser : MonoBehaviour
     }
 
     /// <summary>
+    /// Used for the player laser beam made from the laser wand - AHL (4/26/21)
+    /// *Please don't remove because then the laser wand does nothing XD*
+    /// </summary>
+    /// <param name="other"></param>
+    private void OnTriggerEnter(Collider other)
+    {
+        if (parentObject.GetComponent<PlayerController>())
+            StartCoroutine(LaserCycle(other.gameObject));
+    }
+
+    /// <summary>
     /// Detects when something enters the laser's collider
     /// </summary>
     /// <param name="other"></param>
@@ -115,10 +126,10 @@ public class Laser : MonoBehaviour
             //If the other object is Monster (Contains the enemy base script) then go on with the rest of the damage then destroys itself
             if (target.GetComponent<EnemyBase>())
             {
-                target.GetComponent<EnemyBase>().Damage(damage);
+                //Starts the knockback coroutine
+                StartCoroutine(target.GetComponent<EnemyBase>().EnemyKnockBack());
 
-                if (setOnFire)
-                    target.GetComponent<EnemyBase>().transform.GetComponent<StatusEffects>().fireStatus(3f);
+                target.GetComponent<EnemyBase>().Damage(damage);
             }
         }
         
