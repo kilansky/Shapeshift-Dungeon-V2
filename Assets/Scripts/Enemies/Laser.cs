@@ -32,7 +32,8 @@ public class Laser : MonoBehaviour
     private CapsuleCollider capsuleCollider;
     private VisualEffect hitEffect;
 
-    [HideInInspector] public GameObject parentObject; //Variable to hold the parent Object to make sure the Damage Tracker is able to track the damage correctly
+    //[HideInInspector] 
+    public GameObject parentObject; //Variable to hold the parent Object to make sure the Damage Tracker is able to track the damage correctly
     [HideInInspector] public bool laserTriggered = false;
 
     private void Start()
@@ -40,7 +41,7 @@ public class Laser : MonoBehaviour
         beam = laser.gameObject.GetComponent<LineRenderer>();
         capsuleCollider = GetComponent<CapsuleCollider>();
 
-        parentObject = transform.parent.gameObject;
+        //parentObject = transform.parent.gameObject;
 
         //If statement to adjust some values if this is used for the player weapon
         if(parentObject.GetComponent<PlayerController>())
@@ -97,6 +98,23 @@ public class Laser : MonoBehaviour
     }
 
     /// <summary>
+    /// Used for enemy hit from the laser wand - AHL (4/27/21)
+    /// *I SAID NO DELETE!!!!!!*
+    /// </summary>
+    /// <param name="other"></param>
+    private void OnTriggerEnter(Collider other)
+    {
+        if (!parentObject.GetComponent<EnemyBase>() && other.GetComponent<EnemyBase>())
+        {
+            if (!laserTriggered && parentObject.GetComponent<PlayerController>() && !other.GetComponent<EnemyBase>().isInvincible)
+            {
+                print("Hit an enemey for the enemy!");
+                StartCoroutine(LaserWandCycle(other.gameObject));
+            }
+        }
+    }
+
+    /// <summary>
     /// Detects when something enters the laser's collider
     /// </summary>
     /// <param name="other"></param>
@@ -104,12 +122,11 @@ public class Laser : MonoBehaviour
     {
         if(!laserTriggered && other.transform != parentObject.transform)
         {
-            if (!parentObject.GetComponent<PlayerController>() && !PlayerHealth.Instance.isInvincible && damage > 0)
+            if (!parentObject.GetComponent<PlayerController>() && other.GetComponent<PlayerController>() && !PlayerHealth.Instance.isInvincible && damage > 0)
                 StartCoroutine(LaserCycle(other.gameObject));
 
-            if (parentObject.GetComponent<PlayerController>() && !other.GetComponent<EnemyBase>().isInvincible && heal)
+            if (other.GetComponent<EnemyBase>() && !other.GetComponent<EnemyBase>().isInvincible && heal)
             {
-                print("Hit an enemey for the enemy!");
                 StartCoroutine(LaserCycle(other.gameObject));
             }
                 
@@ -147,15 +164,40 @@ public class Laser : MonoBehaviour
         {
             if (heal)
                 target.GetComponent<EnemyBase>().Heal(1);
-            else if(!parentObject.GetComponent<EnemyBase>())
+            /*else if(!parentObject.GetComponent<EnemyBase>())
             {
                 //Starts the knockback coroutine
                 StartCoroutine(target.GetComponent<EnemyBase>().EnemyKnockBack());
                 target.GetComponent<EnemyBase>().Damage(damage);
 
-                /*if (setOnFire)
-                    target.GetComponent<EnemyBase>().transform.GetComponent<StatusEffects>().fireStatus(3f);*/
-            }
+                if (setOnFire)
+                    target.GetComponent<EnemyBase>().transform.GetComponent<StatusEffects>().fireStatus(3f);
+            }*/
+
+            yield return new WaitForSeconds(tickRate);
+        }
+
+        laserTriggered = false;
+    }
+
+    /// <summary>
+    /// Deals damage to enemies that need to take damage
+    /// </summary>
+    /// <param name="target"></param>
+    /// <returns></returns>
+    private IEnumerator LaserWandCycle(GameObject target)
+    {
+        laserTriggered = true;
+
+        //If the other object is Monster (Contains the enemy base script) then go on with the rest of the damage then destroys itself
+        if (target.GetComponent<EnemyBase>())
+        {
+            //Starts the knockback coroutine
+            //StartCoroutine(target.GetComponent<EnemyBase>().EnemyKnockBack());
+            target.GetComponent<EnemyBase>().Damage(damage);
+
+            /*if (setOnFire)
+                target.GetComponent<EnemyBase>().transform.GetComponent<StatusEffects>().fireStatus(3f);*/
 
             yield return new WaitForSeconds(tickRate);
         }
