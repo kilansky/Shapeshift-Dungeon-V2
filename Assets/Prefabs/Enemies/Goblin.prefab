@@ -466,7 +466,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hitbox: {fileID: 4675398819247505427}
-  attackAnim: {fileID: 0}
+  attackAnim: {fileID: 5314805546334719486}
   showHitBoxes: 1
 --- !u!1 &1505843469635240261
 GameObject:
@@ -2798,7 +2798,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hitEffect: {fileID: 331117896044982230, guid: 91d53d334422de047bf7b67c77b295ba,
     type: 3}
-  hasTorch: 0
 --- !u!1 &4928127076188830255
 GameObject:
   m_ObjectHideFlags: 0
@@ -3168,8 +3167,6 @@ GameObject:
   - component: {fileID: 5861618946486787351}
   - component: {fileID: -4041397827124426621}
   - component: {fileID: -5163235311747086119}
-  - component: {fileID: 5472510282156795509}
-  - component: {fileID: 4353808572008021936}
   m_Layer: 11
   m_Name: Goblin
   m_TagString: Monster
@@ -3205,10 +3202,10 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 7
-  m_Acceleration: 100
+  m_Speed: 3.5
+  m_Acceleration: 8
   avoidancePriority: 50
-  m_AngularSpeed: 500
+  m_AngularSpeed: 120
   m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
@@ -3231,7 +3228,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   aliveGO: {fileID: 1470995942592417086}
   player: {fileID: 0}
-  health: 9
+  health: 8
   hitMat: {fileID: 2100000, guid: 8e628ab3673526648b68be922de630f2, type: 2}
   normalMat: {fileID: 2100000, guid: 5433dd97fb8182646ad016c773be2d7e, type: 2}
   healthBar: {fileID: 380591686153994882}
@@ -3246,18 +3243,18 @@ MonoBehaviour:
   gemPrefab: {fileID: 1679218149131978045, guid: 269ad815a67e12f4d86befaa2ccef290,
     type: 3}
   isKnockedBack: 0
-  knockBackStrength: 6
+  knockBackStrength: 1000
   meleeDamage: 3
   distanceToPlayer: 0
   agent: {fileID: 0}
   isStunned: 0
-  isInvincible: 0
   whatIsPlayer:
     serializedVersion: 2
     m_Bits: 256
   wallCheck: {fileID: 7778884051866706539}
   ledgeCheck: {fileID: 4632711789486929035}
   playerCheck: {fileID: 137315583785107152}
+  isInvincible: 0
   idleStateData: {fileID: 11400000, guid: 3059e559f3cff8943ad19c58a29d03d5, type: 2}
   moveStateData: {fileID: 11400000, guid: d604eab27050a9e46af8047fdc75160e, type: 2}
   playerDetectedData: {fileID: 11400000, guid: 910b8d194ebe7ed4da5d749705ab4a4f, type: 2}
@@ -3268,7 +3265,6 @@ MonoBehaviour:
   FrontTarget: {fileID: 0}
   SideTarget: {fileID: 0}
   BackTarget: {fileID: 0}
-  isAttacking: 0
   renderer: {fileID: 1417488913638399903}
 --- !u!114 &-4041397827124426621
 MonoBehaviour:
@@ -3297,39 +3293,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da005503d6d9b9f4dbeec223e3c5f431, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fireEffect: {fileID: 486602259771266895}
+  fireEffect: {fileID: 0}
   fireIcon: {fileID: 0}
   fireTimeText: {fileID: 0}
---- !u!136 &5472510282156795509
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5520990575442047842}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 1.8862162
-  m_Direction: 1
-  m_Center: {x: 0, y: 0.95244217, z: 0}
---- !u!54 &4353808572008021936
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5520990575442047842}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 1
-  m_AngularDrag: 0.05
-  m_UseGravity: 1
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 116
-  m_CollisionDetection: 0
 --- !u!1 &5740145373421723616
 GameObject:
   m_ObjectHideFlags: 0
@@ -4900,7 +4866,7 @@ PrefabInstance:
     - target: {fileID: 7083563200013932927, guid: 1ef9d489551575449a77dcd841ebea59,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.75
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7083563200013932927, guid: 1ef9d489551575449a77dcd841ebea59,
         type: 3}
@@ -4944,12 +4910,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1ef9d489551575449a77dcd841ebea59, type: 3}
---- !u!1 &486602259771266895 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7083563200013932914, guid: 1ef9d489551575449a77dcd841ebea59,
-    type: 3}
-  m_PrefabInstance: {fileID: 7245479391810915901}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &486602259771266882 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7083563200013932927, guid: 1ef9d489551575449a77dcd841ebea59,

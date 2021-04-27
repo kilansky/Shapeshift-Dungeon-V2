@@ -216,13 +216,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 942725481}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0.06975647, y: 0, z: 0, w: 0.9975641}
   m_LocalPosition: {x: 0, y: 2, z: 0.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 911771371}
   m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 8, y: 0, z: 0}
 --- !u!1 &681768504641416162
 GameObject:
   m_ObjectHideFlags: 0
@@ -483,6 +483,7 @@ MonoBehaviour:
     type: 3}
   isKnockedBack: 0
   knockBackStrength: 5
+  meleeDamage: 3
   distanceToPlayer: 0
   agent: {fileID: 0}
   isStunned: 0
@@ -492,6 +493,7 @@ MonoBehaviour:
   wallCheck: {fileID: 603791008}
   ledgeCheck: {fileID: 474434372}
   playerCheck: {fileID: 184444783}
+  isInvincible: 0
   idleStateData: {fileID: 11400000, guid: d42de71cc17b3a4438f40f473b235558, type: 2}
   moveStateData: {fileID: 11400000, guid: 3b9b55710c662764eb7365d210049788, type: 2}
   playerDetectedData: {fileID: 11400000, guid: 943c70cdd5610114c99cc8abe5a9d18a, type: 2}
@@ -500,9 +502,10 @@ MonoBehaviour:
     type: 2}
   stunStateData: {fileID: 11400000, guid: e95c3bdc6bb22d74a89b7ef523ccfd45, type: 2}
   firePointFront: {fileID: 942725482}
-  renderer: {fileID: 2588655024629111615}
   pointLight: {fileID: 6937152379845393604}
-  chargeRate: 1
+  renderer: {fileID: 2588655024629111615}
+  rotateSpeed: 1.2
+  isGreenCrystal: 0
 --- !u!54 &1655958689
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -587,6 +590,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fireEffect: {fileID: 7083563199549147664}
+  fireIcon: {fileID: 0}
+  fireTimeText: {fileID: 0}
 --- !u!1 &1685075701894157085
 GameObject:
   m_ObjectHideFlags: 0
