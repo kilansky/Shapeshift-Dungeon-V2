@@ -70,6 +70,10 @@ public class Bullet : MonoBehaviour
     //Check if player was hit & deal damage
     private void OnTriggerEnter(Collider collider)
     {
+        //Detect if the player's sword hits this bullet and destroy it
+        if (canDamage && collider.gameObject.layer == 14)
+            Destroy(gameObject);
+
         if (canDamage && collider.GetComponent<PlayerController>())
         {
             //if (!PlayerHealth.Instance.isInvincible)

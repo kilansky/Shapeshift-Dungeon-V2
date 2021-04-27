@@ -968,7 +968,7 @@ public class PlayerController : SingletonPattern<PlayerController>
         return spawnDirection;
     }
 
-    IEnumerator RechargeSpecial()
+    public IEnumerator RechargeSpecial()
     {
         //Starts the corutine to recharge the second special item is need be
         if (hasBagOfHolding && !specialIsCharging2)
