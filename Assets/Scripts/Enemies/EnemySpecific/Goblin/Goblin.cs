@@ -36,6 +36,8 @@ public class Goblin : EnemyBase
     [HideInInspector] public GameObject SideTarget;
     [HideInInspector] public GameObject BackTarget;
 
+    public bool isAttacking = false;
+
     //public GameObject meleeHitBox;
     //public Transform hitPoint;
 
