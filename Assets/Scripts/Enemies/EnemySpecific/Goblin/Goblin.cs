@@ -36,6 +36,9 @@ public class Goblin : EnemyBase
     public GameObject SideTarget;
     public GameObject BackTarget;
 
+    public GameObject meleeHitBox;
+    public Transform hitPoint;
+
     public SkinnedMeshRenderer renderer;
 
     private float attackDamage;
