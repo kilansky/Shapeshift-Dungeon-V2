@@ -39,6 +39,7 @@ public class Laser : MonoBehaviour
     {
         beam = laser.gameObject.GetComponent<LineRenderer>();
         capsuleCollider = GetComponent<CapsuleCollider>();
+
         parentObject = transform.parent.gameObject;
 
         //If statement to adjust some values if this is used for the player weapon
@@ -106,10 +107,12 @@ public class Laser : MonoBehaviour
             if (!parentObject.GetComponent<PlayerController>() && !PlayerHealth.Instance.isInvincible && damage > 0)
                 StartCoroutine(LaserCycle(other.gameObject));
 
-            if (other.GetComponent<EnemyBase>() && !other.GetComponent<EnemyBase>().isInvincible && heal)
+            if (parentObject.GetComponent<PlayerController>() && !other.GetComponent<EnemyBase>().isInvincible && heal)
             {
+                print("Hit an enemey for the enemy!");
                 StartCoroutine(LaserCycle(other.gameObject));
             }
+                
         }
     }
 
@@ -122,8 +125,8 @@ public class Laser : MonoBehaviour
     {
         laserTriggered = true;
 
-        if (!parentObject.GetComponent<PlayerController>())
-        {
+        //if (!parentObject.GetComponent<PlayerController>())
+        //{
             if (target.GetComponent<PlayerController>() && !PlayerController.Instance.IsDashing)
             {
                 if (!PlayerHealth.Instance.isInvincible)
@@ -137,7 +140,7 @@ public class Laser : MonoBehaviour
 
                 yield return new WaitForSeconds(tickRate);
             }
-        }
+        //}
 
         //If the other object is Monster (Contains the enemy base script) then go on with the rest of the damage then destroys itself
         if (target.GetComponent<EnemyBase>())
@@ -150,8 +153,8 @@ public class Laser : MonoBehaviour
                 StartCoroutine(target.GetComponent<EnemyBase>().EnemyKnockBack());
                 target.GetComponent<EnemyBase>().Damage(damage);
 
-                if (setOnFire)
-                    target.GetComponent<EnemyBase>().transform.GetComponent<StatusEffects>().fireStatus(3f);
+                /*if (setOnFire)
+                    target.GetComponent<EnemyBase>().transform.GetComponent<StatusEffects>().fireStatus(3f);*/
             }
 
             yield return new WaitForSeconds(tickRate);
