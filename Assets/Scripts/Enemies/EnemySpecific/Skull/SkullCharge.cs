@@ -121,7 +121,7 @@ public class SkullCharge : MonoBehaviour
 
         //bullet.transform.localEulerAngles = Vector3.right;
         bullet.GetComponent<Bullet>().canDamage = true;
-        bullet.GetComponent<Bullet>().shotBy = "Skull";
+        //bullet.GetComponent<Bullet>().shotBy = "Skull";
         sparks.Play();
 
         yield return new WaitForSeconds(attackCoolDown);

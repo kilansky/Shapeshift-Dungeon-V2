@@ -21,6 +21,10 @@ public class Laser : MonoBehaviour
     public GameObject laser;
     public LayerMask mask;
 
+    [Header("Special Properties")]
+    public bool setOnFire;
+    public bool heal;
+
     private LineRenderer beam;
     private CapsuleCollider capsuleCollider;
 
@@ -77,19 +81,9 @@ public class Laser : MonoBehaviour
     /// Detects when something enters the laser's collider
     /// </summary>
     /// <param name="other"></param>
-    private void OnTriggerEnter(Collider other)
-    {
-        if(parentObject.GetComponent<PlayerController>())
-            StartCoroutine(LaserCycle(other.gameObject));
-    }
-
-    /// <summary>
-    /// Detects when something enters the laser's collider
-    /// </summary>
-    /// <param name="other"></param>
     private void OnTriggerStay(Collider other)
     {
-        if (!parentObject.GetComponent<PlayerController>() && damage > 0)
+        if (!parentObject.GetComponent<PlayerController>() && !PlayerHealth.Instance.isInvincible && damage > 0)
             StartCoroutine(LaserCycle(other.gameObject));
     }
 
@@ -108,6 +102,10 @@ public class Laser : MonoBehaviour
                     AnalyticsEvents.Instance.PlayerDamaged("Laser"); //Sends analytics event about damage source
 
                 PlayerHealth.Instance.Damage(damage, parentObject);
+
+                if (setOnFire)
+                    PlayerHealth.Instance.transform.GetComponent<StatusEffects>().fireStatus(3f);
+
                 yield return new WaitForSeconds(tickRate);
             }
         }
@@ -118,6 +116,9 @@ public class Laser : MonoBehaviour
             if (target.GetComponent<EnemyBase>())
             {
                 target.GetComponent<EnemyBase>().Damage(damage);
+
+                if (setOnFire)
+                    target.GetComponent<EnemyBase>().transform.GetComponent<StatusEffects>().fireStatus(3f);
             }
         }
         

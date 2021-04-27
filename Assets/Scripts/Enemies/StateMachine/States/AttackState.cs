@@ -24,6 +24,7 @@ public class AttackState : State
 
         //isChargeTimeOver = false;
         entity.agent.SetDestination(entity.transform.position);
+
         TriggerAttack();
         //playerInAttackRange = entity.CheckPlayerInMinAttackRange();
         //entity.SetVelocity(0f);

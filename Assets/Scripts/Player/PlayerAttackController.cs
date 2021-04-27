@@ -35,8 +35,8 @@ public class PlayerAttackController : SingletonPattern<PlayerAttackController>
             slashHitbox.GetComponent<MeshRenderer>().enabled = true;
 
         Vector3 vfxSpawnPos = new Vector3(player.position.x, slashHitbox.transform.position.y, player.position.z);
-        GameObject vfx = Instantiate(slashVFX2, vfxSpawnPos, player.rotation, player);
-        vfx.transform.Rotate(90, 0, 45);
+        GameObject vfx = Instantiate(slashVFX1, vfxSpawnPos, player.rotation, player);
+        vfx.transform.Rotate(90, 0, 42.571f);
         Destroy(vfx, 1);
     }
 
@@ -51,8 +51,9 @@ public class PlayerAttackController : SingletonPattern<PlayerAttackController>
             slashHitbox.GetComponent<MeshRenderer>().enabled = true;
 
         Vector3 vfxSpawnPos = new Vector3(player.position.x, slashHitbox.transform.position.y, player.position.z);
-        GameObject vfx = Instantiate(slashVFX1, vfxSpawnPos, player.rotation, player);
-        vfx.transform.Rotate(90, 0, 45);
+        GameObject vfx = Instantiate(slashVFX2, vfxSpawnPos, player.rotation, player);
+        vfx.transform.Rotate(90, 0, 103.16f); //42.571f 103.16f
+        //vfx.transform.localScale = new Vector3(vfx.transform.localScale.x, vfx.transform.localScale.y * -1f, vfx.transform.localScale.z);
         Destroy(vfx, 1);
     }
 

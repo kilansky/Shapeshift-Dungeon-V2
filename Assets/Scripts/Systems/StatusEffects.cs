@@ -34,24 +34,24 @@ public class StatusEffects : MonoBehaviour
     {
         currTime = 0; //Tracker to make sure that the ticks only happen a certain amount of time as specified by the duration
 
-        fireEffect.SetActive(true); //Activates the fire effect object on the object
-
         //While the tracker is less than the duration the function will run and every second deal a single damage to the player or the enemy that this script is attached to.
         while (currTime < duration)
         {
+            fireEffect.SetActive(true); //Activates the fire effect object on the object
+
             //If the object is an enemy (Contains the enemy base script) than deal the damage
             if (GetComponent<EnemyBase>())
-                GetComponent<EnemyBase>().Damage(1);
+                GetComponent<EnemyBase>().FireDamage(1);
 
             //If the object is the palyer than deal the damage
             if (GetComponent<PlayerHealth>())
-                PlayerHealth.Instance.Damage(1, gameObject);
+                PlayerHealth.Instance.FireDamage(1);
 
             currTime++; //Adds 1 to the current time to help with the while statement
 
             timeLeft = duration - currTime; //Adjusts time left to show how much time is remaining (aka how much damage is left for the enemy to take)
 
-            print("This object: " + gameObject.name + " has this much time remaining for the fire status effect: " + timeLeft);
+            //print("This object: " + gameObject.name + " has this much time remaining for the fire status effect: " + timeLeft);
 
             yield return new WaitForSeconds(1); //Waits for a single second before checking the while loop again
         }

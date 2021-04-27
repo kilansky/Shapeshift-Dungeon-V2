@@ -18,7 +18,7 @@ public class Bullet : MonoBehaviour
     //bullet charge time
     public float minBulletSize;
     public float maxBulletSize;
-    public string shotBy; //used for damage type analytics - REMOVE LATER
+    //public string shotBy; //used for damage type analytics - REMOVE LATER
 
     [Header("VFX Pointers")]
     public GameObject beamLight;
@@ -69,8 +69,8 @@ public class Bullet : MonoBehaviour
     {
         if (canDamage && collider.GetComponent<PlayerController>())
         {
-            if (!PlayerHealth.Instance.isInvincible)
-                AnalyticsEvents.Instance.PlayerDamaged(shotBy + " Projectile"); //Sends analytics event about damage source
+            //if (!PlayerHealth.Instance.isInvincible)
+                //AnalyticsEvents.Instance.PlayerDamaged(shotBy + " Projectile"); //Sends analytics event about damage source
 
             PlayerHealth.Instance.Damage(bulletDamage, parentObject);
             Destroy(gameObject);

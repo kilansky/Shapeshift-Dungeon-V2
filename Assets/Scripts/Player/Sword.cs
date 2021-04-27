@@ -27,6 +27,9 @@ public class Sword : MonoBehaviour
             //Apply damage to enemy
             other.GetComponent<EnemyBase>().Damage(damageToDeal);
 
+            //Apply Knockback to enemy
+            StartCoroutine(other.GetComponent<EnemyBase>().EnemyKnockBack());
+
             AudioManager.Instance.Play("Hit");
         }
 

@@ -75,7 +75,7 @@ public class Dispenser : MonoBehaviour
         //Fires Projectile after waiting
         bullet.GetComponent<Bullet>().moveSpeed = originalSpeed;
         bullet.GetComponent<Bullet>().canDamage = true;
-        bullet.GetComponent<Bullet>().shotBy = "Dispenser";
+        //bullet.GetComponent<Bullet>().shotBy = "Dispenser";
 
         yield return new WaitForSeconds(rateOfFire - delayBeforeFiring - chargeTime);
 

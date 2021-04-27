@@ -39,7 +39,11 @@ public class EnemyBase : MonoBehaviour, IDamageable
     public GameObject deathEffect;
     public GameObject gemPrefab;
 
-    
+    public bool isKnockedBack;
+    public float knockBackStrength = 1000f;
+
+    private Vector3 knockbackDirection;
+    private bool isBeingKnockedBack = false;
 
     [HideInInspector] public float distanceToPlayer;
     [HideInInspector] public NavMeshAgent agent;
@@ -48,7 +52,8 @@ public class EnemyBase : MonoBehaviour, IDamageable
     #endregion
 
     #region Getters and Setters
-    public Rigidbody RB { get; private set; }
+    //public Rigidbody RB { get; private set; }
+    public Rigidbody topRB { get; private set; }
     public Animator Anim { get; private set; }
     //public float minAgroRange { get; private set; }
     public float maxAgroRange { get; private set; }
@@ -83,6 +88,9 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     #region Protected Variables nothing in here atm
     protected Transform target;
+
+    protected Vector3 OGposition;
+    protected Quaternion OGrotation;
     //protected bool canAttack = true;
     //protected bool isPlayerInMinAgroRange;
     //protected bool isPlayerInMinAttackRange;
@@ -102,7 +110,8 @@ public class EnemyBase : MonoBehaviour, IDamageable
         currentStunResistance = entityData.stunResistance;
 
         agent = GetComponent<NavMeshAgent>();
-        RB = aliveGO.GetComponent<Rigidbody>();
+        //RB = aliveGO.GetComponent<Rigidbody>();
+        topRB = GetComponent<Rigidbody>();
         Anim = aliveGO.GetComponent<Animator>();
 
         //find player pos and go to it
@@ -167,8 +176,8 @@ public class EnemyBase : MonoBehaviour, IDamageable
     public virtual void SetVelocity(float velocity)
     {
         //may need to change this
-        velocityWorkspace.Set(FacingDirection * velocity * Time.fixedDeltaTime, RB.velocity.y, RB.velocity.x);
-        RB.velocity = velocityWorkspace;
+        //velocityWorkspace.Set(FacingDirection * velocity * Time.fixedDeltaTime, RB.velocity.y, RB.velocity.x);
+        //RB.velocity = velocityWorkspace;
     }
 
     public virtual bool CheckWall()
@@ -285,6 +294,22 @@ public class EnemyBase : MonoBehaviour, IDamageable
         }
     }
 
+    public virtual void FireDamage(float damage)
+    {
+        Flash();
+
+        //enemy takes damage from the player
+        Health -= damage;
+        UpdateUI();
+
+        //When the enemy takes enough damage and is killed it will do the kill function then the player kapala item special item charge function from player controller - AHL (4/20/21)
+        if (Health <= 0)
+        {
+            Kill();
+            PlayerController.Instance.KapalaSpecialRecharge();
+        }
+    }
+
     public virtual void Flash()
     {
         //sets enemy's color to the hitMat (red)
@@ -341,7 +366,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     public void SetDestination()
     {
-        if (target != null)
+        if (target != null && !isKnockedBack)
         {
             //target the player
             agent.SetDestination(target.position);
@@ -394,6 +419,55 @@ public class EnemyBase : MonoBehaviour, IDamageable
         ResetColor();
     }
 
+    //public IEnumerator EnemyKnockBack()
+    public IEnumerator EnemyKnockBack()
+    {
+        if (!isBeingKnockedBack)
+        {
+            isBeingKnockedBack = true;
+
+            //Debug.Log("knockback script called");
+            //Debug.Log("topRB is equal to " + topRB);
+
+            OGposition = topRB.transform.position;
+            OGrotation = topRB.transform.rotation;
+            //Debug.Log("OG chillin at " + OGposition);
+
+            isKnockedBack = true;
+            agent.enabled = false;
+            topRB.isKinematic = false;
+
+            //don't knock them back in the air
+
+            //TODO: double check the logic here should be enemy - knockbacker object
+            knockbackDirection = (transform.position - player.transform.position).normalized;
+            knockbackDirection.y = 0;
+            //Debug.Log("knockbackdirection is " + knockbackDirection);
+
+            //topRB.velocity = knockbackDirection * knockBackStrength;
+            //Debug.Log("my strength is " + knockBackStrength);
+
+            topRB.AddForce(knockbackDirection * knockBackStrength, ForceMode.Impulse);
+            //Debug.Log("what's my velocity? " + topRB.velocity);
+            //enemy.transform.position = enemy.RB.transform.localPosition;
+
+            topRB.transform.position = OGposition;
+            topRB.transform.rotation = OGrotation;
+            //Debug.Log("OG now chillin at " + OGposition);
+            //Debug.Log("the RB is at " + enemy.RB.transform.position);
+
+            yield return new WaitForSeconds(0.5f);
+
+            if(Health > 0)
+            {
+                isKnockedBack = false;
+                agent.enabled = true;
+                topRB.isKinematic = true;
+                isBeingKnockedBack = false;
+            }
+        }
+    }
+
 
     public void OnDrawGizmos()
     {
@@ -403,6 +477,29 @@ public class EnemyBase : MonoBehaviour, IDamageable
         Gizmos.DrawWireSphere(transform.position, minAgroRange);
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(transform.position, minAttackRange);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+
+        //enemy = other.GetComponent<EnemyBase>();
+        //Debug.Log("enemy is equal to " + enemy.name);
+
+        //enemy = FindObjectOfType<EnemyBase>();
+        //Rigidbody rb = other.GetComponent<EnemyBase>().aliveGO.GetComponent<Rigidbody>();
+        //Debug.Log("rb is equal to " + rb);
+
+        //straight line knockback
+        /*
+        if (other.gameObject.CompareTag("Item") || other.gameObject.layer == 14) //layer 14 = swordHitbox
+        {
+            Debug.Log("hey look i'm triggered");
+            Vector3 direction = (other.transform.position - transform.position).normalized;
+            if(!isBeingKnockedBack)
+                StartCoroutine(EnemyKnockBack());
+            rb.AddForce(knockbackDirection.normalized * knockBackStrength, ForceMode.Impulse);
+        }
+        */
     }
 
     private void OnTriggerStay(Collider other)

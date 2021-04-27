@@ -5,7 +5,6 @@ using UnityEngine;
 public class FloatingCrystal_AttackState : AttackState
 {
     private FloatingCrystal enemy;
-    [HideInInspector] public float rotateSpeed = 1.2f;
     private LaserDispenser laser;
     float timeElapsed;
     float attackDuration = 8f;
@@ -32,7 +31,6 @@ public class FloatingCrystal_AttackState : AttackState
         laser = enemy.GetComponent<LaserDispenser>();
         attackStartupTime = laser.startupTime;
         isChargingUp = true;
-        TriggerAttack();
     }
 
     public override void Exit()
@@ -69,7 +67,7 @@ public class FloatingCrystal_AttackState : AttackState
         if (isAttacking && timeElapsed >= attackDuration)
         {
             isAttacking = false;
-            enemy.Anim.SetBool("isAttacking", false);
+            //enemy.Anim.SetBool("isAttacking", false);
             enemy.pointLight.intensity = 5f;
 
             timeElapsed = 0;
@@ -82,14 +80,13 @@ public class FloatingCrystal_AttackState : AttackState
         base.PhysicsUpdate();
 
         if(isAttacking)
-            enemy.transform.Rotate(0, rotateSpeed, 0);
+            enemy.transform.Rotate(0, enemy.rotateSpeed, 0);
     }
 
     public override void TriggerAttack()
     {
         //canAttack = false;
-        base.TriggerAttack();
-        enemy.Anim.SetBool("isAttacking", true);
+        //enemy.Anim.SetBool("isAttacking", true);
 
         //fire the laser
         enemy.GetComponent<LaserDispenser>().ToggleLaser(true);

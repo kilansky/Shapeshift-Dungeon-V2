@@ -114,7 +114,7 @@ public class FloatingCrystal_MoveState : MoveState
     {
         //find a walk point after you've moved to one already
         walkPoint = new Vector3(Random.insideUnitSphere.x * walkPointRange, enemy.transform.position.y, Random.insideUnitSphere.z * walkPointRange);
-        Debug.Log("my walkpoint is " + walkPoint);
+        //Debug.Log("my walkpoint is " + walkPoint);
         walkPointSet = true;
 
         /*float randomZ = Random.Range(-walkPointRange, walkPointRange);

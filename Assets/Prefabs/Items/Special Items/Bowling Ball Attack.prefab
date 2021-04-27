@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 9000119421812008355}
   - component: {fileID: 9000119421812008354}
   - component: {fileID: 5716389661837284565}
+  - component: {fileID: 7509537116839183730}
   m_Layer: 0
   m_Name: Bowling Ball Attack
   m_TagString: Special Item Attack
@@ -108,3 +109,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage: 6
   speed: 12
+--- !u!114 &7509537116839183730
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9000119421812008352}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d19ffa07f2c65943b3a39c07fece3ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  knockBackStrength: 5
+  knockbackDirection: {x: 0, y: 0, z: 0}
+  enemy: {fileID: 0}
