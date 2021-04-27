@@ -91,6 +91,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     protected Vector3 OGposition;
     protected Quaternion OGrotation;
+
     //protected bool canAttack = true;
     //protected bool isPlayerInMinAgroRange;
     //protected bool isPlayerInMinAttackRange;
@@ -320,7 +321,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     public virtual void ResetColor()
     {
-
+        //base place holder function to reset color of enemies
     }
 
     public virtual void Heal(float heal)
@@ -402,6 +403,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
         //TODO: add stunResistance to entityData
         currentStunResistance = entityData.stunResistance;
     }
+
 
     //Makes the enemy invincible briefly
     IEnumerator InvincibilityFrames()

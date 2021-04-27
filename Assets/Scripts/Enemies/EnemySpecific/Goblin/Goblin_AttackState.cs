@@ -10,6 +10,9 @@ public class Goblin_AttackState : AttackState
     protected Transform attackPosition;
 
     public GameObject meleeHitBox;
+    public GameObject meleeVFX;
+    public bool showHitBoxes = false;
+
 
     public Goblin_AttackState(EnemyBase entity, FiniteStateMachine stateMachine, string animBoolName, D_AttackState stateData, Goblin enemy) : base(entity, stateMachine, animBoolName, stateData)
     {
@@ -61,10 +64,12 @@ public class Goblin_AttackState : AttackState
         //Debug.Log("he triggering the attack rn");
         enemy.Anim.SetBool("isAttacking", true);
         //hit the player
-        //meleeHitBox.GetComponent<MeshCollider>().enabled = true;
         //turn on mesh collider hit box for melee attack
-        //meleeHitBox.GetComponent<MeshRenderer>().enabled = true;
-        
+        meleeHitBox.GetComponent<MeshCollider>().enabled = true;
+        //show the hitbox for the attack
+        if (showHitBoxes)
+            meleeHitBox.GetComponent<MeshRenderer>().enabled = true;
+
         //swipe at the player
 
     }
