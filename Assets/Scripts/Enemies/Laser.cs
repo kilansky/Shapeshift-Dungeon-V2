@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.VFX;
 using UnityEngine;
 
 public class Laser : MonoBehaviour
@@ -20,6 +21,7 @@ public class Laser : MonoBehaviour
     [Header("Misc")]
     public GameObject laser;
     public LayerMask mask;
+    public GameObject hitFX;
 
     [Header("Special Properties")]
     public bool setOnFire;
@@ -28,6 +30,7 @@ public class Laser : MonoBehaviour
     private LineRenderer beam;
     private CapsuleCollider capsuleCollider;
     private bool laserTriggered = false;
+    private VisualEffect hitEffect;
 
     [HideInInspector] public GameObject parentObject; //Variable to hold the parent Object to make sure the Damage Tracker is able to track the damage correctly
 
@@ -35,6 +38,8 @@ public class Laser : MonoBehaviour
     {
         beam = laser.gameObject.GetComponent<LineRenderer>();
         capsuleCollider = GetComponent<CapsuleCollider>();
+        hitEffect = hitFX.GetComponent<VisualEffect>();
+        parentObject = transform.parent.gameObject;
 
         //If statement to adjust some values if this is used for the player weapon
         if(parentObject.GetComponent<PlayerController>())
@@ -42,6 +47,8 @@ public class Laser : MonoBehaviour
             damage = 5f;
             Destroy(gameObject, 0.3f);
         }
+
+        StartCoroutine(PlayFX());
     }
 
     private void FixedUpdate()
@@ -76,6 +83,7 @@ public class Laser : MonoBehaviour
         beam.SetPosition(1, new Vector3(0, 0, length));
         capsuleCollider.center = Vector3.forward * length / 2;
         capsuleCollider.height = length;
+        hitFX.transform.localPosition = new Vector3(0, 0, length);
     }
 
     /// <summary>
@@ -141,6 +149,14 @@ public class Laser : MonoBehaviour
         }
 
         laserTriggered = false;
+    }
+
+    private IEnumerator PlayFX()
+    {
+        Debug.Log("Playing effect!");
+        hitEffect.Play();
+        yield return new WaitForSeconds(.15f);
+        StartCoroutine(PlayFX());
     }
 
     /// <summary>
