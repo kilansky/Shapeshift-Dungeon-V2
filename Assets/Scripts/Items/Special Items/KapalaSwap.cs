@@ -17,24 +17,56 @@ public class KapalaSwap : MonoBehaviour
     /// <param name="percentage"></param>
     public void KapalaSpriteSwap(float percentage)
     {
-        //Empty Kapala Sprite if the percentage is less than 40% (0.4)
-        if(percentage < 0.4f)
-            HUDController.Instance.speicalItemIcon.sprite = Kapala0;
+        //If the Kapala is in the Special Item Slot
+        if(PlayerController.Instance.SpecialSlot.ItemName == "Kapala")
+        {
+            //Empty Kapala Sprite if the percentage is less than 40% (0.4)
+            if (percentage < 0.4f)
+                PlayerController.Instance.SpecialSlot.sprite = Kapala0;
 
-        //Kapala1 Sprite used if the percentage is less than 60% (0.6)
-        else if (percentage < 0.6f)
-            HUDController.Instance.speicalItemIcon.sprite = Kapala1;
+            //Kapala1 Sprite used if the percentage is less than 60% (0.6)
+            else if (percentage < 0.6f)
+                PlayerController.Instance.SpecialSlot.sprite = Kapala1;
 
-        //Kapala2 Sprite used if the percentage is less than 80% (0.8)
-        else if (percentage < 0.8f)
-            HUDController.Instance.speicalItemIcon.sprite = Kapala2;
+            //Kapala2 Sprite used if the percentage is less than 80% (0.8)
+            else if (percentage < 0.8f)
+                PlayerController.Instance.SpecialSlot.sprite = Kapala2;
 
-        //Kapala3 Sprite used if the percentage is less than 100% (1)
-        else if (percentage < 1)
-            HUDController.Instance.speicalItemIcon.sprite = Kapala3;
+            //Kapala3 Sprite used if the percentage is less than 100% (1)
+            else if (percentage < 1)
+                PlayerController.Instance.SpecialSlot.sprite = Kapala3;
 
-        //Kapala4 Sprite used if the percentage is 100% (1)
-        else
-            HUDController.Instance.speicalItemIcon.sprite = Kapala4;
+            //Kapala4 Sprite used if the percentage is 100% (1)
+            else
+                PlayerController.Instance.SpecialSlot.sprite = Kapala4;
+
+            HUDController.Instance.SetNewSpecialItemIcon();
+        }
+
+        //If the Kapala is in the BOH Slot and it is active
+        else if(PlayerController.Instance.hasBagOfHolding && PlayerController.Instance.BagOfHoldingSlot.ItemName == "Kapala")
+        {
+            //Empty Kapala Sprite if the percentage is less than 40% (0.4)
+            if (percentage < 0.4f)
+                PlayerController.Instance.BagOfHoldingSlot.sprite = Kapala0;
+
+            //Kapala1 Sprite used if the percentage is less than 60% (0.6)
+            else if (percentage < 0.6f)
+                PlayerController.Instance.BagOfHoldingSlot.sprite = Kapala1;
+
+            //Kapala2 Sprite used if the percentage is less than 80% (0.8)
+            else if (percentage < 0.8f)
+                PlayerController.Instance.BagOfHoldingSlot.sprite = Kapala2;
+
+            //Kapala3 Sprite used if the percentage is less than 100% (1)
+            else if (percentage < 1)
+                PlayerController.Instance.BagOfHoldingSlot.sprite = Kapala3;
+
+            //Kapala4 Sprite used if the percentage is 100% (1)
+            else
+                PlayerController.Instance.BagOfHoldingSlot.sprite = Kapala4;
+
+            HUDController.Instance.SetNewSpecialItemIcons();
+        }
     }
 }

@@ -574,6 +574,9 @@ public class PlayerController : SingletonPattern<PlayerController>
             //Starts the Corutine if the special charge is not equal to the value
             StartCoroutine(RechargeSpecial());
 
+            //Do the Kapala Recharge stuff
+
+
             //Sets the new current item in the active special slot
             HUDController.Instance.SetNewSpecialItemIcons();
 
@@ -876,7 +879,7 @@ public class PlayerController : SingletonPattern<PlayerController>
                     //Heals the player for 5 HP then sets the special charge to 0 **This is based on the Kapala item on the GDD** - AHL (4/20/21)
                     PlayerHealth.Instance.Heal(5);
                     SpecialCharge = 0;
-                    SpecialSlot.prefab.GetComponent<KapalaSwap>().KapalaSpriteSwap(SpecialCharge); //Resets the Kapala sprite aas it was used
+                    SpecialSlot.prefab.GetComponent<KapalaSwap>().KapalaSpriteSwap(0); //Resets the Kapala sprite aas it was used
                     HUDController.Instance.UpdateSpecialCharge();
                 }
 
@@ -1003,6 +1006,22 @@ public class PlayerController : SingletonPattern<PlayerController>
             float percent = SpecialCharge / specialCooldownTime.Value;
 
             SpecialSlot.prefab.GetComponent<KapalaSwap>().KapalaSpriteSwap(percent); //Changes the sprite of the Kapala based on the Special Charge value
+            HUDController.Instance.UpdateSpecialCharge();
+        }
+
+        //The special only recharges if the current BOH item is the Kapala
+        else if (BagOfHoldingSlot && BagOfHoldingSlot.ItemName == "Kapala")
+        {
+            //Calculates the % value of the Special Charge compared to the SpecialCooldownTime.Value
+            if (specialCharge2MaxValue == -1)
+                specialCharge2MaxValue = 10;
+
+            if ((specialCharge2 < specialCharge2MaxValue) && !isItemSwapping)
+                specialCharge2++; //Adds 1 to the special charge 2 since this is when an enemy dies
+
+            float percent = specialCharge2 / specialCharge2MaxValue;
+
+            BagOfHoldingSlot.prefab.GetComponent<KapalaSwap>().KapalaSpriteSwap(percent); //Changes the sprite of the Kapala based on the Special Charge value
             HUDController.Instance.UpdateSpecialCharge();
         }
     }

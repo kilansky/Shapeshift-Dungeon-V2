@@ -467,6 +467,11 @@ public class HUDController : SingletonPattern<HUDController>
         speicalItemEmptyIcon.SetActive(false);
     }
 
+    public void SetNewSpecialItemIcon()
+    {
+        speicalItemIcon.sprite = PlayerController.Instance.SpecialSlot.sprite;
+    }
+
     public void SetNewSpecialItemIcons()
     {
         speicalItemIcon.sprite = PlayerController.Instance.SpecialSlot.sprite;

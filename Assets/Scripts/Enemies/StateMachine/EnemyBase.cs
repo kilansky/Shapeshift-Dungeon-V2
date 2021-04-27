@@ -305,8 +305,8 @@ public class EnemyBase : MonoBehaviour, IDamageable
         //When the enemy takes enough damage and is killed it will do the kill function then the player kapala item special item charge function from player controller - AHL (4/20/21)
         if (Health <= 0)
         {
-            Kill();
             PlayerController.Instance.KapalaSpecialRecharge();
+            Kill();
         }
     }
 

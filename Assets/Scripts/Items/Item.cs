@@ -41,15 +41,19 @@ public class Item : MonoBehaviour
                     c.canUseSpecial = false;
                     item.prefab.GetComponent<KapalaSwap>().KapalaSpriteSwap(0);
                 }
-                    
             }
                 
                 
-
+            //If the BOH Slot is being set for the first time then we have some special aspecst to do with setting values
             else if(c.hasBagOfHolding && !c.BagOfHoldingSlot) //If the player has a special item and the bag of holding but nothing in the bag of holding then we place the item in the bag
             {
                 c.BagOfHoldingSlot = this.item;
 
+                //If the item is the Kapala then we need to reset it's sprite  - AHL (4/25/21)
+                if (item.ItemName == "Kapala")
+                {
+                    item.prefab.GetComponent<KapalaSwap>().KapalaSpriteSwap(0);
+                }
             }
                 
 
