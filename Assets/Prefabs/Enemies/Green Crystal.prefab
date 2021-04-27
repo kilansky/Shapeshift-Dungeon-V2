@@ -492,6 +492,7 @@ MonoBehaviour:
   wallCheck: {fileID: 603791008}
   ledgeCheck: {fileID: 474434372}
   playerCheck: {fileID: 184444783}
+  isInvincible: 0
   idleStateData: {fileID: 11400000, guid: d42de71cc17b3a4438f40f473b235558, type: 2}
   moveStateData: {fileID: 11400000, guid: 3b9b55710c662764eb7365d210049788, type: 2}
   playerDetectedData: {fileID: 11400000, guid: 943c70cdd5610114c99cc8abe5a9d18a, type: 2}
@@ -503,6 +504,7 @@ MonoBehaviour:
   pointLight: {fileID: 6937152379845393604}
   renderer: {fileID: 2588655024629111615}
   rotateSpeed: 0.8
+  isGreenCrystal: 1
 --- !u!54 &1655958689
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -564,7 +566,7 @@ MonoBehaviour:
   firingMode: 0
   timeOn: 10
   timeOff: 5
-  startupTime: 1.5
+  startupTime: 0.75
   redLaser: {fileID: 0}
   blueLaser: {fileID: 0}
   greenLaser: {fileID: 4851013556838653444, guid: 211ad6cb075174746ab42142f8f16e24,

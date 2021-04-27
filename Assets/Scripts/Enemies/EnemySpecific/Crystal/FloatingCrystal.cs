@@ -34,6 +34,7 @@ public class FloatingCrystal : EnemyBase
     public Light pointLight;
     public MeshRenderer renderer;
     public float rotateSpeed = 1.2f;
+    public bool isGreenCrystal = false;
 
     public override void Awake()
     {
@@ -44,8 +45,7 @@ public class FloatingCrystal : EnemyBase
 
 
     public override void Start()
-    {
-        
+    {      
         base.Start();
 
         moveState = new FloatingCrystal_MoveState(this, stateMachine, "move", moveStateData, this);
@@ -72,7 +72,6 @@ public class FloatingCrystal : EnemyBase
     //set current state to stunState if isStunned
     public override void Damage(float damage)
     {
-
         base.Damage(damage);
 
         if (isStunned && stateMachine.currentState != stunState)
