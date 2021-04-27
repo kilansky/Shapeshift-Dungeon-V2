@@ -111,7 +111,7 @@ public class LevelManager : SingletonPattern<LevelManager>
     {
         if(levelList == null)
         {
-            Debug.Log("No level list detected. Probably loaded a shop");
+            //Debug.Log("No level list detected. Probably loaded a shop");
             return;
         }
 
@@ -136,7 +136,7 @@ public class LevelManager : SingletonPattern<LevelManager>
     /// <returns></returns>
     private List<GameObject> SelectLevelList()
     {
-        Debug.Log("Current floor: " + currFloor);
+        //Debug.Log("Current floor: " + currFloor);
         if(currFloor >= 0 && currFloor < 5)
         {
             return levelSet1;
@@ -239,7 +239,7 @@ public class LevelManager : SingletonPattern<LevelManager>
         else
             MusicManager.Instance.DungeonDecoration();
 
-        Debug.Log("Current map is: " + currMapName);
+        //Debug.Log("Current map is: " + currMapName);
     }
 
     /// <summary>
