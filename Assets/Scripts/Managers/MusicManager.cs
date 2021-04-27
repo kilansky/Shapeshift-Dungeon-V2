@@ -6,7 +6,9 @@ using UnityEngine.Audio;
 //Manages the background music in the game
 public class MusicManager : SingletonPattern<MusicManager>
 {
-    public AudioClip combat;
+    public AudioClip exoticDangers;
+    public AudioClip dungeonDecoration;
+    public AudioClip dungeonDestruction;
     public AudioClip floorCleared;
     public AudioClip shop;
     public float volume = 0.6f;
@@ -20,10 +22,26 @@ public class MusicManager : SingletonPattern<MusicManager>
     }
 
     [ContextMenu("Combat")]
-    public void Combat()
+    public void ExoticDangers()
     {
         STOP();
-        ac.clip = combat;
+        ac.clip = exoticDangers;
+        ac.volume = volume;
+        ac.Play();
+    }
+
+    public void DungeonDecoration()
+    {
+        STOP();
+        ac.clip = dungeonDecoration;
+        ac.volume = volume;
+        ac.Play();
+    }
+
+    public void DungeonDestruction()
+    {
+        STOP();
+        ac.clip = dungeonDestruction;
         ac.volume = volume;
         ac.Play();
     }
