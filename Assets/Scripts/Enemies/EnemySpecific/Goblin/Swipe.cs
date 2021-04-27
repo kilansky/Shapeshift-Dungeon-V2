@@ -15,7 +15,8 @@ public class Swipe : MonoBehaviour
 
     private void Start()
     {
-        //attackAnim = GetComponent<Animator>();
+        enemy = transform.parent.GetComponent<Goblin>();
+        attackAnim = GetComponent<Animator>();
     }
 
     public void EnableHitBox()
@@ -43,6 +44,8 @@ public class Swipe : MonoBehaviour
     public void EndAttack()
     {
         attackAnim.SetBool("isAttacking", false);
+        Debug.Log("I'm ending my attack");
+        StartCoroutine(WaitToEnableAttack());
     }
 
     /*private void OnTriggerEnter(Collider other)
@@ -60,14 +63,11 @@ public class Swipe : MonoBehaviour
         }
     }*/
 
-    /*IEnumerator SlashBox()
-    {
-        //enable the swipe hitbox
-        hit = GetComponent<MeshCollider>();
-        hit.enabled = true;
+    IEnumerator WaitToEnableAttack()
+    {   
         yield return new WaitForSeconds(0.5f);
-        //switch the meshCollider off
-        hit.enabled = false;
-    }*/
+        
+        enemy.isAttacking = false;
+    }
 
 }

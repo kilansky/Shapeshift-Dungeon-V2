@@ -48,7 +48,6 @@ public class Goblin_MoveState : MoveState
             //Debug.Log("I'm attacking!!");
             stateMachine.ChangeState(enemy.attackState);
         }
-        
     }
 
     public override void PhysicsUpdate()

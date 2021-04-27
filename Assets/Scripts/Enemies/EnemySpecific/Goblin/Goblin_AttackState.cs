@@ -29,7 +29,6 @@ public class Goblin_AttackState : AttackState
 
     public override void Enter()
     {
-        base.Enter();
         //attack = enemy.aliveGO.GetComponent<Swipe>();
         //how much damage do they do, and where does it come from
     }
@@ -43,10 +42,11 @@ public class Goblin_AttackState : AttackState
     {
         base.LogicUpdate();
 
-        if (enemy.CheckPlayerInMinAttackRange())
+        if (enemy.CheckPlayerInMinAttackRange() && !enemy.isAttacking)
         {
             //TODO double check logic here 
-            TriggerAttack();
+            base.Enter();
+            enemy.isAttacking = true;
         }
         else
         {
@@ -64,7 +64,10 @@ public class Goblin_AttackState : AttackState
     {
         base.TriggerAttack();
 
+        Debug.Log("owen wilson says wow");
+
         enemy.Anim.SetBool("isAttacking", true);
+        //enemy.isAttackOver = true;
         //attack.MeleeAttack();
 
         /*
