@@ -295,6 +295,22 @@ public class EnemyBase : MonoBehaviour, IDamageable
         }
     }
 
+    public virtual void FireDamage(float damage)
+    {
+        Flash();
+
+        //enemy takes damage from the player
+        Health -= damage;
+        UpdateUI();
+
+        //When the enemy takes enough damage and is killed it will do the kill function then the player kapala item special item charge function from player controller - AHL (4/20/21)
+        if (Health <= 0)
+        {
+            Kill();
+            PlayerController.Instance.KapalaSpecialRecharge();
+        }
+    }
+
     public virtual void Flash()
     {
         //sets enemy's color to the hitMat (red)

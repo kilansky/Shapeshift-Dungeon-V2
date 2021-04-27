@@ -81,19 +81,9 @@ public class Laser : MonoBehaviour
     /// Detects when something enters the laser's collider
     /// </summary>
     /// <param name="other"></param>
-    private void OnTriggerEnter(Collider other)
-    {
-        if(parentObject.GetComponent<PlayerController>())
-            StartCoroutine(LaserCycle(other.gameObject));
-    }
-
-    /// <summary>
-    /// Detects when something enters the laser's collider
-    /// </summary>
-    /// <param name="other"></param>
     private void OnTriggerStay(Collider other)
     {
-        if (!parentObject.GetComponent<PlayerController>() && damage > 0)
+        if (!parentObject.GetComponent<PlayerController>() && !PlayerHealth.Instance.isInvincible && damage > 0)
             StartCoroutine(LaserCycle(other.gameObject));
     }
 
