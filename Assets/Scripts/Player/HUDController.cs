@@ -442,10 +442,6 @@ public class HUDController : SingletonPattern<HUDController>
                 specialItem2Panel.SetActive(true);
                 SetNewSpecialItemIcons();
             }
-
-            //If the picked up item wasn't due to item swapping and it isn't the Kapala then we set its special charge to full (Which is just a very high number as it is hard to get the actual value
-            if (!PlayerController.Instance.isItemSwapping && PlayerController.Instance.BagOfHoldingSlot.ItemName != "Kapala")
-                PlayerController.Instance.specialCharge2 = 15;
         }
             
 

@@ -53,9 +53,16 @@ public class Item : MonoBehaviour
                 if (item.ItemName == "Kapala")
                 {
                     item.prefab.GetComponent<KapalaSwap>().KapalaSpriteSwap(0);
+                    c.specialCharge2MaxValue = 10;
+                }
+
+                //If the item is anything but the Kapala then we need to set its special charge 2 max value to whatever it's value is
+                else
+                {
+                    c.specialCharge2 = item.statMods[0].adjustableValue;
+                    c.specialCharge2MaxValue = c.specialCharge2;
                 }
             }
-                
 
             else //If the player does have a special item and No Bag of Holding OR if the player has the bag of holding and it is filled as well then unequip their current one and equip the new one
             {
@@ -494,8 +501,8 @@ public class Item : MonoBehaviour
             else if ((int)item.statMods[i].statType == 12)
             {
                 c.specialCooldownTime.RemoveAllModifiersFromSource(item.prefab);
-                Debug.Log("This item " + item.ItemName + " has been removed so Damage From Enemies has been adjusted.");
-                Debug.Log("The new Damage From Enemies is " + c.specialCooldownTime.Value);
+                Debug.Log("This item " + item.ItemName + " has been removed so Special Item Recharge has been adjusted.");
+                Debug.Log("The new Special Item Recharge is " + c.specialCooldownTime.Value);
             }
         }
     }

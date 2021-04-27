@@ -116,6 +116,7 @@ public class PlayerController : SingletonPattern<PlayerController>
     private float currAttackSpeed;
     private int priceOfLastTouchedItem = 0; //I need this to store prices -Justin
     private bool specialIsCharging = false;
+    private bool specialIsCharging2 = false;
 
     //Allow/prevent input actions
     private bool canMove = true;
@@ -574,9 +575,6 @@ public class PlayerController : SingletonPattern<PlayerController>
             //Starts the Corutine if the special charge is not equal to the value
             StartCoroutine(RechargeSpecial());
 
-            //Do the Kapala Recharge stuff
-
-
             //Sets the new current item in the active special slot
             HUDController.Instance.SetNewSpecialItemIcons();
 
@@ -961,6 +959,10 @@ public class PlayerController : SingletonPattern<PlayerController>
 
     IEnumerator RechargeSpecial()
     {
+        //Starts the corutine to recharge the second special item is need be
+        if (hasBagOfHolding && !specialIsCharging2)
+            StartCoroutine(RechargeSpecial2());
+
         //The special only recharges if the current special item isn't the Kapala
         if(!specialIsCharging)
         {
@@ -986,6 +988,30 @@ public class PlayerController : SingletonPattern<PlayerController>
                 HUDController.Instance.UpdateSpecialCharge();
             }
         }           
+    }
+
+    //Bag of holding special bar
+    IEnumerator RechargeSpecial2()
+    {
+        //The special only recharges if the current special item isn't the Kapala
+        if (!specialIsCharging2)
+        {
+            //While loop to check about the Kapala because if not then it will recharge using the time variables
+            while (specialCharge2 < specialCharge2MaxValue && !isItemSwapping && BagOfHoldingSlot.ItemName != "Kapala")
+            {
+                specialIsCharging2 = true;
+
+                specialCharge2 += Time.deltaTime;
+                HUDController.Instance.UpdateSpecialCharge();
+
+                if (isItemSwapping)
+                    break;
+
+                yield return new WaitForEndOfFrame();
+            }
+
+            specialIsCharging2 = false;
+        }
     }
 
     /// <summary>
