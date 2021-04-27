@@ -83,7 +83,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
     
     //private bool isAttacking = false;
     private bool stopMoving = false;
-    private bool isInvincible = false;
+    public bool isInvincible = false;
     #endregion
 
     #region Protected Variables nothing in here atm
