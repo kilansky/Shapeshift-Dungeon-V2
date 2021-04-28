@@ -27,8 +27,8 @@ public class BowllingAttack : MonoBehaviour
             other.GetComponent<EnemyBase>().Damage(damage);
         }
 
-        //If the bowling ball hits a wall or environment tile then it deletes itself
-        if (other.gameObject.layer == 9 || other.gameObject.layer == 10)
+        //If the bowling ball hits a wall layer then it deletes itself
+        if (other.gameObject.layer == 9)
         {
             Destroy(gameObject);
         }
