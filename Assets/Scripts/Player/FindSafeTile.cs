@@ -37,7 +37,7 @@ public class FindSafeTile : SingletonPattern<FindSafeTile>
                 {
                     //Debug.Log("Not a safe tile!");                   
                 }
-                else
+                else if(transform.position.y > 2f)
                 {                    
                     safePos = transform.position;
                     //Debug.Log(hit.transform.gameObject.GetComponent<Tile>().tileType);
