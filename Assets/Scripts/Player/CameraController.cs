@@ -28,13 +28,17 @@ public class CameraController : SingletonPattern<CameraController>
         volProf.TryGet(out DoF);
         volProf.TryGet(out shadMidHigh);
 
-        //Set darkness of shadows based on current floor
-        for (int i = 0; i < LevelManager.Instance.currFloor + 1; i++)
-            SetShadows();
-
         Scene scene = SceneManager.GetActiveScene();
         if(scene.buildIndex == 0)
             DoF.focalLength.value = 120;
+
+        if (scene.buildIndex != 0)
+        {
+            DoF.focalLength.value = 210;
+            //Set darkness of shadows based on current floor
+            for (int i = 0; i < LevelManager.Instance.currFloor + 1; i++)
+                SetShadows();
+        }
     }
 
 
