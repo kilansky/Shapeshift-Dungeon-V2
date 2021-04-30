@@ -555,12 +555,11 @@ public class PlayerController : SingletonPattern<PlayerController>
     /// Pause function to pause the game based on the isPause variable and will stop the game time while displaying the pause screen
     public void Pause(InputAction.CallbackContext context)
     {
-        bool levelReviewActive = HUDController.Instance.levelReviewPanel.activeSelf;
         bool statPotionPanelActive = HUDController.Instance.statPotionPanel.activeSelf;
         bool playerIsAlive = PlayerHealth.Instance.Health > 0;
 
         //Pause the game if the input is performed, the player is alive, and there are no active panels on the screen
-        if (context.performed && playerIsAlive && !levelReviewActive && !statPotionPanelActive) 
+        if (context.performed && playerIsAlive && !statPotionPanelActive) 
         {
             if (!IsPaused) //If the game is not paused then pause the game
             {
@@ -1058,15 +1057,10 @@ public class PlayerController : SingletonPattern<PlayerController>
                 RunTimer.Instance.IncreaseTimer = false;
                 Time.timeScale = 0;
                 HUDController.Instance.ShowWinScreen();
-                HUDController.Instance.ShowLevelReviewPanel();
             }
             else
             {
-                //LevelManager.Instance.TransitionLevel();
-                if(HUDController.Instance.ShowLevelReview)
-                    HUDController.Instance.ShowLevelReviewPanel(); //Show the level review panel if enabled
-                else
-                    LevelManager.Instance.TransitionLevel(); //if disabled, instantly transition the level
+                LevelManager.Instance.TransitionLevel();
 
                 CenterTile.Instance.onTile = false;
 

@@ -62,9 +62,6 @@ public class HUDController : SingletonPattern<HUDController>
     [Header("Stat Potion Panel")]
     public GameObject statPotionPanel;
 
-    [Header("Review Panel")]
-    public GameObject levelReviewPanel;
-
     [Header("PauseScreen")]
     public GameObject pauseScreen;
 
@@ -91,12 +88,10 @@ public class HUDController : SingletonPattern<HUDController>
     private bool pocketSlot1Used = false;
     private bool pocketSlot2Used = false;
 
-    public bool ShowLevelReview { get; set; }
     public string CurrentControlScheme { get { return currentControlScheme; } }
 
     void Start()
     {
-        ShowLevelReview = true;
         player = PlayerController.Instance;
         playerInput = player.gameObject.GetComponent<PlayerInput>();
 
@@ -494,23 +489,6 @@ public class HUDController : SingletonPattern<HUDController>
         swapItemPanel.panel.SetActive(false);
     }
 
-    public void ShowLevelReviewPanel()
-    {
-        player.gameObject.GetComponent<PlayerInput>().SwitchCurrentActionMap("UI");
-        Time.timeScale = 0;
-        levelReviewPanel.SetActive(true);
-    }
-
-    public void HideLevelReviewPanel()
-    {
-        if (PlayerHealth.Instance.Health > 0)
-        {
-            player.gameObject.GetComponent<PlayerInput>().SwitchCurrentActionMap("Player");
-            Time.timeScale = 1;
-        }
-        levelReviewPanel.SetActive(false);
-    }
-
     public void ShowGameOver()
     {
         player.gameObject.GetComponent<PlayerInput>().SwitchCurrentActionMap("UI");
@@ -523,8 +501,6 @@ public class HUDController : SingletonPattern<HUDController>
             gameOverScreen.GetComponent<Buttons>().SetSelectedButton();
         else
             gameOverScreen.GetComponent<Buttons>().ClearSelectedButtons();
-
-        StartCoroutine(gameOverScreen.GetComponent<Buttons>().WaitToDisplayReview());
     }
 
     public void HideGameOver()
