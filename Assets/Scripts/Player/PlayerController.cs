@@ -151,6 +151,8 @@ public class PlayerController : SingletonPattern<PlayerController>
     public bool IsUsingSpecial { get { return isUsingSpecial; } }   //True while using a Special Item
     public bool IsPaused { get { return isPaused; } }               //True while game is paused
     public bool IsUsingMouse { get { return isUsingMouse; } }      //True while player is using mouse and keyboard controls
+    public bool IsDead { get; set; }                               //Prevents actions if true
+    public Animator PlayerAnimator { get { return animator; } }
 
     private void Start()
     {
@@ -163,6 +165,7 @@ public class PlayerController : SingletonPattern<PlayerController>
         currAttackSpeed = baseAttackSpeed.Value;
         currAttackDamage = baseAttackDamage.Value;
         SetAttackSpeed();
+        IsDead = false;
 
         StatMaxHealthCount = 0;
         StatAttackCount = 0;
@@ -180,27 +183,30 @@ public class PlayerController : SingletonPattern<PlayerController>
     private void Update()
     {
         //Move, Rotate, & Animate Player
-        MovePlayer();
-        RotatePlayer();
-        AnimatePlayer();
-        ZoomCamera();
-
-        //Set mouse target pos if using M&K
-        if (GetComponent<PlayerInput>().currentControlScheme == "Keyboard&Mouse")
+        if(!IsDead)
         {
-            isUsingMouse = true;
-            SetMouseTargetPosition();
+            MovePlayer();
+            RotatePlayer();
+            AnimatePlayer();
+            ZoomCamera();
+
+            //Set mouse target pos if using M&K
+            if (GetComponent<PlayerInput>().currentControlScheme == "Keyboard&Mouse")
+            {
+                isUsingMouse = true;
+                SetMouseTargetPosition();
+            }
+            else
+                isUsingMouse = false;
+
+            //Check if there are any new button inputs and attempt to activate them
+            if (inputQueue.Count > 0)
+                ActivateQueuedInputs();
+
+            //If the input queue has two or more inputs, remove the first button press w/o performing it
+            if (inputQueue.Count >= 2)
+                inputQueue.Dequeue();
         }
-        else
-            isUsingMouse = false;
-
-        //Check if there are any new button inputs and attempt to activate them
-        if (inputQueue.Count > 0)
-            ActivateQueuedInputs();
-
-        //If the input queue has two or more inputs, remove the first button press w/o performing it
-        if (inputQueue.Count >= 2)
-            inputQueue.Dequeue();
     }
 
     //Checks the input queue for player input and responds according to input type & timing
@@ -281,6 +287,7 @@ public class PlayerController : SingletonPattern<PlayerController>
         }
         else
             moveVelocity = 0;
+
 
         Vector3 attackVector = new Vector3(transform.forward.x, vSpeed, transform.forward.z);
         Vector3 chargingVector = new Vector3(0, vSpeed, 0);

@@ -77,6 +77,9 @@ public class HUDController : SingletonPattern<HUDController>
     [Header("Run Timer")]
     public GameObject runTimer;
 
+    [Header("Boss Health Bar")]
+    public Slider bossHealthBar;
+
     [Header("Black Screen Overlay")]
     public GameObject blackScreenOverlay;
     public float fadeInTime = 2f;
@@ -555,6 +558,16 @@ public class HUDController : SingletonPattern<HUDController>
     public void HideRunTimer()
     {
         runTimer.GetComponent<TextMeshProUGUI>().enabled = false;
+    }
+
+    public void ShowBossHealthBar()
+    {
+        bossHealthBar.gameObject.SetActive(true);
+    }
+
+    public void HideBossHealthBar()
+    {
+        bossHealthBar.gameObject.SetActive(false);
     }
 
     public IEnumerator ShowPlayerDamagedOverlay()

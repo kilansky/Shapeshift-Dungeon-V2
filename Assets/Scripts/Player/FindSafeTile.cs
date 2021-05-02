@@ -11,13 +11,14 @@ public class FindSafeTile : SingletonPattern<FindSafeTile>
      * Date Created: 2/22/2021
      * Date Last Edited: 2/22/2021
      **/
-
+    public GameObject teleportVFX;
     [HideInInspector]public Vector3 safePos;
 
     private bool respawningPlayer = false;
 
     private void Start()
     {
+        safePos = transform.position;
         StartCoroutine(LocateSafePosition());
     }
 
@@ -33,19 +34,17 @@ public class FindSafeTile : SingletonPattern<FindSafeTile>
         {
             if(hit.transform.gameObject.GetComponent<Tile>()) //If the raycast finds an object, this finds out if that object is a tile
             {
-                if(hit.transform.gameObject.GetComponent<Tile>().tileType == Tile.tileTypes.pit || hit.transform.gameObject.GetComponent<Tile>().tileType == Tile.tileTypes.lava || hit.transform.gameObject.GetComponent<Tile>().tileType == Tile.tileTypes.spike)
+                Tile hitTile = hit.transform.gameObject.GetComponent<Tile>();
+
+                if (hitTile.tileType == Tile.tileTypes.stone || hitTile.tileType == Tile.tileTypes.dirt || hitTile.tileType == Tile.tileTypes.stoneGrass || hitTile.tileType == Tile.tileTypes.dirtGrass || hitTile.tileType == Tile.tileTypes.sand)
                 {
-                    //Debug.Log("Not a safe tile!");                   
-                }
-                else if(transform.position.y > 2f)
-                {                    
-                    safePos = transform.position;
-                    //Debug.Log(hit.transform.gameObject.GetComponent<Tile>().tileType);
+                    if(transform.position.y > 2f)
+                        safePos = hitTile.transform.position + new Vector3(0f, 5f, 0f);               
                 }
             }
             else if(hit.transform.gameObject.GetComponent<CenterTile>())
             {
-                safePos = transform.position;
+                safePos = hit.transform.position + new Vector3(0f, 5f, 0f);
             }
         }
 
@@ -104,5 +103,6 @@ public class FindSafeTile : SingletonPattern<FindSafeTile>
         transform.position = pos;
         yield return new WaitForEndOfFrame();
         GetComponent<CharacterController>().enabled = true;
+        Instantiate(teleportVFX, pos + new Vector3(0, 1.5f, 0), Quaternion.identity);
     }
 }
