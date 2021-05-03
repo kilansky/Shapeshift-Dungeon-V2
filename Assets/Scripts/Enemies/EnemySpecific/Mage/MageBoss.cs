@@ -19,16 +19,22 @@ public class MageBoss : MonoBehaviour, IDamageable
     public float sightRange = 20f;
     public float minAttackRange;
     public float timeBetweenAttacks = 3f;
-    public float projectileChargeTime = 0.5f;
+    public float projectileChargeTime = 0.75f;
     public float attack2RotateSpeed = 5f;
     public GameObject magicProjectile;
 
     [Header("Teleporting")]
-    public float minTeleportRange = 15f;
-    public float maxTeleportRange = 30f;
-    public float minTeleportRangeFromPlayer = 15f;
-    public float maxTeleportRangeFromPlayer = 30f;
+    public float timeToTeleportAgain = 12f;
     public GameObject teleportParticles;
+    //public float minTeleportRange = 18f;
+    //public float maxTeleportRange = 25f;
+    //public float minTeleportRangeFromPlayer = 18f;
+    //public float maxTeleportRangeFromPlayer = 25f;
+
+    [Header("Phase Changes")]
+    public float phaseChange1 = 0.75f;
+    public float phaseChange2 = 0.4f;
+    public float phaseChange3 = 0.1f;
 
     [Header("Fire Points")]
     public Transform[] firePoints1;
@@ -43,7 +49,7 @@ public class MageBoss : MonoBehaviour, IDamageable
 
     [HideInInspector] public List<GameObject> unfiredProjectiles = new List<GameObject>();
     [HideInInspector] public float distanceToPlayer;
-    [HideInInspector] public bool isStunned;
+    [HideInInspector] public bool isStunned = false;
     [HideInInspector] public bool isInvincible = false;
 
     //-----------Private-----------
@@ -52,13 +58,24 @@ public class MageBoss : MonoBehaviour, IDamageable
     private Animator animator;
     private Renderer mageRenderer;
     private float currentStunResistance;
+    private float stunTimeRemaining;
     private float lastTimeAttacked;
     private Quaternion lastTargetRotation;
+    private List<Transform> teleportPoints = new List<Transform>();
+    private List<Transform> furthest3Points = new List<Transform>();
+    private Transform currentTeleportPoint;
+    private Transform previousTeleportPoint;
+    private Vector3 hiddenTeleportPoint = new Vector3(0, 5, -42); //Teleport out of bounds during phase changes
+    private float timeTillNextTeleport;
 
     private bool isAttacking = false;
+    private bool isSpawningMonsters = false;
     private bool rotateTowardsPlayer = true;
     private bool stopMoving = false;
 
+    private bool phase1Complete = false;
+    private bool phase2Complete = false;
+    private bool phase3Complete = false;
 
     public virtual void Start()
     {
@@ -78,8 +95,13 @@ public class MageBoss : MonoBehaviour, IDamageable
         healthBar.maxValue = Health;
         healthBar.value = Health;
 
-        //InvokeRepeating("Attack1", 5f, 5f);
-        StartCoroutine(Attack2());
+        //Set teleport points
+        GetAllTeleportPoints();
+        Teleport();
+        StartCoroutine(WaitToTeleport());
+
+        InvokeRepeating("CheckToStartAttacking", 0, 0.25f);
+        //StartCoroutine(Attack2());
     }
 
     private void Update()
@@ -89,20 +111,30 @@ public class MageBoss : MonoBehaviour, IDamageable
             ResetStunResistance();
 
         Rotate();
+        //Debug.Log("timeTillNextTeleport is: " + timeTillNextTeleport);
 
         if (isAttacking)
-        {
-            //rotateTowardsPlayer = false;
             firePoints2Root.Rotate(0f, 10f * attack2RotateSpeed * Time.deltaTime, 0f);
+    }
+
+    private void CheckToStartAttacking()
+    {
+        if (!isAttacking && !isStunned && timeTillNextTeleport > 2.5f)
+        {
+            StartCoroutine(Attack1());
         }
     }
+
+    //================================================================
+    //------------------------Player Detection------------------------
+    //================================================================
 
     private void Rotate()
     {
         if (!rotateTowardsPlayer)
             return;
 
-        //Get direction to plater
+        //Get direction to player
         Vector3 targetPoint = new Vector3(player.transform.position.x, 0, player.transform.position.z) - new Vector3(aliveMage.transform.position.x, 0, aliveMage.transform.position.z);
         Quaternion targetRotation = Quaternion.LookRotation(targetPoint);
         float rotSpeed = 5f;
@@ -118,97 +150,83 @@ public class MageBoss : MonoBehaviour, IDamageable
         return (distanceToPlayer < minAttackRange) ? true : false;
     }
 
-    public void Damage(float damage)
+    //================================================================
+    //----------------------------Attacking---------------------------
+    //================================================================
+
+    public IEnumerator Attack1()
     {
-        //start timer
-        lastTimeAttacked = Time.time;
-        //TODO: check what player damage variable is called, and script name
-        //subtract the players damage from the enemies stun resistance
-        currentStunResistance -= damage;
+        isAttacking = true;
 
-        if (!isInvincible)
-        {
-            //enemy takes damage from the player
-            Health -= damage;
-            Flash();
-            UpdateUI();
-            //Debug.Log("Enemy Took Damage");
+        Debug.Log("Attack1 Started");
 
-            //When the enemy takes enough damage and is killed it will do the kill function then the player kapala item special item charge function from player controller - AHL (4/20/21)
-            if (Health <= 0)
-                Kill();
-
-            //if currently stunned, flip bool
-            //Debug.Log("stun resistance is set to: " + currentStunResistance);
-            if (currentStunResistance <= 0)
-            {
-                //Debug.Log("currentStunResistance is less than 0");
-                isStunned = true;
-            }
-
-            //prevent from taking damage temporarily
-            StartCoroutine(InvincibilityFrames());
-        }
-    }
-
-    public void FireDamage(float damage)
-    {
-        Flash();
-
-        //enemy takes damage from the player
-        Health -= damage;
-        UpdateUI();
-
-        //When the enemy takes enough damage and is killed it will do the kill function then the player kapala item special item charge function from player controller - AHL (4/20/21)
-        if (Health <= 0)
-            Kill();
-    }
-
-    public void Flash()
-    {
-        //sets enemy's color to the hitMat (red)
-        mageRenderer.material = hitMat;
-        StartCoroutine(WaitToResetColor());
-
-    }
-
-    public void ResetColor()
-    {
-        mageRenderer.material = normalMat;
-    }
-
-    public void Heal(float heal)
-    {
-        //heal the enemy
-        Health = Mathf.Clamp(Health + heal, 0, healthBar.maxValue);
-        UpdateUI();
-        //Debug.Log("Enemy Healed");
-    }
-
-    public void Kill()
-    {
-        Instantiate(deathEffect, transform.position + new Vector3(0, 2, 0), Quaternion.identity);
-        HUDController.Instance.HideBossHealthBar();
-
-        //Destroy self
-        Destroy(gameObject);
-    }
-
-    private void UpdateUI()
-    {
-        healthBar.value = Health;
-    }
-
-    public void Attack1()
-    {
         //Charge up and fire a projectile from each fire point
         foreach (Transform firePoint in firePoints1)
             StartCoroutine(ChargeAttack1(magicProjectile, firePoint, projectileChargeTime));
+
+        float timeElapsed = 0f;
+        while (timeElapsed < timeBetweenAttacks)
+        {
+            if (!isAttacking)
+                break;
+
+            timeElapsed += Time.deltaTime;
+            yield return new WaitForEndOfFrame();
+        }
+        isAttacking = false;
+    }
+
+    IEnumerator ChargeAttack1(GameObject fireball, Transform firePoint, float chargeTime)
+    {
+        GameObject bullet = Instantiate(fireball, firePoint.transform.position, firePoint.transform.rotation, firePoint.transform);
+        Vector3 originalScale = bullet.transform.localScale;
+        float vfxPercent = 0;
+
+        //set movespeed to 0
+        bullet.GetComponent<Bullet>().moveSpeed = 0f;
+        bullet.transform.GetChild(0).gameObject.SetActive(false);
+
+        //set scale of bullet to .1 scale up, doesn't scale vfx
+        bullet.transform.GetChild(0).gameObject.SetActive(true);
+        bullet.transform.localScale = Vector3.one * .1f;
+
+        //Sets the bullets parent game object to this one to make the Damage Tracker acquire the skull as the correct game object for tracking
+        bullet.GetComponent<Bullet>().parentObject = gameObject;
+
+        //disable inner collider so it doesn't destroy while charging
+        bullet.GetComponent<CapsuleCollider>().enabled = false;
+
+        float timeElapsed = 0f; //Counter to keep track of time elapsed
+        while (timeElapsed < chargeTime) //This while loop scales object over time
+        {
+            if (isStunned || timeTillNextTeleport <= 0)
+            {
+                Destroy(bullet);
+                //myAnim.SetBool("isAttacking", false);
+                yield break;
+            }
+
+            timeElapsed += Time.deltaTime;
+            bullet.transform.localScale = Vector3.Lerp(bullet.transform.localScale, originalScale, timeElapsed / chargeTime);
+            vfxPercent = Mathf.Lerp(1f, 100f, timeElapsed / chargeTime);
+            bullet.GetComponent<Bullet>().SetVFXScale(vfxPercent);
+
+            yield return new WaitForEndOfFrame();
+        }
+        Destroy(bullet);
+
+        //Spawn new projectile in the direction of the player
+        bullet = Instantiate(fireball, firePoint.transform.position, firePoint.transform.rotation);
+
+        bullet.transform.localScale = originalScale;
+        bullet.GetComponent<Bullet>().parentObject = gameObject;
+        bullet.GetComponent<Bullet>().canDamage = true;
+        //sparks.Play();
     }
 
     public IEnumerator Attack2()
     {
-        while(true)
+        while (true)
         {
             yield return new WaitForSeconds(1.5f);
             isAttacking = true;
@@ -236,59 +254,6 @@ public class MageBoss : MonoBehaviour, IDamageable
         }
     }
 
-    IEnumerator ChargeAttack1(GameObject fireball, Transform firePoint, float chargeTime)
-    {
-        GameObject bullet = Instantiate(fireball, firePoint.transform.position, firePoint.transform.rotation, firePoint.transform);
-        Vector3 originalScale = bullet.transform.localScale;
-        float vfxPercent = 0;
-
-        //set movespeed to 0
-        bullet.GetComponent<Bullet>().moveSpeed = 0f;
-        bullet.transform.GetChild(0).gameObject.SetActive(false);
-
-        yield return new WaitForSeconds(.1f);
-
-        //set scale of bullet to .1 scale up, doesn't scale vfx
-        bullet.transform.GetChild(0).gameObject.SetActive(true);
-        bullet.transform.localScale = Vector3.one * .1f;
-
-        //Sets the bullets parent game object to this one to make the Damage Tracker acquire the skull as the correct game object for tracking
-        bullet.GetComponent<Bullet>().parentObject = gameObject;
-
-        //disable inner collider so it doesn't destroy while charging
-        bullet.GetComponent<CapsuleCollider>().enabled = false;
-
-        float timeElapsed = 0f; //Counter to keep track of time elapsed
-        while (timeElapsed < chargeTime) //This while loop scales object over time
-        {
-            if (isStunned)
-            {
-                Destroy(bullet);
-                //myAnim.SetBool("isAttacking", false);
-                yield break;
-            }
-
-            timeElapsed += Time.deltaTime;
-            bullet.transform.localScale = Vector3.Lerp(bullet.transform.localScale, originalScale, timeElapsed / chargeTime);
-            vfxPercent = Mathf.Lerp(1f, 100f, timeElapsed / chargeTime);
-            bullet.GetComponent<Bullet>().SetVFXScale(vfxPercent);
-
-            yield return new WaitForEndOfFrame();
-        }
-
-        //WE DESTROY THE GD BULLET WE JUST WENT THROUGH CREATING
-        Destroy(bullet);
-
-        //WHY DOES THIS WORK
-        bullet = Instantiate(fireball, firePoint.transform.position, firePoint.transform.rotation);
-        bullet.transform.localScale = originalScale;
-        bullet.GetComponent<Bullet>().canDamage = true;
-        //sparks.Play();
-
-        //yield return new WaitForSeconds(attackCoolDown);
-        isAttacking = false;
-    }
-
     IEnumerator ChargeAttack2(GameObject fireball, Transform firePoint, float chargeTime)
     {
         GameObject bullet = Instantiate(fireball, firePoint.transform.position, firePoint.transform.rotation, firePoint.transform);
@@ -301,8 +266,6 @@ public class MageBoss : MonoBehaviour, IDamageable
         bullet.GetComponent<Bullet>().parentObject = gameObject;
         bullet.transform.GetChild(0).gameObject.SetActive(false);
 
-        yield return new WaitForSeconds(.1f);
-
         //set scale of bullet to .1 scale up, doesn't scale vfx
         bullet.transform.GetChild(0).gameObject.SetActive(true);
         bullet.transform.localScale = Vector3.one * .1f;
@@ -313,7 +276,7 @@ public class MageBoss : MonoBehaviour, IDamageable
         float timeElapsed = 0f; //Counter to keep track of time elapsed
         while (timeElapsed < chargeTime) //This while loop scales object over time
         {
-            if (isStunned)
+            if (isStunned || timeTillNextTeleport <= 0)
             {
                 Destroy(bullet);
                 //myAnim.SetBool("isAttacking", false);
@@ -355,9 +318,60 @@ public class MageBoss : MonoBehaviour, IDamageable
         //sparks.Play();
     }
 
+    /*
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(transform.position, minTeleportRange);
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, maxTeleportRange);
+    }
+    */
+
+    //================================================================
+    //------------------------Monster Spawning------------------------
+    //================================================================
+
+    /*
+    //Spawns a single monster, waits, and is called again recursively until all monsters have been killed
+    private void SpawnMonsters()
+    {
+        isSpawningMonsters = true;
+
+        //Only spawn if the # of monsters in the room is less than maxMonsters
+        if (monstersInRoom < currFloorInfo.maxMonsters && monsterSpawnPoints.Count > 0)
+        {
+            //Get a random spawn point index
+            int randSpawnPoint = Random.Range(0, monsterSpawnPoints.Count);
+
+            //Get a random monster to spawn
+            //int randMonster = Random.Range(0, currFloorInfo.monsters.Length);
+            GameObject monsterToSpawn = currFloorInfo.GetMonsterToSpawn();
+
+            //Spawn the monster and disable the spawn point temporarily
+            monsterSpawnPoints[randSpawnPoint].SpawnMonster(monsterToSpawn, CheckForGem());
+            monstersInRoom++;
+            monstersSpawned++;
+            StartCoroutine(DisableSpawner(randSpawnPoint));
+        }
+
+        //Recursively attempt to spawn until the total # of monsters to spawn have been killed
+        if (monstersSpawned < currFloorInfo.totalMonsters)
+            StartCoroutine(WaitToSpawnAgain());
+        else
+            isSpawningMonsters = false;
+    }
+    */
+
+    //================================================================
+    //---------------------------Teleporting--------------------------
+    //================================================================
+
     public void Teleport()
     {
-        //teleport to a new position
+        //teleport to a semi-random safe tile in the room 
+        /*
         Transform safeTeleportTile = FindSafeTeleportTile();
 
         if(safeTeleportTile)
@@ -368,8 +382,128 @@ public class MageBoss : MonoBehaviour, IDamageable
             Vector3 teleportPos = safeTeleportTile.position + new Vector3(0f, 5f, 0f);
             transform.position = teleportPos;
         }
+        */
+        isAttacking = false;
+        stunTimeRemaining = 0;
+
+        GameObject vfx = Instantiate(teleportParticles, transform.position + new Vector3(0, 1.5f, 0), Quaternion.identity);
+        Destroy(vfx, 2f);
+
+        //---------------------------Phase 1---------------------------
+        if (!phase1Complete)
+        {
+            Transform newTeleportPoint = GetPhase1TeleportPoint();
+            transform.position = newTeleportPoint.position;
+
+            previousTeleportPoint = currentTeleportPoint;
+            currentTeleportPoint = newTeleportPoint;
+        }
+        //---------------------------Phase 2---------------------------
+        else if (!phase2Complete)
+        {
+            if (teleportPoints.Count == 0)
+                GetAllTeleportPoints();
+
+            int randTeleportPoint = Random.Range(0, teleportPoints.Count);
+            transform.position = teleportPoints[randTeleportPoint].position;
+
+            //Add the last teleport point back into the list        
+            if (currentTeleportPoint)
+                teleportPoints.Add(currentTeleportPoint);
+            //then set the new current teleport point and remove it from the list
+            currentTeleportPoint = teleportPoints[randTeleportPoint];
+            teleportPoints.Remove(teleportPoints[randTeleportPoint]);
+        }
+        //---------------------------Phase 3---------------------------
+        else if (!phase3Complete)
+        {
+
+        }
+        //---------------------------Phase 4---------------------------
+        else
+        {
+
+        }
+
+        GameObject vfx2 = Instantiate(teleportParticles, transform.position + new Vector3(0, 1.5f, 0), Quaternion.identity);
+        Destroy(vfx2, 2f);
     }
 
+    //Gets the 3 furthest points furthest from the mage's current position
+    private Transform GetPhase1TeleportPoint()
+    {       
+        teleportPoints.Clear();
+        furthest3Points.Clear();
+
+        GetAllTeleportPoints();
+
+        //Repeat getting the point that is furt
+        for (int i = 0; i < 3; i++)
+        {
+            //Get the point furthest from the mage
+            Transform furthestPoint = null;
+            float furthestDist = 0f;
+            foreach (Transform point in teleportPoints)
+            {
+                float pointDist = Vector3.Distance(transform.position, point.position);
+                if (pointDist > furthestDist)
+                {
+                    furthestPoint = point;
+                    furthestDist = pointDist;
+                }
+            }
+            //Add the point that is furthest to the furthest3Points list, and remove it from the teleportPoints list
+            furthest3Points.Add(furthestPoint);
+            teleportPoints.Remove(furthestPoint);
+        }
+
+        if (previousTeleportPoint)
+            furthest3Points.Remove(previousTeleportPoint);
+
+        int randTeleportPoint = Random.Range(0, furthest3Points.Count);
+        return furthest3Points[randTeleportPoint];
+    }
+
+    private void GetAllTeleportPoints()
+    {
+        foreach (BossTeleportPoint teleportPoint in GameObject.FindObjectsOfType<BossTeleportPoint>())
+            teleportPoints.Add(teleportPoint.transform);
+    }
+
+    private void DestroyOldTeleportPoints()
+    {
+        foreach (BossTeleportPoint teleportPoint in GameObject.FindObjectsOfType<BossTeleportPoint>())
+            teleportPoint.DestroyTeleportPoint();
+    }
+
+    private IEnumerator WaitToTeleport()
+    {
+        while(timeTillNextTeleport > 0)
+        {
+            timeTillNextTeleport -= Time.deltaTime;
+            yield return new WaitForEndOfFrame();
+        }
+        timeTillNextTeleport = timeToTeleportAgain;
+
+        Teleport();
+        StartCoroutine(WaitToTeleport());
+    }
+
+    private IEnumerator PhaseChangeTeleport()
+    {
+        isStunned = true;
+        GameObject vfx = Instantiate(teleportParticles, transform.position + new Vector3(0, 1.5f, 0), Quaternion.identity);
+        Destroy(vfx, 2f);
+
+        transform.position = hiddenTeleportPoint;
+        yield return new WaitForSeconds(5.5f);
+
+        Teleport();
+        StartCoroutine(WaitToTeleport());
+        isStunned = false;
+    }
+
+    /*
     private Transform FindSafeTeleportTile()
     {
         List<Tile> tiles = new List<Tile>();
@@ -383,10 +517,7 @@ public class MageBoss : MonoBehaviour, IDamageable
 
                 //Check if the distance to this new tile is far from the mage, and within a certain range of the player
                 if((distToTile > minTeleportRange && distToTile < maxTeleportRange) && (playerDistToTile > minTeleportRangeFromPlayer && playerDistToTile < maxTeleportRangeFromPlayer))
-                {
-                    //Add this tile to the list of potential safe tiles to teleport to
-                    tiles.Add(tile);
-                }
+                    tiles.Add(tile); //Add this tile to the list of potential safe tiles to teleport to
             }
         }
 
@@ -401,10 +532,136 @@ public class MageBoss : MonoBehaviour, IDamageable
 
         return null;
     }
+    */
+
+    //================================================================
+    //---------------------Phases & Shapeshifting---------------------
+    //================================================================
+
+    private void CheckForPhaseChange()
+    {
+        if(!phase1Complete && Health / startingHealth < phaseChange1)
+        {
+            phase1Complete = true;
+            Debug.Log("Start Phase 2");
+
+            //Clear phase 1 teleport points
+            DestroyOldTeleportPoints();
+            teleportPoints.Clear();
+            furthest3Points.Clear();
+            previousTeleportPoint = null;
+            currentTeleportPoint = null;
+            StopCoroutine(WaitToTeleport());
+
+            //Transition Level
+            LevelManager.Instance.TransitionLevel();
+            timeToTeleportAgain = 16f;
+            timeTillNextTeleport = 16f;
+            StartCoroutine(PhaseChangeTeleport());
+        }
+        else if (!phase2Complete && Health / startingHealth < phaseChange2)
+        {
+            phase2Complete = true;
+            Debug.Log("Start Phase 3");
+        }
+        else if (!phase3Complete && Health / startingHealth < phaseChange3)
+        {
+            phase3Complete = true;
+            Debug.Log("Start Phase 4");
+        }
+    }
+
+
+    //================================================================
+    //-------------------------Health & Damage------------------------
+    //================================================================
+
+    public void Damage(float damage)
+    {
+        //start timer
+        lastTimeAttacked = Time.time;
+        //TODO: check what player damage variable is called, and script name
+        //subtract the players damage from the enemies stun resistance
+
+
+        if (!isInvincible)
+        {
+            //enemy takes damage from the player
+            Health -= damage;
+            Flash();
+            UpdateHealthUI();
+            //Debug.Log("Enemy Took Damage");
+
+            //When the enemy takes enough damage and is killed it will do the kill function then the player kapala item special item charge function from player controller - AHL (4/20/21)
+            if (Health <= 0)
+                Kill();
+
+            //Reduce stun resistance and check if stunned
+            currentStunResistance -= damage;
+            //Debug.Log("stun resistance is set to: " + currentStunResistance);
+            if (isStunned)
+                stunTimeRemaining = Mathf.Clamp(stunTimeRemaining + 0.5f, 0, stunRecoveryTime);
+            else if (!isStunned && currentStunResistance <= 0)
+            {
+                isStunned = true;
+                isAttacking = false;
+                StartCoroutine(ResetStunResistance());
+            }
+
+            //prevent from taking damage temporarily
+            StartCoroutine(InvincibilityFrames());
+
+            //reduce the time before teleporting
+            timeTillNextTeleport -= (damage / 2);
+
+            CheckForPhaseChange();
+        }
+    }
+
+    public void FireDamage(float damage)
+    {
+        Flash();
+
+        //enemy takes damage from the player
+        Health -= damage;
+        UpdateHealthUI();
+
+        //When the enemy takes enough damage and is killed it will do the kill function then the player kapala item special item charge function from player controller - AHL (4/20/21)
+        if (Health <= 0)
+            Kill();
+    }
+
+    public void Heal(float heal)
+    {
+        //heal the enemy
+        Health = Mathf.Clamp(Health + heal, 0, healthBar.maxValue);
+        UpdateHealthUI();
+    }
+
+    private void UpdateHealthUI()
+    {
+        healthBar.value = Health;
+    }
+
+    public void Kill()
+    {
+        Instantiate(deathEffect, transform.position + new Vector3(0, 2, 0), Quaternion.identity);
+        HUDController.Instance.HideBossHealthBar();
+
+        //Destroy self
+        Destroy(gameObject);
+    }
 
     //function for enemies ability to resist stuns
-    public void ResetStunResistance()
+    public IEnumerator ResetStunResistance()
     {
+        stunTimeRemaining = stunRecoveryTime;
+        while (stunTimeRemaining > 0)
+        {
+            stunTimeRemaining -= Time.deltaTime;
+            yield return new WaitForEndOfFrame();
+        }
+
         isStunned = false;
         currentStunResistance = stunResistance;
     }
@@ -417,19 +674,17 @@ public class MageBoss : MonoBehaviour, IDamageable
         isInvincible = false;
     }
 
+    public void Flash()
+    {
+        //sets enemy's color to the hitMat (red)
+        mageRenderer.material = hitMat;
+        StartCoroutine(WaitToResetColor());
+    }
+
     public IEnumerator WaitToResetColor()
     {
         //reset enemy's color to normalMat
         yield return new WaitForSeconds(dmgInvincibilityTime);
-        ResetColor();
-    }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(transform.position, minTeleportRange);
-
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, maxTeleportRange);
+        mageRenderer.material = normalMat;
     }
 }
