@@ -62,9 +62,6 @@ public class HUDController : SingletonPattern<HUDController>
     [Header("Stat Potion Panel")]
     public GameObject statPotionPanel;
 
-    [Header("Review Panel")]
-    public GameObject levelReviewPanel;
-
     [Header("PauseScreen")]
     public GameObject pauseScreen;
 
@@ -80,6 +77,9 @@ public class HUDController : SingletonPattern<HUDController>
     [Header("Run Timer")]
     public GameObject runTimer;
 
+    [Header("Boss Health Bar")]
+    public Slider bossHealthBar;
+
     [Header("Black Screen Overlay")]
     public GameObject blackScreenOverlay;
     public float fadeInTime = 2f;
@@ -91,12 +91,10 @@ public class HUDController : SingletonPattern<HUDController>
     private bool pocketSlot1Used = false;
     private bool pocketSlot2Used = false;
 
-    public bool ShowLevelReview { get; set; }
     public string CurrentControlScheme { get { return currentControlScheme; } }
 
     void Start()
     {
-        ShowLevelReview = true;
         player = PlayerController.Instance;
         playerInput = player.gameObject.GetComponent<PlayerInput>();
 
@@ -494,23 +492,6 @@ public class HUDController : SingletonPattern<HUDController>
         swapItemPanel.panel.SetActive(false);
     }
 
-    public void ShowLevelReviewPanel()
-    {
-        player.gameObject.GetComponent<PlayerInput>().SwitchCurrentActionMap("UI");
-        Time.timeScale = 0;
-        levelReviewPanel.SetActive(true);
-    }
-
-    public void HideLevelReviewPanel()
-    {
-        if (PlayerHealth.Instance.Health > 0)
-        {
-            player.gameObject.GetComponent<PlayerInput>().SwitchCurrentActionMap("Player");
-            Time.timeScale = 1;
-        }
-        levelReviewPanel.SetActive(false);
-    }
-
     public void ShowGameOver()
     {
         player.gameObject.GetComponent<PlayerInput>().SwitchCurrentActionMap("UI");
@@ -523,8 +504,6 @@ public class HUDController : SingletonPattern<HUDController>
             gameOverScreen.GetComponent<Buttons>().SetSelectedButton();
         else
             gameOverScreen.GetComponent<Buttons>().ClearSelectedButtons();
-
-        StartCoroutine(gameOverScreen.GetComponent<Buttons>().WaitToDisplayReview());
     }
 
     public void HideGameOver()
@@ -579,6 +558,16 @@ public class HUDController : SingletonPattern<HUDController>
     public void HideRunTimer()
     {
         runTimer.GetComponent<TextMeshProUGUI>().enabled = false;
+    }
+
+    public void ShowBossHealthBar()
+    {
+        bossHealthBar.gameObject.SetActive(true);
+    }
+
+    public void HideBossHealthBar()
+    {
+        bossHealthBar.gameObject.SetActive(false);
     }
 
     public IEnumerator ShowPlayerDamagedOverlay()

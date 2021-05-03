@@ -7,7 +7,6 @@ using UnityEngine.EventSystems;
 
 public class Buttons : MonoBehaviour
 {
-    public GameObject buttonsPanel;
     public GameObject[] buttons;
     public EventSystem eventSystem;
 
@@ -63,11 +62,6 @@ public class Buttons : MonoBehaviour
         Application.OpenURL("https://docs.google.com/forms/d/1yeWTvuf43eci_y8Tj1MR-Tj1UTHPfomzOjMlrw7A2mM/edit");
     }
 
-    public void DisableLevelReview()
-    {
-        HUDController.Instance.ShowLevelReview = false;
-    }
-
     public void RestartGame()
     {
         Time.timeScale = 1;
@@ -78,27 +72,5 @@ public class Buttons : MonoBehaviour
     {
         Time.timeScale = 1;
         SceneManager.LoadScene(0);
-    }
-
-    //Show that the player died, wait, then show level review panel
-    public IEnumerator WaitToDisplayReview()
-    {
-        yield return new WaitForSecondsRealtime(1f);
-
-        //Send the damage the player took as an email - only if in build, not editor
-        /*
-        if (!Application.isEditor)
-        {
-            //print("We are running this from inside of the editor!");
-            PlayerController.Instance.GetComponent<DamageTracker>().DisplayDamage();
-        }
-        */
-
-        yield return new WaitForSecondsRealtime(1f);
-
-        buttonsPanel.SetActive(true);
-
-        if (HUDController.Instance.ShowLevelReview)
-            HUDController.Instance.ShowLevelReviewPanel();
     }
 }

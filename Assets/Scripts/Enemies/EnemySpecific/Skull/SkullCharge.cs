@@ -52,6 +52,7 @@ public class SkullCharge : MonoBehaviour
         //-Justin
 
         GameObject bullet = Instantiate(fireball, firePoint.transform.position, firePoint.transform.rotation, transform);
+        bullet.GetComponent<Bullet>().parentObject = transform.root.gameObject;
         Vector3 originalScale = bullet.transform.localScale;
         float vfxPercent = 0;
         //canAttack = false;
@@ -63,7 +64,7 @@ public class SkullCharge : MonoBehaviour
         //To be honest, I forgot why I needed to do this. But it works for the dispenser
         bullet.transform.GetChild(0).gameObject.SetActive(false);
 
-        yield return new WaitForSeconds(.1f);
+        yield return new WaitForEndOfFrame();
 
         //set scale of bullet to .1 scale up, doesn't scale vfx
         bullet.transform.GetChild(0).gameObject.SetActive(true);

@@ -33,12 +33,6 @@ public class PlayerController : SingletonPattern<PlayerController>
     public PlayerStats attackTime; //ItemsEquipment for Attack Speed
     public float attackSpeedMod = 0.25f;
     public float attack3DmgMod = 1.5f; //increases damage of third attack
-    //public float autoAimRange = 4f;
-    //public float targetMonsterDist = 4f;
-
-    [Header("Dash Attack Stats")]
-    public float dashAttackInputWindow = 0.6f;
-    private float dashAttackWindow;
 
     [Header("Charge Attack Stats")]
     public GameObject chargeArrow; //GameObject to hold the arrow underneath the player during charge attacks
@@ -128,14 +122,12 @@ public class PlayerController : SingletonPattern<PlayerController>
     private bool canMove = true;
     private bool canDash = true;
     private bool canAttack = true;
-    //private bool canDashAttack = false;
     private bool canChargeAttack = true;
     private bool canUsePotion = true;
 
     //Current action/state of the player
     private bool isDashing = false;
     private bool isAttacking = false;
-    //private bool isDashAttacking = false;
     private bool isCharging = false;
     private bool isChargeAttacking = false;
     private bool isUsingPotion = false;
@@ -152,7 +144,6 @@ public class PlayerController : SingletonPattern<PlayerController>
     public float CurrAttackSpeed { get { return currAttackSpeed; } } //Set to the current attack speed of the player
     public bool IsDashing { get { return isDashing; } }             //True during entire dash
     public bool IsAttacking { get { return isAttacking; } }         //True during combo attacks until hitbox is deactiviated
-    //public bool IsDashAttacking { get { return isDashAttacking; } } //True during dash attack
     public bool IsCharging { get { return isCharging; } }           //True while charge attack button is held
     public bool IsChargeAttacking { get { return isChargeAttacking; } } //True when charge attack button released
     public bool IsZooming { get { return isZoomingIn || isZoomingOut; } }
@@ -160,19 +151,21 @@ public class PlayerController : SingletonPattern<PlayerController>
     public bool IsUsingSpecial { get { return isUsingSpecial; } }   //True while using a Special Item
     public bool IsPaused { get { return isPaused; } }               //True while game is paused
     public bool IsUsingMouse { get { return isUsingMouse; } }      //True while player is using mouse and keyboard controls
+    public bool IsDead { get; set; }                               //Prevents actions if true
+    public Animator PlayerAnimator { get { return animator; } }
 
     private void Start()
     {
         controller = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
         lastTargetRotation = Quaternion.identity;
-        dashAttackWindow = dashAttackInputWindow;
         chargeArrow.SetActive(false);
 
         currMoveSpeed = baseMoveSpeed.Value;
         currAttackSpeed = baseAttackSpeed.Value;
         currAttackDamage = baseAttackDamage.Value;
         SetAttackSpeed();
+        IsDead = false;
 
         StatMaxHealthCount = 0;
         StatAttackCount = 0;
@@ -190,56 +183,36 @@ public class PlayerController : SingletonPattern<PlayerController>
     private void Update()
     {
         //Move, Rotate, & Animate Player
-        MovePlayer();
-        RotatePlayer();
-        AnimatePlayer();
-        ZoomCamera();
-
-        //Set mouse target pos if using M&K
-        if (GetComponent<PlayerInput>().currentControlScheme == "Keyboard&Mouse")
+        if(!IsDead)
         {
-            isUsingMouse = true;
-            SetMouseTargetPosition();
-        }
-        else
-            isUsingMouse = false;
+            MovePlayer();
+            RotatePlayer();
+            AnimatePlayer();
+            ZoomCamera();
 
-        /*
-        //Set whether the player can dash attack after a dash
-        if(canDashAttack)
-        {
-            dashAttackWindow -= Time.deltaTime;
-            if(dashAttackWindow <= 0)
+            //Set mouse target pos if using M&K
+            if (GetComponent<PlayerInput>().currentControlScheme == "Keyboard&Mouse")
             {
-                canDashAttack = false;
-                dashAttackWindow = dashAttackInputWindow;
+                isUsingMouse = true;
+                SetMouseTargetPosition();
             }
+            else
+                isUsingMouse = false;
+
+            //Check if there are any new button inputs and attempt to activate them
+            if (inputQueue.Count > 0)
+                ActivateQueuedInputs();
+
+            //If the input queue has two or more inputs, remove the first button press w/o performing it
+            if (inputQueue.Count >= 2)
+                inputQueue.Dequeue();
         }
-        */
-
-        //Check if there are any new button inputs and attempt to activate them
-        if (inputQueue.Count > 0)
-            ActivateQueuedInputs();
-
-        //If the input queue has two or more inputs, remove the first button press w/o performing it
-        if (inputQueue.Count >= 2)
-            inputQueue.Dequeue();
     }
 
     //Checks the input queue for player input and responds according to input type & timing
     private void ActivateQueuedInputs()
     {
         //Debug.Log("The next queued input is : " + inputQueue.Peek().inputButton);
-
-        //if the player inputs an attack during a dash (Dash Attack!)
-        /*
-        if (canDashAttack && inputQueue.Peek().inputButton == inputButtons.Attack)
-        {
-            //Debug.Log("Start Dash Attack");
-            //ActivateDashAttack();
-            return;
-        }
-        */
 
         //Check if player is currently performing an action
         //If not, attempt to activate the next input in the queue
@@ -315,6 +288,7 @@ public class PlayerController : SingletonPattern<PlayerController>
         else
             moveVelocity = 0;
 
+
         Vector3 attackVector = new Vector3(transform.forward.x, vSpeed, transform.forward.z);
         Vector3 chargingVector = new Vector3(0, vSpeed, 0);
 
@@ -379,7 +353,7 @@ public class PlayerController : SingletonPattern<PlayerController>
         }
     }
 
-    //Returns the transform of the closest monster to the player
+    //Returns the transform of the closest monster from the designated point (used for item auto-aiming)
     private Transform GetClosestMonster(Vector3 fromPoint, float autoAimRange)
     {
         //Get all monsters in the scene, store in 'monsters' array
@@ -588,12 +562,11 @@ public class PlayerController : SingletonPattern<PlayerController>
     /// Pause function to pause the game based on the isPause variable and will stop the game time while displaying the pause screen
     public void Pause(InputAction.CallbackContext context)
     {
-        bool levelReviewActive = HUDController.Instance.levelReviewPanel.activeSelf;
         bool statPotionPanelActive = HUDController.Instance.statPotionPanel.activeSelf;
         bool playerIsAlive = PlayerHealth.Instance.Health > 0;
 
         //Pause the game if the input is performed, the player is alive, and there are no active panels on the screen
-        if (context.performed && playerIsAlive && !levelReviewActive && !statPotionPanelActive) 
+        if (context.performed && playerIsAlive && !statPotionPanelActive) 
         {
             if (!IsPaused) //If the game is not paused then pause the game
             {
@@ -674,7 +647,7 @@ public class PlayerController : SingletonPattern<PlayerController>
         {
             canDash = false;
             isDashing = true;
-            //canDashAttack = true;
+
             animator.SetBool("isDashing", true);
             currMoveSpeed = dashSpeed.Value; //set dash speed
             StartCoroutine(DashInvincibility());
@@ -701,23 +674,6 @@ public class PlayerController : SingletonPattern<PlayerController>
         yield return new WaitForSeconds(dashInvincibilityTime.Value); //wait to disable invincibility
         PlayerHealth.Instance.isInvincible = false;
     }
-
-    /*
-    private void ActivateDashAttack()
-    {
-        inputQueue.Dequeue();
-
-        isDashAttacking = true;
-        canDashAttack = false;
-        animator.SetBool("isDashAttacking", true);
-    }
-
-    public void EndDashAttack()
-    {
-        isDashAttacking = false;
-        animator.SetBool("isDashAttacking", false);
-    }
-    */
 
     //Starts an Attack - called on button input
     private void ActivateAttack()
@@ -776,13 +732,13 @@ public class PlayerController : SingletonPattern<PlayerController>
     {
         attackComboState = 0;
         isAttacking = false;
-        //isDashAttacking = false;
         canAttack = true;
         canMove = true;
+
         animator.SetBool("attack1", false);
         animator.SetBool("attack2", false);
         animator.SetBool("attack3", false);
-        //animator.SetBool("isDashAttacking", false);
+
         PlayerAttackController.Instance.DeactivateAllHitboxes();
         currAttackDamage = baseAttackDamage.Value;
 
@@ -814,8 +770,6 @@ public class PlayerController : SingletonPattern<PlayerController>
         float timeElapsed = 0;
         while (isCharging) //Increase charge speed & arrow UI until button is released
         {
-            //currMoveSpeed = 0; //prevent movement while charging
-
             chargeSpeed = Mathf.Lerp(minChargeSpeed, maxChargeSpeed, timeElapsed / timeToFullCharge);
             currAttackDamage = Mathf.Lerp(baseAttackDamage.Value * minChargeDmgModifier, baseAttackDamage.Value * chargeDmgModifier.Value, timeElapsed / timeToFullCharge);
 
@@ -855,7 +809,6 @@ public class PlayerController : SingletonPattern<PlayerController>
         isChargeAttacking = false;
         yield return new WaitForSeconds(chargeCooldownTime); //wait for charge anim to play out before going back to normal
         canChargeAttack = true;
-        //currMoveSpeed = baseMoveSpeed.Value;
         currAttackDamage = baseAttackDamage.Value; //reset attack damage
     }
 
@@ -883,14 +836,10 @@ public class PlayerController : SingletonPattern<PlayerController>
                     SpecialSlot.prefab.GetComponent<KapalaSwap>().KapalaSpriteSwap(0); //Resets the Kapala sprite aas it was used
                     HUDController.Instance.UpdateSpecialCharge();
                 }
-
                 else
                     canUseSpecial = true; //Needs this or else it will get stuck in an infinite loop
 
             }
-
-
-
             //Else - Not the Kapala so we go through the rest of the special items like normal
             else
             {
@@ -904,11 +853,9 @@ public class PlayerController : SingletonPattern<PlayerController>
 
                     SpecialSlot.prefab.GetComponent<BowlingBall>().spawnBowlingBall(transform.position + new Vector3(0, 0.35f, 0), spawnDirection, spawnRotation);
                 }
-
                 //Bomb Item
                 else if (SpecialSlot.ItemName == "Bomb Bag")
                     SpecialSlot.prefab.GetComponent<BombBag>().spawnBomb(transform.position, transform.rotation);
-
                 //Fire Wand Item
                 else if (SpecialSlot.ItemName == "Fire Wand")
                 {
@@ -917,7 +864,6 @@ public class PlayerController : SingletonPattern<PlayerController>
 
                     SpecialSlot.prefab.GetComponent<FireWand>().spawnFireBall(transform.position, spawnDirection, spawnRotation);
                 }
-
                 //Lazer Wand Item
                 else if (SpecialSlot.ItemName == "Laser Wand")
                 {
@@ -926,7 +872,6 @@ public class PlayerController : SingletonPattern<PlayerController>
 
                     SpecialSlot.prefab.GetComponent<LazerWand>().spawnLazer(transform.position, spawnDirection, spawnRotation);
                 }
-
                 SpecialCharge = 0; //Resets the Special Charge
                 StartCoroutine(RechargeSpecial());
             }
@@ -936,6 +881,7 @@ public class PlayerController : SingletonPattern<PlayerController>
         yield return new WaitForSeconds(useSpecialTime);
     }
 
+    //Returns the position of the monster closest to the mouse pointer or forward direction of the player (Auto-Aiming)
     private Vector3 GetItemSpawnDirection()
     {
         Vector3 spawnDirection = transform.forward;
@@ -962,7 +908,6 @@ public class PlayerController : SingletonPattern<PlayerController>
                 spawnDirection = new Vector3(closestMonsterController.position.x, 0, closestMonsterController.position.z) - new Vector3(transform.position.x, 0, transform.position.z);
 
             spawnDirection = spawnDirection.normalized / 2;
-
         }
 
         return spawnDirection;
@@ -1119,15 +1064,10 @@ public class PlayerController : SingletonPattern<PlayerController>
                 RunTimer.Instance.IncreaseTimer = false;
                 Time.timeScale = 0;
                 HUDController.Instance.ShowWinScreen();
-                HUDController.Instance.ShowLevelReviewPanel();
             }
             else
             {
-                //LevelManager.Instance.TransitionLevel();
-                if(HUDController.Instance.ShowLevelReview)
-                    HUDController.Instance.ShowLevelReviewPanel(); //Show the level review panel if enabled
-                else
-                    LevelManager.Instance.TransitionLevel(); //if disabled, instantly transition the level
+                LevelManager.Instance.TransitionLevel();
 
                 CenterTile.Instance.onTile = false;
 

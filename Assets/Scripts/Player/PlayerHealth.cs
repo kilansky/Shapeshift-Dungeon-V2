@@ -204,9 +204,14 @@ public class PlayerHealth : SingletonPattern<PlayerHealth>, IDamageable
     {
         AnalyticsEvents.Instance.PlayerDied(); //Send Player Died Analytics Event
         AnalyticsEvents.Instance.ItemsOnDeath(); //Send Items On Death Analytics Event
-        //StartCoroutine(AnalyticsEvents.Instance.DamageSourcesData()); //Send Damage source data Analytics Event
-        HUDController.Instance.ShowGameOver();
-        Time.timeScale = 0;
+
+        //Play Death Animation, lock player movement, and zoom in the camera
+        PlayerController.Instance.PlayerAnimator.SetBool("isDead", true);
+        PlayerController.Instance.IsDead = true;
+        CameraController.Instance.PlayerDeathZoomIn();
+
+        //Wait to show game over screen until death anim is done
+        StartCoroutine(WaitToShowGameOver());
     }
 
     //Makes the player invincible briefly
@@ -215,5 +220,14 @@ public class PlayerHealth : SingletonPattern<PlayerHealth>, IDamageable
         isInvincible = true;
         yield return new WaitForSeconds(dmgInvincibilityTime);
         isInvincible = false;
+    }
+
+    //Wait to show the game over screen upon death
+    IEnumerator WaitToShowGameOver()
+    {
+        yield return new WaitForSeconds(4f);
+
+        HUDController.Instance.ShowGameOver();
+        Time.timeScale = 0;
     }
 }

@@ -51,7 +51,7 @@ public class EnemyHitBox : MonoBehaviour
             CineShake.Instance.Shake(1f, 0.1f);
 
             //Destroy Prop
-            other.GetComponent<DestructibleProp>().DestroyObject();
+            other.GetComponent<DestructibleProp>().ShatterObject();
             AudioManager.Instance.Play("WoodBreak");
         }
 
