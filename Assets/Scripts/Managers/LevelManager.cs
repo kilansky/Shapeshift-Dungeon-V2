@@ -275,7 +275,11 @@ public class LevelManager : SingletonPattern<LevelManager>
         }
 
         if(GameObject.FindObjectOfType<MageBoss>())
+        {
             GameObject.FindObjectOfType<MageBoss>().startBossFight = true;
+            foreach (DangerTiles dangerousTile in GameObject.FindObjectsOfType<DangerTiles>())
+                dangerousTile.ParentToTile();
+        }
 
         //Debug.Log("Current map is: " + currMapName);
     }

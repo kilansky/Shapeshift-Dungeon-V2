@@ -171,7 +171,7 @@ public class MageBoss : MonoBehaviour, IDamageable
     {
         isAttacking = true;
 
-        Debug.Log("Attack1 Started");
+        //Debug.Log("Attack1 Started");
 
         //Charge up and fire a projectile from each fire point
         foreach (Transform firePoint in firePoints1)
