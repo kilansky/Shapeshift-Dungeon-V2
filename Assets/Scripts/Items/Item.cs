@@ -88,6 +88,11 @@ public class Item : MonoBehaviour
                 c.HeadSlot.prefab.GetComponent<Item>().Unequip(c, h);
                 c.HeadSlot = this.item;
             }
+
+            //Checks if the item being equipped is the Monster Mask so we can adjust the bool variable in the player controller
+            if (item.ItemName == "Monster Mask")
+                c.hasMonsterMask = true;
+
         }
 
         //Torso Item Slot
@@ -523,6 +528,10 @@ public class Item : MonoBehaviour
                 //Debug.Log("The new Special Item Recharge is " + c.specialCooldownTime.Value);
             }
         }
+
+        //If the monster Mask is being unequipped then we set the bool to false
+        if (item.ItemName == "Monster Mask")
+            c.hasMonsterMask = false;
     }
 
     private void Start()
