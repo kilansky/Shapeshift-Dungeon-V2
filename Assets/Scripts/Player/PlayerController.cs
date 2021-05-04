@@ -647,6 +647,9 @@ public class PlayerController : SingletonPattern<PlayerController>
         {
             canDash = false;
             isDashing = true;
+            
+            //If the player has the Spiked Boots equipped then we actiivate the dash hitbox - AHL (5/3/21)
+
             //PlayerAttackController.Instance.ActivateDashHitbox();
 
             animator.SetBool("isDashing", true);
