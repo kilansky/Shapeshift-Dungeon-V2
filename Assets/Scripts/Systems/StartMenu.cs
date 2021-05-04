@@ -70,8 +70,8 @@ public class StartMenu : MonoBehaviour
 
     public void StartFloor20()
     {
-        //PlayerPrefs.SetInt("startingLevel", 19);
-        //StartCoroutine(FadeOutToLevel(2));
+        PlayerPrefs.SetInt("startingLevel", 19);
+        StartCoroutine(FadeOutToLevel(2));
     }
 
     public void FormFeedback()

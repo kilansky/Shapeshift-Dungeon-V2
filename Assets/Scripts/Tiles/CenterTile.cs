@@ -12,7 +12,8 @@ public class CenterTile : SingletonPattern<CenterTile>
      * Date Created: 2/18/2021
      * Date Last Edited: 3/1/2021
      **/
-
+    [SerializeField] private GameObject levelText;
+    [SerializeField] private GameObject skullText;
     [SerializeField] private TextMeshProUGUI levelDisplay;
     [SerializeField] private TMP_FontAsset glowFont;
     [SerializeField] private TMP_FontAsset dimFont;
@@ -73,6 +74,12 @@ public class CenterTile : SingletonPattern<CenterTile>
 
             levelDisplay.color = new Color32(255, 255, 255, 255);
             levelDisplay.font = glowFont;
+
+            if (LevelManager.Instance.currFloor == 20)
+            {
+                levelText.SetActive(false);
+                skullText.SetActive(true);
+            }
         }
         else
         {

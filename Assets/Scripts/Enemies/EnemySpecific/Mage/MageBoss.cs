@@ -44,6 +44,9 @@ public class MageBoss : MonoBehaviour, IDamageable
     [Header("Object References")]
     public GameObject aliveMage;
     public GameObject deathEffect;
+    public GameObject phase2Map;
+    public GameObject phase3Map;
+    public GameObject phase4Map;
 
     public float Health { get; set; }
 
@@ -77,6 +80,8 @@ public class MageBoss : MonoBehaviour, IDamageable
     private bool phase2Complete = false;
     private bool phase3Complete = false;
 
+    [HideInInspector] public bool startBossFight = false;
+
     public virtual void Start()
     {
         player = FindObjectOfType<PlayerController>().gameObject;
@@ -95,13 +100,8 @@ public class MageBoss : MonoBehaviour, IDamageable
         healthBar.maxValue = Health;
         healthBar.value = Health;
 
-        //Set teleport points
-        GetAllTeleportPoints();
-        Teleport();
-        StartCoroutine(WaitToTeleport());
-
+        isStunned = true;
         InvokeRepeating("CheckToStartAttacking", 0, 0.25f);
-        //StartCoroutine(Attack2());
     }
 
     private void Update()
@@ -115,6 +115,19 @@ public class MageBoss : MonoBehaviour, IDamageable
 
         if (isAttacking)
             firePoints2Root.Rotate(0f, 10f * attack2RotateSpeed * Time.deltaTime, 0f);
+
+        if(startBossFight)
+        {
+            startBossFight = false;
+            isStunned = false;
+
+            transform.parent = null;
+
+            //Set teleport points and teleport to a point within the map
+            GetAllTeleportPoints();
+            Teleport();
+            StartCoroutine(WaitToTeleport());
+        }
     }
 
     private void CheckToStartAttacking()
@@ -158,7 +171,7 @@ public class MageBoss : MonoBehaviour, IDamageable
     {
         isAttacking = true;
 
-        Debug.Log("Attack1 Started");
+        //Debug.Log("Attack1 Started");
 
         //Charge up and fire a projectile from each fire point
         foreach (Transform firePoint in firePoints1)
@@ -393,10 +406,16 @@ public class MageBoss : MonoBehaviour, IDamageable
         if (!phase1Complete)
         {
             Transform newTeleportPoint = GetPhase1TeleportPoint();
-            transform.position = newTeleportPoint.position;
 
-            previousTeleportPoint = currentTeleportPoint;
-            currentTeleportPoint = newTeleportPoint;
+            if (newTeleportPoint)
+            {
+                transform.position = newTeleportPoint.position;
+
+                previousTeleportPoint = currentTeleportPoint;
+                currentTeleportPoint = newTeleportPoint;
+            }
+            else
+                Debug.LogError("Mage Attempted To Teleport But Failed");
         }
         //---------------------------Phase 2---------------------------
         else if (!phase2Complete)
@@ -412,12 +431,29 @@ public class MageBoss : MonoBehaviour, IDamageable
                 teleportPoints.Add(currentTeleportPoint);
             //then set the new current teleport point and remove it from the list
             currentTeleportPoint = teleportPoints[randTeleportPoint];
-            teleportPoints.Remove(teleportPoints[randTeleportPoint]);
+            teleportPoints.Remove(currentTeleportPoint);
         }
         //---------------------------Phase 3---------------------------
         else if (!phase3Complete)
         {
+            if (teleportPoints.Count == 0)
+                GetAllTeleportPoints();
 
+            int randTeleportPoint = Random.Range(0, teleportPoints.Count);
+            transform.position = teleportPoints[randTeleportPoint].position;
+
+            //Add the last 2 teleport points back into the list        
+            if (currentTeleportPoint)
+                teleportPoints.Add(currentTeleportPoint);
+
+            if (previousTeleportPoint)
+                teleportPoints.Add(previousTeleportPoint);
+
+            //then set the new current teleport point and remove it from the list
+            previousTeleportPoint = currentTeleportPoint;
+            currentTeleportPoint = teleportPoints[randTeleportPoint];
+            teleportPoints.Remove(currentTeleportPoint);
+            teleportPoints.Remove(previousTeleportPoint);
         }
         //---------------------------Phase 4---------------------------
         else
@@ -437,7 +473,7 @@ public class MageBoss : MonoBehaviour, IDamageable
 
         GetAllTeleportPoints();
 
-        //Repeat getting the point that is furt
+        //Repeat getting the point that is furthest from the mage 3 times
         for (int i = 0; i < 3; i++)
         {
             //Get the point furthest from the mage
@@ -489,18 +525,13 @@ public class MageBoss : MonoBehaviour, IDamageable
         StartCoroutine(WaitToTeleport());
     }
 
-    private IEnumerator PhaseChangeTeleport()
+    private void PhaseChangeTeleport()
     {
         isStunned = true;
         GameObject vfx = Instantiate(teleportParticles, transform.position + new Vector3(0, 1.5f, 0), Quaternion.identity);
         Destroy(vfx, 2f);
 
         transform.position = hiddenTeleportPoint;
-        yield return new WaitForSeconds(9f);
-
-        Teleport();
-        StartCoroutine(WaitToTeleport());
-        isStunned = false;
     }
 
     /*
@@ -543,18 +574,19 @@ public class MageBoss : MonoBehaviour, IDamageable
         if(!phase1Complete && Health / startingHealth < phaseChange1)
         {
             phase1Complete = true;
-            Debug.Log("Start Phase 2");
+            //Debug.Log("Start Phase 2");
             StartCoroutine(StartPhase2());
         }
         else if (!phase2Complete && Health / startingHealth < phaseChange2)
         {
             phase2Complete = true;
-            Debug.Log("Start Phase 3");
+            //Debug.Log("Start Phase 3");
+            StartCoroutine(StartPhase3());
         }
         else if (!phase3Complete && Health / startingHealth < phaseChange3)
         {
             phase3Complete = true;
-            Debug.Log("Start Phase 4");
+            //Debug.Log("Start Phase 4");
         }
     }
 
@@ -569,24 +601,51 @@ public class MageBoss : MonoBehaviour, IDamageable
         StopCoroutine(WaitToTeleport());
 
         //Teleport away to hidden point
-        StartCoroutine(PhaseChangeTeleport());
+        PhaseChangeTeleport();
         timeToTeleportAgain = 16f;
         timeTillNextTeleport = 16f;
 
         //Alert player of dangerous tiles
         foreach (DangerTiles dangerousTile in GameObject.FindObjectsOfType<DangerTiles>())
             dangerousTile.StartFlashing();
-        CineShake.Instance.Shake(1.5f, 3.5f);
+        CineShake.Instance.Shake(1.5f, 2.5f);
         CameraController.Instance.ZoomOutLevelTransition();
         AudioManager.Instance.Play("Rumble");
-        yield return new WaitForSeconds(3.5f);
+        yield return new WaitForSeconds(2.5f);
 
         //Transition Level
-        LevelManager.Instance.TransitionLevel();
+        LevelManager.Instance.ChangeBossLevel(phase2Map);
+        timeToTeleportAgain = 16f;
+        timeTillNextTeleport = 16f;
+    }
+
+    private IEnumerator StartPhase3()
+    {
+        //Clear phase 2 teleport points
+        DestroyOldTeleportPoints();
+        teleportPoints.Clear();
+        furthest3Points.Clear();
+        previousTeleportPoint = null;
+        currentTeleportPoint = null;
+        StopCoroutine(WaitToTeleport());
+
+        //Teleport away to hidden point
+        PhaseChangeTeleport();
         timeToTeleportAgain = 16f;
         timeTillNextTeleport = 16f;
 
-        yield return null;
+        //Alert player of dangerous tiles
+        foreach (DangerTiles dangerousTile in GameObject.FindObjectsOfType<DangerTiles>())
+            dangerousTile.StartFlashing();
+        CineShake.Instance.Shake(1.5f, 2.5f);
+        CameraController.Instance.ZoomOutLevelTransition();
+        AudioManager.Instance.Play("Rumble");
+        yield return new WaitForSeconds(2.5f);
+
+        //Transition Level
+        LevelManager.Instance.ChangeBossLevel(phase3Map);
+        timeToTeleportAgain = 16f;
+        timeTillNextTeleport = 16f;
     }
 
 

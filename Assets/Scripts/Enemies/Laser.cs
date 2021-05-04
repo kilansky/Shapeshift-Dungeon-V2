@@ -28,13 +28,12 @@ public class Laser : MonoBehaviour
     public bool setOnFire;
     public bool heal;
 
+    [HideInInspector] public GameObject parentObject; //Variable to hold the parent Object to make sure the Damage Tracker is able to track the damage correctly
+    [HideInInspector] public bool laserTriggered = false;
+
     private LineRenderer beam;
     private CapsuleCollider capsuleCollider;
     private VisualEffect hitEffect;
-
-    //[HideInInspector] 
-    public GameObject parentObject; //Variable to hold the parent Object to make sure the Damage Tracker is able to track the damage correctly
-    [HideInInspector] public bool laserTriggered = false;
 
     private void Start()
     {

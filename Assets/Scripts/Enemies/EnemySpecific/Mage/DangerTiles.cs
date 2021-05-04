@@ -8,6 +8,7 @@ public class DangerTiles : MonoBehaviour
     public float flashTime = 1f;
     public float numberOfFlashes = 3;
     public float maximumAlpha = 0.7f;
+    public LayerMask lookForLayer;
     private Image warningSquare;
 
     private void Start()
@@ -18,6 +19,17 @@ public class DangerTiles : MonoBehaviour
         var tempColor = warningSquare.color;
         tempColor.a = 0;
         warningSquare.color = tempColor;
+    }
+
+    public void ParentToTile()
+    {
+        RaycastHit hit;
+
+        if (Physics.Raycast(transform.position + new Vector3(0, 1f, 0), Vector3.down, out hit, 10f, lookForLayer)) //Sends a raycast to look for an object below this one
+        {
+            if (hit.transform.gameObject.GetComponent<Tile>()) //If the raycast finds an object, this finds out if that object is a tile
+                transform.parent.parent = hit.transform; //Parent this to the tile below it
+        }
     }
 
     public void StartFlashing()
@@ -40,6 +52,9 @@ public class DangerTiles : MonoBehaviour
                 yield return new WaitForSeconds((flashTime / 2));
             }
         }
+
+        yield return new WaitForSeconds(4);
+        Destroy(transform.parent);
     }
 
     private IEnumerator FadeAlphaValues(float startValue, float endValue)

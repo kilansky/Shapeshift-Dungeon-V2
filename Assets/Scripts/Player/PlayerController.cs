@@ -1148,6 +1148,8 @@ public class PlayerController : SingletonPattern<PlayerController>
 
                 Destroy(other.gameObject); //Destroy the instance of the item in the gamescene
                 pickupItem = false; //Set pickup to false
+                touchingItem = false;
+                canAffordItem = false;
 
                 PedestalManager.Instance.DeactivatePedestals();
             }
@@ -1159,6 +1161,7 @@ public class PlayerController : SingletonPattern<PlayerController>
         if (other.tag == "Item")
         {
             touchingItem = false;
+            canAffordItem = false;
             HUDController.Instance.HideQuickHint();
         }
     }
