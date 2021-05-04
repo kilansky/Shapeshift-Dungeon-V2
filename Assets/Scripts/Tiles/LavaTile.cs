@@ -13,8 +13,7 @@ public class LavaTile : MonoBehaviour
      **/
 
     [SerializeField] private float damage = 1f;
-    //[SerializeField] private float rate = 1f;
-    [SerializeField] private float damageDelay = .2f;
+    [SerializeField] private float damageDelay = .1f;
     private bool lavaHit = false;
     private bool playerOnLava = false;
 
