@@ -24,6 +24,16 @@ public class Skeleton_IdleState : IdleState
     public override void LogicUpdate()
     {
         base.LogicUpdate();
+
+        //is player in attack range
+        if (enemy.CheckPlayerInMinAgroRange())
+        {
+            stateMachine.ChangeState(enemy.playerDetectedState);
+        }
+        else if (isIdleTimeOver) //if player out of attack range, move
+        {
+            stateMachine.ChangeState(enemy.moveState);
+        }
     }
 
     public override void PhysicsUpdate()

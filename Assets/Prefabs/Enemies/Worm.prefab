@@ -977,7 +977,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hitEffect: {fileID: 331117896044982230, guid: 91d53d334422de047bf7b67c77b295ba,
     type: 3}
-  hasTorch: 0
+  appliesFireStatus: 0
 --- !u!1 &5021853205969204128
 GameObject:
   m_ObjectHideFlags: 0
@@ -1254,28 +1254,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   aliveGO: {fileID: 7159810125567551847}
-  player: {fileID: 0}
-  health: 20
-  hitMat: {fileID: 2100000, guid: 8e628ab3673526648b68be922de630f2, type: 2}
-  normalMat: {fileID: 2100000, guid: 6599c9d501513a1498a748906b1d609b, type: 2}
   healthBar: {fileID: 380591686153994882}
   entityData: {fileID: 11400000, guid: c1cbb62e315cf384cb992b784e1a3061, type: 2}
-  dmgInvincibilityTime: 0.25
-  sightRange: 20
-  minAttackRange: 0
-  timeBetweenAttacks: 3
-  minAgroRange: 0
   deathEffect: {fileID: 3017006636548126711, guid: 9fa9cc35f614bf44d8df492ba34ed85b,
     type: 3}
   gemPrefab: {fileID: 1679218149131978045, guid: 269ad815a67e12f4d86befaa2ccef290,
     type: 3}
-  isKnockedBack: 0
+  health: 20
+  dmgInvincibilityTime: 0.25
   knockBackStrength: 0
+  hitMat: {fileID: 2100000, guid: 8e628ab3673526648b68be922de630f2, type: 2}
+  normalMat: {fileID: 2100000, guid: 6599c9d501513a1498a748906b1d609b, type: 2}
+  sightRange: 20
+  minAgroRange: 0
+  minAttackRange: 0
+  timeBetweenAttacks: 3
   meleeDamage: 3
+  player: {fileID: 0}
   distanceToPlayer: 0
   agent: {fileID: 0}
   isStunned: 0
   isInvincible: 0
+  isKnockedBack: 0
   whatIsPlayer:
     serializedVersion: 2
     m_Bits: 256
@@ -1293,7 +1293,8 @@ MonoBehaviour:
   SideTarget: {fileID: 0}
   BackTarget: {fileID: 0}
   isAttacking: 0
-  renderer: {fileID: 8154163575772172619}
+  headRenderer: {fileID: 606642490412145216}
+  bodyRenderer: {fileID: 8154163575772172619}
 --- !u!114 &-4041397827124426621
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1754,7 +1755,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hitbox: {fileID: 4675398819247505427}
-  attackAnim: {fileID: 4537162391179192743}
   showHitBoxes: 1
 --- !u!1 &7591325397936014368
 GameObject:

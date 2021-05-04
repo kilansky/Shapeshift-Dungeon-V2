@@ -39,7 +39,8 @@ public class Worm : EnemyBase
     //public GameObject meleeHitBox;
     //public Transform hitPoint;
 
-    public SkinnedMeshRenderer renderer;
+    public SkinnedMeshRenderer headRenderer;
+    public SkinnedMeshRenderer bodyRenderer;
 
     private float attackDamage;
 
@@ -89,7 +90,8 @@ public class Worm : EnemyBase
     public override void Flash()
     {
         //sets enemy's color to the hitMat (red)
-        renderer.material = hitMat;
+        headRenderer.material = hitMat;
+        bodyRenderer.material = hitMat;
         StartCoroutine(WaitToResetColor());
 
     }
@@ -97,6 +99,7 @@ public class Worm : EnemyBase
     public override void ResetColor()
     {
         base.ResetColor();
-        renderer.material = normalMat;
+        headRenderer.material = normalMat;
+        bodyRenderer.material = normalMat;
     }
 }

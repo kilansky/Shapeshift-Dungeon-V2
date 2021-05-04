@@ -40,7 +40,20 @@ public class Skeleton : EnemyBase
     //public GameObject meleeHitBox;
     //public Transform hitPoint;
 
-    public SkinnedMeshRenderer renderer;
+    public SkinnedMeshRenderer feetRenderer;
+    public SkinnedMeshRenderer femurRenderer;
+    public SkinnedMeshRenderer forearmRenderer;
+    public SkinnedMeshRenderer gutBasketRenderer;
+    public SkinnedMeshRenderer handRenderer;
+    public SkinnedMeshRenderer lowerLegRenderer;
+    public SkinnedMeshRenderer miniRibRenderer;
+    public SkinnedMeshRenderer ribCageRenderer;
+    public SkinnedMeshRenderer shoulderRenderer;
+    public SkinnedMeshRenderer skullRenderer;
+    public SkinnedMeshRenderer spineRenderer;
+    public SkinnedMeshRenderer upperArmRenderer;
+
+
 
     private float attackDamage;
 
@@ -63,10 +76,13 @@ public class Skeleton : EnemyBase
         //this line is what got rid of my NullReferenceExceptions
         stateMachine.Initialize(moveState);
 
+        //renderer = GetComponentInChildren<Skeleton>()
+
         FrontTarget = PlayerController.Instance.frontTarget;
         SideTarget = PlayerController.Instance.sideTarget;
         BackTarget = PlayerController.Instance.backTarget;
     }
+        
 
     //set current state to stunState if isStunned
     public override void Damage(float damage)
@@ -111,7 +127,18 @@ public class Skeleton : EnemyBase
     public override void Flash()
     {
         //sets enemy's color to the hitMat (red)
-        renderer.material = hitMat;
+        feetRenderer.material = hitMat;
+        femurRenderer.material = hitMat;
+        forearmRenderer.material = hitMat;
+        gutBasketRenderer.material = hitMat;
+        handRenderer.material = hitMat;
+        lowerLegRenderer.material = hitMat;
+        miniRibRenderer.material = hitMat;
+        ribCageRenderer.material = hitMat;
+        shoulderRenderer.material = hitMat;
+        skullRenderer.material = hitMat;
+        spineRenderer.material = hitMat;
+        upperArmRenderer.material = hitMat;
         StartCoroutine(WaitToResetColor());
 
     }
@@ -119,6 +146,17 @@ public class Skeleton : EnemyBase
     public override void ResetColor()
     {
         base.ResetColor();
-        renderer.material = normalMat;
+        feetRenderer.material = normalMat;
+        femurRenderer.material = normalMat;
+        forearmRenderer.material = normalMat;
+        gutBasketRenderer.material = normalMat;
+        handRenderer.material = normalMat;
+        lowerLegRenderer.material = normalMat;
+        miniRibRenderer.material = normalMat;
+        ribCageRenderer.material = normalMat;
+        shoulderRenderer.material = normalMat;
+        skullRenderer.material = normalMat;
+        spineRenderer.material = normalMat;
+        upperArmRenderer.material = normalMat;
     }
 }

@@ -29,6 +29,16 @@ public class Skeleton_LookForPlayer : LookForPlayerState
     public override void LogicUpdate()
     {
         base.LogicUpdate();
+
+        if (isPlayerInMinAgroRange)
+        {
+            //TODO: double check logic here
+            stateMachine.ChangeState(enemy.playerDetectedState);
+        }
+        else if (!isPlayerInMinAgroRange)
+        {
+            stateMachine.ChangeState(enemy.moveState);
+        }
     }
 
     public override void PhysicsUpdate()
