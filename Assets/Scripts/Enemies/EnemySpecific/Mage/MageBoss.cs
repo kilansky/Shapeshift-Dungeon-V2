@@ -496,7 +496,7 @@ public class MageBoss : MonoBehaviour, IDamageable
         Destroy(vfx, 2f);
 
         transform.position = hiddenTeleportPoint;
-        yield return new WaitForSeconds(5.5f);
+        yield return new WaitForSeconds(9f);
 
         Teleport();
         StartCoroutine(WaitToTeleport());
@@ -544,20 +544,7 @@ public class MageBoss : MonoBehaviour, IDamageable
         {
             phase1Complete = true;
             Debug.Log("Start Phase 2");
-
-            //Clear phase 1 teleport points
-            DestroyOldTeleportPoints();
-            teleportPoints.Clear();
-            furthest3Points.Clear();
-            previousTeleportPoint = null;
-            currentTeleportPoint = null;
-            StopCoroutine(WaitToTeleport());
-
-            //Transition Level
-            LevelManager.Instance.TransitionLevel();
-            timeToTeleportAgain = 16f;
-            timeTillNextTeleport = 16f;
-            StartCoroutine(PhaseChangeTeleport());
+            StartCoroutine(StartPhase2());
         }
         else if (!phase2Complete && Health / startingHealth < phaseChange2)
         {
@@ -569,6 +556,37 @@ public class MageBoss : MonoBehaviour, IDamageable
             phase3Complete = true;
             Debug.Log("Start Phase 4");
         }
+    }
+
+    private IEnumerator StartPhase2()
+    {
+        //Clear phase 1 teleport points
+        DestroyOldTeleportPoints();
+        teleportPoints.Clear();
+        furthest3Points.Clear();
+        previousTeleportPoint = null;
+        currentTeleportPoint = null;
+        StopCoroutine(WaitToTeleport());
+
+        //Teleport away to hidden point
+        StartCoroutine(PhaseChangeTeleport());
+        timeToTeleportAgain = 16f;
+        timeTillNextTeleport = 16f;
+
+        //Alert player of dangerous tiles
+        foreach (DangerTiles dangerousTile in GameObject.FindObjectsOfType<DangerTiles>())
+            dangerousTile.StartFlashing();
+        CineShake.Instance.Shake(1.5f, 3.5f);
+        CameraController.Instance.ZoomOutLevelTransition();
+        AudioManager.Instance.Play("Rumble");
+        yield return new WaitForSeconds(3.5f);
+
+        //Transition Level
+        LevelManager.Instance.TransitionLevel();
+        timeToTeleportAgain = 16f;
+        timeTillNextTeleport = 16f;
+
+        yield return null;
     }
 
 

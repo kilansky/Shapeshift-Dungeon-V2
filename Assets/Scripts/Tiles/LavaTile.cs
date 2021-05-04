@@ -16,6 +16,7 @@ public class LavaTile : MonoBehaviour
     //[SerializeField] private float rate = 1f;
     [SerializeField] private float damageDelay = .2f;
     private bool lavaHit = false;
+    private bool playerOnLava = false;
 
     /// <summary>
     /// Detects if something is on this lava tile. If its a player, deals damage. Will add logic for enemies later
@@ -23,20 +24,36 @@ public class LavaTile : MonoBehaviour
     /// <param name="other"></param>
     private void OnTriggerStay(Collider other)
     {
-        if(!lavaHit && other.GetComponent<PlayerController>() && !PlayerController.Instance.IsDashing)
-            StartCoroutine(LavaCycle(other.gameObject));
+        if(other.GetComponent<PlayerController>() && !PlayerController.Instance.IsDashing)
+        {
+            playerOnLava = true;
+
+            if (!lavaHit)
+                StartCoroutine(LavaCycle(other.gameObject));
+        }
+        else if (other.GetComponent<PlayerController>() && PlayerController.Instance.IsDashing)
+            playerOnLava = false;
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.GetComponent<PlayerController>())
+            playerOnLava = false;
     }
 
     private IEnumerator LavaCycle(GameObject target)
     {
         lavaHit = true;
-
-        if (!PlayerHealth.Instance.isInvincible)
-            AnalyticsEvents.Instance.PlayerDamaged("Lava"); //Sends analytics event about damage source
-
-        PlayerHealth.Instance.Damage(damage, gameObject);
-        PlayerController.Instance.transform.GetComponent<StatusEffects>().fireStatus(1f);
         yield return new WaitForSeconds(damageDelay);
+
+        if(playerOnLava)
+        {
+            if (!PlayerHealth.Instance.isInvincible)
+                AnalyticsEvents.Instance.PlayerDamaged("Lava"); //Sends analytics event about damage source
+
+            PlayerHealth.Instance.Damage(damage, gameObject);
+            PlayerController.Instance.transform.GetComponent<StatusEffects>().fireStatus(1f);
+        }
         lavaHit = false;
     }
 }
