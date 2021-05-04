@@ -29,6 +29,18 @@ public class Skeleton_StunState : StunState
     public override void LogicUpdate()
     {
         base.LogicUpdate();
+
+        if (isStunTimeOver)
+        {
+            if (isPlayerInMinAttackRange)
+            {
+                stateMachine.ChangeState(enemy.playerDetectedState);
+            }
+            else
+            {
+                stateMachine.ChangeState(enemy.lookForPlayerState);
+            }
+        }
     }
 
     public override void PhysicsUpdate()

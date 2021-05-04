@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Skeleton_AttackState : AttackState
 {
@@ -29,6 +30,18 @@ public class Skeleton_AttackState : AttackState
     public override void LogicUpdate()
     {
         base.LogicUpdate();
+
+        if (enemy.CheckPlayerInMinAttackRange() && !enemy.isAttacking)
+        {
+            //TODO double check logic here 
+            base.Enter();
+            enemy.isAttacking = true;
+        }
+        else
+        {
+            //stateMachine.ChangeState(enemy.moveState);
+            stateMachine.ChangeState(enemy.lookForPlayerState);
+        }
     }
 
     public override void PhysicsUpdate()
@@ -39,5 +52,7 @@ public class Skeleton_AttackState : AttackState
     public override void TriggerAttack()
     {
         base.TriggerAttack();
+
+        enemy.Anim.SetBool("isAttacking", true);
     }
 }
