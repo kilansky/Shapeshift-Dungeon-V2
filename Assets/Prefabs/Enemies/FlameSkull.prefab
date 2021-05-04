@@ -733,28 +733,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   aliveGO: {fileID: 1656225346805746181}
-  player: {fileID: 6827406435468743520, guid: ac84a2fd4a138be4ca452353dd420a4b, type: 3}
-  health: 13
-  hitMat: {fileID: 2100000, guid: 8e628ab3673526648b68be922de630f2, type: 2}
-  normalMat: {fileID: 2100000, guid: 8e95025cb3dcab6409bb0a8940f858df, type: 2}
   healthBar: {fileID: 8531734560222423607}
   entityData: {fileID: 11400000, guid: 421632450167ebd499eafb6e84d01c25, type: 2}
-  dmgInvincibilityTime: 0.25
-  sightRange: 15
-  minAttackRange: 5
-  timeBetweenAttacks: 2
-  minAgroRange: 15
   deathEffect: {fileID: 3017006636548126711, guid: 9fa9cc35f614bf44d8df492ba34ed85b,
     type: 3}
   gemPrefab: {fileID: 1679218149131978045, guid: 269ad815a67e12f4d86befaa2ccef290,
     type: 3}
-  isKnockedBack: 0
+  health: 14
+  dmgInvincibilityTime: 0.25
   knockBackStrength: 5
+  hitMat: {fileID: 2100000, guid: 8e628ab3673526648b68be922de630f2, type: 2}
+  normalMat: {fileID: 2100000, guid: 8e95025cb3dcab6409bb0a8940f858df, type: 2}
+  sightRange: 15
+  minAgroRange: 15
+  minAttackRange: 5
+  timeBetweenAttacks: 2
   meleeDamage: 3
+  player: {fileID: 6827406435468743520, guid: ac84a2fd4a138be4ca452353dd420a4b, type: 3}
   distanceToPlayer: 0
   agent: {fileID: 0}
   isStunned: 0
   isInvincible: 0
+  isKnockedBack: 0
   whatIsPlayer:
     serializedVersion: 2
     m_Bits: 256

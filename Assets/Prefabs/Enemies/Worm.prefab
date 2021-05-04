@@ -1190,11 +1190,11 @@ GameObject:
   m_Component:
   - component: {fileID: 5176235769105279448}
   - component: {fileID: 9172030981256744138}
+  - component: {fileID: 1595554330}
   - component: {fileID: -4041397827124426621}
   - component: {fileID: -5163235311747086119}
   - component: {fileID: 5440069397064294489}
   - component: {fileID: 5534321102580318151}
-  - component: {fileID: 1595554330}
   m_Layer: 11
   m_Name: Worm
   m_TagString: Monster
@@ -1241,6 +1241,59 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &1595554330
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5520990575442047842}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e8f6284caf3a4a42912c4c6794aa6ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  aliveGO: {fileID: 7159810125567551847}
+  player: {fileID: 0}
+  health: 20
+  hitMat: {fileID: 2100000, guid: 8e628ab3673526648b68be922de630f2, type: 2}
+  normalMat: {fileID: 2100000, guid: 6599c9d501513a1498a748906b1d609b, type: 2}
+  healthBar: {fileID: 380591686153994882}
+  entityData: {fileID: 11400000, guid: c1cbb62e315cf384cb992b784e1a3061, type: 2}
+  dmgInvincibilityTime: 0.25
+  sightRange: 20
+  minAttackRange: 0
+  timeBetweenAttacks: 3
+  minAgroRange: 0
+  deathEffect: {fileID: 3017006636548126711, guid: 9fa9cc35f614bf44d8df492ba34ed85b,
+    type: 3}
+  gemPrefab: {fileID: 1679218149131978045, guid: 269ad815a67e12f4d86befaa2ccef290,
+    type: 3}
+  isKnockedBack: 0
+  knockBackStrength: 0
+  meleeDamage: 3
+  distanceToPlayer: 0
+  agent: {fileID: 0}
+  isStunned: 0
+  isInvincible: 0
+  whatIsPlayer:
+    serializedVersion: 2
+    m_Bits: 256
+  wallCheck: {fileID: 7778884051866706539}
+  ledgeCheck: {fileID: 4632711789486929035}
+  playerCheck: {fileID: 137315583785107152}
+  idleStateData: {fileID: 11400000, guid: ad6d536679f65bb42abeeee9aec99ffb, type: 2}
+  moveStateData: {fileID: 11400000, guid: 1a71dc297e2505841be5f4d340894564, type: 2}
+  playerDetectedData: {fileID: 11400000, guid: 4e3dc916332301948af9deb44b1c44af, type: 2}
+  attackStateData: {fileID: 11400000, guid: 599972f55ca33c14f81b5091a5f9bfe1, type: 2}
+  lookForPlayerStateData: {fileID: 11400000, guid: e606cd28356f66246af372eb98d92e60,
+    type: 2}
+  stunStateData: {fileID: 11400000, guid: c95f607a4d7e30f46a8f1c2acd92ec73, type: 2}
+  FrontTarget: {fileID: 0}
+  SideTarget: {fileID: 0}
+  BackTarget: {fileID: 0}
+  isAttacking: 0
+  renderer: {fileID: 8154163575772172619}
 --- !u!114 &-4041397827124426621
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1301,59 +1354,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
---- !u!114 &1595554330
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5520990575442047842}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e8f6284caf3a4a42912c4c6794aa6ae, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  aliveGO: {fileID: 7159810125567551847}
-  player: {fileID: 0}
-  health: 15
-  hitMat: {fileID: 2100000, guid: 8e628ab3673526648b68be922de630f2, type: 2}
-  normalMat: {fileID: 2100000, guid: 6599c9d501513a1498a748906b1d609b, type: 2}
-  healthBar: {fileID: 380591686153994882}
-  entityData: {fileID: 11400000, guid: c1cbb62e315cf384cb992b784e1a3061, type: 2}
-  dmgInvincibilityTime: 0.5
-  sightRange: 20
-  minAttackRange: 0
-  timeBetweenAttacks: 3
-  minAgroRange: 0
-  deathEffect: {fileID: 3017006636548126711, guid: 9fa9cc35f614bf44d8df492ba34ed85b,
-    type: 3}
-  gemPrefab: {fileID: 1679218149131978045, guid: 269ad815a67e12f4d86befaa2ccef290,
-    type: 3}
-  isKnockedBack: 0
-  knockBackStrength: 1000
-  meleeDamage: 3
-  distanceToPlayer: 0
-  agent: {fileID: 0}
-  isStunned: 0
-  isInvincible: 0
-  whatIsPlayer:
-    serializedVersion: 2
-    m_Bits: 256
-  wallCheck: {fileID: 7778884051866706539}
-  ledgeCheck: {fileID: 4632711789486929035}
-  playerCheck: {fileID: 137315583785107152}
-  idleStateData: {fileID: 11400000, guid: ad6d536679f65bb42abeeee9aec99ffb, type: 2}
-  moveStateData: {fileID: 11400000, guid: 1a71dc297e2505841be5f4d340894564, type: 2}
-  playerDetectedData: {fileID: 11400000, guid: 4e3dc916332301948af9deb44b1c44af, type: 2}
-  attackStateData: {fileID: 11400000, guid: 599972f55ca33c14f81b5091a5f9bfe1, type: 2}
-  lookForPlayerStateData: {fileID: 11400000, guid: e606cd28356f66246af372eb98d92e60,
-    type: 2}
-  stunStateData: {fileID: 11400000, guid: c95f607a4d7e30f46a8f1c2acd92ec73, type: 2}
-  FrontTarget: {fileID: 0}
-  SideTarget: {fileID: 0}
-  BackTarget: {fileID: 0}
-  isAttacking: 0
-  renderer: {fileID: 8154163575772172619}
 --- !u!1 &5610550877287887882
 GameObject:
   m_ObjectHideFlags: 0

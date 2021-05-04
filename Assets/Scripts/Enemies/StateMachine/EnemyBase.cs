@@ -14,43 +14,35 @@ public class EnemyBase : MonoBehaviour, IDamageable
     //Shared Functions:
     //Move(), TakeDamage(), Die(), TargetPlayer()
     #region Public Variables
+
+    [Header("Object References")]
     public GameObject aliveGO;
-    public GameObject player;
-    public float health;
-    
-    //public Renderer renderer;
-    //public SkinnedMeshRenderer renderer;
-
-    public Material hitMat;
-    public Material normalMat;
-    
-    //public GameObject firePoint;
-
     public Slider healthBar;
     public D_Entity entityData;
     public FiniteStateMachine stateMachine;
-
-    public float dmgInvincibilityTime = 0.5f;
-    public float sightRange = 20f;
-    public float minAttackRange;
-    //public float maxAttackRange = 20f;
-    public float timeBetweenAttacks = 3f;
-    public float minAgroRange;
     public GameObject deathEffect;
     public GameObject gemPrefab;
 
-    public bool isKnockedBack;
-    public float knockBackStrength = 1000f;
+    [Header("Health & Taking Damage")]
+    public float health;
+    public float dmgInvincibilityTime = 0.25f;
+    public float knockBackStrength = 5f;
+    public Material hitMat;
+    public Material normalMat;
 
+    [Header("Attacking")]
+    public float sightRange = 20f;
+    public float minAgroRange = 20f;
+    public float minAttackRange = 3f;
+    public float timeBetweenAttacks = 3f;
     public float meleeDamage = 3f;
 
-    private Vector3 knockbackDirection;
-    private bool isBeingKnockedBack = false;
-
+    [HideInInspector] public GameObject player;
     [HideInInspector] public float distanceToPlayer;
     [HideInInspector] public NavMeshAgent agent;
     [HideInInspector] public bool isStunned;
     [HideInInspector] public bool isInvincible = false;
+    [HideInInspector] public bool isKnockedBack;
 
     #endregion
 
@@ -80,11 +72,10 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     #region Private Variables
     private float currentStunResistance;
-    private float lastTimeAttacked;
-    
+    private float lastTimeAttacked;    
     private Vector3 velocityWorkspace;
-    
-    //private bool isAttacking = false;
+    private Vector3 knockbackDirection;
+    private bool isBeingKnockedBack = false;
     private bool stopMoving = false;
 
     #endregion
@@ -113,19 +104,14 @@ public class EnemyBase : MonoBehaviour, IDamageable
         currentStunResistance = entityData.stunResistance;
 
         agent = GetComponent<NavMeshAgent>();
-        //RB = aliveGO.GetComponent<Rigidbody>();
         topRB = GetComponent<Rigidbody>();
         Anim = aliveGO.GetComponent<Animator>();
 
-        //find player pos and go to it
-        //SetNewTarget(player);
-        //SetDestination();
-
-        //set health variables
-
+        //Set increased health if gem monster
         if (GetComponent<GemMonster>().isGemMonster)
             health *= GetComponent<GemMonster>().healthMod;
 
+        //set health variables
         Health = health;
         healthBar.maxValue = Health;
         healthBar.value = Health;
@@ -318,7 +304,6 @@ public class EnemyBase : MonoBehaviour, IDamageable
         //sets enemy's color to the hitMat (red)
         //renderer.material = hitMat;
         StartCoroutine(WaitToResetColor());
-
     }
 
     public virtual void ResetColor()
@@ -339,7 +324,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
     {
         //Update the monster count of the room
         MonsterSpawner.Instance.MonsterKilled();
-        Instantiate(deathEffect, transform.position + new Vector3(0, 2, 0), Quaternion.identity);
+        Instantiate(deathEffect, transform.position + new Vector3(0, agent.height/2, 0), Quaternion.identity);
 
         if (GetComponent<GemMonster>().isGemMonster)
             DropGem();

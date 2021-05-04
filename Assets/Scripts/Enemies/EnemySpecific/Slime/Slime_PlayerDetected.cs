@@ -29,6 +29,17 @@ public class Slime_PlayerDetected : PlayerDetectedState
     public override void LogicUpdate()
     {
         base.LogicUpdate();
+
+        if (enemy.CheckPlayerInMinAttackRange())
+        {
+            //switch to attackstate
+            stateMachine.ChangeState(enemy.attackState);
+        }
+        else if (!enemy.CheckPlayerInMinAttackRange())
+        {
+            //if too far away, go to the player
+            stateMachine.ChangeState(enemy.moveState);
+        }
     }
 
     public override void PhysicsUpdate()

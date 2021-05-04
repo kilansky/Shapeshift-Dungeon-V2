@@ -19,6 +19,10 @@ public class Slime_MoveState : MoveState
     public override void Enter()
     {
         base.Enter();
+        //Debug.Log("oh he movin");
+        //Debug.Log("num is equal to " + num);
+
+        entity.SetVelocity(stateData.moveSpeed);
     }
 
     public override void Exit()
@@ -29,10 +33,27 @@ public class Slime_MoveState : MoveState
     public override void LogicUpdate()
     {
         base.LogicUpdate();
+
+        if (enemy.CheckPlayerInMinAgroRange())
+        {
+            //go to player detected state next and have that transistion to attack
+            stateMachine.ChangeState(enemy.playerDetectedState);
+        }
+        if (enemy.CheckPlayerInMinAttackRange())
+        {
+            //Debug.Log("I'm attacking!!");
+            stateMachine.ChangeState(enemy.attackState);
+        }
     }
 
     public override void PhysicsUpdate()
     {
         base.PhysicsUpdate();
+
+        if (!enemy.isKnockedBack)
+            entity.SetDestination();
+
+        //set destination to the player, look check should go here
+        //entity.SetDestination();
     }
 }
