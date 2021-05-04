@@ -130,6 +130,10 @@ public class EnemyBase : MonoBehaviour, IDamageable
         healthBar.maxValue = Health;
         healthBar.value = Health;
 
+        //If the player has the monster mask item then we reduce the speed of the monsters -AHL (5/3/21)
+        if (PlayerController.Instance.hasMonsterMask)
+            agent.speed = agent.speed * 0.85f;            
+
         stateMachine = new FiniteStateMachine();
     }
 
