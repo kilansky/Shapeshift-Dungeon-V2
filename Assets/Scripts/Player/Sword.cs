@@ -33,6 +33,27 @@ public class Sword : MonoBehaviour
             AudioManager.Instance.Play("Hit");
         }
 
+        if (other.GetComponent<MageBoss>())
+        {
+            //Spawn hit effect on enemy
+            Vector3 enemyPos = other.transform.position;
+            Instantiate(hitEffect, new Vector3(enemyPos.x, transform.position.y, enemyPos.z), Quaternion.identity);
+
+            //Apply slight camera shake
+            CineShake.Instance.Shake(1f, 0.1f);
+
+            //Determine dameage to deal based on player's current attack damage
+            float damageToDeal = PlayerController.Instance.CurrAttackDamage;
+
+            if (dealsExtraDamage)//Check to deal additional damage
+                damageToDeal *= PlayerController.Instance.attack3DmgMod;
+
+            //Apply damage to enemy
+            other.GetComponent<MageBoss>().Damage(damageToDeal);
+
+            AudioManager.Instance.Play("Hit");
+        }
+
         if (other.GetComponent<DestructibleProp>())
         {
             //Spawn hit effect
@@ -43,7 +64,7 @@ public class Sword : MonoBehaviour
             CineShake.Instance.Shake(1f, 0.1f);
 
             //Destroy Prop
-            other.GetComponent<DestructibleProp>().DestroyObject();
+            other.GetComponent<DestructibleProp>().ShatterObject();
             AudioManager.Instance.Play("WoodBreak");
         }
 

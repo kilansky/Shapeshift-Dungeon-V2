@@ -16,7 +16,7 @@ public class Sand : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        if(other.gameObject == PlayerController.Instance.gameObject)
+        if(other.GetComponent<PlayerController>())
         {
             //Reduce player speed
             //Debug.Log("Player is on sand");
@@ -26,7 +26,7 @@ public class Sand : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject == PlayerController.Instance.gameObject)
+        if (other.GetComponent<PlayerController>())
         {
             //Set player speed back
             //Debug.Log("Player has exited sand");

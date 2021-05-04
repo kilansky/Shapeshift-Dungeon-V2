@@ -79,7 +79,7 @@ public class MonsterSpawner : SingletonPattern<MonsterSpawner>
         if (LevelManager.Instance.currFloor % 5 != 0)//Check if current floor is not a shop
         {
             //Debug.Log("Starting Floor " + currFloor);
-            AnalyticsEvents.Instance.FloorStarted();//Send Level Rated Analytics Event
+            AnalyticsEvents.Instance.FloorStarted();//Send Floor Started Analytics Event
 
             //Clear the spawn point list of any previously set spawn points
             monsterSpawnPoints.Clear();

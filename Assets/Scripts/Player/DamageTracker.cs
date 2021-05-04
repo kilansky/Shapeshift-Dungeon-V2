@@ -100,6 +100,7 @@ public class DamageTracker : SingletonPattern<DamageTracker>
         }
     }
 
+    /*
     /// <summary>
     /// When the player dies then we display the total amount of damage the player has taken - AHL (4/4/21)
     /// </summary>
@@ -118,9 +119,7 @@ public class DamageTracker : SingletonPattern<DamageTracker>
             "\nThe Amount of Bomb damage the player took was: " + bombDamage +
             "\nThe Amount of Fire Status damage the player took was: " + fireStatusDamage);
 
-        Debug.Log(body);
-
-        try { EMail.Instance.SendEmail(subject, body); }
-        catch { Debug.LogError("Failed to send email feedback"); }    
+        //Debug.Log(body);
     }
+    */
 }

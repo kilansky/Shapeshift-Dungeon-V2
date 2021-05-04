@@ -28,7 +28,7 @@ public class CenterTile : SingletonPattern<CenterTile>
     /// <param name="other"></param>
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Player" && MonsterSpawner.Instance.floorCleared && canTransition)
+        if (other.GetComponent<PlayerController>() && MonsterSpawner.Instance.floorCleared && canTransition)
         {
             onTile = true;
 
@@ -43,7 +43,7 @@ public class CenterTile : SingletonPattern<CenterTile>
     /// <param name="other"></param>
     private void OnTriggerExit(Collider other)
     {
-        if (other.tag == "Player")
+        if (other.GetComponent<PlayerController>())
         {
             onTile = false;
 
