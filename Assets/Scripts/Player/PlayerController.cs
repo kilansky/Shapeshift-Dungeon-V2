@@ -647,6 +647,7 @@ public class PlayerController : SingletonPattern<PlayerController>
         {
             canDash = false;
             isDashing = true;
+            //PlayerAttackController.Instance.ActivateDashHitbox();
 
             animator.SetBool("isDashing", true);
             currMoveSpeed = dashSpeed.Value; //set dash speed
@@ -657,6 +658,7 @@ public class PlayerController : SingletonPattern<PlayerController>
 
             yield return new WaitForSeconds(dashTime.Value); //wait for end of dash & restore base speed
             currMoveSpeed = baseMoveSpeed.Value;
+            //PlayerAttackController.Instance.DeactivateDashHitbox();
             isDashing = false;
 
             yield return new WaitForSeconds(dashCooldownTime.Value); //wait to refresh dash
@@ -1059,12 +1061,14 @@ public class PlayerController : SingletonPattern<PlayerController>
                 HUDController.Instance.controlsPanel.SetActive(false);
                 HUDController.Instance.HideQuickHint();
             }
+            /*
             else if (LevelManager.Instance.currFloor == 19)//End game stuff
             {
                 RunTimer.Instance.IncreaseTimer = false;
                 Time.timeScale = 0;
                 HUDController.Instance.ShowWinScreen();
             }
+            */
             else
             {
                 LevelManager.Instance.TransitionLevel();

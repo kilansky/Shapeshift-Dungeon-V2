@@ -104,6 +104,33 @@ public class LevelManager : SingletonPattern<LevelManager>
         StartCoroutine(WaitForTransition());    
     }
 
+    public void ChangeBossLevel(GameObject nextLevel)
+    {
+        if (isTransitioning)
+        {
+            Debug.LogError("Level is already transitioning!");
+            return;
+        }
+
+        isTransitioning = true;
+
+        nextLevel.SetActive(true);
+
+        CineShake.Instance.Shake(1.5f, 2 * transitionTime + maxStartTime);
+        AudioManager.Instance.Play("Rumble");
+
+        Transform[] allChildrenCurrLevel = activeLevel.GetComponentsInChildren<Transform>(); //Puts all tiles into an array
+        foreach (Transform tile in allChildrenCurrLevel) //Cycles through all tiles in the newly created array
+        {
+            if (tile.GetComponent<Tile>()) //If the object selected is a tile
+            {
+                tile.GetComponent<Tile>().DoTransition(transitionTime, Random.Range(minStartTime, maxStartTime)); //Runs the function to initiate a transition
+            }
+        }
+
+        StartCoroutine(WaitForTransition());
+    }
+
     /// <summary>
     /// Loads in the next level based on the list of levels available
     /// </summary>

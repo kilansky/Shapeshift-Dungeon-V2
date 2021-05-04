@@ -7,6 +7,7 @@ public class PlayerAttackController : SingletonPattern<PlayerAttackController>
     [Header("Hitboxes")]
     [SerializeField] private GameObject slashHitbox; //GameObject to hold slash attack hitbox
     [SerializeField] private GameObject thrustHitbox; //GameObject to hold thrust attack hitbox
+    [SerializeField] private GameObject dashHitbox; //GameObject to hold dash attack hitbox
     [SerializeField] private GameObject radialHitbox; //GameObject to hold radial attack hitbox
     [SerializeField] private GameObject swordImpactPoint; //GameObject to hold point of impact on third attack
     [SerializeField] private bool showHitboxes = false;
@@ -77,6 +78,17 @@ public class PlayerAttackController : SingletonPattern<PlayerAttackController>
         StartCoroutine(LerpRadialHitbox());
     }
 
+    //Activate the dash hitbox - called from attack animation event
+    public void ActivateDashHitbox()
+    {
+        DeactivateDashHitbox();
+
+        dashHitbox.GetComponent<CapsuleCollider>().enabled = true;
+
+        if (showHitboxes)
+            dashHitbox.GetComponent<MeshRenderer>().enabled = true;
+    }
+
     //Scales a circular wave of damage to hit enemies in a radius
     private IEnumerator LerpRadialHitbox()
     {
@@ -131,6 +143,15 @@ public class PlayerAttackController : SingletonPattern<PlayerAttackController>
 
         if (showHitboxes)
             thrustHitbox.GetComponent<MeshRenderer>().enabled = false;
+    }
+
+    //Disable the dash hitbox - called from attack animation event
+    public void DeactivateDashHitbox()
+    {
+        dashHitbox.GetComponent<CapsuleCollider>().enabled = false;
+
+        if (showHitboxes)
+            dashHitbox.GetComponent<MeshRenderer>().enabled = false;
     }
 
     public void DeactivateAllHitboxes()
