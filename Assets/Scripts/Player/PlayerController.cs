@@ -36,16 +36,14 @@ public class PlayerController : SingletonPattern<PlayerController>
 
     [Header("Charge Attack Stats")]
     public GameObject chargeArrow; //GameObject to hold the arrow underneath the player during charge attacks
-    public float timeToFullCharge = 1.25f;
+    public PlayerStats timeToFullCharge; //ItemsEquipment for the Charge Attack Time
+    //public float timeToFullCharge = 1.25f;
     public float minChargeSpeed = 20f;
     public float maxChargeSpeed = 35f;
     public float chargeDeceleration = 55f;
     public float chargeCooldownTime = 0.2f;
     public float minChargeDmgModifier;
     public PlayerStats chargeDmgModifier; //ItemsEquipment for Dash Damage Modifier
-
-    //OBSOLETE: Use timeToFullCharge instead
-    public PlayerStats chargeRate; //ItemsEquipment for Charge Attack Time
 
     [Header("Special Stats")]
     public float useSpecialTime = 0.5f;

@@ -124,6 +124,8 @@ public class EnemyBase : MonoBehaviour, IDamageable
             if (PlayerController.Instance.hasMonsterMask)
                 agent.speed = agent.speed * 0.85f;
 
+            //SetNewTarget();
+
             stateMachine = new FiniteStateMachine();
         }
     }
