@@ -50,6 +50,7 @@ public class LevelManager : SingletonPattern<LevelManager>
     public GameObject navMeshHazards;
 
     private bool isTransitioning = false;
+    private bool isPlayingBossMusic = false;
     private int enemiesRemaining;
 
     /// <summary>
@@ -231,7 +232,9 @@ public class LevelManager : SingletonPattern<LevelManager>
     /// <returns></returns>
     private IEnumerator WaitForTransition()
     {
-        MusicManager.Instance.FadeOut(0f, 1.5f * transitionTime + maxStartTime);
+        if(!isPlayingBossMusic)
+            MusicManager.Instance.FadeOut(0f, 1.5f * transitionTime + maxStartTime);
+
         yield return new WaitForSeconds(2 * transitionTime + maxStartTime);
         //Debug.Log("TransitionComplete!");
         isTransitioning = false; //Sets boolean back to false so transition can occur again
@@ -261,10 +264,18 @@ public class LevelManager : SingletonPattern<LevelManager>
         }
         else if (currFloor < 5)
             MusicManager.Instance.ExoticDangers();
-        else if (currFloor >= 11)
-            MusicManager.Instance.DungeonDestruction();
-        else
+        else if (currFloor >= 6 && currFloor <= 9)
             MusicManager.Instance.DungeonDecoration();
+        else if (currFloor >= 11 && currFloor <= 19)
+            MusicManager.Instance.DungeonDestruction();
+        else if(!isPlayingBossMusic)
+        {
+            isPlayingBossMusic = true;
+            MusicManager.Instance.DungeonDestruction();
+        }
+
+        if(GameObject.FindObjectOfType<MageBoss>())
+            GameObject.FindObjectOfType<MageBoss>().startBossFight = true;
 
         //Debug.Log("Current map is: " + currMapName);
     }
