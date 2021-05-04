@@ -2,20 +2,32 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Swipe : MonoBehaviour
+public class EnemyAttack : MonoBehaviour
 {
-    private Goblin enemy;
-
+    [Header("Attack Hitbox")]
     public GameObject hitbox;
-    //private MeshCollider hit;
-
-    public Animator attackAnim;
-
     public bool showHitBoxes = false;
+
+    private Goblin goblinEnemy;
+    private Skeleton skeletonEnemy;
+    private Slime slimeEnemy;
+    private Worm wormEnemy;
+    private Animator attackAnim;
 
     private void Start()
     {
-        enemy = transform.parent.GetComponent<Goblin>();
+        if (transform.parent.GetComponent<Goblin>())
+            goblinEnemy = transform.parent.GetComponent<Goblin>();
+
+        if (transform.parent.GetComponent<Skeleton>())
+            skeletonEnemy = transform.parent.GetComponent<Skeleton>();
+
+        if (transform.parent.GetComponent<Slime>())
+            slimeEnemy = transform.parent.GetComponent<Slime>();
+
+        if (transform.parent.GetComponent<Worm>())
+            wormEnemy = transform.parent.GetComponent<Worm>();
+
         attackAnim = GetComponent<Animator>();
     }
 
@@ -47,26 +59,21 @@ public class Swipe : MonoBehaviour
         StartCoroutine(WaitToEnableAttack());
     }
 
-    /*private void OnTriggerEnter(Collider other)
-    {
-        if (other.GetComponent<PlayerController>())
-        {
-
-            StartCoroutine(SlashBox());
-            //Determine dameage to deal based on player's current attack damage
-            float damageToDeal = PlayerController.Instance.CurrAttackDamage;
-            //float damageDealt = Goblin.;
-
-            //Apply damage to player
-            //other.GetComponent<PlayerHealth>().Damage(damageDealt);
-        }
-    }*/
-
     IEnumerator WaitToEnableAttack()
     {   
         yield return new WaitForSeconds(0.5f);
         
-        enemy.isAttacking = false;
+        if(goblinEnemy)
+            goblinEnemy.isAttacking = false;
+
+        if (skeletonEnemy)
+            skeletonEnemy.isAttacking = false;
+
+        if (slimeEnemy)
+            slimeEnemy.isAttacking = false;
+
+        if (wormEnemy)
+            wormEnemy.isAttacking = false;
     }
 
 }

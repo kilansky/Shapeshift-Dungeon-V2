@@ -466,7 +466,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hitbox: {fileID: 4675398819247505427}
-  attackAnim: {fileID: 0}
   showHitBoxes: 1
 --- !u!1 &1505843469635240261
 GameObject:
@@ -1526,7 +1525,7 @@ GameObject:
   - component: {fileID: 8542946155484846687}
   - component: {fileID: 4173978942226686056}
   - component: {fileID: 2653816522581271204}
-  m_Layer: 14
+  m_Layer: 0
   m_Name: SlashHitbox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2798,7 +2797,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hitEffect: {fileID: 331117896044982230, guid: 91d53d334422de047bf7b67c77b295ba,
     type: 3}
-  hasTorch: 1
+  appliesFireStatus: 1
 --- !u!1 &4928127076188830255
 GameObject:
   m_ObjectHideFlags: 0

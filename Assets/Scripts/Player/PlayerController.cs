@@ -647,7 +647,10 @@ public class PlayerController : SingletonPattern<PlayerController>
         {
             canDash = false;
             isDashing = true;
-            //PlayerAttackController.Instance.ActivateDashHitbox();
+            
+            //If the player has the Spiked Boots equipped then we actiivate the dash hitbox - AHL (5/3/21)
+            if(FootSlot != null && FootSlot.ItemName == "Spiked Boots")
+                PlayerAttackController.Instance.ActivateDashHitbox();
 
             animator.SetBool("isDashing", true);
             currMoveSpeed = dashSpeed.Value; //set dash speed
@@ -658,7 +661,11 @@ public class PlayerController : SingletonPattern<PlayerController>
 
             yield return new WaitForSeconds(dashTime.Value); //wait for end of dash & restore base speed
             currMoveSpeed = baseMoveSpeed.Value;
-            //PlayerAttackController.Instance.DeactivateDashHitbox();
+            
+            //Deactivates Spiked Boots if they are active
+            if(FootSlot != null && FootSlot.ItemName == "Spiked Boots")
+                PlayerAttackController.Instance.DeactivateDashHitbox();
+            
             isDashing = false;
 
             yield return new WaitForSeconds(dashCooldownTime.Value); //wait to refresh dash
@@ -1140,6 +1147,8 @@ public class PlayerController : SingletonPattern<PlayerController>
 
                 Destroy(other.gameObject); //Destroy the instance of the item in the gamescene
                 pickupItem = false; //Set pickup to false
+                touchingItem = false;
+                canAffordItem = false;
 
                 PedestalManager.Instance.DeactivatePedestals();
             }
@@ -1151,6 +1160,7 @@ public class PlayerController : SingletonPattern<PlayerController>
         if (other.tag == "Item")
         {
             touchingItem = false;
+            canAffordItem = false;
             HUDController.Instance.HideQuickHint();
         }
     }

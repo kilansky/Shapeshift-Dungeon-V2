@@ -118,6 +118,7 @@ public class Bullet : MonoBehaviour
 
     private void DestroyBullet()
     {
+        //Remove this bullet from the mage boss's ring of projectiles if relevant
         if(parentObject.GetComponent<MageBoss>() && parentObject.GetComponent<MageBoss>().unfiredProjectiles.Count > 0)
             parentObject.GetComponent<MageBoss>().unfiredProjectiles.Remove(gameObject);
 

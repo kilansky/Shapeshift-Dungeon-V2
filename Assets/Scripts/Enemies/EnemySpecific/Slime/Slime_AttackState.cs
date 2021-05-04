@@ -18,7 +18,7 @@ public class Slime_AttackState : AttackState
 
     public override void Enter()
     {
-        base.Enter();
+
     }
 
     public override void Exit()
@@ -29,6 +29,18 @@ public class Slime_AttackState : AttackState
     public override void LogicUpdate()
     {
         base.LogicUpdate();
+
+        if (enemy.CheckPlayerInMinAttackRange() && !enemy.isAttacking)
+        {
+            //TODO double check logic here 
+            base.Enter();//Trigger Attack and stop movement
+            enemy.isAttacking = true;
+        }
+        else
+        {
+            //stateMachine.ChangeState(enemy.moveState);
+            stateMachine.ChangeState(enemy.lookForPlayerState);
+        }
     }
 
     public override void PhysicsUpdate()
@@ -39,5 +51,7 @@ public class Slime_AttackState : AttackState
     public override void TriggerAttack()
     {
         base.TriggerAttack();
+
+        enemy.Anim.SetBool("isAttacking", true);
     }
 }

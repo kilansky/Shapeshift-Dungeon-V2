@@ -20,9 +20,12 @@ public class Pit : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.GetComponent<PlayerController>())
+        if (other.GetComponent<PlayerController>())
         {
             FindSafeTile.Instance.MovePlayerToSafeLocation(pitDamage);
         }
+
+        else if (other.name == "Bowling Ball Pit Checker")
+            StartCoroutine(other.GetComponentInParent<BowllingAttack>().ballOverPit());
     }
 }

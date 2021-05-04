@@ -5,7 +5,7 @@ using UnityEngine;
 public class EnemyHitBox : MonoBehaviour
 {
     public GameObject hitEffect;
-    public bool hasTorch = false;
+    public bool appliesFireStatus = false;
     //public bool dealsExtraDamage; //deals extra damage based on player's attack3 dmg mod if true
 
     private void OnTriggerEnter(Collider other)
@@ -23,7 +23,7 @@ public class EnemyHitBox : MonoBehaviour
             float damageToDeal = transform.parent.GetComponent<EnemyBase>().meleeDamage;
 
             //Set player on fire if this enemy is holding a torch
-            if (hasTorch)
+            if (appliesFireStatus)
             {
                 damageToDeal--;
                 other.GetComponent<StatusEffects>().fireStatus(4);

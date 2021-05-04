@@ -1005,6 +1005,7 @@ GameObject:
   - component: {fileID: 8217349250977208565}
   - component: {fileID: 8590171296834704643}
   - component: {fileID: 2215489342663547587}
+  - component: {fileID: 1372510458404440855}
   m_Layer: 11
   m_Name: MageBoss
   m_TagString: Monster
@@ -1083,13 +1084,12 @@ MonoBehaviour:
   attack2RotateSpeed: 7
   magicProjectile: {fileID: 6239542489288251911, guid: 595935f1d48fe274a843e6ba8bd6bdca,
     type: 3}
-  minTeleportRange: 15
-  maxTeleportRange: 30
-  minTeleportRangeFromPlayer: 15
-  maxTeleportRangeFromPlayer: 30
   timeToTeleportAgain: 12
   teleportParticles: {fileID: 8643698998942811136, guid: 5180ce9297df1bf4ea34944a992e43b9,
     type: 3}
+  phaseChange1: 0.75
+  phaseChange2: 0.4
+  phaseChange3: 0.1
   firePoints1:
   - {fileID: 8721209085376629787}
   - {fileID: 5079101217682560343}
@@ -1107,10 +1107,53 @@ MonoBehaviour:
   aliveMage: {fileID: 380136001807200258}
   deathEffect: {fileID: 3017006636548126711, guid: 9fa9cc35f614bf44d8df492ba34ed85b,
     type: 3}
+  phase2Map: {fileID: 0}
+  phase3Map: {fileID: 0}
+  phase4Map: {fileID: 0}
   unfiredProjectiles: []
   distanceToPlayer: 0
   isStunned: 0
   isInvincible: 0
+  startBossFight: 0
+--- !u!114 &1372510458404440855
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7358188539282161565}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e6fb77cb02e2084da3c8b8244744041, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  aliveGO: {fileID: 0}
+  healthBar: {fileID: 0}
+  entityData: {fileID: 0}
+  deathEffect: {fileID: 0}
+  gemPrefab: {fileID: 0}
+  health: 0
+  dmgInvincibilityTime: 0.25
+  knockBackStrength: 5
+  hitMat: {fileID: 0}
+  normalMat: {fileID: 0}
+  sightRange: 20
+  minAgroRange: 20
+  minAttackRange: 3
+  timeBetweenAttacks: 3
+  meleeDamage: 3
+  player: {fileID: 0}
+  distanceToPlayer: 0
+  agent: {fileID: 0}
+  isStunned: 0
+  isInvincible: 0
+  isKnockedBack: 0
+  whatIsPlayer:
+    serializedVersion: 2
+    m_Bits: 0
+  wallCheck: {fileID: 0}
+  ledgeCheck: {fileID: 0}
+  playerCheck: {fileID: 0}
 --- !u!1 &7987665738615705953
 GameObject:
   m_ObjectHideFlags: 0
