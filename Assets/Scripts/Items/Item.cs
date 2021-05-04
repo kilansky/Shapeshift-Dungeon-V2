@@ -280,8 +280,8 @@ public class Item : MonoBehaviour
                 if ((int)item.statMods[i].statModifier == 300)
                     c.timeToFullCharge.AddModifiers(new StatModifier(item.statMods[i].adjustableValue, StatModType.PercentMult, item.prefab));
 
-                Debug.Log("This item " + item.ItemName + " has been equipped so Charge Attack Time has been adjusted.");
-                Debug.Log("The new Charge Attack Time is " + c.timeToFullCharge.Value);
+                //Debug.Log("This item " + item.ItemName + " has been equipped so Charge Attack Time has been adjusted.");
+                //Debug.Log("The new Charge Attack Time is " + c.timeToFullCharge.Value);
             }
 
             //Attack Knockback Adjustment
