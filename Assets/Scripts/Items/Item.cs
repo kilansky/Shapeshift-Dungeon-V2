@@ -270,18 +270,18 @@ public class Item : MonoBehaviour
             {
                 //Flat Value
                 if ((int)item.statMods[i].statModifier == 100)
-                    c.chargeRate.AddModifiers(new StatModifier(item.statMods[i].adjustableValue, StatModType.Flat, item.prefab));
+                    c.timeToFullCharge.AddModifiers(new StatModifier(item.statMods[i].adjustableValue, StatModType.Flat, item.prefab));
 
                 //Percent Add Value
                 if ((int)item.statMods[i].statModifier == 200)
-                    c.chargeRate.AddModifiers(new StatModifier(item.statMods[i].adjustableValue, StatModType.PercentAdd, item.prefab));
+                    c.timeToFullCharge.AddModifiers(new StatModifier(item.statMods[i].adjustableValue, StatModType.PercentAdd, item.prefab));
 
                 //Percent Mult Value
                 if ((int)item.statMods[i].statModifier == 300)
-                    c.chargeRate.AddModifiers(new StatModifier(item.statMods[i].adjustableValue, StatModType.PercentMult, item.prefab));
+                    c.timeToFullCharge.AddModifiers(new StatModifier(item.statMods[i].adjustableValue, StatModType.PercentMult, item.prefab));
 
-                //Debug.Log("This item " + item.ItemName + " has been equipped so Charge Attack Time has been adjusted.");
-                //Debug.Log("The new Charge Attack Time is " + c.chargeRate.Value);
+                Debug.Log("This item " + item.ItemName + " has been equipped so Charge Attack Time has been adjusted.");
+                Debug.Log("The new Charge Attack Time is " + c.timeToFullCharge.Value);
             }
 
             //Attack Knockback Adjustment
@@ -466,7 +466,7 @@ public class Item : MonoBehaviour
             //Charge Attack Time Adjustment
             else if ((int)item.statMods[i].statType == 5)
             {
-                c.chargeRate.RemoveAllModifiersFromSource(item.prefab);
+                c.timeToFullCharge.RemoveAllModifiersFromSource(item.prefab);
                 //Debug.Log("This item " + item.ItemName + " has been removed so Charge Attack Time has been adjusted.");
                 //Debug.Log("The new Charge Attack Time is " + c.chargeRate.Value);
             }

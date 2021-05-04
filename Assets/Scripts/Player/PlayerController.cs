@@ -37,7 +37,6 @@ public class PlayerController : SingletonPattern<PlayerController>
     [Header("Charge Attack Stats")]
     public GameObject chargeArrow; //GameObject to hold the arrow underneath the player during charge attacks
     public PlayerStats timeToFullCharge; //ItemsEquipment for the Charge Attack Time
-    //public float timeToFullCharge = 1.25f;
     public float minChargeSpeed = 20f;
     public float maxChargeSpeed = 35f;
     public float chargeDeceleration = 55f;
@@ -778,17 +777,17 @@ public class PlayerController : SingletonPattern<PlayerController>
         float timeElapsed = 0;
         while (isCharging) //Increase charge speed & arrow UI until button is released
         {
-            chargeSpeed = Mathf.Lerp(minChargeSpeed, maxChargeSpeed, timeElapsed / timeToFullCharge);
-            currAttackDamage = Mathf.Lerp(baseAttackDamage.Value * minChargeDmgModifier, baseAttackDamage.Value * chargeDmgModifier.Value, timeElapsed / timeToFullCharge);
+            chargeSpeed = Mathf.Lerp(minChargeSpeed, maxChargeSpeed, timeElapsed / timeToFullCharge.Value);
+            currAttackDamage = Mathf.Lerp(baseAttackDamage.Value * minChargeDmgModifier, baseAttackDamage.Value * chargeDmgModifier.Value, timeElapsed / timeToFullCharge.Value);
 
-            arrowLength = Mathf.Lerp(0.5f, 3.5f, timeElapsed / timeToFullCharge);
-            arrowWidth = Mathf.Lerp(0.8f, 1.2f, timeElapsed / timeToFullCharge);
+            arrowLength = Mathf.Lerp(0.5f, 3.5f, timeElapsed / timeToFullCharge.Value);
+            arrowWidth = Mathf.Lerp(0.8f, 1.2f, timeElapsed / timeToFullCharge.Value);
             chargeArrow.transform.localScale = new Vector3(arrowWidth, arrowLength, arrowWidth);
 
             timeElapsed += Time.deltaTime;
-            if (timeElapsed > timeToFullCharge)
+            if (timeElapsed > timeToFullCharge.Value)
             {
-                timeElapsed = timeToFullCharge;
+                timeElapsed = timeToFullCharge.Value;
                 chargeSpeed = maxChargeSpeed;
                 currAttackDamage = baseAttackDamage.Value * chargeDmgModifier.Value;
             }

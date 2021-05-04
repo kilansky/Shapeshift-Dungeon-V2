@@ -7468,7 +7468,8 @@ MonoBehaviour:
   attackSpeedMod: 0.3
   attack3DmgMod: 1.3
   chargeArrow: {fileID: 1484773621025215269}
-  timeToFullCharge: 1.2
+  timeToFullCharge:
+    BaseValue: 1.25
   minChargeSpeed: 20
   maxChargeSpeed: 35
   chargeDeceleration: 65
@@ -7476,8 +7477,6 @@ MonoBehaviour:
   minChargeDmgModifier: 0.5
   chargeDmgModifier:
     BaseValue: 1.5
-  chargeRate:
-    BaseValue: 12
   useSpecialTime: 0
   specialCooldownTime:
     BaseValue: 0
@@ -7500,6 +7499,7 @@ MonoBehaviour:
   canAffordItem: 0
   hasRedHerb: 0
   hasBagOfHolding: 0
+  hasMonsterMask: 0
   isItemSwapping: 0
   canUseSpecial: 1
   specialCharge2: 0
@@ -18656,7 +18656,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6827406435000022443}
   m_LocalRotation: {x: 0.46174863, y: -0, z: -0, w: 0.8870109}
-  m_LocalPosition: {x: 0, y: 16.787977, z: -7.886135}
+  m_LocalPosition: {x: 0, y: 16.787977, z: -7.8861313}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6827406435602002682}
@@ -18924,7 +18924,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6827406435918421407}
   m_LocalRotation: {x: 0.46174863, y: -0, z: -0, w: 0.8870109}
-  m_LocalPosition: {x: 0, y: 16.787977, z: -7.886135}
+  m_LocalPosition: {x: 0, y: 16.787977, z: -7.8861313}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6900241166240612964}
