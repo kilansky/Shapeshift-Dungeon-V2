@@ -774,13 +774,23 @@ public class PlayerController : SingletonPattern<PlayerController>
         float chargeSpeed = minChargeSpeed;
         currAttackDamage = baseAttackDamage.Value * minChargeDmgModifier;
 
+        //If the player has the Cloak of Darkness equipped then we adjust the max charge speed 
+        if (TorsoSlot != null && TorsoSlot.ItemName == "Cloak of Darkness")
+            maxChargeSpeed = 42f;
+
         float timeElapsed = 0;
         while (isCharging) //Increase charge speed & arrow UI until button is released
         {
             chargeSpeed = Mathf.Lerp(minChargeSpeed, maxChargeSpeed, timeElapsed / timeToFullCharge.Value);
             currAttackDamage = Mathf.Lerp(baseAttackDamage.Value * minChargeDmgModifier, baseAttackDamage.Value * chargeDmgModifier.Value, timeElapsed / timeToFullCharge.Value);
 
-            arrowLength = Mathf.Lerp(0.5f, 3.5f, timeElapsed / timeToFullCharge.Value);
+            //If the player has the Cloak of Darkness equipped then we adjust the arrow length 
+            if (TorsoSlot != null && TorsoSlot.ItemName == "Cloak of Darkness")
+                arrowLength = Mathf.Lerp(0.5f, 5f, timeElapsed / timeToFullCharge.Value);
+
+            else
+                arrowLength = Mathf.Lerp(0.5f, 3.5f, timeElapsed / timeToFullCharge.Value);
+            
             arrowWidth = Mathf.Lerp(0.8f, 1.2f, timeElapsed / timeToFullCharge.Value);
             chargeArrow.transform.localScale = new Vector3(arrowWidth, arrowLength, arrowWidth);
 
