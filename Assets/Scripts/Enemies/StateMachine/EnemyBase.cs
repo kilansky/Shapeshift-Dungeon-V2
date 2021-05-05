@@ -55,7 +55,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
     public float FacingDirection { get; private set; }
     public float Health { get; set; }
     #endregion
-    
+
     #region Serialize Fields
     [SerializeField]
     public LayerMask whatIsPlayer;
@@ -72,7 +72,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     #region Private Variables
     private float currentStunResistance;
-    private float lastTimeAttacked;    
+    private float lastTimeAttacked;
     private Vector3 velocityWorkspace;
     private Vector3 knockbackDirection;
     private bool isBeingKnockedBack = false;
@@ -120,6 +120,11 @@ public class EnemyBase : MonoBehaviour, IDamageable
             Health = health;
             healthBar.maxValue = Health;
             healthBar.value = Health;
+
+            if (PlayerController.Instance.hasMonsterMask)
+                agent.speed = agent.speed * 0.85f;
+
+            //SetNewTarget();
 
             stateMachine = new FiniteStateMachine();
         }
@@ -279,7 +284,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
             if (GetComponent<GemMonster>().isGemMonster)
                 DropGem();
 
-            //Destroy self from root object 
+            //Destroy self from root object
             Destroy(transform.root.gameObject);
         }
     }
@@ -309,7 +314,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
             //target the player
             agent.SetDestination(target.position);
         }
-        #region turn variables 
+        #region turn variables
         //make sure the enemy faces the player
         //this will be the same for all enemies
         //Vector3 direction = (target.position - transform.position).normalized;

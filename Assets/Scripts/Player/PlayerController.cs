@@ -36,16 +36,13 @@ public class PlayerController : SingletonPattern<PlayerController>
 
     [Header("Charge Attack Stats")]
     public GameObject chargeArrow; //GameObject to hold the arrow underneath the player during charge attacks
-    public float timeToFullCharge = 1.25f;
+    public PlayerStats timeToFullCharge; //ItemsEquipment for the Charge Attack Time
     public float minChargeSpeed = 20f;
     public float maxChargeSpeed = 35f;
     public float chargeDeceleration = 55f;
     public float chargeCooldownTime = 0.2f;
     public float minChargeDmgModifier;
     public PlayerStats chargeDmgModifier; //ItemsEquipment for Dash Damage Modifier
-
-    //OBSOLETE: Use timeToFullCharge instead
-    public PlayerStats chargeRate; //ItemsEquipment for Charge Attack Time
 
     [Header("Special Stats")]
     public float useSpecialTime = 0.5f;
@@ -76,6 +73,7 @@ public class PlayerController : SingletonPattern<PlayerController>
     public bool canAffordItem = false; //Variable to see if player can afford an item -Justin
     [HideInInspector] public bool hasRedHerb = false; //Variable to make sure that the player has the red herb (makes for less checking of both pocker slots) so they are able to regain health when they start a new level
     [HideInInspector] public bool hasBagOfHolding = false; //Variable to make sure that the player has the bag of holding item (makes for less checking of both pocker slots) so they are able to store/swap special items
+    [HideInInspector] public bool hasMonsterMask = false; //Variable to check for the Monster Mask item to make it easier to search for by the enemies when they spawn
     [HideInInspector] public bool isItemSwapping = false; //Variable to be used to check if the itms are currently being swapped or not
     [HideInInspector] public bool canUseSpecial = true; //Keeps track of if the special item can be used
     [HideInInspector] public float specialCharge2 = 0; //Varaible to hold the special charge of the item in the bag of holding
@@ -776,20 +774,30 @@ public class PlayerController : SingletonPattern<PlayerController>
         float chargeSpeed = minChargeSpeed;
         currAttackDamage = baseAttackDamage.Value * minChargeDmgModifier;
 
+        //If the player has the Cloak of Darkness equipped then we adjust the max charge speed 
+        if (TorsoSlot != null && TorsoSlot.ItemName == "Cloak of Darkness")
+            maxChargeSpeed = 42f;
+
         float timeElapsed = 0;
         while (isCharging) //Increase charge speed & arrow UI until button is released
         {
-            chargeSpeed = Mathf.Lerp(minChargeSpeed, maxChargeSpeed, timeElapsed / timeToFullCharge);
-            currAttackDamage = Mathf.Lerp(baseAttackDamage.Value * minChargeDmgModifier, baseAttackDamage.Value * chargeDmgModifier.Value, timeElapsed / timeToFullCharge);
+            chargeSpeed = Mathf.Lerp(minChargeSpeed, maxChargeSpeed, timeElapsed / timeToFullCharge.Value);
+            currAttackDamage = Mathf.Lerp(baseAttackDamage.Value * minChargeDmgModifier, baseAttackDamage.Value * chargeDmgModifier.Value, timeElapsed / timeToFullCharge.Value);
 
-            arrowLength = Mathf.Lerp(0.5f, 3.5f, timeElapsed / timeToFullCharge);
-            arrowWidth = Mathf.Lerp(0.8f, 1.2f, timeElapsed / timeToFullCharge);
+            //If the player has the Cloak of Darkness equipped then we adjust the arrow length 
+            if (TorsoSlot != null && TorsoSlot.ItemName == "Cloak of Darkness")
+                arrowLength = Mathf.Lerp(0.5f, 5f, timeElapsed / timeToFullCharge.Value);
+
+            else
+                arrowLength = Mathf.Lerp(0.5f, 3.5f, timeElapsed / timeToFullCharge.Value);
+            
+            arrowWidth = Mathf.Lerp(0.8f, 1.2f, timeElapsed / timeToFullCharge.Value);
             chargeArrow.transform.localScale = new Vector3(arrowWidth, arrowLength, arrowWidth);
 
             timeElapsed += Time.deltaTime;
-            if (timeElapsed > timeToFullCharge)
+            if (timeElapsed > timeToFullCharge.Value)
             {
-                timeElapsed = timeToFullCharge;
+                timeElapsed = timeToFullCharge.Value;
                 chargeSpeed = maxChargeSpeed;
                 currAttackDamage = baseAttackDamage.Value * chargeDmgModifier.Value;
             }
