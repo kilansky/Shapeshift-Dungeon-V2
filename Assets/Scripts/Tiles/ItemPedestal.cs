@@ -49,6 +49,7 @@ public class ItemPedestal : MonoBehaviour
     {       
         if(isRandom) //Checks if pedestal is set to spawn random item
         {
+            /*----------Removed code to randomly spawn potions/gem bags after floor 5----------  -Sky
             if(LevelManager.Instance.currFloor >= 5) //Checks if the current level is passed floor 5
             {
                 int rnd = Random.Range(0, 100); //If it is, rolls for percent chance on drops. 15% for small potion, 15% for gem pouch, and 70% chance for random item
@@ -64,11 +65,13 @@ public class ItemPedestal : MonoBehaviour
                     item = Instantiate(ItemPool.Instance.randomItemSpawn().prefab, transform.position + new Vector3(0, 7.2f, 0), transform.rotation, transform);
             }
             else //If it isn't passed floor 5 yet, spawns a random item
-                item = Instantiate(ItemPool.Instance.randomItemSpawn().prefab, transform.position + new Vector3(0, 7.2f, 0), transform.rotation, transform);
+            */
+
+            item = Instantiate(ItemPool.Instance.randomItemSpawn().prefab, transform.position + new Vector3(0, 7.2f, 0), transform.rotation, transform);
         }
-        else //If pedestal is not a random pedestal, it spawns a stat potion
+        else //If pedestal is not a random pedestal, it spawns a gem bag
         {
-            item = Instantiate(ItemPool.Instance.statPotion.prefab, transform.position + new Vector3(0, 7.2f, 0), transform.rotation, transform);
+            item = Instantiate(ItemPool.Instance.gemBag.prefab, transform.position + new Vector3(0, 7.2f, 0), transform.rotation, transform);
         }
     }
 

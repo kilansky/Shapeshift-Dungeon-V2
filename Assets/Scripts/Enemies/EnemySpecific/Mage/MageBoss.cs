@@ -383,19 +383,6 @@ public class MageBoss : MonoBehaviour, IDamageable
 
     public void Teleport()
     {
-        //teleport to a semi-random safe tile in the room 
-        /*
-        Transform safeTeleportTile = FindSafeTeleportTile();
-
-        if(safeTeleportTile)
-        {
-            GameObject vfx = Instantiate(teleportParticles, transform.position + new Vector3(0, 1.5f, 0), Quaternion.identity);
-            Destroy(vfx, 2f);
-
-            Vector3 teleportPos = safeTeleportTile.position + new Vector3(0f, 5f, 0f);
-            transform.position = teleportPos;
-        }
-        */
         isAttacking = false;
         stunTimeRemaining = 0;
 
@@ -533,37 +520,6 @@ public class MageBoss : MonoBehaviour, IDamageable
 
         transform.position = hiddenTeleportPoint;
     }
-
-    /*
-    private Transform FindSafeTeleportTile()
-    {
-        List<Tile> tiles = new List<Tile>();
-        foreach (Tile tile in GameObject.FindObjectsOfType<Tile>())
-        {
-            //Check if the tile is safe to stand on
-            if(tile.tileType == Tile.tileTypes.stone || tile.tileType == Tile.tileTypes.dirt || tile.tileType == Tile.tileTypes.stoneGrass || tile.tileType == Tile.tileTypes.dirtGrass)
-            {
-                float distToTile = Vector3.Distance(transform.position, tile.transform.position);
-                float playerDistToTile = Vector3.Distance(player.transform.position, tile.transform.position);
-
-                //Check if the distance to this new tile is far from the mage, and within a certain range of the player
-                if((distToTile > minTeleportRange && distToTile < maxTeleportRange) && (playerDistToTile > minTeleportRangeFromPlayer && playerDistToTile < maxTeleportRangeFromPlayer))
-                    tiles.Add(tile); //Add this tile to the list of potential safe tiles to teleport to
-            }
-        }
-
-        if(tiles.Count == 0)
-            Debug.LogError("Mage attempted to teleport but found no valid tiles");
-        else
-        {
-            Debug.Log("Mage found " + tiles.Count + " safe tiles to teleport to");
-            int randTileIndex = Random.Range(0, tiles.Count);
-            return tiles[randTileIndex].transform;
-        }
-
-        return null;
-    }
-    */
 
     //================================================================
     //---------------------Phases & Shapeshifting---------------------

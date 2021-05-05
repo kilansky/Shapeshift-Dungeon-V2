@@ -16,7 +16,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &7277066439716082263
 Transform:
   m_ObjectHideFlags: 0
@@ -114,6 +114,7 @@ MonoBehaviour:
   activeLevel: {fileID: 1062277893805341967}
   forceLevelOne: {fileID: 0}
   disableSpawning: 0
+  currFloor: 0
   levelSet1:
   - {fileID: 0}
   - {fileID: 0}
@@ -141,7 +142,8 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  levelSet5: []
+  levelSet5:
+  - {fileID: 0}
   levelSet6: []
   shop1: {fileID: 0}
   shop2: {fileID: 0}
@@ -149,7 +151,7 @@ MonoBehaviour:
   shop4: {fileID: 0}
   shop5: {fileID: 0}
   shop6: {fileID: 0}
-  currFloor: 0
+  levelsCompleted: 0
   currMapName: 
   transitionTime: 2
   minStartTime: 0
@@ -296,20 +298,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   items:
-  - {fileID: 11400000, guid: 638e2da528d1b10499ed81901d13d159, type: 2}
-  - {fileID: 11400000, guid: bbcd2f06a0d4fd2458fb15ca84657eeb, type: 2}
-  - {fileID: 11400000, guid: 1a21aebb2c2e6674489c0a036fe69db1, type: 2}
-  - {fileID: 11400000, guid: 0e4fdd9f741c2eb4686b858ff0015a7a, type: 2}
-  - {fileID: 11400000, guid: 83f8b6d705702d84da5fdeb1777ab80f, type: 2}
-  - {fileID: 11400000, guid: 4d298534d5f1bdc44a2b14a7e1ff51a9, type: 2}
   - {fileID: 11400000, guid: 1d93a0016a0e50f4cb26634d07d16646, type: 2}
-  - {fileID: 11400000, guid: fb9ae05261357884e83c4827931f75f2, type: 2}
-  - {fileID: 11400000, guid: cab4529d13635d249b510e7de8aacba4, type: 2}
-  - {fileID: 11400000, guid: c5fc44a53cfe9f14aad1274099132034, type: 2}
+  - {fileID: 11400000, guid: bbcd2f06a0d4fd2458fb15ca84657eeb, type: 2}
+  - {fileID: 11400000, guid: 4d298534d5f1bdc44a2b14a7e1ff51a9, type: 2}
+  - {fileID: 11400000, guid: c0e0a5964e5fe5e46911152f41816573, type: 2}
   - {fileID: 11400000, guid: 40b7f22cd154d74438f4ae96465e09bb, type: 2}
+  - {fileID: 11400000, guid: fb9ae05261357884e83c4827931f75f2, type: 2}
+  - {fileID: 11400000, guid: 0cb7e301d977bf948928bf0e95ef1b92, type: 2}
+  - {fileID: 11400000, guid: 1a21aebb2c2e6674489c0a036fe69db1, type: 2}
+  - {fileID: 11400000, guid: 2e6fbfd82ee14544db477e11023454cc, type: 2}
+  - {fileID: 11400000, guid: 83f8b6d705702d84da5fdeb1777ab80f, type: 2}
+  - {fileID: 11400000, guid: e67afe5350918854aa967e4f6fc5be32, type: 2}
+  - {fileID: 11400000, guid: 638e2da528d1b10499ed81901d13d159, type: 2}
+  - {fileID: 11400000, guid: cab4529d13635d249b510e7de8aacba4, type: 2}
+  - {fileID: 11400000, guid: 0e4fdd9f741c2eb4686b858ff0015a7a, type: 2}
+  - {fileID: 11400000, guid: c5fc44a53cfe9f14aad1274099132034, type: 2}
+  - {fileID: 11400000, guid: c5fc44a53cfe9f14aad1274099132034, type: 2}
+  - {fileID: 11400000, guid: 3f0134cfdbf44c24fbf38f06568d36ba, type: 2}
+  - {fileID: 11400000, guid: 3f0134cfdbf44c24fbf38f06568d36ba, type: 2}
   statPotion: {fileID: 11400000, guid: 3456420df867a614e8bc69bf71b29bee, type: 2}
   smallPotion: {fileID: 11400000, guid: c5fc44a53cfe9f14aad1274099132034, type: 2}
-  gemBag: {fileID: 11400000, guid: 2ec143b7e1e962a458a21ff850bef09d, type: 2}
+  gemBag: {fileID: 11400000, guid: 3f0134cfdbf44c24fbf38f06568d36ba, type: 2}
 --- !u!114 &4997247078844831748
 MonoBehaviour:
   m_ObjectHideFlags: 0

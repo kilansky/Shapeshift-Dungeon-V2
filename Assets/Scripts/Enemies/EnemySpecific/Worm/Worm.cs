@@ -30,20 +30,31 @@ public class Worm : EnemyBase
 
     //will have a melee range instead of fireball
     public float AttackDamage { get { return attackDamage; } }
-
-    [HideInInspector] public GameObject FrontTarget;
-    [HideInInspector] public GameObject SideTarget;
-    [HideInInspector] public GameObject BackTarget;
     [HideInInspector] public bool isAttacking = false;
+    [HideInInspector] public float aboveGroundYPos;
+    [HideInInspector] public float underGroundYPos;
+    [HideInInspector] public float dirtAboveGroundYPos;
+    [HideInInspector] public float dirtUnderGroundYPos;
+    [HideInInspector] public bool wormIsMoving;
 
-    //public GameObject meleeHitBox;
-    //public Transform hitPoint;
+    [Header("Worm Mover")]
+    public GameObject wormMover;
 
+    [Header("Submerging")]
+    public float timeToEmergeOrSubmerge = 1f;
+    public float amountToMoveWorm = 6f;
+
+    [Header("Dirt Circle")]
+    public GameObject dirtCircle;
+    public Material dirtMat;
+    public Material sandMat;
+    public float amountToMoveDirt = 2f;
+
+    [Header("Renderers")]
     public SkinnedMeshRenderer headRenderer;
     public SkinnedMeshRenderer bodyRenderer;
 
     private float attackDamage;
-
 
     public override void Start()
     {
@@ -57,12 +68,30 @@ public class Worm : EnemyBase
         lookForPlayerState = new Worm_LookForPlayer(this, stateMachine, "lookForPlayer", lookForPlayerStateData, this);
         stunState = new Worm_StunState(this, stateMachine, "stun", stunStateData, this);
 
-        //initialize the goblin in the idle state
-        //stateMachine.Initialize(idleState);
+        aboveGroundYPos = wormMover.transform.position.y;
+        underGroundYPos = aboveGroundYPos - amountToMoveWorm;
+        wormMover.transform.position = new Vector3(wormMover.transform.position.x, underGroundYPos, wormMover.transform.position.z);
 
-        //this line is what got rid of my NullReferenceExceptions
+        dirtAboveGroundYPos = dirtCircle.transform.position.y;
+        dirtUnderGroundYPos = aboveGroundYPos - amountToMoveDirt;
+        dirtCircle.transform.position = new Vector3(dirtCircle.transform.position.x, dirtUnderGroundYPos, dirtCircle.transform.position.z);
+
+        //initialize the worm in the idle state
         stateMachine.Initialize(idleState);
+    }
 
+    public override void Update()
+    {
+        base.Update();
+
+        //Get direction to player
+        Vector3 targetPoint = new Vector3(player.transform.position.x, 0, player.transform.position.z) - new Vector3(wormMover.transform.position.x, 0, wormMover.transform.position.z);
+        Quaternion targetRotation = Quaternion.LookRotation(targetPoint);
+        float rotSpeed = 5f;
+
+        //Smoothly rotate towards player
+        Quaternion lastTargetRotation = Quaternion.Slerp(wormMover.transform.rotation, targetRotation, rotSpeed * Time.deltaTime);
+        wormMover.transform.rotation = lastTargetRotation;
     }
 
     //set current state to stunState if isStunned
@@ -70,13 +99,22 @@ public class Worm : EnemyBase
     {
         base.Damage(damage);
         Flash();
-        /*if (isDead)
-        {
-            stateMachine.ChangeState(deadState);
-        }*/
-        if (isStunned && stateMachine.currentState != stunState)
+
+        //Make sure worm is not moving before transitioning to stun state
+        if (isStunned && stateMachine.currentState != stunState && !wormIsMoving)
         {
             stateMachine.ChangeState(stunState);
+        }
+    }
+
+    public override void FireDamage(float damage)
+    {
+        base.FireDamage(damage);
+
+        //Worm goes to the move state if it can to try and quench its flames
+        if (!wormIsMoving && !isAttacking)
+        {
+            stateMachine.ChangeState(moveState);
         }
     }
 
@@ -84,7 +122,6 @@ public class Worm : EnemyBase
     {
         //this will be used for the dummy item
         target = newTarget.transform;
-
     }
 
     public override void Flash()
@@ -93,7 +130,6 @@ public class Worm : EnemyBase
         headRenderer.material = hitMat;
         bodyRenderer.material = hitMat;
         StartCoroutine(WaitToResetColor());
-
     }
 
     public override void ResetColor()
@@ -101,5 +137,31 @@ public class Worm : EnemyBase
         base.ResetColor();
         headRenderer.material = normalMat;
         bodyRenderer.material = normalMat;
+    }
+
+    public Transform FindSafeTeleportTile()
+    {
+        List<Tile> tiles = new List<Tile>();
+        foreach (Tile tile in GameObject.FindObjectsOfType<Tile>())
+        {
+            //Check if the tile is safe to stand on
+            if (tile.tileType == Tile.tileTypes.dirt || tile.tileType == Tile.tileTypes.sand)
+            {
+                float playerDistToTile = Vector3.Distance(player.transform.position, tile.transform.position + new Vector3(0,5,0));
+                if (playerDistToTile > 4.5f && playerDistToTile < 21)
+                    tiles.Add(tile); //Add this tile to the list of potential safe tiles to teleport to
+            }
+        }
+
+        if (tiles.Count == 0)
+            Debug.LogError("Worm attempted to teleport but found no valid tiles");
+        else
+        {
+            Debug.Log("Worm found " + tiles.Count + " safe tiles to teleport to");
+            int randTileIndex = Random.Range(0, tiles.Count);
+            return tiles[randTileIndex].transform;
+        }
+
+        return null;
     }
 }

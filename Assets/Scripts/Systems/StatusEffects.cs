@@ -5,9 +5,9 @@ using TMPro;
 
 public class StatusEffects : MonoBehaviour
 {
-    private float currTime = 0; //CurrTime variable to be accessed by the fireStatus script
     private float timeLeft = 0; //TimeLeft variable to check how much time is left in the current coroutine if it is already running
-    private bool isBurning = false; 
+    [HideInInspector] public float currTime = 0; //CurrTime variable to be accessed by the fireStatus script
+    [HideInInspector] public bool isBurning = false; 
 
     [Header("Effects Particles")]
     public GameObject fireEffect; //Assigns the Fire Effect so the player can see the enemies or themselves burning

@@ -16,17 +16,17 @@ public class EnemyAttack : MonoBehaviour
 
     private void Start()
     {
-        if (transform.parent.GetComponent<Goblin>())
-            goblinEnemy = transform.parent.GetComponent<Goblin>();
+        if (transform.root.GetComponent<Goblin>())
+            goblinEnemy = transform.root.GetComponent<Goblin>();
 
-        if (transform.parent.GetComponent<Skeleton>())
-            skeletonEnemy = transform.parent.GetComponent<Skeleton>();
+        if (transform.root.GetComponent<Skeleton>())
+            skeletonEnemy = transform.root.GetComponent<Skeleton>();
 
-        if (transform.parent.GetComponent<Slime>())
-            slimeEnemy = transform.parent.GetComponent<Slime>();
+        if (transform.root.GetComponent<Slime>())
+            slimeEnemy = transform.root.GetComponent<Slime>();
 
-        if (transform.parent.GetComponent<Worm>())
-            wormEnemy = transform.parent.GetComponent<Worm>();
+        if (transform.root.GetComponent<Worm>())
+            wormEnemy = transform.root.GetComponent<Worm>();
 
         attackAnim = GetComponent<Animator>();
     }
@@ -36,7 +36,7 @@ public class EnemyAttack : MonoBehaviour
         //enemy.Anim.SetBool("isAttacking", true);
         //hit the player
         //turn on mesh collider hit box for melee attack
-        hitbox.GetComponent<MeshCollider>().enabled = true;
+        hitbox.GetComponent<Collider>().enabled = true;
         //show the hitbox for the attack
         if (showHitBoxes)
             hitbox.GetComponent<MeshRenderer>().enabled = true;
@@ -46,7 +46,7 @@ public class EnemyAttack : MonoBehaviour
     {
         //hit the player
         //turn on mesh collider hit box for melee attack
-        hitbox.GetComponent<MeshCollider>().enabled = false;
+        hitbox.GetComponent<Collider>().enabled = false;
         
         //show the hitbox for the attack
         if (showHitBoxes)

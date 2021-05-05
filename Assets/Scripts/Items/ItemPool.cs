@@ -8,7 +8,7 @@ public class ItemPool : SingletonPattern<ItemPool>
     /// Inspector to let you adjust the size of the list and add to it each itemEquipment scriptable objects - AHL (3/2/21)
     /// </summary>
     [SerializeField]
-    public List<ItemsEquipment> items;
+    public List<ItemsEquipment> items = new List<ItemsEquipment>();
 
     [Header("Set Items")]
     public ItemsEquipment statPotion;
