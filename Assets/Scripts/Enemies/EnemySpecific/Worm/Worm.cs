@@ -36,9 +36,13 @@ public class Worm : EnemyBase
     [HideInInspector] public float dirtAboveGroundYPos;
     [HideInInspector] public float dirtUnderGroundYPos;
     [HideInInspector] public bool wormIsMoving;
+    [HideInInspector] public Tile currOccupiedTile;
 
-    [Header("Worm Mover")]
+    [Header("Worm Moving")]
     public GameObject wormMover;
+    public float minMoveRangeFromPlayer = 4.5f;
+    public float maxMoveRangeFromPlayer = 21f;
+    public LayerMask tileLayer;
 
     [Header("Submerging")]
     public float timeToEmergeOrSubmerge = 1f;
@@ -68,6 +72,7 @@ public class Worm : EnemyBase
         lookForPlayerState = new Worm_LookForPlayer(this, stateMachine, "lookForPlayer", lookForPlayerStateData, this);
         stunState = new Worm_StunState(this, stateMachine, "stun", stunStateData, this);
 
+        //Set starting positions for the worm model & dirt circle
         aboveGroundYPos = wormMover.transform.position.y;
         underGroundYPos = aboveGroundYPos - amountToMoveWorm;
         wormMover.transform.position = new Vector3(wormMover.transform.position.x, underGroundYPos, wormMover.transform.position.z);
@@ -75,6 +80,14 @@ public class Worm : EnemyBase
         dirtAboveGroundYPos = dirtCircle.transform.position.y;
         dirtUnderGroundYPos = aboveGroundYPos - amountToMoveDirt;
         dirtCircle.transform.position = new Vector3(dirtCircle.transform.position.x, dirtUnderGroundYPos, dirtCircle.transform.position.z);
+
+        //Set the starting tile to be occupied by the worm
+        RaycastHit hit;
+        if(Physics.Raycast(transform.position + new Vector3(0, 10, 0), Vector3.down, out hit, 20, tileLayer))
+        {
+            currOccupiedTile = hit.transform.GetComponent<Tile>();
+            currOccupiedTile.occupiedByWorm = true;
+        }
 
         //initialize the worm in the idle state
         stateMachine.Initialize(idleState);
@@ -147,8 +160,9 @@ public class Worm : EnemyBase
             //Check if the tile is safe to stand on
             if (tile.tileType == Tile.tileTypes.dirt || tile.tileType == Tile.tileTypes.sand)
             {
+                //Get a tile that is not occupied by another worm and is within a certain range of the player
                 float playerDistToTile = Vector3.Distance(player.transform.position, tile.transform.position + new Vector3(0,5,0));
-                if (playerDistToTile > 4.5f && playerDistToTile < 21)
+                if (!tile.GetComponent<Tile>().occupiedByWorm && playerDistToTile > minMoveRangeFromPlayer && playerDistToTile < maxMoveRangeFromPlayer)
                     tiles.Add(tile); //Add this tile to the list of potential safe tiles to teleport to
             }
         }
@@ -163,5 +177,14 @@ public class Worm : EnemyBase
         }
 
         return null;
+    }
+
+    public override void OnDrawGizmos()
+    {
+        base.OnDrawGizmos();
+
+        Gizmos.color = Color.magenta;
+        Gizmos.DrawWireSphere(transform.position, minMoveRangeFromPlayer);
+        Gizmos.DrawWireSphere(transform.position, maxMoveRangeFromPlayer);
     }
 }

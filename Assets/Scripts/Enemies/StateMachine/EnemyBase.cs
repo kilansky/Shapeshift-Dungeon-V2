@@ -398,7 +398,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
         }
     }
 
-    public void OnDrawGizmos()
+    public virtual void OnDrawGizmos()
     {
         if (wallCheck)
             Gizmos.DrawLine(wallCheck.position, wallCheck.position + (Vector3)(Vector2.right * FacingDirection * entityData.wallCheckDistance));

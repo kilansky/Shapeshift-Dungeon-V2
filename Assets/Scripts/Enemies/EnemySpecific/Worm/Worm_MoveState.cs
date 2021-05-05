@@ -59,9 +59,14 @@ public class Worm_MoveState : MoveState
             Transform safeTeleportTile = enemy.FindSafeTeleportTile();
             if (safeTeleportTile)
             {
-                //Set enemy root position to the new tile
+                //Set the worm to no longer occupy the current tile and set the current tile to the new one
+                enemy.currOccupiedTile.occupiedByWorm = false;
+                enemy.currOccupiedTile = safeTeleportTile.GetComponent<Tile>();
+
+                //Set enemy root position to the new tile and set it as occupied
                 Vector3 teleportPos = safeTeleportTile.position + new Vector3(0f, 5f, 0f);
                 enemy.transform.position = teleportPos;
+                enemy.currOccupiedTile.occupiedByWorm = true;
 
                 //Modify the above and under ground y positions of the worm and dirt circle
                 enemy.aboveGroundYPos = teleportPos.y;
