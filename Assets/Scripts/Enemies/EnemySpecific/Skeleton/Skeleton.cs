@@ -36,10 +36,14 @@ public class Skeleton : EnemyBase
     [HideInInspector] public GameObject SideTarget;
     [HideInInspector] public GameObject BackTarget;
     [HideInInspector] public bool isAttacking = false;
+    [HideInInspector] public bool isBlocking = true;
+
+    //shield that blocks all incoming damage from front of skeleton
+    public GameObject shield;
 
     //public GameObject meleeHitBox;
     //public Transform hitPoint;
-
+    #region Skinned Mesh Renderers
     public SkinnedMeshRenderer feetRenderer;
     public SkinnedMeshRenderer femurRenderer;
     public SkinnedMeshRenderer forearmRenderer;
@@ -52,8 +56,7 @@ public class Skeleton : EnemyBase
     public SkinnedMeshRenderer skullRenderer;
     public SkinnedMeshRenderer spineRenderer;
     public SkinnedMeshRenderer upperArmRenderer;
-
-
+    #endregion
 
     private float attackDamage;
 
@@ -81,21 +84,26 @@ public class Skeleton : EnemyBase
         FrontTarget = PlayerController.Instance.frontTarget;
         SideTarget = PlayerController.Instance.sideTarget;
         BackTarget = PlayerController.Instance.backTarget;
+
+        shield = GetComponent<GameObject>();
     }
         
 
     //set current state to stunState if isStunned
     public override void Damage(float damage)
     {
-        base.Damage(damage);
-        Flash();
-        /*if (isDead)
+        if (!isBlocking)
         {
-            stateMachine.ChangeState(deadState);
-        }*/
-        if (isStunned && stateMachine.currentState != stunState)
-        {
-            stateMachine.ChangeState(stunState);
+            base.Damage(damage);
+            Flash();
+            /*if (isDead)
+            {
+                stateMachine.ChangeState(deadState);
+            }*/
+            if (isStunned && stateMachine.currentState != stunState && !isBlocking)
+            {
+                stateMachine.ChangeState(stunState);
+            }
         }
     }
 
@@ -103,7 +111,6 @@ public class Skeleton : EnemyBase
     {
         //this will be used for the dummy item
         target = newTarget.transform;
-
     }
 
     public bool HaveLineOfSight()
@@ -120,8 +127,16 @@ public class Skeleton : EnemyBase
             //Debug.DrawRay(transform.position, direction, Color.red);
         }
 
-
         return false;
+    }
+
+    public void Block()
+    {
+        if (isBlocking)
+        {
+            shield.GetComponent<BoxCollider>().enabled = true;
+        }
+
     }
 
     public override void Flash()
@@ -140,7 +155,6 @@ public class Skeleton : EnemyBase
         spineRenderer.material = hitMat;
         upperArmRenderer.material = hitMat;
         StartCoroutine(WaitToResetColor());
-
     }
 
     public override void ResetColor()

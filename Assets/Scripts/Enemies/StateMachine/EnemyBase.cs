@@ -195,16 +195,13 @@ public class EnemyBase : MonoBehaviour, IDamageable
             //start timer
             lastTimeAttacked = Time.time;
             //TODO: check what player damage variable is called, and script name
-            //subtract the players damage from the enemies stun resistance
-            currentStunResistance -= damage;
-
-            Flash();
 
             if (!isInvincible)
             {
                 //enemy takes damage from the player
                 Health -= damage;
                 UpdateUI();
+                Flash();
                 //Debug.Log("Enemy Took Damage");
 
                 //When the enemy takes enough damage and is killed it will do the kill function then the player kapala item special item charge function from player controller - AHL (4/20/21)
@@ -212,12 +209,13 @@ public class EnemyBase : MonoBehaviour, IDamageable
                 {
                     Kill();
                     PlayerController.Instance.KapalaSpecialRecharge();
-                }                
+                }
 
-                //if currently stunned, flip bool
                 //Debug.Log("stun resistance is set to: " + currentStunResistance);
+                //subtract the players damage from the enemies stun resistance
+                currentStunResistance -= damage;
                 if (currentStunResistance <= 0)
-                    isStunned = true;
+                    isStunned = true; //if currently stunned, flip bool
 
                 //prevent from taking damage temporarily
                 StartCoroutine(InvincibilityFrames());
@@ -323,7 +321,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
         target = newTarget.transform;
     }
 
-    public void SetDestination()
+    public virtual void SetDestination()
     {
         if (target != null && !isKnockedBack)
         {
@@ -350,14 +348,16 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
 
     //Makes the enemy invincible briefly
-    public IEnumerator InvincibilityFrames()
+    public virtual IEnumerator InvincibilityFrames()
     {
         isInvincible = true;
         yield return new WaitForSeconds(dmgInvincibilityTime);
-        isInvincible = false;
+
+        if(Health > 0)
+            isInvincible = false;
     }
 
-    public IEnumerator WaitToResetColor()
+    public virtual IEnumerator WaitToResetColor()
     {
         //reset enemy's color to normalMat
         yield return new WaitForSeconds(dmgInvincibilityTime);
@@ -366,14 +366,11 @@ public class EnemyBase : MonoBehaviour, IDamageable
     }
 
     //public IEnumerator EnemyKnockBack()
-    public IEnumerator EnemyKnockBack()
+    public virtual IEnumerator EnemyKnockBack()
     {
         if (!isMageBoss && !isBeingKnockedBack)
         {
             isBeingKnockedBack = true;
-
-            //Debug.Log("knockback script called");
-            //Debug.Log("topRB is equal to " + topRB);
 
             OGposition = topRB.transform.position;
             OGrotation = topRB.transform.rotation;
@@ -390,17 +387,10 @@ public class EnemyBase : MonoBehaviour, IDamageable
             knockbackDirection.y = 0;
             //Debug.Log("knockbackdirection is " + knockbackDirection);
 
-            //topRB.velocity = knockbackDirection * knockBackStrength;
-            //Debug.Log("my strength is " + knockBackStrength);
-
             topRB.AddForce(knockbackDirection * knockBackStrength, ForceMode.Impulse);
-            //Debug.Log("what's my velocity? " + topRB.velocity);
-            //enemy.transform.position = enemy.RB.transform.localPosition;
 
             topRB.transform.position = OGposition;
             topRB.transform.rotation = OGrotation;
-            //Debug.Log("OG now chillin at " + OGposition);
-            //Debug.Log("the RB is at " + enemy.RB.transform.position);
 
             yield return new WaitForSeconds(0.5f);
 

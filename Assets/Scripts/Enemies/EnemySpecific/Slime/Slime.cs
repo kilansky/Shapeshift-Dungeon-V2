@@ -36,6 +36,7 @@ public class Slime : EnemyBase
     public GameObject mediumSlime;
     public GameObject smallSlime;
     public SlimeType slimeType;
+    public GameObject canvas;
 
     public static int staticSlimeID = 0;
     [HideInInspector] public int slimeID = 0;
@@ -98,6 +99,9 @@ public class Slime : EnemyBase
                 Debug.LogError("I broke the switch statement");
                 break;
         }
+        canvas.SetActive(false);
+        isInvincible = true;
+
         StartCoroutine(SlimeDeathAnim());
     }
 

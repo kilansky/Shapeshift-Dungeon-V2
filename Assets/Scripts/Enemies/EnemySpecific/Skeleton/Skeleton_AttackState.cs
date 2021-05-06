@@ -20,6 +20,8 @@ public class Skeleton_AttackState : AttackState
     public override void Enter()
     {
         base.Enter();
+        enemy.isBlocking = false;
+        enemy.shield.GetComponent<BoxCollider>().enabled = false;
     }
 
     public override void Exit()
@@ -41,6 +43,8 @@ public class Skeleton_AttackState : AttackState
         {
             //stateMachine.ChangeState(enemy.moveState);
             stateMachine.ChangeState(enemy.lookForPlayerState);
+            enemy.isBlocking = true;
+            enemy.shield.GetComponent<BoxCollider>().enabled = true;
         }
     }
 

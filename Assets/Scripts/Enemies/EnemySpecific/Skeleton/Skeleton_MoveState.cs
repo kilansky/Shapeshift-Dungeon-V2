@@ -8,6 +8,8 @@ public class Skeleton_MoveState : MoveState
 
     int num = Random.Range(1, 11);
 
+    //skeleton should be moving with shield up
+
     public Skeleton_MoveState(EnemyBase entity, FiniteStateMachine stateMachine, string animBoolName, D_MoveState stateData, Skeleton enemy) : base(entity, stateMachine, animBoolName, stateData)
     {
         this.enemy = enemy;
