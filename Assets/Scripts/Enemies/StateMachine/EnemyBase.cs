@@ -121,8 +121,12 @@ public class EnemyBase : MonoBehaviour, IDamageable
             healthBar.maxValue = Health;
             healthBar.value = Health;
 
+            //If the player has the Monster Mask Item then the enemy will slow down - AHL (5/6/21)
             if (PlayerController.Instance.hasMonsterMask)
-                agent.speed = agent.speed * 0.85f;
+            {
+                agent.speed = agent.speed * 0.85f; //Adjusts the movement speed of the enemy so it is slower
+                Anim.SetFloat("attackSpeed", 0.85f); //Adjusts the animation speed of the attacks and movement so it all appears slower for added visual feedback to the player
+            }
 
             //SetNewTarget();
 
