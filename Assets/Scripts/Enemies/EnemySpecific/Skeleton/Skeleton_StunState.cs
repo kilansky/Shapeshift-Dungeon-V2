@@ -19,6 +19,7 @@ public class Skeleton_StunState : StunState
     public override void Enter()
     {
         base.Enter();
+        enemy.Anim.SetBool("isStunned", true);
         enemy.isBlocking = false;
     }
 

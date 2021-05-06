@@ -23,7 +23,9 @@ public class Skeleton_MoveState : MoveState
     public override void Enter()
     {
         base.Enter();
-
+        enemy.Anim.SetBool("isAttacking", false);
+        enemy.Anim.SetBool("isBlocking", false);
+        enemy.Anim.SetBool("isMoving", true);
         entity.SetVelocity(stateData.moveSpeed);
     }
 
@@ -41,10 +43,17 @@ public class Skeleton_MoveState : MoveState
             //go to player detected state next and have that transistion to attack
             stateMachine.ChangeState(enemy.playerDetectedState);
         }*/
-        if (enemy.CheckPlayerInMinAttackRange())
+
+        if (enemy.distanceToPlayer < 2f)
         {
-            //Debug.Log("I'm attacking!!");
-            stateMachine.ChangeState(enemy.attackState);
+            enemy.isBlocking = true;
+            enemy.Anim.SetBool("isBlocking", true);
+            enemy.Anim.SetBool("isMoving", false);
+            if (enemy.CheckPlayerInMinAttackRange())
+            {
+                //Debug.Log("I'm attacking!!");
+                stateMachine.ChangeState(enemy.attackState);
+            }
         }
     }
 

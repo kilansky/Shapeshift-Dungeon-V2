@@ -21,6 +21,8 @@ public class Skeleton_AttackState : AttackState
     {
         base.Enter();
         enemy.isBlocking = false;
+        //enemy.Anim.SetBool("isBlocking", false);
+        //enemy.Anim.SetBool("isAttacking", true);
         enemy.shield.GetComponent<BoxCollider>().enabled = false;
     }
 
@@ -35,15 +37,16 @@ public class Skeleton_AttackState : AttackState
 
         if (enemy.CheckPlayerInMinAttackRange() && !enemy.isAttacking)
         {
+            TriggerAttack();
             //TODO double check logic here 
-            base.Enter();
-            enemy.isAttacking = true;
+            //base.Enter();
         }
-        else
+        else if(!enemy.isAttacking)
         {
             //stateMachine.ChangeState(enemy.moveState);
-            stateMachine.ChangeState(enemy.lookForPlayerState);
-            enemy.isBlocking = true;
+            stateMachine.ChangeState(enemy.moveState);
+            //enemy.isBlocking = true;
+            //enemy.Anim.SetBool("isAttacking", false);
             enemy.shield.GetComponent<BoxCollider>().enabled = true;
         }
     }
@@ -56,7 +59,8 @@ public class Skeleton_AttackState : AttackState
     public override void TriggerAttack()
     {
         base.TriggerAttack();
-
+        enemy.isAttacking = true;
         enemy.Anim.SetBool("isAttacking", true);
+        //enemy.Anim.SetBool("isBlocking", false);
     }
 }
