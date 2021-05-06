@@ -33,7 +33,7 @@ public class Slime_AttackState : AttackState
         if (enemy.CheckPlayerInMinAttackRange() && !enemy.isAttacking)
         {
             TriggerAttack();
-            enemy.SetDestination();
+            enemy.SetNewDestination();
         }
         else if(!enemy.isAttacking)
         {
