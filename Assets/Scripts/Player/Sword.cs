@@ -9,9 +9,17 @@ public class Sword : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log(other.gameObject);
         if (other.GetComponent<EnemyBase>())
         {
-            if (!other.GetComponent<EnemyBase>().isInvincible)
+            if(other.GetComponent<Skeleton>())
+            {
+                if (other.GetComponent<Skeleton>().isBlocking)
+                    AudioManager.Instance.Play("Block");
+                else if (!other.GetComponent<EnemyBase>().isInvincible)
+                    AudioManager.Instance.Play("Hit");
+            }
+            else if (!other.GetComponent<EnemyBase>().isInvincible)
                 AudioManager.Instance.Play("Hit");
 
             //Spawn hit effect on enemy

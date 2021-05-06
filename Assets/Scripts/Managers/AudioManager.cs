@@ -44,6 +44,7 @@ public class AudioManager : SingletonPattern<AudioManager>
             Debug.LogWarning("Sound " + name + " not found!");
             return;
         }
+        s.source.pitch = s.pitch;
         s.source.Play();
     }
 
