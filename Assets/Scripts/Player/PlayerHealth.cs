@@ -93,8 +93,7 @@ public class PlayerHealth : SingletonPattern<PlayerHealth>, IDamageable
                 return;
             }
 
-            AudioManager.Instance.Play("PlayerHit");
-
+            //AudioManager.Instance.Play("PlayerHitMagic");
             //prevent from taking damage temporarily
             StartCoroutine(InvincibilityFrames());
         }
@@ -133,8 +132,9 @@ public class PlayerHealth : SingletonPattern<PlayerHealth>, IDamageable
                 {
                     potionSlots[i].sprite = transparentSquare;
                     Heal(maxHealth); //Old healing value: 15f + additionalPotionHealing.Value
+                    AudioManager.Instance.Play("Potion");
 
-                    if(GetPotionCount() == 0)
+                    if (GetPotionCount() == 0)
                         HUDController.Instance.HidePotionsPanel();
 
                     return;

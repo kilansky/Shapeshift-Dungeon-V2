@@ -85,6 +85,19 @@ public class Slime : EnemyBase
 
     public override void Kill()
     {
+        int randomSound = Random.Range(0, 2);
+        switch (randomSound)
+        {
+            case 0:
+                AudioManager.Instance.Play("EnemyDeath1");
+                break;
+            case 1:
+                AudioManager.Instance.Play("EnemyDeath2");
+                break;
+            default:
+                Debug.LogError("I broke the switch statement");
+                break;
+        }
         StartCoroutine(SlimeDeathAnim());
     }
 

@@ -226,7 +226,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
         else //Use the corresponding function of the MageBoss instead
             GetComponent<MageBoss>().Damage(damage);
 
-        AudioManager.Instance.Play("Hit");
+        //AudioManager.Instance.Play("Hit");
     }
 
     public virtual void FireDamage(float damage)
@@ -286,6 +286,20 @@ public class EnemyBase : MonoBehaviour, IDamageable
             if (GetComponent<GemMonster>().isGemMonster)
                 DropGem();
 
+            int randomSound = Random.Range(0, 2);
+            switch(randomSound)
+            {
+                case 0:
+                    AudioManager.Instance.Play("EnemyDeath1");
+                    break;
+                case 1:
+                    AudioManager.Instance.Play("EnemyDeath2");
+                    break;
+                default:
+                    Debug.LogError("I broke the switch statement");
+                    break;
+            }
+            
             //Destroy self from root object
             Destroy(transform.root.gameObject);
         }

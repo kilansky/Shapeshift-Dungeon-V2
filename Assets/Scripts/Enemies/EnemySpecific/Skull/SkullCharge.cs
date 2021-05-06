@@ -122,6 +122,7 @@ public class SkullCharge : MonoBehaviour
         bullet.GetComponent<Bullet>().canDamage = true;
         //bullet.GetComponent<Bullet>().shotBy = "Skull";
         sparks.Play();
+        GetComponent<AudioSource>().Play();
 
         yield return new WaitForSeconds(attackCoolDown);
         isAttacking = false;
