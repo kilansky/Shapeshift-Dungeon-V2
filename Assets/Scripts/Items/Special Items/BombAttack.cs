@@ -22,7 +22,7 @@ public class BombAttack : MonoBehaviour
     /// <summary>
     /// OnTrigger so when the bool is true it checks to see what would take damage - AHL (3/9/21)
     /// </summary>
-    private void OnTriggerStay(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
         //Checks to see if the is damaging bool true (The bomb explodes)
         if(isDamage)
