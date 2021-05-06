@@ -36,7 +36,7 @@ public class Skeleton : EnemyBase
     [HideInInspector] public GameObject SideTarget;
     [HideInInspector] public GameObject BackTarget;
     [HideInInspector] public bool isAttacking = false;
-    [HideInInspector] public bool isBlocking = true;
+    [HideInInspector] public bool isBlocking = false;
 
     //shield that blocks all incoming damage from front of skeleton
     public GameObject shield;
@@ -77,7 +77,8 @@ public class Skeleton : EnemyBase
         //stateMachine.Initialize(idleState);
 
         //this line is what got rid of my NullReferenceExceptions
-        stateMachine.Initialize(moveState);
+        //stateMachine.Initialize(moveState);
+        stateMachine.Initialize(idleState);
 
         //renderer = GetComponentInChildren<Skeleton>()
 
@@ -136,7 +137,6 @@ public class Skeleton : EnemyBase
         {
             shield.GetComponent<BoxCollider>().enabled = true;
         }
-
     }
 
     public override void Flash()
