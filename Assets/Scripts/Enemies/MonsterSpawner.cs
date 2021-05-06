@@ -56,6 +56,7 @@ public class MonsterSpawner : SingletonPattern<MonsterSpawner>
 
     //private variables
     private List<SpawnPoint> monsterSpawnPoints = new List<SpawnPoint>();
+    private List<Tile> dirtAndSandTiles = new List<Tile>();
     private Queue<SpawnPoint> disabledSpawnQueue = new Queue<SpawnPoint>();
     private int monstersInRoom = 0;
     private int monstersSpawned = 0;
@@ -85,10 +86,23 @@ public class MonsterSpawner : SingletonPattern<MonsterSpawner>
 
             //Clear the spawn point list of any previously set spawn points
             monsterSpawnPoints.Clear();
+            dirtAndSandTiles.Clear();
 
             //Set up spawn point list based on current room tiles
             foreach (SpawnPoint spawnPoint in GameObject.FindObjectsOfType<SpawnPoint>())
+            {
                 monsterSpawnPoints.Add(spawnPoint);
+                spawnPoint.onAtStart = true;
+            }
+
+            foreach (Tile tile in GameObject.FindObjectsOfType<Tile>())
+            {
+                //Check if the tile is safe to stand on
+                if (tile.tileType == Tile.tileTypes.dirt || tile.tileType == Tile.tileTypes.sand)
+                {
+                    dirtAndSandTiles.Add(tile);
+                }
+            }
 
             SpawnMonsters();
         }
@@ -123,20 +137,32 @@ public class MonsterSpawner : SingletonPattern<MonsterSpawner>
         if (monstersInRoom < currFloorInfo.maxMonsters && monsterSpawnPoints.Count > 0)
         {
             //Get a random spawn point index
-            //int randSpawnPoint = Random.Range(0, monsterSpawnPoints.Count);
+            int randSpawnPoint = Random.Range(0, monsterSpawnPoints.Count);
 
             //Get a random monster to spawn
             //int randMonster = Random.Range(0, currFloorInfo.monsters.Length);
-            //GameObject monsterToSpawn = currFloorInfo.GetMonsterToSpawn();
-            SpawnCycle(currFloorInfo.GetMonsterToSpawn());
+            GameObject monsterToSpawn = currFloorInfo.GetMonsterToSpawn();
 
-            //Spawn the monster and disable the spawn point temporarily
-            /*
-            monsterSpawnPoints[randSpawnPoint].SpawnMonster(monsterToSpawn, CheckForGem());
-            monstersInRoom++;
-            monstersSpawned++;
-            StartCoroutine(DisableSpawner(randSpawnPoint));
-            */
+            if(monsterToSpawn.GetComponent<Worm>())
+            {
+                int randomTile = Random.Range(0, dirtAndSandTiles.Count);
+                dirtAndSandTiles[randomTile].spawnerIndicator.SetActive(true);
+                dirtAndSandTiles[randomTile].spawnerIndicator.GetComponent<SpawnPoint>().SpawnMonster(monsterToSpawn, CheckForGem());       
+                if(!dirtAndSandTiles[randomTile].spawnerIndicator.GetComponent<SpawnPoint>().onAtStart)
+                {
+                    StartCoroutine(DisableWormSpawner(dirtAndSandTiles[randomTile].spawnerIndicator));
+                }
+                monstersInRoom++;
+                monstersSpawned++;
+            }
+            else
+            {
+                //Spawn the monster and disable the spawn point temporarily
+                monsterSpawnPoints[randSpawnPoint].SpawnMonster(monsterToSpawn, CheckForGem());
+                monstersInRoom++;
+                monstersSpawned++;
+                StartCoroutine(DisableSpawner(randSpawnPoint));
+            }           
         }
 
         //Recursively attempt to spawn until the total # of monsters to spawn have been killed
@@ -144,34 +170,6 @@ public class MonsterSpawner : SingletonPattern<MonsterSpawner>
             StartCoroutine(WaitToSpawnAgain());
         else
             isSpawningMonsters = false;
-    }
-
-    private void SpawnCycle(GameObject monster)
-    {
-        int randSpawnPoint = Random.Range(0, monsterSpawnPoints.Count);
-
-        if(monster.GetComponent<Worm>() && !(monsterSpawnPoints[randSpawnPoint].gameObject.transform.parent.GetComponent<Tile>().tileType == Tile.tileTypes.sand || monsterSpawnPoints[randSpawnPoint].gameObject.transform.parent.GetComponent<Tile>().tileType == Tile.tileTypes.dirt))
-        {
-            ++failCounter;
-            if(failCounter > 50)
-            {
-                Debug.LogError("Failed to find a tile for worm to spawn on! Aborting!");
-                failCounter = 0;
-                return;
-            }
-            else
-            {
-                SpawnCycle(monster);
-            }
-        }
-        else
-        {
-            failCounter = 0;
-            monsterSpawnPoints[randSpawnPoint].SpawnMonster(monster, CheckForGem());
-            monstersInRoom++;
-            monstersSpawned++;
-            StartCoroutine(DisableSpawner(randSpawnPoint));
-        }      
     }
 
     /// <summary>
@@ -246,6 +244,12 @@ public class MonsterSpawner : SingletonPattern<MonsterSpawner>
         yield return new WaitForSeconds(disableSpawnerTime);
 
         monsterSpawnPoints.Add(disabledSpawnQueue.Dequeue());
+    }
+
+    IEnumerator DisableWormSpawner(GameObject spawner)
+    {
+        yield return new WaitForSeconds(5f);
+        spawner.SetActive(false);
     }
 
     public void SetSpawnInfo(FloorSpawnInfo info)

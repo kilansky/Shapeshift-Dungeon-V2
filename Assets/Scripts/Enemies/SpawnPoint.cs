@@ -7,7 +7,8 @@ public class SpawnPoint : MonoBehaviour
     public float spawnTime = 2.5f;
     public GameObject spawnCircle;
     public GameObject spawnVFX;
-    public Vector3 offset;    
+    public Vector3 offset;
+    [HideInInspector] public bool onAtStart = false;
 
     //Spawns a monster on a tile (called from MonsterSpawner)
     public void SpawnMonster(GameObject monsterToSpawn, bool isGemMonster)
