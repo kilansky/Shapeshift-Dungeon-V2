@@ -854,7 +854,7 @@ MonoBehaviour:
     - name: Green Crystal
       monster: {fileID: 1044970987093620923, guid: 0fb047fb2c5b4894a8b3c9107b38137d,
         type: 3}
-      spawnWeight: 5
+      spawnWeight: 1
     - name: MediumSlime
       monster: {fileID: 4590788874860001185, guid: d3c5dc8722cfae949a9e63d76ae311b7,
         type: 3}
@@ -866,7 +866,11 @@ MonoBehaviour:
     - name: Worm
       monster: {fileID: 5520990575442047842, guid: c8c2fc06c1a8db747b16c4b4fe7937bd,
         type: 3}
-      spawnWeight: 4
+      spawnWeight: 2
+    - name: Skeleton
+      monster: {fileID: 5520990575442047842, guid: 88ab8574e27b2034183b63847449338a,
+        type: 3}
+      spawnWeight: 6
     totalMonsters: 19
     maxMonsters: 7
     gemsOnFloor: 3

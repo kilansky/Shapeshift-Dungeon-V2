@@ -1126,6 +1126,7 @@ public class PlayerController : SingletonPattern<PlayerController>
                 HUDController.Instance.ShowGemCounter();
 
             PlayerGems.Instance.AddGems(1);
+            AudioManager.Instance.Play("CollectGem");
             Destroy(other.gameObject);
         }
     }

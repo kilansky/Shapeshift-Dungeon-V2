@@ -70,6 +70,7 @@ public class MageBoss : MonoBehaviour, IDamageable
     private Transform previousTeleportPoint;
     private Vector3 hiddenTeleportPoint = new Vector3(0, 5, -42); //Teleport out of bounds during phase changes
     private float timeTillNextTeleport;
+    private float changeToUseAttack2;
 
     private bool isAttacking = false;
     private bool isSpawningMonsters = false;
@@ -99,6 +100,8 @@ public class MageBoss : MonoBehaviour, IDamageable
         HUDController.Instance.ShowBossHealthBar();
         healthBar.maxValue = Health;
         healthBar.value = Health;
+
+        changeToUseAttack2 = 0.2f;
 
         isStunned = true;
         InvokeRepeating("CheckToStartAttacking", 0, 0.25f);
@@ -132,9 +135,19 @@ public class MageBoss : MonoBehaviour, IDamageable
 
     private void CheckToStartAttacking()
     {
-        if (!isAttacking && !isStunned && timeTillNextTeleport > 2.5f)
+        if (!isAttacking && !isStunned && timeTillNextTeleport > 2f)
         {
-            StartCoroutine(Attack1());
+            if(timeTillNextTeleport < 4f)
+                StartCoroutine(Attack1());
+            else
+            {
+                float randAttackNum = Random.value;
+
+                if (randAttackNum < changeToUseAttack2)
+                    StartCoroutine(Attack2());
+                else
+                    StartCoroutine(Attack1());
+            }
         }
     }
 
@@ -197,14 +210,14 @@ public class MageBoss : MonoBehaviour, IDamageable
 
         //set movespeed to 0
         bullet.GetComponent<Bullet>().moveSpeed = 0f;
-        bullet.transform.GetChild(0).gameObject.SetActive(false);
+        //Sets the bullets parent game object to this one to make the Damage Tracker acquire the skull as the correct game object for tracking
+        bullet.GetComponent<Bullet>().parentObject = gameObject;
 
+        bullet.transform.GetChild(0).gameObject.SetActive(false);
+        yield return new WaitForEndOfFrame();
         //set scale of bullet to .1 scale up, doesn't scale vfx
         bullet.transform.GetChild(0).gameObject.SetActive(true);
         bullet.transform.localScale = Vector3.one * .1f;
-
-        //Sets the bullets parent game object to this one to make the Damage Tracker acquire the skull as the correct game object for tracking
-        bullet.GetComponent<Bullet>().parentObject = gameObject;
 
         //disable inner collider so it doesn't destroy while charging
         bullet.GetComponent<CapsuleCollider>().enabled = false;
@@ -235,36 +248,39 @@ public class MageBoss : MonoBehaviour, IDamageable
         bullet.GetComponent<Bullet>().parentObject = gameObject;
         bullet.GetComponent<Bullet>().canDamage = true;
         //sparks.Play();
+
+        GetComponent<AudioSource>().Play();
     }
 
     public IEnumerator Attack2()
     {
-        while (true)
+        isAttacking = true;
+        timeTillNextTeleport += 4f;
+
+        //Charge up a ring of projectiles
+        foreach (Transform firePoint in firePoints2)
         {
-            yield return new WaitForSeconds(1.5f);
-            isAttacking = true;
+            if (!isAttacking || isStunned || timeTillNextTeleport <= 0)
+                break;
 
-            //Charge up a ring of projectiles
-            foreach (Transform firePoint in firePoints2)
-            {
-                StartCoroutine(ChargeAttack2(magicProjectile, firePoint, projectileChargeTime));
-                yield return new WaitForSeconds(0.25f);
-            }
+            StartCoroutine(ChargeAttack2(magicProjectile, firePoint, projectileChargeTime));
+            yield return new WaitForSeconds(0.25f);
+        }
 
+        if (isAttacking)
             yield return new WaitForSeconds(1f);
 
-            //Fire each projectile at the player
-            foreach (Transform firePoint in firePoints2)
-            {
-                Attack2End(magicProjectile, firePoint, projectileChargeTime);
-                yield return new WaitForSeconds(0.5f);
-            }
+        //Fire each projectile at the player
+        foreach (Transform firePoint in firePoints2)
+        {
+            if (!isAttacking || isStunned || timeTillNextTeleport <= 0)
+                break;
 
-            isAttacking = false;
-
+            Attack2FireProjectile(magicProjectile, firePoint, projectileChargeTime);
             yield return new WaitForSeconds(0.5f);
-            Teleport();
         }
+
+        isAttacking = false;
     }
 
     IEnumerator ChargeAttack2(GameObject fireball, Transform firePoint, float chargeTime)
@@ -272,12 +288,13 @@ public class MageBoss : MonoBehaviour, IDamageable
         GameObject bullet = Instantiate(fireball, firePoint.transform.position, firePoint.transform.rotation, firePoint.transform);
         Vector3 originalScale = bullet.transform.localScale;
         float vfxPercent = 0;
-        isAttacking = true;
 
         bullet.GetComponent<Bullet>().moveSpeed = 0f;
         bullet.GetComponent<Bullet>().canBeDestroyed = false;
         bullet.GetComponent<Bullet>().parentObject = gameObject;
+    
         bullet.transform.GetChild(0).gameObject.SetActive(false);
+        yield return new WaitForEndOfFrame();
 
         //set scale of bullet to .1 scale up, doesn't scale vfx
         bullet.transform.GetChild(0).gameObject.SetActive(true);
@@ -308,7 +325,7 @@ public class MageBoss : MonoBehaviour, IDamageable
         unfiredProjectiles.Add(bullet);
     }
 
-    private void Attack2End(GameObject fireball, Transform firePoint, float chargeTime)
+    private void Attack2FireProjectile(GameObject fireball, Transform firePoint, float chargeTime)
     {
         if (unfiredProjectiles.Count == 0)
             return;
@@ -321,7 +338,7 @@ public class MageBoss : MonoBehaviour, IDamageable
         Destroy(bullet);
 
         //Spawn new projectiles in the direction of the player
-        Vector3 targetPoint = new Vector3(player.transform.position.x, 0, player.transform.position.z) - new Vector3(bulletPos.x, 0, bulletPos.z);
+        Vector3 targetPoint = new Vector3(player.transform.position.x, player.transform.position.y, player.transform.position.z) - new Vector3(bulletPos.x, bulletPos.y, bulletPos.z);
         Quaternion targetRotation = Quaternion.LookRotation(targetPoint);
         bullet = Instantiate(fireball, bulletPos, targetRotation);
 
@@ -329,6 +346,8 @@ public class MageBoss : MonoBehaviour, IDamageable
         bullet.GetComponent<Bullet>().parentObject = gameObject;
         bullet.GetComponent<Bullet>().canDamage = true;
         //sparks.Play();
+
+        GetComponent<AudioSource>().Play();
     }
 
     /*
@@ -388,6 +407,15 @@ public class MageBoss : MonoBehaviour, IDamageable
 
         GameObject vfx = Instantiate(teleportParticles, transform.position + new Vector3(0, 1.5f, 0), Quaternion.identity);
         Destroy(vfx, 2f);
+
+        //Check to destroy attack2 projectiles if left unfired before teleporting
+        if(unfiredProjectiles.Count > 0)
+        {
+            foreach (GameObject projectile in unfiredProjectiles)
+                Destroy(projectile, 0.1f);
+
+            unfiredProjectiles.Clear();
+        }
 
         //---------------------------Phase 1---------------------------
         if (!phase1Complete)
@@ -573,6 +601,7 @@ public class MageBoss : MonoBehaviour, IDamageable
         LevelManager.Instance.ChangeBossLevel(phase2Map);
         timeToTeleportAgain = 16f;
         timeTillNextTeleport = 16f;
+        changeToUseAttack2 = 0.4f;
     }
 
     private IEnumerator StartPhase3()
@@ -602,6 +631,7 @@ public class MageBoss : MonoBehaviour, IDamageable
         LevelManager.Instance.ChangeBossLevel(phase3Map);
         timeToTeleportAgain = 16f;
         timeTillNextTeleport = 16f;
+        changeToUseAttack2 = 0.7f;
     }
 
 
@@ -681,6 +711,10 @@ public class MageBoss : MonoBehaviour, IDamageable
         Instantiate(deathEffect, transform.position + new Vector3(0, 2, 0), Quaternion.identity);
         HUDController.Instance.HideBossHealthBar();
 
+        RunTimer.Instance.IncreaseTimer = false;
+        Time.timeScale = 0;
+        HUDController.Instance.ShowWinScreen();
+
         //Destroy self
         Destroy(gameObject);
     }
@@ -688,6 +722,17 @@ public class MageBoss : MonoBehaviour, IDamageable
     //function for enemies ability to resist stuns
     public IEnumerator ResetStunResistance()
     {
+        isAttacking = false;
+
+        //Check to destroy attack2 projectiles
+        if (unfiredProjectiles.Count > 0)
+        {
+            foreach (GameObject projectile in unfiredProjectiles)
+                Destroy(projectile, 0.1f);
+
+            unfiredProjectiles.Clear();
+        }
+
         stunTimeRemaining = stunRecoveryTime;
         while (stunTimeRemaining > 0)
         {
