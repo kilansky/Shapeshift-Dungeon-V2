@@ -6,15 +6,6 @@ using UnityEngine.AI;
 public class Goblin_AttackState : AttackState
 {
     private Goblin enemy;
-    //private Swipe attack;
-
-
-    //protected Transform attackPosition;
-
-    //public GameObject meleeHitBox;
-    //public GameObject meleeVFX;
-   //public bool showHitBoxes = false;
-
 
     public Goblin_AttackState(EnemyBase entity, FiniteStateMachine stateMachine, string animBoolName, D_AttackState stateData, Goblin enemy) : base(entity, stateMachine, animBoolName, stateData)
     {
@@ -48,10 +39,9 @@ public class Goblin_AttackState : AttackState
             base.Enter();
             enemy.isAttacking = true;
         }
-        else
+        else if(!enemy.isAttacking)
         {
-            //stateMachine.ChangeState(enemy.moveState);
-            stateMachine.ChangeState(enemy.lookForPlayerState);
+            stateMachine.ChangeState(enemy.moveState);
         }
     }
 

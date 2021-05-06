@@ -43,6 +43,7 @@ public class PlayerController : SingletonPattern<PlayerController>
     public float chargeCooldownTime = 0.2f;
     public float minChargeDmgModifier;
     public PlayerStats chargeDmgModifier; //ItemsEquipment for Dash Damage Modifier
+    public GameObject chargingVFX;
 
     [Header("Special Stats")]
     public float useSpecialTime = 0.5f;
@@ -769,6 +770,7 @@ public class PlayerController : SingletonPattern<PlayerController>
 
         //Charge input is held down
         chargeArrow.SetActive(true);
+        chargingVFX.SetActive(true);
         float arrowLength = chargeArrow.transform.localScale.y;
         float arrowWidth = chargeArrow.transform.localScale.x;
         float chargeSpeed = minChargeSpeed;
@@ -807,6 +809,7 @@ public class PlayerController : SingletonPattern<PlayerController>
 
         //Charge input is released
         chargeArrow.SetActive(false);
+        chargingVFX.SetActive(false);
         chargeArrow.transform.localScale = new Vector3(1, 1, 1);
 
         Vector3 chargeVector = transform.forward;

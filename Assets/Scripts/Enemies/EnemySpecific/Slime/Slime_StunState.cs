@@ -29,6 +29,18 @@ public class Slime_StunState : StunState
     public override void LogicUpdate()
     {
         base.LogicUpdate();
+
+        if (isStunTimeOver)
+        {
+            if (isPlayerInMinAttackRange)
+            {
+                stateMachine.ChangeState(enemy.attackState);
+            }
+            else
+            {
+                stateMachine.ChangeState(enemy.moveState);
+            }
+        }
     }
 
     public override void PhysicsUpdate()
