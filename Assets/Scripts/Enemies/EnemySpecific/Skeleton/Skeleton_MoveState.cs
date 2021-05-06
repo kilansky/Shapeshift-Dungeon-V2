@@ -61,7 +61,7 @@ public class Skeleton_MoveState : MoveState
             {
                 //attack back
                 enemy.SetNewTarget(enemy.BackTarget);
-                entity.SetDestination();
+                entity.SetNewDestination();
                 enemy.HaveLineOfSight();
                 //Debug.Log("I'm going to backstab the player");
             }
@@ -72,7 +72,7 @@ public class Skeleton_MoveState : MoveState
             if (!enemy.isKnockedBack)
             {
                 enemy.SetNewTarget(enemy.SideTarget);
-                entity.SetDestination();
+                entity.SetNewDestination();
                 enemy.HaveLineOfSight();
                 //Debug.Log("I'm attacking from the side");
             }
@@ -83,7 +83,7 @@ public class Skeleton_MoveState : MoveState
             {
                 //attack front
                 enemy.SetNewTarget(enemy.FrontTarget);
-                entity.SetDestination();
+                entity.SetNewDestination();
                 enemy.HaveLineOfSight();
                 //Debug.Log("I'm going straight at the player");
             }

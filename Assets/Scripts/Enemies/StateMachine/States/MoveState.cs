@@ -31,7 +31,7 @@ public class MoveState : State
     {
         //calls function from State
         base.Enter();
-        entity.SetDestination();
+        entity.SetNewDestination();
     }
 
     public override void Exit()

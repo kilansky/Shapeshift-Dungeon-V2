@@ -321,7 +321,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
         target = newTarget.transform;
     }
 
-    public virtual void SetDestination()
+    public virtual void SetNewDestination()
     {
         if (target != null && !isKnockedBack)
         {

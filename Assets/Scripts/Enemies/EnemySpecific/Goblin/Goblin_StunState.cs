@@ -19,6 +19,8 @@ public class Goblin_StunState : StunState
     public override void Enter()
     {
         base.Enter();
+        enemy.Anim.SetBool("isMoving", false);
+        enemy.Anim.SetBool("isAttacking", false);
     }
 
     public override void Exit()

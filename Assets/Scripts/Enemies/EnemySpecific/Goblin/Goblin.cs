@@ -58,10 +58,7 @@ public class Goblin : EnemyBase
         stunState = new Goblin_StunState(this, stateMachine, "stun", stunStateData, this);
 
         //initialize the goblin in the idle state
-        //stateMachine.Initialize(idleState);
-
-        //this line is what got rid of my NullReferenceExceptions
-        stateMachine.Initialize(moveState);
+        stateMachine.Initialize(idleState);
 
         FrontTarget = PlayerController.Instance.frontTarget;
         SideTarget = PlayerController.Instance.sideTarget;
