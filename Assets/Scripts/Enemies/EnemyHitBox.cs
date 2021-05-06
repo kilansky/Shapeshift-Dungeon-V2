@@ -31,7 +31,8 @@ public class EnemyHitBox : MonoBehaviour
             //Apply damage to player
             other.GetComponent<PlayerHealth>().Damage(damageToDeal, transform.parent.gameObject);
 
-            AudioManager.Instance.Play("Hit");
+            if (!PlayerHealth.Instance.isInvincible)
+                AudioManager.Instance.Play("Hit");
         }
 
         if (other.GetComponent<DestructibleProp>())

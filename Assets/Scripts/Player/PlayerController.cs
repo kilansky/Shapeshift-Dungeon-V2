@@ -1147,6 +1147,7 @@ public class PlayerController : SingletonPattern<PlayerController>
             if (pickupItem == true) //If the item can be picked up
             {
                 other.GetComponentInParent<Item>().Equip(this, GetComponent<PlayerHealth>()); //Equip the item to the player
+                AudioManager.Instance.Play("ItemPickup");
 
                 if(LevelManager.Instance.currFloor %5 != 0)
                     AnalyticsEvents.Instance.ItemTaken(other.GetComponentInParent<Item>().item.ItemName); //Send Item Taken analytics event

@@ -23,6 +23,7 @@ public class SpawnPoint : MonoBehaviour
 
         GameObject monster = Instantiate(monsterToSpawn, transform.position + offset, Quaternion.identity);
         Instantiate(spawnVFX, monster.transform.position + new Vector3(0, 1.5f, 0), Quaternion.identity);
+        GetComponent<AudioSource>().Play();
 
         if (isGemMonster)
         {

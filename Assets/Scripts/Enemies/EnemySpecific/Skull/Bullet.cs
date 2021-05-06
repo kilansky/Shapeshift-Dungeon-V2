@@ -85,6 +85,9 @@ public class Bullet : MonoBehaviour
 
             PlayerHealth.Instance.Damage(bulletDamage, parentObject);
 
+            if(!PlayerHealth.Instance.isInvincible)
+                AudioManager.Instance.Play("PlayerHitMagic");
+
             if (setOnFire)
                 PlayerHealth.Instance.transform.GetComponent<StatusEffects>().fireStatus(3f);
 

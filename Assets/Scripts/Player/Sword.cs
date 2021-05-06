@@ -11,6 +11,9 @@ public class Sword : MonoBehaviour
     {
         if (other.GetComponent<EnemyBase>())
         {
+            if (!other.GetComponent<EnemyBase>().isInvincible)
+                AudioManager.Instance.Play("Hit");
+
             //Spawn hit effect on enemy
             Vector3 enemyPos = other.transform.position;
             Instantiate(hitEffect, new Vector3(enemyPos.x, transform.position.y, enemyPos.z), Quaternion.identity);
@@ -30,11 +33,14 @@ public class Sword : MonoBehaviour
             //Apply Knockback to enemy
             StartCoroutine(other.GetComponent<EnemyBase>().EnemyKnockBack());
 
-            AudioManager.Instance.Play("Hit");
+            
         }
 
         if (other.GetComponent<MageBoss>())
         {
+            if (!other.GetComponent<MageBoss>().isInvincible)
+                AudioManager.Instance.Play("Hit");
+
             //Spawn hit effect on enemy
             Vector3 enemyPos = other.transform.position;
             Instantiate(hitEffect, new Vector3(enemyPos.x, transform.position.y, enemyPos.z), Quaternion.identity);
@@ -51,7 +57,7 @@ public class Sword : MonoBehaviour
             //Apply damage to enemy
             other.GetComponent<MageBoss>().Damage(damageToDeal);
 
-            AudioManager.Instance.Play("Hit");
+            
         }
 
         if (other.GetComponent<DestructibleProp>())
