@@ -36,11 +36,11 @@ public class Skeleton_MoveState : MoveState
     {
         base.LogicUpdate();
 
-        if (enemy.CheckPlayerInMinAgroRange())
+        /*if (enemy.CheckPlayerInMinAgroRange())
         {
             //go to player detected state next and have that transistion to attack
             stateMachine.ChangeState(enemy.playerDetectedState);
-        }
+        }*/
         if (enemy.CheckPlayerInMinAttackRange())
         {
             //Debug.Log("I'm attacking!!");

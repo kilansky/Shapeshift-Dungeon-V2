@@ -35,12 +35,12 @@ public class Skeleton_StunState : StunState
         {
             if (isPlayerInMinAttackRange)
             {
-                stateMachine.ChangeState(enemy.playerDetectedState);
+                stateMachine.ChangeState(enemy.attackState);
 
             }
             else
             {
-                stateMachine.ChangeState(enemy.lookForPlayerState);
+                stateMachine.ChangeState(enemy.moveState);
                 enemy.isBlocking = true;
             }
         }

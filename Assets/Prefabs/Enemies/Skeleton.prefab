@@ -3617,6 +3617,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da005503d6d9b9f4dbeec223e3c5f431, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currTime: 0
+  isBurning: 0
   fireEffect: {fileID: 486602259771266895}
   fireIcon: {fileID: 0}
   fireTimeText: {fileID: 0}
@@ -3702,6 +3704,8 @@ MonoBehaviour:
   SideTarget: {fileID: 0}
   BackTarget: {fileID: 0}
   isAttacking: 0
+  isBlocking: 1
+  shield: {fileID: 0}
   feetRenderer: {fileID: 3622912048682548143}
   femurRenderer: {fileID: 2177286345170054518}
   forearmRenderer: {fileID: 8021635322319488296}
