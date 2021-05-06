@@ -9,18 +9,9 @@ public class Sword : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log(other.gameObject);
-        if (other.GetComponent<EnemyBase>())
+        if (other.GetComponent<EnemyBase>() && !other.GetComponent<EnemyBase>().isInvincible)
         {
-            if(other.GetComponent<Skeleton>())
-            {
-                if (other.GetComponent<Skeleton>().isBlocking)
-                    AudioManager.Instance.Play("Block");
-                else if (!other.GetComponent<EnemyBase>().isInvincible)
-                    AudioManager.Instance.Play("Hit");
-            }
-            else if (!other.GetComponent<EnemyBase>().isInvincible)
-                AudioManager.Instance.Play("Hit");
+            AudioManager.Instance.Play("Hit");
 
             //Spawn hit effect on enemy
             Vector3 enemyPos = other.transform.position;
@@ -39,12 +30,10 @@ public class Sword : MonoBehaviour
             other.GetComponent<EnemyBase>().Damage(damageToDeal);
 
             //Apply Knockback to enemy
-            StartCoroutine(other.GetComponent<EnemyBase>().EnemyKnockBack());
-
-            
+            StartCoroutine(other.GetComponent<EnemyBase>().EnemyKnockBack());        
         }
 
-        if (other.GetComponent<MageBoss>())
+        if (other.GetComponent<MageBoss>() && !other.GetComponent<MageBoss>().isInvincible)
         {
             if (!other.GetComponent<MageBoss>().isInvincible)
                 AudioManager.Instance.Play("Hit");
