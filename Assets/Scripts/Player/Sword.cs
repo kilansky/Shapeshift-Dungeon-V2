@@ -8,11 +8,11 @@ public class Sword : MonoBehaviour
     public bool dealsExtraDamage; //deals extra damage based on player's attack3 dmg mod if true
 
     private void OnTriggerEnter(Collider other)
-    {
-        Debug.Log(other.gameObject);
-        if (other.GetComponent<EnemyBase>())
+    {       
+        if (other.GetComponent<EnemyBase>() && !other.GetComponent<EnemyBase>().isInvincible)
         {
-            if(other.GetComponent<Skeleton>())
+            Debug.Log(other.gameObject);
+            if (other.GetComponent<Skeleton>())
             {
                 if (other.GetComponent<Skeleton>().isBlocking)
                     AudioManager.Instance.Play("Block");
