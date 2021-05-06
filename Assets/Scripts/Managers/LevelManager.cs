@@ -58,7 +58,7 @@ public class LevelManager : SingletonPattern<LevelManager>
     /// </summary>
     public void TransitionLevel()
     {
-        PedestalManager.Instance.ClearPedestals();
+        PedestalManager.Instance.ClearPedestals();       
 
         if(isTransitioning)
         {
@@ -86,6 +86,8 @@ public class LevelManager : SingletonPattern<LevelManager>
         }
         else
             LoadNextLevel(SelectLevelList());
+
+        SetAllPedestalToWorldGUI(false);
 
         CineShake.Instance.Shake(1.5f, 2* transitionTime + maxStartTime);
         AudioManager.Instance.Play("Rumble");
@@ -281,6 +283,8 @@ public class LevelManager : SingletonPattern<LevelManager>
                 dangerousTile.ParentToTile();
         }
 
+        SetAllPedestalToWorldGUI(true);
+
         //Debug.Log("Current map is: " + currMapName);
     }
 
@@ -330,5 +334,13 @@ public class LevelManager : SingletonPattern<LevelManager>
     private void ForceStartHazards()
     {
         ToggleHazards(true);
+    }
+
+    private void SetAllPedestalToWorldGUI(bool active)
+    {
+        foreach (Item item in GameObject.FindObjectsOfType<Item>())
+        {
+            item.SetWorldGUILayer(active);
+        }
     }
 }

@@ -16,8 +16,10 @@ public class ItemPedestal : MonoBehaviour
     public GameObject colliderBox;
     public bool isRandom;
     public bool isRandomSpecial;
+    public bool isRandomShopItem;
+    public int price = 0;
 
-    [HideInInspector] public GameObject item;
+    /*[HideInInspector]*/ public GameObject item;
 
     private void Start()
     {
@@ -26,10 +28,19 @@ public class ItemPedestal : MonoBehaviour
             item = Instantiate(ItemPool.Instance.randomSpecialSpawn().prefab, transform.position + new Vector3(0, 7.2f, 0), transform.rotation, transform);
 
             GameObject itemBase = item.transform.GetChild(0).gameObject;
-            foreach (Transform canvas in itemBase.transform)
-            {
-                canvas.gameObject.layer = 16;//Set world GUI layer on each child
-            }
+            //SetWorldGUILayer();
+        }
+        else if(isRandomShopItem)
+        {
+            item = Instantiate(ItemPool.Instance.GetItemNoGem().prefab, transform.position + new Vector3(0, 7.2f, 0), transform.rotation, transform);
+
+            Item itemScript = item.GetComponent<Item>();
+            itemScript.SetPrice(price);
+            //SetWorldGUILayer();
+        }
+        else
+        {
+            item = GetComponentInChildren<Item>().gameObject;
         }
     }
 
