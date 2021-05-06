@@ -14,6 +14,7 @@ public class Skeleton_IdleState : IdleState
     public override void Enter()
     {
         base.Enter();
+        enemy.isBlocking = false;
     }
 
     public override void Exit()
@@ -33,6 +34,7 @@ public class Skeleton_IdleState : IdleState
         else if (isIdleTimeOver) //if player out of attack range, move
         {
             stateMachine.ChangeState(enemy.moveState);
+            enemy.isBlocking = true;
         }
     }
 

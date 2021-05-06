@@ -19,6 +19,7 @@ public class Skeleton_StunState : StunState
     public override void Enter()
     {
         base.Enter();
+        enemy.isBlocking = false;
     }
 
     public override void Exit()
@@ -35,10 +36,12 @@ public class Skeleton_StunState : StunState
             if (isPlayerInMinAttackRange)
             {
                 stateMachine.ChangeState(enemy.playerDetectedState);
+
             }
             else
             {
                 stateMachine.ChangeState(enemy.lookForPlayerState);
+                enemy.isBlocking = true;
             }
         }
     }
