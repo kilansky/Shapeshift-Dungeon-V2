@@ -75,6 +75,7 @@ public class StatPotionPanel : MonoBehaviour
         HUDController.Instance.HideStatPotionPanel();
 
         AnalyticsEvents.Instance.StatUpgraded("Health"); //Send Stat Upgraded Analytics Event
+        AudioManager.Instance.Play("Potion");
     }
 
     public void IncreaseAttack()
@@ -114,6 +115,7 @@ public class StatPotionPanel : MonoBehaviour
 
         //Decrease the % increase by 0.1%
         attackPercentIncrease -= 0.001f;
+        AudioManager.Instance.Play("Potion");
     }
 
     public void IncreaseSpeed()
@@ -180,5 +182,6 @@ public class StatPotionPanel : MonoBehaviour
         HUDController.Instance.HideStatPotionPanel(); //Hides the stat potion panel
 
         AnalyticsEvents.Instance.StatUpgraded("Speed"); //Send Stat Upgraded Analytics Event
+        AudioManager.Instance.Play("Potion");
     }
 }
