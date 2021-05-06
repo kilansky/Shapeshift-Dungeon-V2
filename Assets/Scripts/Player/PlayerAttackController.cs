@@ -65,6 +65,7 @@ public class PlayerAttackController : SingletonPattern<PlayerAttackController>
         DeactivateSlashHitbox();
 
         thrustHitbox.GetComponent<MeshCollider>().enabled = true;
+        AudioManager.Instance.Play("Swing4");
 
         if (showHitboxes)
             thrustHitbox.GetComponent<MeshRenderer>().enabled = true;

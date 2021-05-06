@@ -65,6 +65,7 @@ public class BombAttack : MonoBehaviour
 
         //Spawn explosion vfx
         Instantiate(explosionEffect, transform.position, Quaternion.identity);
+        GetComponent<AudioSource>().Play();
 
         //Sets it to damage the player
         isDamage = true;
@@ -82,6 +83,8 @@ public class BombAttack : MonoBehaviour
         //Makes sure the hitbox scale is set to the final scale
         transform.localScale = finalScale;
 
-        Destroy(transform.parent.gameObject); //Destroys the bomb parent object
+        GetComponent<SphereCollider>().enabled = false;
+
+        Destroy(transform.parent.gameObject, 2f); //Destroys the bomb parent object
     }
 }

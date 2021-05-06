@@ -47,7 +47,8 @@ public class ArcaneGroup : MonoBehaviour
         if(target != null)
         {
             Instantiate(teleportVFX, player.transform.position + new Vector3(0, 1.5f, 0), Quaternion.identity);
-            teleportScript.TeleportPlayer(target.GetComponent<ArcaneCircle>().teleportPoint.transform.position);       
+            teleportScript.TeleportPlayer(target.GetComponent<ArcaneCircle>().teleportPoint.transform.position);
+            AudioManager.Instance.Play("Teleport");
 
             StartCoroutine(DoCooldown());
             if(target == circleOne)

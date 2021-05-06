@@ -212,7 +212,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
                 {
                     Kill();
                     PlayerController.Instance.KapalaSpecialRecharge();
-                }
+                }                
 
                 //if currently stunned, flip bool
                 //Debug.Log("stun resistance is set to: " + currentStunResistance);
@@ -225,6 +225,8 @@ public class EnemyBase : MonoBehaviour, IDamageable
         }
         else //Use the corresponding function of the MageBoss instead
             GetComponent<MageBoss>().Damage(damage);
+
+        AudioManager.Instance.Play("Hit");
     }
 
     public virtual void FireDamage(float damage)

@@ -64,6 +64,8 @@ public class PlayerHealth : SingletonPattern<PlayerHealth>, IDamageable
                 return;
             }
 
+            AudioManager.Instance.Play("PlayerHit");
+
             //prevent from taking damage temporarily
             StartCoroutine(InvincibilityFrames());
         }
@@ -90,6 +92,8 @@ public class PlayerHealth : SingletonPattern<PlayerHealth>, IDamageable
                 Kill();
                 return;
             }
+
+            AudioManager.Instance.Play("PlayerHit");
 
             //prevent from taking damage temporarily
             StartCoroutine(InvincibilityFrames());

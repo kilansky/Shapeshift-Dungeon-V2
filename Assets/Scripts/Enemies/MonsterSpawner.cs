@@ -63,6 +63,8 @@ public class MonsterSpawner : SingletonPattern<MonsterSpawner>
     private int currFloor;
     private bool isSpawningMonsters;
 
+    private int failCounter = 0;
+
     private void Start()
     {
         isSpawningMonsters = false;
@@ -121,17 +123,20 @@ public class MonsterSpawner : SingletonPattern<MonsterSpawner>
         if (monstersInRoom < currFloorInfo.maxMonsters && monsterSpawnPoints.Count > 0)
         {
             //Get a random spawn point index
-            int randSpawnPoint = Random.Range(0, monsterSpawnPoints.Count);
+            //int randSpawnPoint = Random.Range(0, monsterSpawnPoints.Count);
 
             //Get a random monster to spawn
             //int randMonster = Random.Range(0, currFloorInfo.monsters.Length);
-            GameObject monsterToSpawn = currFloorInfo.GetMonsterToSpawn();
+            //GameObject monsterToSpawn = currFloorInfo.GetMonsterToSpawn();
+            SpawnCycle(currFloorInfo.GetMonsterToSpawn());
 
             //Spawn the monster and disable the spawn point temporarily
+            /*
             monsterSpawnPoints[randSpawnPoint].SpawnMonster(monsterToSpawn, CheckForGem());
             monstersInRoom++;
             monstersSpawned++;
             StartCoroutine(DisableSpawner(randSpawnPoint));
+            */
         }
 
         //Recursively attempt to spawn until the total # of monsters to spawn have been killed
@@ -139,6 +144,34 @@ public class MonsterSpawner : SingletonPattern<MonsterSpawner>
             StartCoroutine(WaitToSpawnAgain());
         else
             isSpawningMonsters = false;
+    }
+
+    private void SpawnCycle(GameObject monster)
+    {
+        int randSpawnPoint = Random.Range(0, monsterSpawnPoints.Count);
+
+        if(monster.GetComponent<Worm>() && !(monsterSpawnPoints[randSpawnPoint].gameObject.transform.parent.GetComponent<Tile>().tileType == Tile.tileTypes.sand || monsterSpawnPoints[randSpawnPoint].gameObject.transform.parent.GetComponent<Tile>().tileType == Tile.tileTypes.dirt))
+        {
+            ++failCounter;
+            if(failCounter > 50)
+            {
+                Debug.LogError("Failed to find a tile for worm to spawn on! Aborting!");
+                failCounter = 0;
+                return;
+            }
+            else
+            {
+                SpawnCycle(monster);
+            }
+        }
+        else
+        {
+            failCounter = 0;
+            monsterSpawnPoints[randSpawnPoint].SpawnMonster(monster, CheckForGem());
+            monstersInRoom++;
+            monstersSpawned++;
+            StartCoroutine(DisableSpawner(randSpawnPoint));
+        }      
     }
 
     /// <summary>
