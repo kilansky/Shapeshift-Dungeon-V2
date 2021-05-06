@@ -71,7 +71,7 @@ public class ItemPedestal : MonoBehaviour
         }
         else //If pedestal is not a random pedestal, it spawns a gem bag
         {
-            item = Instantiate(ItemPool.Instance.gemBag.prefab, transform.position + new Vector3(0, 7.2f, 0), transform.rotation, transform);
+            item = Instantiate(ItemPool.Instance.statPotion.prefab, transform.position + new Vector3(0, 7.2f, 0), transform.rotation, transform);
         }
     }
 

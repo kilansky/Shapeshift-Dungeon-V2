@@ -71,7 +71,7 @@ public class Sword : MonoBehaviour
 
             //Destroy Prop
             other.GetComponent<DestructibleProp>().ShatterObject();
-            AudioManager.Instance.Play("WoodBreak");
+            AudioManager.Instance.Play("WoodBreak", Random.Range(0.6f, 1.2f));
         }
 
         if(other.GetComponent<ExplodingBarrel>())
