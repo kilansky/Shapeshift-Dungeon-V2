@@ -35,6 +35,7 @@ public class Skeleton_IdleState : IdleState
         {
             stateMachine.ChangeState(enemy.moveState);
             enemy.isBlocking = true;
+            enemy.Anim.SetBool("isBlocking", true);
         }
     }
 
