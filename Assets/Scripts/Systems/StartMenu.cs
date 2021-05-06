@@ -98,6 +98,7 @@ public class StartMenu : MonoBehaviour
         float currPos = startPos;
 
         CineShake.Instance.Shake(2f, (menuTransitionTime / 2));
+        AudioManager.Instance.Play("MenuRumble");
         while (timeElapsed < (menuTransitionTime / 2))
         {
             currPos = Mathf.Lerp(startPos, endPos, timeElapsed / (menuTransitionTime / 2));
@@ -116,6 +117,7 @@ public class StartMenu : MonoBehaviour
 
         timeElapsed = 0;
         CineShake.Instance.Shake(2f, (menuTransitionTime / 2));
+        AudioManager.Instance.Play("MenuRumble");
         while (timeElapsed < (menuTransitionTime / 2))
         {
             currPos = Mathf.Lerp(endPos, startPos, timeElapsed / (menuTransitionTime / 2));

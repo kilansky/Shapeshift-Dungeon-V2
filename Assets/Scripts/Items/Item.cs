@@ -551,6 +551,24 @@ public class Item : MonoBehaviour
         return isSecondItem;
     }
 
+    public void SetWorldGUILayer(bool active)
+    {
+        if (active)
+        {
+            foreach (Transform canvas in itemBase.transform)
+            {
+                canvas.gameObject.layer = 16;//Set world GUI layer on each child
+            }
+        }
+        else
+        {
+            foreach (Transform canvas in itemBase.transform)
+            {
+                canvas.gameObject.layer = 5;//Set UI layer on each child
+            }
+        }
+    }
+
 
     ///<summary>
     /// Variables that item stores
