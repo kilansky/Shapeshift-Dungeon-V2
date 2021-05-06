@@ -37,12 +37,8 @@ public class Goblin_MoveState : MoveState
     public override void LogicUpdate()
     {
         base.LogicUpdate();
+        entity.SetDestination();
 
-        if (enemy.CheckPlayerInMinAgroRange())
-        {
-            //go to player detected state next and have that transistion to attack
-            stateMachine.ChangeState(enemy.playerDetectedState);
-        }
         if (enemy.CheckPlayerInMinAttackRange())
         {
             //Debug.Log("I'm attacking!!");

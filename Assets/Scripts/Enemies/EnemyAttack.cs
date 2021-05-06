@@ -33,10 +33,12 @@ public class EnemyAttack : MonoBehaviour
 
     public void EnableHitBox()
     {
-        //enemy.Anim.SetBool("isAttacking", true);
-        //hit the player
         //turn on mesh collider hit box for melee attack
-        hitbox.GetComponent<Collider>().enabled = true;
+        if(hitbox.GetComponent<MeshCollider>())
+            hitbox.GetComponent<MeshCollider>().enabled = true;
+        else
+            hitbox.GetComponent<Collider>().enabled = true;
+
         //show the hitbox for the attack
         if (showHitBoxes)
             hitbox.GetComponent<MeshRenderer>().enabled = true;
@@ -44,10 +46,12 @@ public class EnemyAttack : MonoBehaviour
 
     public void DisableHitBox()
     {
-        //hit the player
         //turn on mesh collider hit box for melee attack
-        hitbox.GetComponent<Collider>().enabled = false;
-        
+        if (hitbox.GetComponent<MeshCollider>())
+            hitbox.GetComponent<MeshCollider>().enabled = false;
+        else
+            hitbox.GetComponent<Collider>().enabled = false;
+
         //show the hitbox for the attack
         if (showHitBoxes)
             hitbox.GetComponent<MeshRenderer>().enabled = false;

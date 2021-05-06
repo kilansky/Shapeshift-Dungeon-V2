@@ -289,13 +289,13 @@ public class EnemyBase : MonoBehaviour, IDamageable
         }
     }
 
-    private void DropGem()
+    public virtual void DropGem()
     {
         GameObject gem = Instantiate(gemPrefab, transform.position + new Vector3(0, 1, 0), Quaternion.identity);
         gem.GetComponent<Rigidbody>().AddForce(Vector3.up * 350f);
     }
 
-    private void UpdateUI()
+    public virtual void UpdateUI()
     {
         healthBar.value = Health;
     }

@@ -34,11 +34,8 @@ public class Slime_MoveState : MoveState
     {
         base.LogicUpdate();
 
-        if (enemy.CheckPlayerInMinAgroRange())
-        {
-            //go to player detected state next and have that transistion to attack
-            stateMachine.ChangeState(enemy.playerDetectedState);
-        }
+        enemy.SetDestination();
+
         if (enemy.CheckPlayerInMinAttackRange())
         {
             //Debug.Log("I'm attacking!!");

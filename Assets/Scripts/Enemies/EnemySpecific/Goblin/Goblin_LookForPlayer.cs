@@ -29,16 +29,6 @@ public class Goblin_LookForPlayer : LookForPlayerState
     public override void LogicUpdate()
     {
         base.LogicUpdate();
-
-        //if we look for the player, and can still see him, switch to detected
-        if (isPlayerInMinAgroRange)
-        {
-            //TODO: double check logic here
-            stateMachine.ChangeState(enemy.playerDetectedState);
-        }else if (!isPlayerInMinAgroRange)
-        {
-            stateMachine.ChangeState(enemy.moveState);
-        }
     }
 
     public override void PhysicsUpdate()

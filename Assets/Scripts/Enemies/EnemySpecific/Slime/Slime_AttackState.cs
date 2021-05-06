@@ -32,14 +32,12 @@ public class Slime_AttackState : AttackState
 
         if (enemy.CheckPlayerInMinAttackRange() && !enemy.isAttacking)
         {
-            //TODO double check logic here 
-            base.Enter();//Trigger Attack and stop movement
-            enemy.isAttacking = true;
+            TriggerAttack();
+            enemy.SetDestination();
         }
-        else
+        else if(!enemy.isAttacking)
         {
-            //stateMachine.ChangeState(enemy.moveState);
-            stateMachine.ChangeState(enemy.lookForPlayerState);
+            stateMachine.ChangeState(enemy.moveState);
         }
     }
 
@@ -51,7 +49,7 @@ public class Slime_AttackState : AttackState
     public override void TriggerAttack()
     {
         base.TriggerAttack();
-
+        enemy.isAttacking = true;
         enemy.Anim.SetBool("isAttacking", true);
     }
 }

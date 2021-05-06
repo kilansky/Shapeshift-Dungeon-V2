@@ -25,7 +25,7 @@ public class SlimeMove : MonoBehaviour
     //Called from animation event
     public void AttackMovement()
     {
-        agent.speed = baseSpeed * 1.25f;
+        agent.speed = baseSpeed * 1.6f;
     }
 
     //Called from animation event

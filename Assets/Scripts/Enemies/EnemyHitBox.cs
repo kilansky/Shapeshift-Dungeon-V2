@@ -31,13 +31,6 @@ public class EnemyHitBox : MonoBehaviour
             //Apply damage to player
             other.GetComponent<PlayerHealth>().Damage(damageToDeal, transform.parent.gameObject);
 
-            //if (dealsExtraDamage)//Check to deal additional damage
-            //  damageToDeal *= PlayerController.Instance.attack3DmgMod;
-
-            
-            //Apply Knockback to enemy
-            //StartCoroutine(other.GetComponent<EnemyBase>().EnemyKnockBack());
-
             AudioManager.Instance.Play("Hit");
         }
 
