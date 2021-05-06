@@ -38,8 +38,7 @@ public class Slime : EnemyBase
     public SlimeType slimeType;
     public GameObject canvas;
 
-    public static int staticSlimeID = 0;
-    [HideInInspector] public int slimeID = 0;
+    [HideInInspector] public int slimeID;
     [HideInInspector] public bool isBaseSlime = true;
 
     public SkinnedMeshRenderer renderer;
@@ -63,8 +62,8 @@ public class Slime : EnemyBase
         //This is done to only kill 1 slime for the monster spawn system rather than get multiple kills per slime
         if(isBaseSlime)
         {
-            slimeID = staticSlimeID;
-            staticSlimeID++;
+            slimeID = LevelManager.Instance.newSlimeID;
+            LevelManager.Instance.newSlimeID++;
         }
         Debug.Log("slimeID is: " + slimeID);
 
