@@ -1,5 +1,170 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1279977864
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1279977865}
+  - component: {fileID: 1279977866}
+  m_Layer: 0
+  m_Name: SFXManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1279977865
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1279977864}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1245628485068397980}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1279977866
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1279977864}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a68e07a9868478a41afe7408baf59fe6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sounds:
+  - name: Rumble
+    clip: {fileID: 8300000, guid: 4d2c284e71f62f644984e59ead48c6f4, type: 3}
+    volume: 0.25
+    pitch: 1
+    spacialBlend: 0
+    loop: 0
+    source: {fileID: 0}
+  - name: BigBell
+    clip: {fileID: 8300000, guid: df3341fb30a54a34fa48b3edc0c56947, type: 3}
+    volume: 0.2
+    pitch: 1
+    spacialBlend: 0
+    loop: 0
+    source: {fileID: 0}
+  - name: TileSlide
+    clip: {fileID: 8300000, guid: 21ea11d86808dab4d9746711b99dcb7d, type: 3}
+    volume: 0.25
+    pitch: 0.75
+    spacialBlend: 0
+    loop: 0
+    source: {fileID: 0}
+  - name: PlaceHolderWoodBreak
+    clip: {fileID: 8300000, guid: bbc47f2adcfc79e409c24653e4968a6d, type: 3}
+    volume: 0.5
+    pitch: 1
+    spacialBlend: 0
+    loop: 0
+    source: {fileID: 0}
+  - name: Swing1
+    clip: {fileID: 8300000, guid: 4c91c8a74f8cd7441a4cf65c02507a06, type: 3}
+    volume: 0.25
+    pitch: 0.85
+    spacialBlend: 0
+    loop: 0
+    source: {fileID: 0}
+  - name: Swing2
+    clip: {fileID: 8300000, guid: dbff3e9e3d9bb924cbf0bdcad920a238, type: 3}
+    volume: 0.25
+    pitch: 0.85
+    spacialBlend: 0
+    loop: 0
+    source: {fileID: 0}
+  - name: Swing3
+    clip: {fileID: 8300000, guid: 40d382253af9d7e44b65d8dc3ffaf8cc, type: 3}
+    volume: 0.25
+    pitch: 0.85
+    spacialBlend: 0
+    loop: 0
+    source: {fileID: 0}
+  - name: Teleport
+    clip: {fileID: 8300000, guid: 39c9cf80dcaa37244a10bb876e9359b3, type: 3}
+    volume: 0.25
+    pitch: 1
+    spacialBlend: 0
+    loop: 0
+    source: {fileID: 0}
+  - name: Swing4
+    clip: {fileID: 8300000, guid: 105bb5d46eb542946b939cd270924386, type: 3}
+    volume: 0.25
+    pitch: 0.85
+    spacialBlend: 0
+    loop: 0
+    source: {fileID: 0}
+  - name: PlayerHit
+    clip: {fileID: 8300000, guid: cb53b33c7601c6543bc0a61fe5b9e169, type: 3}
+    volume: 0.1
+    pitch: 1
+    spacialBlend: 0
+    loop: 0
+    source: {fileID: 0}
+  - name: Hit
+    clip: {fileID: 8300000, guid: 6b281152d5210374bb5ce5864350e4f1, type: 3}
+    volume: 0.1
+    pitch: 1
+    spacialBlend: 0
+    loop: 0
+    source: {fileID: 0}
+  - name: Potion
+    clip: {fileID: 8300000, guid: cff6bb0d21a846b4a8e4614547dfda4c, type: 3}
+    volume: 0.25
+    pitch: 1
+    spacialBlend: 0
+    loop: 0
+    source: {fileID: 0}
+  - name: ItemPickup
+    clip: {fileID: 8300000, guid: d66e64e966152f545b4d32b6398276ee, type: 3}
+    volume: 0.15
+    pitch: 1.25
+    spacialBlend: 0
+    loop: 0
+    source: {fileID: 0}
+  - name: PlayerHitMagic
+    clip: {fileID: 8300000, guid: f29c3e2afd7abd942a8ff5f69631b288, type: 3}
+    volume: 0.1
+    pitch: 1
+    spacialBlend: 0
+    loop: 0
+    source: {fileID: 0}
+  - name: EnemyDeath1
+    clip: {fileID: 8300000, guid: 38f03fa1f88c97540af8ebdee8508578, type: 3}
+    volume: 0.1
+    pitch: 1
+    spacialBlend: 0
+    loop: 0
+    source: {fileID: 0}
+  - name: EnemyDeath2
+    clip: {fileID: 8300000, guid: e9fa3ee6948ada6488f76cf4706651da, type: 3}
+    volume: 0.1
+    pitch: 1
+    spacialBlend: 0
+    loop: 0
+    source: {fileID: 0}
+  - name: PlayerDeath
+    clip: {fileID: 8300000, guid: 81130fd95814c4a4daf58fdfb3c1acc2, type: 3}
+    volume: 0.4
+    pitch: 0.8
+    spacialBlend: 0
+    loop: 0
+    source: {fileID: 0}
+  SFXGroup: {fileID: 6275688246128163665, guid: db0117e9e85bfe74ab54d58147033b53,
+    type: 2}
 --- !u!1 &1245628485068397986
 GameObject:
   m_ObjectHideFlags: 0
@@ -28,7 +193,8 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 1279977865}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -41,7 +207,7 @@ AudioSource:
   m_GameObject: {fileID: 1245628485068397986}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 24300002, guid: db0117e9e85bfe74ab54d58147033b53,
+  OutputAudioMixerGroup: {fileID: -3548380221992555752, guid: db0117e9e85bfe74ab54d58147033b53,
     type: 2}
   m_audioClip: {fileID: 8300000, guid: 69bed1cdb4b43df42aeb25ce7c5c9df6, type: 3}
   m_PlayOnAwake: 1

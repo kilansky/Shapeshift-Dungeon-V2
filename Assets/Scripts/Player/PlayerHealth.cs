@@ -214,6 +214,8 @@ public class PlayerHealth : SingletonPattern<PlayerHealth>, IDamageable
         PlayerController.Instance.IsDead = true;
         CameraController.Instance.PlayerDeathZoomIn();
 
+        AudioManager.Instance.Play("PlayerDeath");
+
         //Wait to show game over screen until death anim is done
         StartCoroutine(WaitToShowGameOver());
     }
