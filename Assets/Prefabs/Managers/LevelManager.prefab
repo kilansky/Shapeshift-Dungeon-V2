@@ -71,7 +71,6 @@ GameObject:
   - component: {fileID: 2345862844983506690}
   - component: {fileID: 9095473716012857750}
   - component: {fileID: 2345862844983506691}
-  - component: {fileID: 4263487265860965594}
   - component: {fileID: 368792401}
   - component: {fileID: 368792402}
   - component: {fileID: 368792405}
@@ -116,11 +115,6 @@ MonoBehaviour:
   disableSpawning: 0
   currFloor: 0
   levelSet1:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   - {fileID: 0}
   levelSet2:
   - {fileID: 0}
@@ -180,98 +174,6 @@ MonoBehaviour:
     totalMonsters: 0
     maxMonsters: 0
     gemsOnFloor: 0
---- !u!114 &4263487265860965594
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2345862844983506692}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a68e07a9868478a41afe7408baf59fe6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sounds:
-  - name: Rumble
-    clip: {fileID: 8300000, guid: 4d2c284e71f62f644984e59ead48c6f4, type: 3}
-    volume: 0.25
-    pitch: 1
-    spacialBlend: 0
-    loop: 0
-    source: {fileID: 0}
-  - name: BigBell
-    clip: {fileID: 8300000, guid: df3341fb30a54a34fa48b3edc0c56947, type: 3}
-    volume: 0.2
-    pitch: 1
-    spacialBlend: 0
-    loop: 0
-    source: {fileID: 0}
-  - name: TileSlide
-    clip: {fileID: 8300000, guid: 21ea11d86808dab4d9746711b99dcb7d, type: 3}
-    volume: 0.25
-    pitch: 0.75
-    spacialBlend: 0
-    loop: 0
-    source: {fileID: 0}
-  - name: PlaceHolderWoodBreak
-    clip: {fileID: 8300000, guid: bbc47f2adcfc79e409c24653e4968a6d, type: 3}
-    volume: 0.5
-    pitch: 1
-    spacialBlend: 0
-    loop: 0
-    source: {fileID: 0}
-  - name: Swing1
-    clip: {fileID: 8300000, guid: 4c91c8a74f8cd7441a4cf65c02507a06, type: 3}
-    volume: 0.25
-    pitch: 0.85
-    spacialBlend: 0
-    loop: 0
-    source: {fileID: 0}
-  - name: Swing2
-    clip: {fileID: 8300000, guid: dbff3e9e3d9bb924cbf0bdcad920a238, type: 3}
-    volume: 0.25
-    pitch: 0.85
-    spacialBlend: 0
-    loop: 0
-    source: {fileID: 0}
-  - name: Swing3
-    clip: {fileID: 8300000, guid: 40d382253af9d7e44b65d8dc3ffaf8cc, type: 3}
-    volume: 0.25
-    pitch: 0.85
-    spacialBlend: 0
-    loop: 0
-    source: {fileID: 0}
-  - name: Teleport
-    clip: {fileID: 8300000, guid: 39c9cf80dcaa37244a10bb876e9359b3, type: 3}
-    volume: 0.25
-    pitch: 1
-    spacialBlend: 0
-    loop: 0
-    source: {fileID: 0}
-  - name: Swing4
-    clip: {fileID: 8300000, guid: 105bb5d46eb542946b939cd270924386, type: 3}
-    volume: 0.25
-    pitch: 0.85
-    spacialBlend: 0
-    loop: 0
-    source: {fileID: 0}
-  - name: PlayerHit
-    clip: {fileID: 8300000, guid: 2a3e9a6910402b747b9cd64a2dbeec9b, type: 3}
-    volume: 0.25
-    pitch: 1
-    spacialBlend: 0
-    loop: 0
-    source: {fileID: 0}
-  - name: Hit
-    clip: {fileID: 8300000, guid: 252a0d0e2189fe94d8a13a2c487bebbf, type: 3}
-    volume: 0.15
-    pitch: 0.6
-    spacialBlend: 0
-    loop: 0
-    source: {fileID: 0}
-  SFXGroup: {fileID: 6275688246128163665, guid: db0117e9e85bfe74ab54d58147033b53,
-    type: 2}
 --- !u!114 &368792401
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -697,6 +599,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Mesh
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2026129331479064813, guid: 24762c2c0b86bde4b89244c0b7ac382e,
+        type: 3}
+      propertyPath: offset.y
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 2538349331036168214, guid: 24762c2c0b86bde4b89244c0b7ac382e,
         type: 3}

@@ -20,8 +20,7 @@ public class Goblin_AttackState : AttackState
 
     public override void Enter()
     {
-        //attack = enemy.aliveGO.GetComponent<Swipe>();
-        //how much damage do they do, and where does it come from
+        base.Enter();
     }
 
     public override void Exit()
@@ -33,11 +32,9 @@ public class Goblin_AttackState : AttackState
     {
         base.LogicUpdate();
 
-        if (enemy.CheckPlayerInMinAttackRange() && !enemy.isAttacking)
+        if (!enemy.isAttacking && enemy.CheckPlayerInMinAttackRange())
         {
-            //TODO double check logic here 
-            base.Enter();
-            enemy.isAttacking = true;
+            TriggerAttack();
         }
         else if(!enemy.isAttacking)
         {
@@ -53,20 +50,7 @@ public class Goblin_AttackState : AttackState
     public override void TriggerAttack()
     {
         base.TriggerAttack();
-
+        enemy.isAttacking = true;
         enemy.Anim.SetBool("isAttacking", true);
-        //enemy.isAttackOver = true;
-        //attack.MeleeAttack();
-
-        /*
-        //hit the player
-        //turn on mesh collider hit box for melee attack
-        meleeHitBox.GetComponent<MeshCollider>().enabled = true;
-        //show the hitbox for the attack
-        if (showHitBoxes)
-            meleeHitBox.GetComponent<MeshRenderer>().enabled = true;
-        */
-        //swipe at the player
-
     }
 }

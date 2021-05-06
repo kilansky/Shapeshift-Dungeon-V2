@@ -34,7 +34,7 @@ public class Slime_MoveState : MoveState
     {
         base.LogicUpdate();
 
-        enemy.SetDestination();
+        enemy.SetNewDestination();
 
         if (enemy.CheckPlayerInMinAttackRange())
         {
@@ -48,7 +48,7 @@ public class Slime_MoveState : MoveState
         base.PhysicsUpdate();
 
         if (!enemy.isKnockedBack)
-            entity.SetDestination();
+            entity.SetNewDestination();
 
         //set destination to the player, look check should go here
         //entity.SetDestination();
