@@ -19,6 +19,9 @@ public class Skeleton_IdleState : IdleState
     {
         base.Enter();
         enemy.isBlocking = false;
+        enemy.Anim.SetBool("isStunned", false);
+        enemy.Anim.SetBool("isMoving", false);
+        enemy.Anim.SetBool("isBlocking", false);
         enemy.agent.SetDestination(enemy.transform.position);
     }
 

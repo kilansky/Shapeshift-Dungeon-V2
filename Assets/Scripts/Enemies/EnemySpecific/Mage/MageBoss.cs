@@ -338,7 +338,7 @@ public class MageBoss : MonoBehaviour, IDamageable
         Destroy(bullet);
 
         //Spawn new projectiles in the direction of the player
-        Vector3 targetPoint = new Vector3(player.transform.position.x, player.transform.position.y, player.transform.position.z) - new Vector3(bulletPos.x, bulletPos.y, bulletPos.z);
+        Vector3 targetPoint = new Vector3(player.transform.position.x, player.transform.position.y + 1, player.transform.position.z) - bulletPos;
         Quaternion targetRotation = Quaternion.LookRotation(targetPoint);
         bullet = Instantiate(fireball, bulletPos, targetRotation);
 
@@ -708,11 +708,14 @@ public class MageBoss : MonoBehaviour, IDamageable
 
     public void Kill()
     {
+        AudioManager.Instance.Play("BigBell");
+        CineShake.Instance.Shake(1f, 2f);
+        MusicManager.Instance.FloorCleared();
+
         Instantiate(deathEffect, transform.position + new Vector3(0, 2, 0), Quaternion.identity);
         HUDController.Instance.HideBossHealthBar();
 
         RunTimer.Instance.IncreaseTimer = false;
-        Time.timeScale = 0;
         HUDController.Instance.ShowWinScreen();
 
         //Destroy self

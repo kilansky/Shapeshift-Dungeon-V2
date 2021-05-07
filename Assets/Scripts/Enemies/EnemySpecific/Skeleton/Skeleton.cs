@@ -33,7 +33,6 @@ public class Skeleton : EnemyBase
     public float AttackDamage { get { return attackDamage; } }
 
     public GameObject ragdoll;
-
     public LayerMask tileLayer;
 
     [HideInInspector] public GameObject FrontTarget;
@@ -114,18 +113,16 @@ public class Skeleton : EnemyBase
 
     public override void Kill()
     {
-        base.Kill();
-
-        //ragdoll.transform.parent = null;
         ragdoll.gameObject.SetActive(true);
 
-        //Set the starting tile to be occupied by the worm
         RaycastHit hit;
-        if (Physics.Raycast(transform.position + new Vector3(0, 10, 0), Vector3.down, out hit, 20, tileLayer))
+        if (Physics.Raycast(transform.position + new Vector3(0, 10, 0), Vector3.down, out hit, 50, tileLayer))
         {
-            //set ragdoll's parent to tile it is on
             ragdoll.transform.parent = hit.transform;
+            ragdoll.transform.position = transform.position;
         }
+          
+        base.Kill();
     }
 
     public override void SetNewTarget(GameObject newTarget)

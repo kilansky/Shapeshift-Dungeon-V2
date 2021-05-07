@@ -21,7 +21,10 @@ public class Skeleton_StunState : StunState
         base.Enter();
         enemy.Anim.SetBool("isStunned", true);
         enemy.Anim.SetBool("isAttacking", false);
+        enemy.Anim.SetBool("isBlocking", false);
+        enemy.Anim.SetBool("isMoving", false);
         enemy.isBlocking = false;
+        enemy.isAttacking = false;
     }
 
     public override void Exit()

@@ -374,6 +374,8 @@ public class EnemyBase : MonoBehaviour, IDamageable
     {
         if (!isMageBoss && !isBeingKnockedBack)
         {
+            Debug.Log("Should Knockback Enemy");
+
             isBeingKnockedBack = true;
 
             OGposition = topRB.transform.position;

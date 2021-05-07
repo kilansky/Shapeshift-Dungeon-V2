@@ -515,8 +515,16 @@ public class HUDController : SingletonPattern<HUDController>
     public void ShowWinScreen()
     {
         player.gameObject.GetComponent<PlayerInput>().SwitchCurrentActionMap("UI");
-        winScreen.SetActive(true);
+        CameraController.Instance.PlayerWinZoomIn();
+
+        StartCoroutine(WaitToWin());
+    }
+
+    private IEnumerator WaitToWin()
+    {
+        yield return new WaitForSeconds(3);
         Time.timeScale = 0;
+        winScreen.SetActive(true);
         playerDamagedOverlay.SetActive(false);
 
         //Set initial selected button if using controller

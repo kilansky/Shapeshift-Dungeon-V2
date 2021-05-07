@@ -27,6 +27,7 @@ public class Skeleton_MoveState : MoveState
     public override void Enter()
     {
         base.Enter();
+        enemy.Anim.SetBool("isStunned", false);
         enemy.Anim.SetBool("isAttacking", false);
         enemy.Anim.SetBool("isBlocking", false);
         enemy.Anim.SetBool("isMoving", true);
@@ -97,17 +98,20 @@ public class Skeleton_MoveState : MoveState
             if (newPath.status != NavMeshPathStatus.PathComplete)
             {
                 //Debug.Log("Found not found, going back to idle");
-                enemy.Anim.SetBool("isMoving", false);
                 stateMachine.ChangeState(enemy.idleState);
             }
 
             timeElapsed = 0f;
         }
 
-        if (enemy.distanceToPlayer < 3f)
+        if (enemy.distanceToPlayer < 3.5f)
         {
             enemy.isBlocking = true;
             enemy.Anim.SetBool("isBlocking", true);
+            enemy.Anim.SetBool("isMoving", false);
+
+            enemy.agent.SetDestination(enemy.transform.position);
+
             //enemy.Anim.SetBool("isMoving", false);
             if (enemy.CheckPlayerInMinAttackRange())
             {
@@ -115,13 +119,31 @@ public class Skeleton_MoveState : MoveState
                 stateMachine.ChangeState(enemy.attackState);
             }
         }
+
+        if (enemy.distanceToPlayer > 5f)
+        {
+            enemy.isBlocking = false;
+            enemy.Anim.SetBool("isBlocking", false);
+            enemy.Anim.SetBool("isMoving", true);
+        }
     }
 
     public override void PhysicsUpdate()
     {
         base.PhysicsUpdate();
 
-        //Update the position of the target to move to
-        entity.SetNewDestination();
+        if(enemy.isBlocking)
+        {
+            //Get direction to player
+            Vector3 targetPoint = new Vector3(enemy.player.transform.position.x, 0, enemy.player.transform.position.z) - new Vector3(enemy.transform.position.x, 0, enemy.transform.position.z);
+            Quaternion targetRotation = Quaternion.LookRotation(targetPoint);
+            float rotSpeed = 4f;
+
+            //Smoothly rotate towards player
+            Quaternion lastTargetRotation = Quaternion.Slerp(enemy.transform.rotation, targetRotation, rotSpeed * Time.deltaTime);
+            enemy.transform.rotation = lastTargetRotation;
+        }
+        else
+            entity.SetNewDestination();
     }
 }

@@ -21,8 +21,8 @@ public class Skeleton_AttackState : AttackState
     {
         base.Enter();
         enemy.isBlocking = false;
-        //enemy.Anim.SetBool("isBlocking", false);
-        //enemy.Anim.SetBool("isAttacking", true);
+        enemy.Anim.SetBool("isStunned", false);
+        enemy.Anim.SetBool("isBlocking", false);
         //enemy.shield.GetComponent<BoxCollider>().enabled = false;
     }
 
@@ -61,6 +61,5 @@ public class Skeleton_AttackState : AttackState
         base.TriggerAttack();
         enemy.isAttacking = true;
         enemy.Anim.SetBool("isAttacking", true);
-        //enemy.Anim.SetBool("isBlocking", false);
     }
 }
