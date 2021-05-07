@@ -38,9 +38,6 @@ public class Slime : EnemyBase
     public SlimeType slimeType;
     public GameObject canvas;
 
-    [HideInInspector] public int slimeID;
-    [HideInInspector] public bool isBaseSlime = true;
-
     public SkinnedMeshRenderer renderer;
 
     [HideInInspector] public bool isAttacking = false;
@@ -57,15 +54,6 @@ public class Slime : EnemyBase
         attackState = new Slime_AttackState(this, stateMachine, "attack", attackStateData, this);
         lookForPlayerState = new Slime_LookForPlayer(this, stateMachine, "lookForPlayer", lookForPlayerStateData, this);
         stunState = new Slime_StunState(this, stateMachine, "stun", stunStateData, this);
-
-        //If this is the initial slime that spawned, set its ID number
-        //This is done to only kill 1 slime for the monster spawn system rather than get multiple kills per slime
-        if(isBaseSlime)
-        {
-            slimeID = LevelManager.Instance.newSlimeID;
-            LevelManager.Instance.newSlimeID++;
-        }
-        Debug.Log("slimeID is: " + slimeID);
 
         //initialize the slime in the idle state
         stateMachine.Initialize(moveState);
@@ -108,74 +96,30 @@ public class Slime : EnemyBase
     {
         Anim.SetBool("isDead", true);
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.75f);
+        Instantiate(deathEffect, transform.position + new Vector3(0, agent.height / 2, 0), Quaternion.identity);
 
-        switch(slimeType)
+        //Called the killed function of the slime group based on this slime's type
+        switch (slimeType)
         {
             case SlimeType.big:
-                SlimeSplit(mediumSlime);
+                transform.root.GetComponent<SlimeGroup>().BigSlimeKilled(this);
                 break;
             case SlimeType.medium:
-                SlimeSplit(smallSlime);
+                transform.root.GetComponent<SlimeGroup>().MediumSlimeKilled(this);
                 break;
             case SlimeType.small:
-                SlimeKill();
+                transform.root.GetComponent<SlimeGroup>().SmallSlimeKilled(this);
                 break;
             default:
                 break;
         }
     }
 
-    private void SlimeSplit(GameObject newSlimeType)
-    {
-        GameObject newSlime = Instantiate(newSlimeType, transform.position, transform.rotation);
-        newSlime.GetComponent<Slime>().isBaseSlime = false;
-        newSlime.GetComponent<Slime>().slimeID = slimeID;
-
-        if (GetComponent<GemMonster>().isGemMonster)//Pass the gem from this slime onto one of its splits
-            newSlime.GetComponent<GemMonster>().SetGemMonster();
-
-        newSlime = Instantiate(newSlimeType, transform.position, transform.rotation);
-        newSlime.GetComponent<Slime>().isBaseSlime = false;
-        newSlime.GetComponent<Slime>().slimeID = slimeID;
-
-        SlimeKill();
-    }
-
-    private void SlimeKill()
-    {
-        if(slimeType == SlimeType.small)
-        {
-            //Check whether this is the last slime of its ID value
-            bool isLastSlime = true;
-            foreach (Slime slime in GameObject.FindObjectsOfType<Slime>())
-            {
-                if (slime != this && slime.slimeID == slimeID)
-                    isLastSlime = false;
-            }
-            Debug.Log("isLastSlime is: " + isLastSlime);
-            Debug.Log("slimeID is: " + slimeID);
-
-            //Update the monster count of the room IF this is the last small slime of its ID
-            if (isLastSlime)
-                MonsterSpawner.Instance.MonsterKilled();
-
-            if (GetComponent<GemMonster>().isGemMonster)
-                DropGem();
-        }
-
-        Instantiate(deathEffect, transform.position + new Vector3(0, agent.height / 2, 0), Quaternion.identity);
-
-        //Destroy self from root object
-        Destroy(transform.root.gameObject);
-
-    }
-
     public override void SetNewTarget(GameObject newTarget)
     {
         //this will be used for the dummy item
         target = newTarget.transform;
-
     }
 
     public override void Flash()

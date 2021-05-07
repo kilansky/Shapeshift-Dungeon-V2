@@ -22,8 +22,8 @@ public class EnemyAttack : MonoBehaviour
         if (transform.root.GetComponent<Skeleton>())
             skeletonEnemy = transform.root.GetComponent<Skeleton>();
 
-        if (transform.root.GetComponent<Slime>())
-            slimeEnemy = transform.root.GetComponent<Slime>();
+        if (transform.parent.GetComponent<Slime>())
+            slimeEnemy = transform.parent.GetComponent<Slime>();
 
         if (transform.root.GetComponent<Worm>())
             wormEnemy = transform.root.GetComponent<Worm>();

@@ -30,7 +30,7 @@ public class Worm_AttackState : AttackState
     public override void LogicUpdate()
     {
         base.LogicUpdate();
-        Debug.Log("wormIsAttacking: " + enemy.isAttacking);
+        //Debug.Log("wormIsAttacking: " + enemy.isAttacking);
 
         //Attack if the player is in range, and the worm is not attacking or on fire
         if (enemy.CheckPlayerInMinAttackRange() && !enemy.isAttacking && !enemy.GetComponent<StatusEffects>().isBurning)

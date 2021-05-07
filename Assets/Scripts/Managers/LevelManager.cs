@@ -36,7 +36,6 @@ public class LevelManager : SingletonPattern<LevelManager>
 
     [HideInInspector] public int levelsCompleted = 0;
     [HideInInspector] public string currMapName; //Used for level feedback forms
-    [HideInInspector] public int newSlimeID = 0;
 
     [Header("Transition Variables")]
     public float transitionTime = 3f;
