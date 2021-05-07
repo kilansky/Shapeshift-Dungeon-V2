@@ -32,6 +32,10 @@ public class Skeleton : EnemyBase
     //will have a melee range instead of fireball
     public float AttackDamage { get { return attackDamage; } }
 
+    public GameObject ragdoll;
+
+    public LayerMask tileLayer;
+
     [HideInInspector] public GameObject FrontTarget;
     [HideInInspector] public GameObject SideTarget;
     [HideInInspector] public GameObject BackTarget;
@@ -39,7 +43,7 @@ public class Skeleton : EnemyBase
     [HideInInspector] public bool isBlocking = false;
 
     //shield that blocks all incoming damage from front of skeleton
-    public GameObject shield;
+    //public GameObject shield;
 
     //public GameObject meleeHitBox;
     //public Transform hitPoint;
@@ -86,7 +90,7 @@ public class Skeleton : EnemyBase
         SideTarget = PlayerController.Instance.sideTarget;
         BackTarget = PlayerController.Instance.backTarget;
 
-        shield = GetComponent<GameObject>();
+        //shield = GetComponent<GameObject>();
     }
         
 
@@ -105,6 +109,22 @@ public class Skeleton : EnemyBase
             {
                 stateMachine.ChangeState(stunState);
             }
+        }
+    }
+
+    public override void Kill()
+    {
+        base.Kill();
+
+        //ragdoll.transform.parent = null;
+        ragdoll.gameObject.SetActive(true);
+
+        //Set the starting tile to be occupied by the worm
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position + new Vector3(0, 10, 0), Vector3.down, out hit, 20, tileLayer))
+        {
+            //set ragdoll's parent to tile it is on
+            ragdoll.transform.parent = hit.transform;
         }
     }
 
@@ -131,13 +151,13 @@ public class Skeleton : EnemyBase
         return false;
     }
 
-    public void Block()
+    /*public void Block()
     {
         if (isBlocking)
         {
             shield.GetComponent<BoxCollider>().enabled = true;
         }
-    }
+    }*/
 
     public override void Flash()
     {

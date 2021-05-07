@@ -23,7 +23,7 @@ public class Skeleton_AttackState : AttackState
         enemy.isBlocking = false;
         //enemy.Anim.SetBool("isBlocking", false);
         //enemy.Anim.SetBool("isAttacking", true);
-        enemy.shield.GetComponent<BoxCollider>().enabled = false;
+        //enemy.shield.GetComponent<BoxCollider>().enabled = false;
     }
 
     public override void Exit()
@@ -47,7 +47,7 @@ public class Skeleton_AttackState : AttackState
             stateMachine.ChangeState(enemy.moveState);
             //enemy.isBlocking = true;
             //enemy.Anim.SetBool("isAttacking", false);
-            enemy.shield.GetComponent<BoxCollider>().enabled = true;
+            //enemy.shield.GetComponent<BoxCollider>().enabled = true;
         }
     }
 

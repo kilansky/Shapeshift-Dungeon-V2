@@ -20,6 +20,7 @@ public class Skeleton_StunState : StunState
     {
         base.Enter();
         enemy.Anim.SetBool("isStunned", true);
+        enemy.Anim.SetBool("isAttacking", false);
         enemy.isBlocking = false;
     }
 
@@ -37,7 +38,6 @@ public class Skeleton_StunState : StunState
             if (isPlayerInMinAttackRange)
             {
                 stateMachine.ChangeState(enemy.attackState);
-
             }
             else
             {
