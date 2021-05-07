@@ -83,7 +83,7 @@ public class Worm : EnemyBase
 
         //Set the starting tile to be occupied by the worm
         RaycastHit hit;
-        if(Physics.Raycast(transform.position + new Vector3(0, 10, 0), Vector3.down, out hit, 20, tileLayer))
+        if(Physics.Raycast(transform.position + new Vector3(0, 10, 0), Vector3.down, out hit, 50, tileLayer))
         {
             currOccupiedTile = hit.transform.GetComponent<Tile>();
             currOccupiedTile.occupiedByWorm = true;

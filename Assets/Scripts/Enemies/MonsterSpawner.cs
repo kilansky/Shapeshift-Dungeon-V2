@@ -145,11 +145,17 @@ public class MonsterSpawner : SingletonPattern<MonsterSpawner>
 
             if(monsterToSpawn.GetComponent<Worm>())
             {
-                int randomTile = Random.Range(0, dirtAndSandTiles.Count);
+                int randomTile;
+                do
+                {  //Keep looking for a tile to spawn on that doesn't already contain a worm
+                    randomTile = Random.Range(0, dirtAndSandTiles.Count);
+                }
+                while (dirtAndSandTiles[randomTile].occupiedByWorm == true);
+
                 dirtAndSandTiles[randomTile].spawnerIndicator.SetActive(true);
                 dirtAndSandTiles[randomTile].spawnerIndicator.GetComponent<SpawnPoint>().SpawnMonster(monsterToSpawn, CheckForGem());
-                dirtAndSandTiles[randomTile].occupiedByWorm = true; 
-                if(!dirtAndSandTiles[randomTile].spawnerIndicator.GetComponent<SpawnPoint>().onAtStart)
+                dirtAndSandTiles[randomTile].occupiedByWorm = true;
+                if (!dirtAndSandTiles[randomTile].spawnerIndicator.GetComponent<SpawnPoint>().onAtStart)
                 {
                     StartCoroutine(DisableWormSpawner(dirtAndSandTiles[randomTile].spawnerIndicator));
                 }
