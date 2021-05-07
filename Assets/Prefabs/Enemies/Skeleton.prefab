@@ -3876,12 +3876,15 @@ MonoBehaviour:
   lookForPlayerStateData: {fileID: 11400000, guid: 275f226f343337a4e92293f85a5fcd0f,
     type: 2}
   stunStateData: {fileID: 11400000, guid: 8f18785fa649dba49a713cc9fe9d3ef5, type: 2}
+  ragdoll: {fileID: 3860270840945591316}
+  tileLayer:
+    serializedVersion: 2
+    m_Bits: 1024
   FrontTarget: {fileID: 0}
   SideTarget: {fileID: 0}
   BackTarget: {fileID: 0}
   isAttacking: 0
   isBlocking: 1
-  shield: {fileID: 0}
   feetRenderer: {fileID: 4742166535514424536}
   femurRenderer: {fileID: 9047044015200439261}
   forearmRenderer: {fileID: 7981624602129794342}
@@ -5693,6 +5696,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3e01f94e022691443b0f93ad16549891, type: 3}
+--- !u!1 &3860270840945591316 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7864687809612589341, guid: 3e01f94e022691443b0f93ad16549891,
+    type: 3}
+  m_PrefabInstance: {fileID: 6392459467242466569}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4528861233602633390 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7381165903661888423, guid: 3e01f94e022691443b0f93ad16549891,
