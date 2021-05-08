@@ -16,7 +16,8 @@ public class PlayerAttackController : SingletonPattern<PlayerAttackController>
     [SerializeField] private Transform sword; //Transform to hold sword position/rotation info
     [SerializeField] private ParticleSystem attack1VFX; //GameObject to hold slash vfx1
     [SerializeField] private ParticleSystem attack2VFX; //GameObject to hold slash vfx2
-    [SerializeField] private ParticleSystem[] attack3VFX; //GameObject to hold slash vfx2
+    [SerializeField] private ParticleSystem[] attack3VFX; //GameObject to hold slash vfx3
+    [SerializeField] private ParticleSystem[] thrustVFX; //GameObject to hold thrust vfx
 
     private Transform player;
 
@@ -64,6 +65,10 @@ public class PlayerAttackController : SingletonPattern<PlayerAttackController>
 
         if (showHitboxes)
             thrustHitbox.GetComponent<MeshRenderer>().enabled = true;
+
+        //Play all the vfx of this attack from the impact point
+        foreach (ParticleSystem vfx in thrustVFX)
+            vfx.Play();
     }
 
     //Activate the radial hitbox - called from attack animation event
