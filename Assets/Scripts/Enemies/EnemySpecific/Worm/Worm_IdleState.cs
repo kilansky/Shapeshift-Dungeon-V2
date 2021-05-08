@@ -6,6 +6,9 @@ public class Worm_IdleState : IdleState
 {
     private Worm enemy;
     private float timeElapsed;
+    private float timeElapsedToEmerge;
+    private float timeToEmerge = 2f;
+    private bool isEmerging;
 
     public Worm_IdleState(EnemyBase entity, FiniteStateMachine stateMachine, string animBoolName, D_IdleState stateData, Worm enemy) : base(entity, stateMachine, animBoolName, stateData)
     {
@@ -22,8 +25,12 @@ public class Worm_IdleState : IdleState
         base.Enter();
 
         timeElapsed = 0f;
+        timeElapsedToEmerge = 0f;
         enemy.wormIsMoving = true;
-        enemy.Anim.SetBool("isBelowGround", false);
+        isEmerging = false;
+        enemy.dirtCloud.Play();
+        enemy.dirtChunks.Play();
+        enemy.healthCanvas.SetActive(false);
     }
 
     public override void Exit()
@@ -35,10 +42,22 @@ public class Worm_IdleState : IdleState
     {
         base.LogicUpdate();
 
-        timeElapsed += Time.deltaTime;
+        if(isEmerging)
+            timeElapsed += Time.deltaTime;
+        else
+            timeElapsedToEmerge += Time.deltaTime;
+
+        //Wait to move worm up from ground
+        if (timeElapsedToEmerge >= timeToEmerge)
+        {
+            isEmerging = true;
+            enemy.Anim.SetBool("isBelowGround", false);
+            enemy.healthCanvas.SetActive(true);
+        }
+
 
         //Move worm up from the ground
-        if (timeElapsed <= enemy.timeToEmergeOrSubmerge)
+        if (isEmerging && timeElapsed <= enemy.timeToEmergeOrSubmerge)
         {
             float wormYPos = Mathf.Lerp(enemy.underGroundYPos, enemy.aboveGroundYPos, timeElapsed / enemy.timeToEmergeOrSubmerge);
             enemy.wormMover.transform.position = new Vector3(enemy.wormMover.transform.position.x, wormYPos, enemy.wormMover.transform.position.z);

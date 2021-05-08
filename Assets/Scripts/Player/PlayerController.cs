@@ -31,7 +31,7 @@ public class PlayerController : SingletonPattern<PlayerController>
     public PlayerStats baseAttackDamage; //Attack Damage Variable used for AttackDam in ItemsEquipment
     public PlayerStats baseAttackSpeed; //Attack Speed Variable used for AttackSpd in ItemsEquipment
     public PlayerStats attackTime; //ItemsEquipment for Attack Speed
-    public float attackSpeedMod = 0.25f;
+    public float attackMoveSpeedMod = 0.25f;
     public float attack3DmgMod = 1.5f; //increases damage of third attack
 
     [Header("Charge Attack Stats")]
@@ -711,7 +711,7 @@ public class PlayerController : SingletonPattern<PlayerController>
                 break;
         }
 
-        currMoveSpeed = baseMoveSpeed.Value * attackSpeedMod; //slows movment while attacking
+        currMoveSpeed = baseMoveSpeed.Value * attackMoveSpeedMod; //slows movment while attacking
     }
 
     //Ends an Attack - called from attack animation event

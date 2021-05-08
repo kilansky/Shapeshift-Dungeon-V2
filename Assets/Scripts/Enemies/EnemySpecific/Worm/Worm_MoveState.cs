@@ -23,6 +23,8 @@ public class Worm_MoveState : MoveState
 
         timeElapsed = 0f;
         enemy.wormIsMoving = true;
+        enemy.dirtCloud.Play();
+        enemy.dirtChunks.Play();
         enemy.Anim.SetBool("isBelowGround", true);
     }
 
@@ -51,8 +53,11 @@ public class Worm_MoveState : MoveState
         //The worm is fully in the ground
         if(timeElapsed >= enemy.timeToEmergeOrSubmerge)
         {
+            enemy.dirtCloud.Stop();
+            enemy.dirtChunks.Stop();
+
             //Quench flames if burning underground
-            if(enemy.GetComponent<StatusEffects>().isBurning)
+            if (enemy.GetComponent<StatusEffects>().isBurning)
                 enemy.GetComponent<StatusEffects>().currTime = 10;
 
             //Teleport

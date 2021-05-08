@@ -14,8 +14,9 @@ public class PlayerAttackController : SingletonPattern<PlayerAttackController>
 
     [Header("VFX")]
     [SerializeField] private Transform sword; //Transform to hold sword position/rotation info
-    [SerializeField] private GameObject slashVFX1; //GameObject to hold slash vfx1
-    [SerializeField] private GameObject slashVFX2; //GameObject to hold slash vfx2
+    [SerializeField] private ParticleSystem attack1VFX; //GameObject to hold slash vfx1
+    [SerializeField] private ParticleSystem attack2VFX; //GameObject to hold slash vfx2
+    [SerializeField] private ParticleSystem[] attack3VFX; //GameObject to hold slash vfx2
 
     private Transform player;
 
@@ -35,11 +36,8 @@ public class PlayerAttackController : SingletonPattern<PlayerAttackController>
         if (showHitboxes)
             slashHitbox.GetComponent<MeshRenderer>().enabled = true;
 
-        //Player slash vfx
-        Vector3 vfxSpawnPos = new Vector3(player.position.x, slashHitbox.transform.position.y, player.position.z);
-        GameObject vfx = Instantiate(slashVFX1, vfxSpawnPos, player.rotation, player);
-        vfx.transform.Rotate(90, 0, 42.571f);
-        Destroy(vfx, 1);
+        if (attack1VFX)
+            attack1VFX.Play();
     }
 
     public void ActivateSlashHitbox2()
@@ -52,11 +50,8 @@ public class PlayerAttackController : SingletonPattern<PlayerAttackController>
         if (showHitboxes)
             slashHitbox.GetComponent<MeshRenderer>().enabled = true;
 
-        Vector3 vfxSpawnPos = new Vector3(player.position.x, slashHitbox.transform.position.y, player.position.z);
-        GameObject vfx = Instantiate(slashVFX2, vfxSpawnPos, player.rotation, player);
-        vfx.transform.Rotate(90, 0, 103.16f); //42.571f 103.16f
-        //vfx.transform.localScale = new Vector3(vfx.transform.localScale.x, vfx.transform.localScale.y * -1f, vfx.transform.localScale.z);
-        Destroy(vfx, 1);
+        if (attack2VFX)
+            attack2VFX.Play();
     }
 
     //Activate the thrust hitbox - called from attack animation event
@@ -107,9 +102,16 @@ public class PlayerAttackController : SingletonPattern<PlayerAttackController>
         if (showHitboxes)
             radialHitbox.GetComponent<MeshRenderer>().enabled = true;
 
+        //Play all the vfx of this attack from the impact point
+        foreach (ParticleSystem vfx in attack3VFX)
+        {
+            vfx.gameObject.transform.position = swordImpactPoint.transform.position;
+            vfx.Play();
+        }
+
         //Lerp the damage wave to increase in scale over time
         float timeElapsed = 0;
-        float duration = .25f;
+        float duration = .4f;
         while (timeElapsed < duration)
         {
             attack3HitboxScale = Mathf.Lerp(hitboxMinScale, hitboxOriginalScale, timeElapsed / duration);

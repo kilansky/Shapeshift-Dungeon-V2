@@ -52,11 +52,14 @@ public class Worm : EnemyBase
     public GameObject dirtCircle;
     public Material dirtMat;
     public Material sandMat;
+    public ParticleSystem dirtCloud;
+    public ParticleSystem dirtChunks;
     public float amountToMoveDirt = 2f;
 
     [Header("Renderers")]
     public SkinnedMeshRenderer headRenderer;
     public SkinnedMeshRenderer bodyRenderer;
+    public GameObject healthCanvas;
 
     private float attackDamage;
 

@@ -78,13 +78,12 @@ public class Bullet : MonoBehaviour
         if (canDamage && canBeDestroyed && collider.gameObject.layer == 14)
             DestroyBullet();
 
-        if (canDamage && collider.GetComponent<PlayerController>())
+        if (canDamage && collider.GetComponent<PlayerController>() && !PlayerHealth.Instance.isInvincible)
         {
             //if (!PlayerHealth.Instance.isInvincible)
             //AnalyticsEvents.Instance.PlayerDamaged(shotBy + " Projectile"); //Sends analytics event about damage source
 
-            if (!PlayerHealth.Instance.isInvincible)
-                AudioManager.Instance.Play("PlayerHitMagic");
+            AudioManager.Instance.Play("PlayerHitMagic");
 
             PlayerHealth.Instance.Damage(bulletDamage, parentObject);
 
