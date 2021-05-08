@@ -19,6 +19,8 @@ public class Slime_StunState : StunState
     public override void Enter()
     {
         base.Enter();
+        enemy.aliveGO.GetComponent<EnemyAttack>().DisableHitBox();
+        enemy.agent.SetDestination(enemy.transform.position);
     }
 
     public override void Exit()

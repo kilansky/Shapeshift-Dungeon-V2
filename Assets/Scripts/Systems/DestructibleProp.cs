@@ -18,7 +18,7 @@ public class DestructibleProp : MonoBehaviour
     private void Start()
     {
         //Spawn Gem
-        if (Random.Range(0, 100) < spawnGemChance)
+        if (Random.Range(0, 100) < spawnGemChance && LevelManager.Instance.currFloor > 0)
         {
             spawnGem = true;
             GetComponent<MeshRenderer>().material = containsGemMat;

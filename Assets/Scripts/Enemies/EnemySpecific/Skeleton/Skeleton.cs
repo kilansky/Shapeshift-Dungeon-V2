@@ -76,11 +76,7 @@ public class Skeleton : EnemyBase
         lookForPlayerState = new Skeleton_LookForPlayer(this, stateMachine, "lookForPlayer", lookForPlayerStateData, this);
         stunState = new Skeleton_StunState(this, stateMachine, "stun", stunStateData, this);
 
-        //initialize the goblin in the idle state
-        //stateMachine.Initialize(idleState);
-
-        //this line is what got rid of my NullReferenceExceptions
-        //stateMachine.Initialize(moveState);
+        //initialize the skeleton in the idle state
         stateMachine.Initialize(idleState);
 
         //renderer = GetComponentInChildren<Skeleton>()
@@ -88,8 +84,6 @@ public class Skeleton : EnemyBase
         FrontTarget = PlayerController.Instance.frontTarget;
         SideTarget = PlayerController.Instance.sideTarget;
         BackTarget = PlayerController.Instance.backTarget;
-
-        //shield = GetComponent<GameObject>();
     }
         
 
@@ -120,6 +114,7 @@ public class Skeleton : EnemyBase
         {
             ragdoll.transform.parent = hit.transform;
             ragdoll.transform.position = transform.position;
+            ragdoll.transform.Rotate(0, Random.Range(0f, 360f), 0);
         }
           
         base.Kill();

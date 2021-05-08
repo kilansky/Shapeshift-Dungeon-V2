@@ -167,11 +167,9 @@ public class Worm : EnemyBase
             }
         }
 
-        if (tiles.Count == 0)
-            Debug.LogError("Worm attempted to teleport but found no valid tiles");
-        else
+        if (tiles.Count != 0)
         {
-            Debug.Log("Worm found " + tiles.Count + " safe tiles to teleport to");
+            //Debug.Log("Worm found " + tiles.Count + " safe tiles to teleport to");
             int randTileIndex = Random.Range(0, tiles.Count);
             return tiles[randTileIndex].transform;
         }

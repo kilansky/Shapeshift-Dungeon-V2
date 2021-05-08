@@ -21,6 +21,9 @@ public class Goblin_StunState : StunState
         base.Enter();
         enemy.Anim.SetBool("isMoving", false);
         enemy.Anim.SetBool("isAttacking", false);
+
+        enemy.aliveGO.GetComponent<EnemyAttack>().DisableHitBox();
+        enemy.agent.SetDestination(enemy.transform.position);
     }
 
     public override void Exit()

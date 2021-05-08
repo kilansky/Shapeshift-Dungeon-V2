@@ -106,6 +106,7 @@ public class HUDController : SingletonPattern<HUDController>
 
         ControlSchemeChanged();
 
+        blackScreenOverlay.SetActive(true);
         StartCoroutine(FadeFromBlack());
     }
 

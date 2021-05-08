@@ -6,6 +6,7 @@ public class EnemyAttack : MonoBehaviour
 {
     [Header("Attack Hitbox")]
     public GameObject hitbox;
+    public ParticleSystem attackVFX;
     public bool showHitBoxes = false;
 
     private Goblin goblinEnemy;
@@ -42,6 +43,10 @@ public class EnemyAttack : MonoBehaviour
         //show the hitbox for the attack
         if (showHitBoxes)
             hitbox.GetComponent<MeshRenderer>().enabled = true;
+
+        //show vfx for the attack if there is any
+        if (attackVFX)
+            attackVFX.Play();
     }
 
     public void DisableHitBox()

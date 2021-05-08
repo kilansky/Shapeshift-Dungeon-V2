@@ -11,7 +11,7 @@ public class Sword : MonoBehaviour
     {       
         if (other.GetComponent<EnemyBase>() && !other.GetComponent<EnemyBase>().isInvincible)
         {
-            Debug.Log(other.gameObject);
+            //Debug.Log(other.gameObject);
             if (other.GetComponent<Skeleton>())
             {
                 if (other.GetComponent<Skeleton>().isBlocking)

@@ -25,10 +25,13 @@ public class Skeleton_StunState : StunState
         enemy.Anim.SetBool("isMoving", false);
         enemy.isBlocking = false;
         enemy.isAttacking = false;
+
+        enemy.aliveGO.GetComponent<EnemyAttack>().DisableHitBox();
     }
 
     public override void Exit()
     {
+        enemy.Anim.SetBool("isStunned", false);
         base.Exit();
     }
 

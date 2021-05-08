@@ -11,6 +11,8 @@ public class Skeleton_MoveState : MoveState
 
     private float timeElapsed = 0f;
     private float timeToCheckForPlayer = 1f;
+    private float blockTimeElapsed = 0f;
+    private float timeToHoldBlock;
 
     //skeleton should be moving with shield up
 
@@ -29,9 +31,25 @@ public class Skeleton_MoveState : MoveState
         base.Enter();
         enemy.Anim.SetBool("isStunned", false);
         enemy.Anim.SetBool("isAttacking", false);
-        enemy.Anim.SetBool("isBlocking", false);
-        enemy.Anim.SetBool("isMoving", true);
+
+
+        if(enemy.distanceToPlayer < 3.5f)
+        {
+            enemy.isBlocking = true;
+            enemy.Anim.SetBool("isBlocking", true);
+            enemy.Anim.SetBool("isMoving", false);
+        }
+        else
+        {
+            enemy.isBlocking = false;
+            enemy.Anim.SetBool("isBlocking", false);
+            enemy.Anim.SetBool("isMoving", true);
+        }
+
         entity.SetVelocity(stateData.moveSpeed);
+
+        blockTimeElapsed = 0f;
+        timeToHoldBlock = Random.Range(2f, 5.5f);
 
         //create a random number generator 1-10
         //set back to be #1-5, sides to be #6-8, front to be #9,10
@@ -110,11 +128,16 @@ public class Skeleton_MoveState : MoveState
             enemy.Anim.SetBool("isBlocking", true);
             enemy.Anim.SetBool("isMoving", false);
 
+            blockTimeElapsed += Time.deltaTime;
+
             enemy.agent.SetDestination(enemy.transform.position);
 
             //enemy.Anim.SetBool("isMoving", false);
-            if (enemy.CheckPlayerInMinAttackRange())
+            if (enemy.CheckPlayerInMinAttackRange() || blockTimeElapsed >= timeToHoldBlock)
             {
+                blockTimeElapsed = 0f;
+                enemy.isBlocking = false;
+
                 //Debug.Log("I'm attacking!!");
                 stateMachine.ChangeState(enemy.attackState);
             }
