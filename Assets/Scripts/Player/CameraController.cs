@@ -4,12 +4,13 @@ using UnityEngine;
 using Cinemachine;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.Rendering;
+using UnityEngine.SceneManagement;
 
 public class CameraController : SingletonPattern<CameraController>
 {
     [SerializeField] private CinemachineVirtualCamera playerCam;
     [SerializeField] private VolumeProfile volProf;
-    [SerializeField] private float baseCamDist = 12;
+    //[SerializeField] private float baseCamDist = 12;
     [SerializeField] private float zoomOutCamDist = 25;
     [SerializeField] private float minZoom = 9;
     [SerializeField] private float maxZoom = 15;
@@ -26,7 +27,18 @@ public class CameraController : SingletonPattern<CameraController>
     {
         volProf.TryGet(out DoF);
         volProf.TryGet(out shadMidHigh);
-        SetShadows();
+
+        Scene scene = SceneManager.GetActiveScene();
+        if(scene.buildIndex == 0)
+            DoF.focalLength.value = 120;
+
+        if (scene.buildIndex != 0)
+        {
+            DoF.focalLength.value = 210;
+            //Set darkness of shadows based on current floor
+            for (int i = 0; i < LevelManager.Instance.currFloor + 1; i++)
+                SetShadows();
+        }
     }
 
 
@@ -39,7 +51,7 @@ public class CameraController : SingletonPattern<CameraController>
         currentZoom = framingTransposer.m_CameraDistance;
         framingTransposer.m_CameraDistance = zoomOutCamDist;
 
-        DoF.focalLength.value = 185;
+        DoF.focalLength.value = 180;
     }
 
     //Decreases the camera's distance from the player to the normal amt after a level transition
@@ -50,7 +62,7 @@ public class CameraController : SingletonPattern<CameraController>
         var framingTransposer = playerCam.GetCinemachineComponent<CinemachineFramingTransposer>();
         framingTransposer.m_CameraDistance = currentZoom;
 
-        DoF.focalLength.value = 215;
+        DoF.focalLength.value = 210;
     }
 
     //Increases the camera's distance from the player - called from player controller w/ player input

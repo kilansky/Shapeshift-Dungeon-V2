@@ -79,7 +79,7 @@ public class StatPotionPanel : MonoBehaviour
 
     public void IncreaseAttack()
     {
-        Debug.Log("Increase Attack");
+        //Debug.Log("Increase Attack");
 
         //Keeps track of what the attack starting value was for the debug Log later on
         float startingValue = pc.baseAttackDamage.BaseValue;
@@ -104,12 +104,13 @@ public class StatPotionPanel : MonoBehaviour
         AnalyticsEvents.Instance.StatUpgraded("Attack"); //Send Stat Upgraded Analytics Event
 
         //Debug Log to show all the math as check for Skys math table equations
-        Debug.Log("Starting Value: " + startingValue + "\n" 
+        /*Debug.Log("Starting Value: " + startingValue + "\n" 
             + "Percent Increase: " + attackPercentIncrease * 100 + "\n" 
             + "Math Calculation: " + MathCalculation + "\n" 
             + "Increase Value: " + attackIncreaseValue + "\n"
             + "Final Value: " + pc.baseAttackDamage.BaseValue + "\n"
             + "Increase %: " + increasePercent * 100 + "%");
+            */
 
         //Decrease the % increase by 0.1%
         attackPercentIncrease -= 0.001f;
@@ -117,7 +118,7 @@ public class StatPotionPanel : MonoBehaviour
 
     public void IncreaseSpeed()
     {
-        Debug.Log("Increase Speed");
+        //Debug.Log("Increase Speed");
 
         //Keeps track of what the move speed and dash speed starting value was for the debug Log later on
         float moveSpeedStartingValue = pc.baseMoveSpeed.BaseValue;
@@ -147,6 +148,7 @@ public class StatPotionPanel : MonoBehaviour
         float dashIncreasePercent = ((originalDashSpeedBaseValue + dashIncreaseValue) / originalDashSpeedBaseValue) - 1;
 
         //Debug Log to show all the math as check for Skys math table equations
+        /*
         Debug.Log("Move Speed Math\n"
             + "Starting Value: " + moveSpeedStartingValue + "\n"
             + "Percent Increase: " + speedPercentIncrease * 100 + "\n"
@@ -170,6 +172,7 @@ public class StatPotionPanel : MonoBehaviour
             + "Increase Value: " + dashIncreaseValue + "\n"
             + "Final Value: " + pc.dashSpeed.BaseValue + "\n"
             + "Increase %: " + dashIncreasePercent * 100 + "%");
+            */
 
         //Decrease the % increase by 0.1%
         speedPercentIncrease -= 0.001f;

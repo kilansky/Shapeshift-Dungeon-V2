@@ -36,7 +36,9 @@ public class ExplodingBarrel : MonoBehaviour
             isExploding = true;
         }
         else
-            Debug.Log("Already exploding");
+        {
+            //Debug.Log("Already exploding");
+        }
     }
 
     private IEnumerator FuseCycle()

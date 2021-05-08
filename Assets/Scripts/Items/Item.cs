@@ -181,6 +181,12 @@ public class Item : MonoBehaviour
                 //print("Alright time to open up the stat potion upgrade panel!");
                 HUDController.Instance.ShowStatPotionPanel(); //Opens up the Upgrade Stat Potion Panel
             }
+
+            //Gem Bag
+            else if (item.ItemName == "Gem Bag")
+            {
+                PlayerController.Instance.GetComponent<PlayerGems>().AddGems(5);
+            }
         }
 
 
@@ -212,8 +218,8 @@ public class Item : MonoBehaviour
                 if ((int)item.statMods[i].statModifier == 300)
                     c.baseMoveSpeed.AddModifiers(new StatModifier(item.statMods[i].adjustableValue, StatModType.PercentMult, item.prefab));
 
-                Debug.Log("This item " + item.ItemName + " has been equipped so Move Speed has been adjusted.");
-                Debug.Log("The new move speed is " + c.baseMoveSpeed.Value);
+                //Debug.Log("This item " + item.ItemName + " has been equipped so Move Speed has been adjusted.");
+                //Debug.Log("The new move speed is " + c.baseMoveSpeed.Value);
             }
 
             //Attack Damage Adjustment
@@ -231,8 +237,8 @@ public class Item : MonoBehaviour
                 if ((int)item.statMods[i].statModifier == 300)
                     c.baseAttackDamage.AddModifiers(new StatModifier(item.statMods[i].adjustableValue, StatModType.PercentMult, item.prefab));
 
-                Debug.Log("This item " + item.ItemName + " has been equipped so Attack Damage has been adjusted.");
-                Debug.Log("The new Attack Damage is " + c.baseAttackDamage.Value);
+                //Debug.Log("This item " + item.ItemName + " has been equipped so Attack Damage has been adjusted.");
+                //Debug.Log("The new Attack Damage is " + c.baseAttackDamage.Value);
             }
 
             //Attack Speed Adjustment
@@ -250,8 +256,8 @@ public class Item : MonoBehaviour
                 if ((int)item.statMods[i].statModifier == 300)
                     c.baseAttackSpeed.AddModifiers(new StatModifier(item.statMods[i].adjustableValue, StatModType.PercentMult, item.prefab));
 
-                Debug.Log("This item " + item.ItemName + " has been equipped so Attack has been adjusted.");
-                Debug.Log("The new Attack Speed is " + c.attackTime.Value);
+                //Debug.Log("This item " + item.ItemName + " has been equipped so Attack has been adjusted.");
+                //Debug.Log("The new Attack Speed is " + c.attackTime.Value);
             }
 
             //Charge Attack Time Adjustment
@@ -269,8 +275,8 @@ public class Item : MonoBehaviour
                 if ((int)item.statMods[i].statModifier == 300)
                     c.chargeRate.AddModifiers(new StatModifier(item.statMods[i].adjustableValue, StatModType.PercentMult, item.prefab));
 
-                Debug.Log("This item " + item.ItemName + " has been equipped so Charge Attack Time has been adjusted.");
-                Debug.Log("The new Charge Attack Time is " + c.chargeRate.Value);
+                //Debug.Log("This item " + item.ItemName + " has been equipped so Charge Attack Time has been adjusted.");
+                //Debug.Log("The new Charge Attack Time is " + c.chargeRate.Value);
             }
 
             //Attack Knockback Adjustment
@@ -279,7 +285,7 @@ public class Item : MonoBehaviour
                 //**AHL**
                 //DON'T HAVE ANYTHING YET (Check PlayerController Script?)
                 //Using a Debug to show it works
-                Debug.Log("This item " + item.ItemName + " has been equipped so Attack Knockback has been adjusted.");
+                //Debug.Log("This item " + item.ItemName + " has been equipped so Attack Knockback has been adjusted.");
             }
 
             //Dash Invlurnerability Time Adjustment
@@ -288,7 +294,7 @@ public class Item : MonoBehaviour
                 //**AHL**
                 //DON'T HAVE ANYTHING YET (Check PlayerController Script?)
                 //Using a Debug to show it works
-                Debug.Log("This item " + item.ItemName + " has been equipped so Dash Invulnerability Time has been adjusted.");
+                //Debug.Log("This item " + item.ItemName + " has been equipped so Dash Invulnerability Time has been adjusted.");
             }
 
             //Dash Speed Adjustment
@@ -306,8 +312,8 @@ public class Item : MonoBehaviour
                 if ((int)item.statMods[i].statModifier == 300)
                     c.dashSpeed.AddModifiers(new StatModifier(item.statMods[i].adjustableValue, StatModType.PercentMult, item.prefab));
 
-                Debug.Log("This item " + item.ItemName + " has been equipped so Dash Speed has been adjusted.");
-                Debug.Log("The new Dash Speed is " + c.dashSpeed.Value);
+                //Debug.Log("This item " + item.ItemName + " has been equipped so Dash Speed has been adjusted.");
+                //Debug.Log("The new Dash Speed is " + c.dashSpeed.Value);
             }
 
             //Dash Refresh Speed Adjustment
@@ -325,8 +331,8 @@ public class Item : MonoBehaviour
                 if ((int)item.statMods[i].statModifier == 300)
                     c.dashCooldownTime.AddModifiers(new StatModifier(item.statMods[i].adjustableValue, StatModType.PercentMult, item.prefab));
 
-                Debug.Log("This item " + item.ItemName + " has been equipped so Dash Cooldown has been adjusted.");
-                Debug.Log("The new Dash Cooldown is " + c.dashCooldownTime.Value);
+                //Debug.Log("This item " + item.ItemName + " has been equipped so Dash Cooldown has been adjusted.");
+                //Debug.Log("The new Dash Cooldown is " + c.dashCooldownTime.Value);
             }
 
             //Damage From Enemies Adjustment
@@ -344,8 +350,8 @@ public class Item : MonoBehaviour
                 if ((int)item.statMods[i].statModifier == 300)
                     h.damageModifier.AddModifiers(new StatModifier(item.statMods[i].adjustableValue, StatModType.PercentMult, item.prefab));
 
-                Debug.Log("This item " + item.ItemName + " has been equipped so Damage From Enemies has been adjusted.");
-                Debug.Log("The new Damage From Enemies is " + h.damageModifier.Value);
+                //Debug.Log("This item " + item.ItemName + " has been equipped so Damage From Enemies has been adjusted.");
+                //Debug.Log("The new Damage From Enemies is " + h.damageModifier.Value);
             }
 
             //Potion Healing Adjustment
@@ -363,7 +369,7 @@ public class Item : MonoBehaviour
                 if ((int)item.statMods[i].statModifier == 300)
                     h.additionalPotionHealing.AddModifiers(new StatModifier(item.statMods[i].adjustableValue, StatModType.PercentMult, item.prefab));
 
-                Debug.Log("This item " + item.ItemName + " has been equipped so they will gain " + item.statMods[i].adjustableValue + " more health from healing items.");
+                //Debug.Log("This item " + item.ItemName + " has been equipped so they will gain " + item.statMods[i].adjustableValue + " more health from healing items.");
             }
 
             //Special Item Recharge Time Adjustment
@@ -394,8 +400,8 @@ public class Item : MonoBehaviour
                         HUDController.Instance.ShowSpecialSwapPanel();
                 }
 
-                Debug.Log("This item " + item.ItemName + " has been equipped so Special Item Recharge Time has been adjusted.");
-                Debug.Log("The new Special Item Recharge Time is " + c.specialCooldownTime.Value);
+                //Debug.Log("This item " + item.ItemName + " has been equipped so Special Item Recharge Time has been adjusted.");
+                //Debug.Log("The new Special Item Recharge Time is " + c.specialCooldownTime.Value);
             }
         }
 
@@ -405,6 +411,8 @@ public class Item : MonoBehaviour
 
         if (isNewBOHItem)
             isNewBOHItem = false;
+
+        StartCoroutine(c.RechargeSpecial());
     }
 
     /// <summary>
@@ -430,32 +438,32 @@ public class Item : MonoBehaviour
             if ((int)item.statMods[i].statType == 2)
             {
                 c.baseMoveSpeed.RemoveAllModifiersFromSource(item.prefab);
-                Debug.Log("This item " + item.ItemName + " has been removed so Move Speed has been adjusted.");
-                Debug.Log("The new move speed is " + c.baseMoveSpeed.Value);
+                //Debug.Log("This item " + item.ItemName + " has been removed so Move Speed has been adjusted.");
+                //Debug.Log("The new move speed is " + c.baseMoveSpeed.Value);
             }
 
             //Attack Damage Adjustment
             else if ((int)item.statMods[i].statType == 3)
             {
                 c.baseAttackDamage.RemoveAllModifiersFromSource(item.prefab);
-                Debug.Log("This item " + item.ItemName + " has been removed so Attack Damage has been adjusted.");
-                Debug.Log("The new Attack Damage is " + c.baseAttackDamage.Value);
+                //Debug.Log("This item " + item.ItemName + " has been removed so Attack Damage has been adjusted.");
+                //Debug.Log("The new Attack Damage is " + c.baseAttackDamage.Value);
             }
             
             //Attack Speed Adjustment
             else if ((int)item.statMods[i].statType == 4)
             {
                 c.attackTime.RemoveAllModifiersFromSource(item.prefab);
-                Debug.Log("This item " + item.ItemName + " has been removed so Attack Speed has been adjusted.");
-                Debug.Log("The new Attack Speed is " + c.attackTime.Value);
+                //Debug.Log("This item " + item.ItemName + " has been removed so Attack Speed has been adjusted.");
+                //Debug.Log("The new Attack Speed is " + c.attackTime.Value);
             }
 
             //Charge Attack Time Adjustment
             else if ((int)item.statMods[i].statType == 5)
             {
                 c.chargeRate.RemoveAllModifiersFromSource(item.prefab);
-                Debug.Log("This item " + item.ItemName + " has been removed so Charge Attack Time has been adjusted.");
-                Debug.Log("The new Charge Attack Time is " + c.chargeRate.Value);
+                //Debug.Log("This item " + item.ItemName + " has been removed so Charge Attack Time has been adjusted.");
+                //Debug.Log("The new Charge Attack Time is " + c.chargeRate.Value);
             }
 
             //Attack Knockback Adjustment
@@ -464,7 +472,7 @@ public class Item : MonoBehaviour
                 //**AHL**
                 //DON'T HAVE ANYTHING YET (Check PlayerController Script?)
                 //Using a Debug to show it works
-                Debug.Log("This item " + item.ItemName + " has been removed so Attack Knockback has been adjusted.");
+                //Debug.Log("This item " + item.ItemName + " has been removed so Attack Knockback has been adjusted.");
             }
 
             //Dash Invlurnerability Time Adjustment
@@ -473,46 +481,46 @@ public class Item : MonoBehaviour
                 //**AHL**
                 //DON'T HAVE ANYTHING YET (Check PlayerController Script?)
                 //Using a Debug to show it works
-                Debug.Log("This item " + item.ItemName + " has been removed so Dash Invulnerability Time has been adjusted.");
+                //Debug.Log("This item " + item.ItemName + " has been removed so Dash Invulnerability Time has been adjusted.");
             }
 
             //Dash Speed Adjustment
             else if ((int)item.statMods[i].statType == 8)
             { 
                 c.dashSpeed.RemoveAllModifiersFromSource(item.prefab);
-                Debug.Log("This item " + item.ItemName + " has been removed so Dash Speed has been adjusted.");
-                Debug.Log("The new Dash Speed is " + c.dashSpeed.Value);
+                //Debug.Log("This item " + item.ItemName + " has been removed so Dash Speed has been adjusted.");
+                //Debug.Log("The new Dash Speed is " + c.dashSpeed.Value);
             }
 
             //Dash Refresh Speed Adjustment
             else if ((int)item.statMods[i].statType == 9)
             {
                 c.dashCooldownTime.RemoveAllModifiersFromSource(item.prefab);
-                Debug.Log("This item " + item.ItemName + " has been removed so Dash Cooldown has been adjusted.");
-                Debug.Log("The new Dash Cooldown is " + c.dashCooldownTime.Value);
+                //Debug.Log("This item " + item.ItemName + " has been removed so Dash Cooldown has been adjusted.");
+                //Debug.Log("The new Dash Cooldown is " + c.dashCooldownTime.Value);
             }
 
             //Damage From Enemies Adjustment
             else if ((int)item.statMods[i].statType == 10)
             {
                 h.damageModifier.RemoveAllModifiersFromSource(item.prefab);
-                Debug.Log("This item " + item.ItemName + " has been removed so Damage From Enemies has been adjusted.");
-                Debug.Log("The new Damage From Enemies is " + h.damageModifier.Value);
+                //Debug.Log("This item " + item.ItemName + " has been removed so Damage From Enemies has been adjusted.");
+                //Debug.Log("The new Damage From Enemies is " + h.damageModifier.Value);
             }
 
             //Potion Healing Adjustment
             else if ((int)item.statMods[i].statType == 11)
             {
                 h.additionalPotionHealing.RemoveAllModifiersFromSource(item.prefab);
-                Debug.Log("This item " + item.ItemName + " has been removed so they will gain " + item.statMods[i].adjustableValue + " less health from healing items.");
+                //Debug.Log("This item " + item.ItemName + " has been removed so they will gain " + item.statMods[i].adjustableValue + " less health from healing items.");
             }
 
             //Special Item Recharge Time Adjustment
             else if ((int)item.statMods[i].statType == 12)
             {
                 c.specialCooldownTime.RemoveAllModifiersFromSource(item.prefab);
-                Debug.Log("This item " + item.ItemName + " has been removed so Special Item Recharge has been adjusted.");
-                Debug.Log("The new Special Item Recharge is " + c.specialCooldownTime.Value);
+                //Debug.Log("This item " + item.ItemName + " has been removed so Special Item Recharge has been adjusted.");
+                //Debug.Log("The new Special Item Recharge is " + c.specialCooldownTime.Value);
             }
         }
     }

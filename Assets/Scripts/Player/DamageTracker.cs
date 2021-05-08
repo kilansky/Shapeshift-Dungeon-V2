@@ -29,74 +29,78 @@ public class DamageTracker : SingletonPattern<DamageTracker>
     public void updateDamage(float damageValue, GameObject damageSource)
     {
         //Long chain of ifs to adjust the daamge variables listed above
-        
-        //Spike Trap
-        if(damageSource.GetComponent<SpikeTrap>())
+
+        if (damageSource != null)
         {
-            spikeDamage += damageValue;
-        }
+            //Spike Trap
+            if (damageSource.GetComponent<SpikeTrap>())
+            {
+                spikeDamage += damageValue;
+            }
 
-        //Lava
-        else if (damageSource.GetComponent<LavaTile>())
-        {
-            lavaDamage += damageValue;
-        }
+            //Lava
+            else if (damageSource.GetComponent<LavaTile>())
+            {
+                lavaDamage += damageValue;
+            }
 
-        //Dispenser
-        else if (damageSource.GetComponent<Dispenser>())
-        {
-            dispenserTrapDamage += damageValue;
-        }
+            //Dispenser
+            else if (damageSource.GetComponent<Dispenser>())
+            {
+                dispenserTrapDamage += damageValue;
+            }
 
-        //Skull
-        else if (damageSource.GetComponent<FloatingSkull>())
-        {
-            skullDamage += damageValue;
+            //Skull
+            else if (damageSource.GetComponent<FloatingSkull>())
+            {
+                skullDamage += damageValue;
 
-            //If the player is wearing the Flame Crown then damage the enemy for 3 seconds
-            if (PlayerController.Instance.HeadSlot != null && PlayerController.Instance.HeadSlot.ItemName == "Flame Crown")
-                damageSource.GetComponent<StatusEffects>().fireStatus(3);
-        }
+                //If the player is wearing the Flame Crown then damage the enemy for 3 seconds
+                if (PlayerController.Instance.HeadSlot != null && PlayerController.Instance.HeadSlot.ItemName == "Flame Crown")
+                    damageSource.GetComponent<StatusEffects>().fireStatus(3);
+            }
 
-        //Crystal
-        else if (damageSource.GetComponent<FloatingCrystal>())
-        {
-            crystalDamage += damageValue;
+            //Crystal
+            else if (damageSource.GetComponent<FloatingCrystal>())
+            {
+                crystalDamage += damageValue;
 
-            //If the player is wearing the Flame Crown then damage the enemy for 3 seconds
-            if (PlayerController.Instance.HeadSlot != null && PlayerController.Instance.HeadSlot.ItemName == "Flame Crown")
-                damageSource.GetComponent<StatusEffects>().fireStatus(3);
-        }
+                //If the player is wearing the Flame Crown then damage the enemy for 3 seconds
+                if (PlayerController.Instance.HeadSlot != null && PlayerController.Instance.HeadSlot.ItemName == "Flame Crown")
+                    damageSource.GetComponent<StatusEffects>().fireStatus(3);
+            }
 
-        //Goblin
-        else if (damageSource.GetComponent<Goblin>())
-        {
-            goblinDamage += damageValue;
+            //Goblin
+            else if (damageSource.GetComponent<Goblin>())
+            {
+                goblinDamage += damageValue;
 
-            //If the player is wearing the Flame Crown then damage the enemy for 3 seconds
-            if (PlayerController.Instance.HeadSlot != null && PlayerController.Instance.HeadSlot.ItemName == "Flame Crown")
-                damageSource.GetComponent<StatusEffects>().fireStatus(3);
-        }
+                //If the player is wearing the Flame Crown then damage the enemy for 3 seconds
+                if (PlayerController.Instance.HeadSlot != null && PlayerController.Instance.HeadSlot.ItemName == "Flame Crown")
+                    damageSource.GetComponent<StatusEffects>().fireStatus(3);
+            }
 
-        //Bomb
-        else if (damageSource.GetComponent<BombAttack>())
-        {
-            bombDamage += damageValue;
-        }
+            //Bomb
+            else if (damageSource.GetComponent<BombAttack>())
+            {
+                bombDamage += damageValue;
+            }
 
-        //Pitfalls
-        else if(damageSource.GetComponent<Pit>())
-        {
-            pitfallDamage += damageValue;
-        }
+            //Pitfalls
+            else if (damageSource.GetComponent<Pit>())
+            {
+                pitfallDamage += damageValue;
+            }
 
-        //Fire Status Effect
-        else if (damageSource.GetComponent<PlayerController>())
-        {
-            fireStatusDamage += damageValue;
+            //Fire Status Effect
+            else if (damageSource.GetComponent<PlayerController>())
+            {
+                fireStatusDamage += damageValue;
+            }
         }
     }
 
+    /*
     /// <summary>
     /// When the player dies then we display the total amount of damage the player has taken - AHL (4/4/21)
     /// </summary>
@@ -115,9 +119,7 @@ public class DamageTracker : SingletonPattern<DamageTracker>
             "\nThe Amount of Bomb damage the player took was: " + bombDamage +
             "\nThe Amount of Fire Status damage the player took was: " + fireStatusDamage);
 
-        Debug.Log(body);
-
-        try { EMail.Instance.SendEmail(subject, body); }
-        catch { Debug.LogError("Failed to send email feedback"); }    
+        //Debug.Log(body);
     }
+    */
 }

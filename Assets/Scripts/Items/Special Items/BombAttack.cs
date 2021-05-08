@@ -42,7 +42,7 @@ public class BombAttack : MonoBehaviour
 
             if (other.GetComponent<DestructibleProp>())
             {
-                other.GetComponent<DestructibleProp>().DestroyObject();
+                other.GetComponent<DestructibleProp>().ShatterObject();
             }
 
             if(other.GetComponent<ExplodingBarrel>())
