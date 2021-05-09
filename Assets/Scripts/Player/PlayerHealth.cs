@@ -147,6 +147,13 @@ public class PlayerHealth : SingletonPattern<PlayerHealth>, IDamageable
     //Adds a potion - REPLACE W/ BETTER SYSTEM LATER!
     public void AddPotion()
     {
+        if(GetPotionCount() == 3)
+        {
+            UsePotion();
+            return;
+        }
+
+
         //Check each potion slot front to back
         //If the slot is available, add the potion to it
         for (int i = 0; i < potionSlots.Length; i++)

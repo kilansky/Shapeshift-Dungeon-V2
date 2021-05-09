@@ -60,6 +60,9 @@ public class PlayerController : SingletonPattern<PlayerController>
     public Transform mouseTargetPoint;
     public LayerMask mouseAimMask;
 
+    [Header("HUD")]
+    public GameObject hud;
+
     [Header("Items")]
     public ItemsEquipment SpecialSlot; //Special Item slot
     public ItemsEquipment HeadSlot; //Head Item slot
@@ -590,6 +593,18 @@ public class PlayerController : SingletonPattern<PlayerController>
         if (context.performed)
         {
             mouseAimPosition = context.ReadValue<Vector2>();
+        }
+    }
+
+    //Hide HUD Button Pressed
+    public void HideHUD(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            if(hud.activeSelf)
+                hud.SetActive(false);
+            else
+                hud.SetActive(true);
         }
     }
 

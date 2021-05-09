@@ -92,6 +92,14 @@
                     "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "HideHUD",
+                    "type": "Button",
+                    "id": "69072e21-5eca-49b3-b14f-dd7a78453d17",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -433,6 +441,17 @@
                     "processors": "NormalizeVector2",
                     "groups": "Gamepad",
                     "action": "CameraZoom",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "226cc7ca-af56-4be3-a84f-fc80812ab5bf",
+                    "path": "<Keyboard>/h",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "HideHUD",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
