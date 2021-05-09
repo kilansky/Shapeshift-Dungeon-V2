@@ -119,6 +119,7 @@ public class PlayerController : SingletonPattern<PlayerController>
     private int priceOfLastTouchedItem = 0; //I need this to store prices -Justin
     private bool specialIsCharging = false;
     private bool specialIsCharging2 = false;
+    private bool runStarted = false;
 
     //Allow/prevent input actions
     private bool canMove = true;
@@ -1073,44 +1074,21 @@ public class PlayerController : SingletonPattern<PlayerController>
         //If on center tile
         if (CenterTile.Instance.onTile)
         {
-            if (LevelManager.Instance.currFloor == 0)//floor 0 stuff
+            if(!runStarted) //do certain things if this is the start of the run
             {
+                runStarted = true;
                 RunTimer.Instance.IncreaseTimer = true;
                 HUDController.Instance.ShowRunTimer();
+                HUDController.Instance.ShowMinimap();
 
                 AnalyticsEvents.Instance.PlayerControls(); //Sends an analytics event describing the players current controls
-
-                LevelManager.Instance.TransitionLevel();
-                CenterTile.Instance.onTile = false;
-
-                HUDController.Instance.controlsPanel.SetActive(false);
-                HUDController.Instance.HideQuickHint();
             }
-            else if (LevelManager.Instance.currFloor % 5 == 0)//shop stuff
-            {
-                LevelManager.Instance.TransitionLevel();
-                CenterTile.Instance.onTile = false;
 
-                HUDController.Instance.controlsPanel.SetActive(false);
-                HUDController.Instance.HideQuickHint();
-            }
-            /*
-            else if (LevelManager.Instance.currFloor == 19)//End game stuff
-            {
-                RunTimer.Instance.IncreaseTimer = false;
-                Time.timeScale = 0;
-                HUDController.Instance.ShowWinScreen();
-            }
-            */
-            else
-            {
-                LevelManager.Instance.TransitionLevel();
+            LevelManager.Instance.TransitionLevel();
+            CenterTile.Instance.onTile = false;
 
-                CenterTile.Instance.onTile = false;
-
-                HUDController.Instance.controlsPanel.SetActive(false);
-                HUDController.Instance.HideQuickHint();
-            }
+            HUDController.Instance.controlsPanel.SetActive(false);
+            HUDController.Instance.HideQuickHint();
         }
 
         //If there is currently an item being touched then set pickup Item to true
