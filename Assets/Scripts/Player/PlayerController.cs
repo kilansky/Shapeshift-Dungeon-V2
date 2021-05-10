@@ -79,6 +79,7 @@ public class PlayerController : SingletonPattern<PlayerController>
     [HideInInspector] public bool hasRedHerb = false; //Variable to make sure that the player has the red herb (makes for less checking of both pocker slots) so they are able to regain health when they start a new level
     [HideInInspector] public bool hasBagOfHolding = false; //Variable to make sure that the player has the bag of holding item (makes for less checking of both pocker slots) so they are able to store/swap special items
     [HideInInspector] public bool hasMonsterMask = false; //Variable to check for the Monster Mask item to make it easier to search for by the enemies when they spawn
+    [HideInInspector] public bool hasKapala = false; //Variable to check for the Kapala item to make it easier to adjust Special Charge values
     [HideInInspector] public bool isItemSwapping = false; //Variable to be used to check if the itms are currently being swapped or not
     [HideInInspector] public bool canUseSpecial = true; //Keeps track of if the special item can be used
     [HideInInspector] public float specialCharge2 = 0; //Varaible to hold the special charge of the item in the bag of holding
