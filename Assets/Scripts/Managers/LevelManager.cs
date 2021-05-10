@@ -121,6 +121,7 @@ public class LevelManager : SingletonPattern<LevelManager>
 
         CineShake.Instance.Shake(1.5f, 2 * transitionTime + maxStartTime);
         AudioManager.Instance.Play("Rumble");
+        MonsterSpawner.Instance.SetSpawnInfo(nextLevel.GetComponent<SpawnInfo>().spawnInfo);
 
         Transform[] allChildrenCurrLevel = activeLevel.GetComponentsInChildren<Transform>(); //Puts all tiles into an array
         foreach (Transform tile in allChildrenCurrLevel) //Cycles through all tiles in the newly created array

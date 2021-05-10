@@ -268,4 +268,46 @@ public class MonsterSpawner : SingletonPattern<MonsterSpawner>
             //Debug.Log(monsterInfo.monster);
         }
     }
+
+    public void BossWaveSpawn(int amountOfMonsters)
+    {
+        List<SpawnPoint> spawnPoints = new List<SpawnPoint>();
+        SpawnPoint[] spawnArray = FindObjectsOfType<SpawnPoint>();
+        Debug.Log(spawnArray.Length);
+
+        if(amountOfMonsters > currFloorInfo.maxMonsters)
+        {
+            Debug.LogWarning("Trying to spawn more monsters than spawn points! Aborting.");
+            return;
+        }
+
+        foreach (SpawnPoint point in spawnArray)
+        {
+            spawnPoints.Add(point);
+        }
+
+        for (int i = 0; i < amountOfMonsters; i++)
+        {
+            Debug.Log("There are currently " + monstersInRoom + " monsters active");
+            if (monstersInRoom < currFloorInfo.maxMonsters)
+            {
+                Debug.Log("List size is: " + spawnPoints.Count);
+                int randSpawnPoint = Random.Range(0, monsterSpawnPoints.Count);
+                
+                spawnPoints[randSpawnPoint].SpawnMonster(currFloorInfo.GetMonsterToSpawn(), false);
+                spawnPoints.RemoveAt(randSpawnPoint);
+                monstersInRoom++;
+            }
+            else
+            {
+                Debug.LogWarning("Too many monsters in play! Skipping this one.");
+            }
+        }
+    }
+
+    [ContextMenu("TestBossMonsters")]
+    private void TestBossSpawn()
+    {
+        BossWaveSpawn(5);
+    }
 }
