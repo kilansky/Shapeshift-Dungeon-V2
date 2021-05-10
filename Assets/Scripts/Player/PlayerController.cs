@@ -602,6 +602,7 @@ public class PlayerController : SingletonPattern<PlayerController>
     //Hide HUD Button Pressed
     public void HideHUD(InputAction.CallbackContext context)
     {
+        /*
         if (context.performed)
         {
             if(hud.activeSelf)
@@ -609,6 +610,7 @@ public class PlayerController : SingletonPattern<PlayerController>
             else
                 hud.SetActive(true);
         }
+        */
     }
 
     //---------------------------------------------------------------------------

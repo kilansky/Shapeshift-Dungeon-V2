@@ -326,6 +326,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3645477882027661697}
   - component: {fileID: 1077606468893814810}
+  - component: {fileID: -3056660264650989816}
   m_Layer: 0
   m_Name: LavaCrystal
   m_TagString: Untagged
@@ -363,3 +364,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e2848302ab029947a41ef23fb0488ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-3056660264650989816
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9023005422481520763}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54db07d4bc427aa4bae4a0dcc6b924cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  propType: 16
+  forceTileSwap: 0
+  dontRotateTile: 0
+  mask:
+    serializedVersion: 2
+    m_Bits: 1024
