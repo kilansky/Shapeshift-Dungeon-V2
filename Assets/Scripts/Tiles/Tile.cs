@@ -40,7 +40,7 @@ public class Tile : MonoBehaviour
 
     public bool hasDecor = false;
     public bool forceSwap = false;
-    public bool occupiedByWorm = false;
+    [HideInInspector] public bool occupiedByWorm = false;
 
     private GameObject nextTile;
 

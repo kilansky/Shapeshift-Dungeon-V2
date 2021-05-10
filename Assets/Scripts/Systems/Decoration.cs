@@ -19,10 +19,14 @@ public class Decoration : MonoBehaviour
         torch,
         webs,
         explosiveBarrel,
-        pot
+        pot,
+        column,
+        brokenColumn,
+        crystal
     }
     public decorTypes propType;
     public bool forceTileSwap;
+    public bool dontRotateTile;
     public LayerMask mask;
 
     private GameObject tile;
@@ -49,6 +53,17 @@ public class Decoration : MonoBehaviour
             transform.SetParent(tile.transform);
         else
             Debug.LogWarning("No tile detected");
+
+        StartCoroutine(CheckToResetTileRotation());
+    }
+
+    //Waits until the props and tiles have loaded and then reverts the random rotation of the tile if needed (hanging chains)
+    private IEnumerator CheckToResetTileRotation()
+    {
+        yield return new WaitForSeconds(0.1f);
+
+        if (dontRotateTile && transform.parent.GetComponent<TileRotator>())
+            transform.parent.GetComponent<TileRotator>().UndoRotation();
     }
 
     [ContextMenu("Test")]
