@@ -20,11 +20,18 @@ public class Skeleton_StunState : StunState
     {
         base.Enter();
         enemy.Anim.SetBool("isStunned", true);
+        enemy.Anim.SetBool("isAttacking", false);
+        enemy.Anim.SetBool("isBlocking", false);
+        enemy.Anim.SetBool("isMoving", false);
         enemy.isBlocking = false;
+        enemy.isAttacking = false;
+
+        enemy.aliveGO.GetComponent<EnemyAttack>().DisableHitBox();
     }
 
     public override void Exit()
     {
+        enemy.Anim.SetBool("isStunned", false);
         base.Exit();
     }
 
@@ -37,7 +44,6 @@ public class Skeleton_StunState : StunState
             if (isPlayerInMinAttackRange)
             {
                 stateMachine.ChangeState(enemy.attackState);
-
             }
             else
             {

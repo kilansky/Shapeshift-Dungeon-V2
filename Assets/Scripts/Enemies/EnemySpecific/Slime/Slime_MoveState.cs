@@ -6,6 +6,10 @@ public class Slime_MoveState : MoveState
 {
     private Slime enemy;
 
+    private float timeElapsed = 0f;
+    private float timeToAttack = 0.75f;
+    private bool canAttack = false;
+
     public Slime_MoveState(EnemyBase entity, FiniteStateMachine stateMachine, string animBoolName, D_MoveState stateData, Slime enemy) : base(entity, stateMachine, animBoolName, stateData)
     {
         this.enemy = enemy;
@@ -36,7 +40,15 @@ public class Slime_MoveState : MoveState
 
         enemy.SetNewDestination();
 
-        if (enemy.CheckPlayerInMinAttackRange())
+        if(!canAttack)
+        {
+            timeElapsed += Time.deltaTime;
+
+            if (timeElapsed >= timeToAttack)
+                canAttack = true;
+        }
+
+        if (canAttack && enemy.CheckPlayerInMinAttackRange())
         {
             //Debug.Log("I'm attacking!!");
             stateMachine.ChangeState(enemy.attackState);

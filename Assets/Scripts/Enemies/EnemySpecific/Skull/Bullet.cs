@@ -78,13 +78,12 @@ public class Bullet : MonoBehaviour
         if (canDamage && canBeDestroyed && collider.gameObject.layer == 14)
             DestroyBullet();
 
-        if (canDamage && collider.GetComponent<PlayerController>())
+        if (canDamage && collider.GetComponent<PlayerController>() && !PlayerHealth.Instance.isInvincible)
         {
             //if (!PlayerHealth.Instance.isInvincible)
             //AnalyticsEvents.Instance.PlayerDamaged(shotBy + " Projectile"); //Sends analytics event about damage source
 
-            if (!PlayerHealth.Instance.isInvincible)
-                AudioManager.Instance.Play("PlayerHitMagic");
+            AudioManager.Instance.Play("PlayerHitMagic");
 
             PlayerHealth.Instance.Damage(bulletDamage, parentObject);
 
@@ -103,8 +102,9 @@ public class Bullet : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        //destroy the bullet if it hits the environment, walls, the player, or stairs
-        if(canDamage && collision.gameObject.layer == 10 || collision.gameObject.layer == 9 || collision.gameObject.layer == 8 || collision.gameObject.layer == 2)
+        //destroy the bullet if it hits the environment, walls, stairs, or the player while not dashing
+        if (canDamage && collision.gameObject.layer == 10 || collision.gameObject.layer == 9|| collision.gameObject.layer == 2 || 
+            (collision.gameObject.layer == 8 && !PlayerController.Instance.IsDashing))
             DestroyBullet();
 
         //if the bullet hit another enemy, damage the enemy & destroy the bullet

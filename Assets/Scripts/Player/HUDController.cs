@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
@@ -74,6 +75,9 @@ public class HUDController : SingletonPattern<HUDController>
     [Header("Player Damaged Overlay")]
     public GameObject playerDamagedOverlay;
 
+    [Header("Minimap")]
+    public GameObject minimap;
+
     [Header("Run Timer")]
     public GameObject runTimer;
 
@@ -103,9 +107,11 @@ public class HUDController : SingletonPattern<HUDController>
         HideEquipmentPanel();
         HideSpecialItemPanel();
         HideQuickHint();
+        HideMinimap();
 
         ControlSchemeChanged();
 
+        blackScreenOverlay.SetActive(true);
         StartCoroutine(FadeFromBlack());
     }
 
@@ -492,6 +498,16 @@ public class HUDController : SingletonPattern<HUDController>
         swapItemPanel.panel.SetActive(false);
     }
 
+    public void ShowMinimap()
+    {
+        minimap.SetActive(true);
+    }
+
+    public void HideMinimap()
+    {
+        minimap.SetActive(false);
+    }
+
     public void ShowGameOver()
     {
         player.gameObject.GetComponent<PlayerInput>().SwitchCurrentActionMap("UI");
@@ -515,8 +531,20 @@ public class HUDController : SingletonPattern<HUDController>
     public void ShowWinScreen()
     {
         player.gameObject.GetComponent<PlayerInput>().SwitchCurrentActionMap("UI");
-        winScreen.SetActive(true);
+        CameraController.Instance.PlayerWinZoomIn();
+
+        StartCoroutine(WaitToWin());
+    }
+
+    private IEnumerator WaitToWin()
+    {
+        yield return new WaitForSeconds(3);
         Time.timeScale = 0;
+
+        SceneManager.LoadScene(3);
+
+        /*
+        winScreen.SetActive(true);
         playerDamagedOverlay.SetActive(false);
 
         //Set initial selected button if using controller
@@ -524,6 +552,7 @@ public class HUDController : SingletonPattern<HUDController>
             winScreen.GetComponent<Buttons>().SetSelectedButton();
         else
             winScreen.GetComponent<Buttons>().ClearSelectedButtons();
+        */
     }
 
     public void HideWinScreen()

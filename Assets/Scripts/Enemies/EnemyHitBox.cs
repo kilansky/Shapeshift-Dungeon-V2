@@ -19,8 +19,12 @@ public class EnemyHitBox : MonoBehaviour
             //Apply slight camera shake
             CineShake.Instance.Shake(1f, 0.1f);
 
+            float damageToDeal;
             //Determine dameage to deal based on player's current attack damage
-            float damageToDeal = transform.root.GetComponent<EnemyBase>().meleeDamage;
+            if (transform.parent.GetComponent<EnemyBase>())
+                damageToDeal = transform.parent.GetComponent<EnemyBase>().meleeDamage;
+            else
+                damageToDeal = transform.root.GetComponent<EnemyBase>().meleeDamage;
 
             //Set player on fire if this enemy is holding a torch
             if (appliesFireStatus)

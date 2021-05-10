@@ -31,7 +31,7 @@ public class PlayerController : SingletonPattern<PlayerController>
     public PlayerStats baseAttackDamage; //Attack Damage Variable used for AttackDam in ItemsEquipment
     public PlayerStats baseAttackSpeed; //Attack Speed Variable used for AttackSpd in ItemsEquipment
     public PlayerStats attackTime; //ItemsEquipment for Attack Speed
-    public float attackSpeedMod = 0.25f;
+    public float attackMoveSpeedMod = 0.25f;
     public float attack3DmgMod = 1.5f; //increases damage of third attack
 
     [Header("Charge Attack Stats")]
@@ -59,6 +59,9 @@ public class PlayerController : SingletonPattern<PlayerController>
     [Header("Mouse Aiming")]
     public Transform mouseTargetPoint;
     public LayerMask mouseAimMask;
+
+    [Header("HUD")]
+    public GameObject hud;
 
     [Header("Items")]
     public ItemsEquipment SpecialSlot; //Special Item slot
@@ -116,6 +119,7 @@ public class PlayerController : SingletonPattern<PlayerController>
     private int priceOfLastTouchedItem = 0; //I need this to store prices -Justin
     private bool specialIsCharging = false;
     private bool specialIsCharging2 = false;
+    private bool runStarted = false;
 
     //Allow/prevent input actions
     private bool canMove = true;
@@ -593,6 +597,18 @@ public class PlayerController : SingletonPattern<PlayerController>
         }
     }
 
+    //Hide HUD Button Pressed
+    public void HideHUD(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            if(hud.activeSelf)
+                hud.SetActive(false);
+            else
+                hud.SetActive(true);
+        }
+    }
+
     //---------------------------------------------------------------------------
     //----------------------------RECIEVE UI INPUTS------------------------------
     //---------------------------------------------------------------------------
@@ -711,7 +727,7 @@ public class PlayerController : SingletonPattern<PlayerController>
                 break;
         }
 
-        currMoveSpeed = baseMoveSpeed.Value * attackSpeedMod; //slows movment while attacking
+        currMoveSpeed = baseMoveSpeed.Value * attackMoveSpeedMod; //slows movment while attacking
     }
 
     //Ends an Attack - called from attack animation event
@@ -812,13 +828,17 @@ public class PlayerController : SingletonPattern<PlayerController>
         chargingVFX.SetActive(false);
         chargeArrow.transform.localScale = new Vector3(1, 1, 1);
 
-        Vector3 chargeVector = transform.forward;
-
+        Vector3 chargeVector;
         animator.SetBool("isCharging", false);
 
         //Charge forward & apply deceleration until speed is nearly zero
         while (chargeSpeed > 3f)
         {
+            if (IsGrounded())
+                chargeVector = transform.forward + new Vector3(0, -1f, 0);
+            else
+                chargeVector = transform.forward;
+
             controller.Move(chargeVector * chargeSpeed * Time.deltaTime);
             chargeSpeed -= chargeDeceleration * Time.deltaTime;
             yield return new WaitForEndOfFrame();
@@ -1058,44 +1078,21 @@ public class PlayerController : SingletonPattern<PlayerController>
         //If on center tile
         if (CenterTile.Instance.onTile)
         {
-            if (LevelManager.Instance.currFloor == 0)//floor 0 stuff
+            if(!runStarted) //do certain things if this is the start of the run
             {
+                runStarted = true;
                 RunTimer.Instance.IncreaseTimer = true;
                 HUDController.Instance.ShowRunTimer();
+                HUDController.Instance.ShowMinimap();
 
                 AnalyticsEvents.Instance.PlayerControls(); //Sends an analytics event describing the players current controls
-
-                LevelManager.Instance.TransitionLevel();
-                CenterTile.Instance.onTile = false;
-
-                HUDController.Instance.controlsPanel.SetActive(false);
-                HUDController.Instance.HideQuickHint();
             }
-            else if (LevelManager.Instance.currFloor % 5 == 0)//shop stuff
-            {
-                LevelManager.Instance.TransitionLevel();
-                CenterTile.Instance.onTile = false;
 
-                HUDController.Instance.controlsPanel.SetActive(false);
-                HUDController.Instance.HideQuickHint();
-            }
-            /*
-            else if (LevelManager.Instance.currFloor == 19)//End game stuff
-            {
-                RunTimer.Instance.IncreaseTimer = false;
-                Time.timeScale = 0;
-                HUDController.Instance.ShowWinScreen();
-            }
-            */
-            else
-            {
-                LevelManager.Instance.TransitionLevel();
+            LevelManager.Instance.TransitionLevel();
+            CenterTile.Instance.onTile = false;
 
-                CenterTile.Instance.onTile = false;
-
-                HUDController.Instance.controlsPanel.SetActive(false);
-                HUDController.Instance.HideQuickHint();
-            }
+            HUDController.Instance.controlsPanel.SetActive(false);
+            HUDController.Instance.HideQuickHint();
         }
 
         //If there is currently an item being touched then set pickup Item to true

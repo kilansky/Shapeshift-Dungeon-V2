@@ -13,6 +13,7 @@ public class StartMenu : MonoBehaviour
 
     public GameObject startCanvas;
     public GameObject playCanvas;
+    public GameObject optionsCanvas;
     public float menuTransitionTime;
 
     public Image blackScreenOverlay;
@@ -74,9 +75,16 @@ public class StartMenu : MonoBehaviour
         StartCoroutine(FadeOutToLevel(2));
     }
 
-    public void FormFeedback()
+    //Transition to the options canvas
+    public void Options()
     {
-        Application.OpenURL("https://docs.google.com/forms/d/1yeWTvuf43eci_y8Tj1MR-Tj1UTHPfomzOjMlrw7A2mM/edit");
+        StartCoroutine(TransitionMenu(optionsCanvas));
+    }
+
+    //Transition to the credits screen
+    public void Credits()
+    {
+        StartCoroutine(FadeOutToLevel(3));
     }
 
     //Goes back to the start canvas

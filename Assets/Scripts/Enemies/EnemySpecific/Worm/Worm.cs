@@ -52,11 +52,14 @@ public class Worm : EnemyBase
     public GameObject dirtCircle;
     public Material dirtMat;
     public Material sandMat;
+    public ParticleSystem dirtCloud;
+    public ParticleSystem dirtChunks;
     public float amountToMoveDirt = 2f;
 
     [Header("Renderers")]
     public SkinnedMeshRenderer headRenderer;
     public SkinnedMeshRenderer bodyRenderer;
+    public GameObject healthCanvas;
 
     private float attackDamage;
 
@@ -83,7 +86,7 @@ public class Worm : EnemyBase
 
         //Set the starting tile to be occupied by the worm
         RaycastHit hit;
-        if(Physics.Raycast(transform.position + new Vector3(0, 10, 0), Vector3.down, out hit, 20, tileLayer))
+        if(Physics.Raycast(transform.position + new Vector3(0, 10, 0), Vector3.down, out hit, 50, tileLayer))
         {
             currOccupiedTile = hit.transform.GetComponent<Tile>();
             currOccupiedTile.occupiedByWorm = true;
@@ -167,9 +170,7 @@ public class Worm : EnemyBase
             }
         }
 
-        if (tiles.Count == 0)
-            Debug.LogError("Worm attempted to teleport but found no valid tiles");
-        else
+        if (tiles.Count != 0)
         {
             //Debug.Log("Worm found " + tiles.Count + " safe tiles to teleport to");
             int randTileIndex = Random.Range(0, tiles.Count);

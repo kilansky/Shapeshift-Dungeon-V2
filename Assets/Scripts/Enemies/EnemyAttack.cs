@@ -6,6 +6,7 @@ public class EnemyAttack : MonoBehaviour
 {
     [Header("Attack Hitbox")]
     public GameObject hitbox;
+    public ParticleSystem attackVFX;
     public bool showHitBoxes = false;
 
     private Goblin goblinEnemy;
@@ -22,8 +23,8 @@ public class EnemyAttack : MonoBehaviour
         if (transform.root.GetComponent<Skeleton>())
             skeletonEnemy = transform.root.GetComponent<Skeleton>();
 
-        if (transform.root.GetComponent<Slime>())
-            slimeEnemy = transform.root.GetComponent<Slime>();
+        if (transform.parent.GetComponent<Slime>())
+            slimeEnemy = transform.parent.GetComponent<Slime>();
 
         if (transform.root.GetComponent<Worm>())
             wormEnemy = transform.root.GetComponent<Worm>();
@@ -42,6 +43,10 @@ public class EnemyAttack : MonoBehaviour
         //show the hitbox for the attack
         if (showHitBoxes)
             hitbox.GetComponent<MeshRenderer>().enabled = true;
+
+        //show vfx for the attack if there is any
+        if (attackVFX)
+            attackVFX.Play();
     }
 
     public void DisableHitBox()

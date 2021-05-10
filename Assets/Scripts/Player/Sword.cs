@@ -8,10 +8,19 @@ public class Sword : MonoBehaviour
     public bool dealsExtraDamage; //deals extra damage based on player's attack3 dmg mod if true
 
     private void OnTriggerEnter(Collider other)
-    {
+    {       
         if (other.GetComponent<EnemyBase>() && !other.GetComponent<EnemyBase>().isInvincible)
         {
-            AudioManager.Instance.Play("Hit");
+            //Debug.Log(other.gameObject);
+            if (other.GetComponent<Skeleton>())
+            {
+                if (other.GetComponent<Skeleton>().isBlocking)
+                    AudioManager.Instance.Play("Block");
+                else if (!other.GetComponent<EnemyBase>().isInvincible)
+                    AudioManager.Instance.Play("Hit");
+            }
+            else if (!other.GetComponent<EnemyBase>().isInvincible)
+                AudioManager.Instance.Play("Hit");
 
             //Spawn hit effect on enemy
             Vector3 enemyPos = other.transform.position;
@@ -30,10 +39,12 @@ public class Sword : MonoBehaviour
             other.GetComponent<EnemyBase>().Damage(damageToDeal);
 
             //Apply Knockback to enemy
-            StartCoroutine(other.GetComponent<EnemyBase>().EnemyKnockBack());        
+            StartCoroutine(other.GetComponent<EnemyBase>().EnemyKnockBack());
+
+            
         }
 
-        if (other.GetComponent<MageBoss>() && !other.GetComponent<MageBoss>().isInvincible)
+        if (other.GetComponent<MageBoss>())
         {
             if (!other.GetComponent<MageBoss>().isInvincible)
                 AudioManager.Instance.Play("Hit");
@@ -68,7 +79,6 @@ public class Sword : MonoBehaviour
 
             //Destroy Prop
             other.GetComponent<DestructibleProp>().ShatterObject();
-            AudioManager.Instance.Play("WoodBreak", Random.Range(0.6f, 1.2f));
         }
 
         if(other.GetComponent<ExplodingBarrel>())

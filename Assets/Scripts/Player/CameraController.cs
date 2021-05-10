@@ -104,6 +104,13 @@ public class CameraController : SingletonPattern<CameraController>
         StartCoroutine(DeathVignette());
     }
 
+    //Decreases the camera's distance from the player when the player wins
+    public void PlayerWinZoomIn()
+    {
+        var framingTransposer = playerCam.GetCinemachineComponent<CinemachineFramingTransposer>();
+        framingTransposer.m_CameraDistance = 9f;
+    }
+
     //Increase the darkness of the post processing slightly each time this is called
     public void SetShadows()
     {

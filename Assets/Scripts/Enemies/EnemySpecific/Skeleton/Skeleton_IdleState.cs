@@ -1,10 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Skeleton_IdleState : IdleState
 {
     private Skeleton enemy;
+
+    private float timeElapsed = 0f;
+    private float timeToCheckForPlayer = 0.5f;
 
     public Skeleton_IdleState(EnemyBase entity, FiniteStateMachine stateMachine, string animBoolName, D_IdleState stateData, Skeleton enemy) : base(entity, stateMachine, animBoolName, stateData)
     {
@@ -15,6 +19,10 @@ public class Skeleton_IdleState : IdleState
     {
         base.Enter();
         enemy.isBlocking = false;
+        enemy.Anim.SetBool("isStunned", false);
+        enemy.Anim.SetBool("isMoving", false);
+        enemy.Anim.SetBool("isBlocking", false);
+        enemy.agent.SetDestination(enemy.transform.position);
     }
 
     public override void Exit()
@@ -27,7 +35,7 @@ public class Skeleton_IdleState : IdleState
         base.LogicUpdate();
 
         //is player in attack range
-        if (enemy.CheckPlayerInMinAgroRange())
+        /*if (enemy.CheckPlayerInMinAgroRange())
         {
             stateMachine.ChangeState(enemy.playerDetectedState);
         }
@@ -36,6 +44,24 @@ public class Skeleton_IdleState : IdleState
             stateMachine.ChangeState(enemy.moveState);
             enemy.isBlocking = true;
             enemy.Anim.SetBool("isBlocking", true);
+        }*/
+
+        timeElapsed += Time.deltaTime;
+
+        //Wait 0.5 seconds before checking if there is a path to the player (too expensive to do each frame)
+        if (timeElapsed >= timeToCheckForPlayer)
+        {
+            //Calculate a new path and see if it was a complete path to the player
+            NavMeshPath newPath = new NavMeshPath();
+            enemy.agent.CalculatePath(enemy.player.transform.position, newPath);
+
+            if (newPath.status == NavMeshPathStatus.PathComplete)
+            {
+                //Debug.Log("Found complete path, moving to player");
+                stateMachine.ChangeState(enemy.moveState);
+            }
+
+            timeElapsed = 0f;
         }
     }
 

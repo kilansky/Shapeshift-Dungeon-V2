@@ -32,6 +32,9 @@ public class Skeleton : EnemyBase
     //will have a melee range instead of fireball
     public float AttackDamage { get { return attackDamage; } }
 
+    public GameObject ragdoll;
+    public LayerMask tileLayer;
+
     [HideInInspector] public GameObject FrontTarget;
     [HideInInspector] public GameObject SideTarget;
     [HideInInspector] public GameObject BackTarget;
@@ -39,7 +42,7 @@ public class Skeleton : EnemyBase
     [HideInInspector] public bool isBlocking = false;
 
     //shield that blocks all incoming damage from front of skeleton
-    public GameObject shield;
+    //public GameObject shield;
 
     //public GameObject meleeHitBox;
     //public Transform hitPoint;
@@ -73,11 +76,7 @@ public class Skeleton : EnemyBase
         lookForPlayerState = new Skeleton_LookForPlayer(this, stateMachine, "lookForPlayer", lookForPlayerStateData, this);
         stunState = new Skeleton_StunState(this, stateMachine, "stun", stunStateData, this);
 
-        //initialize the goblin in the idle state
-        //stateMachine.Initialize(idleState);
-
-        //this line is what got rid of my NullReferenceExceptions
-        //stateMachine.Initialize(moveState);
+        //initialize the skeleton in the idle state
         stateMachine.Initialize(idleState);
 
         //renderer = GetComponentInChildren<Skeleton>()
@@ -85,8 +84,6 @@ public class Skeleton : EnemyBase
         FrontTarget = PlayerController.Instance.frontTarget;
         SideTarget = PlayerController.Instance.sideTarget;
         BackTarget = PlayerController.Instance.backTarget;
-
-        shield = GetComponent<GameObject>();
     }
         
 
@@ -106,6 +103,21 @@ public class Skeleton : EnemyBase
                 stateMachine.ChangeState(stunState);
             }
         }
+    }
+
+    public override void Kill()
+    {
+        ragdoll.gameObject.SetActive(true);
+
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position + new Vector3(0, 10, 0), Vector3.down, out hit, 50, tileLayer))
+        {
+            ragdoll.transform.parent = hit.transform;
+            ragdoll.transform.position = transform.position;
+            ragdoll.transform.Rotate(0, Random.Range(0f, 360f), 0);
+        }
+          
+        base.Kill();
     }
 
     public override void SetNewTarget(GameObject newTarget)
@@ -131,13 +143,13 @@ public class Skeleton : EnemyBase
         return false;
     }
 
-    public void Block()
+    /*public void Block()
     {
         if (isBlocking)
         {
             shield.GetComponent<BoxCollider>().enabled = true;
         }
-    }
+    }*/
 
     public override void Flash()
     {
