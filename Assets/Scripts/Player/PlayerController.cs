@@ -44,6 +44,7 @@ public class PlayerController : SingletonPattern<PlayerController>
     public float minChargeDmgModifier;
     public PlayerStats chargeDmgModifier; //ItemsEquipment for Dash Damage Modifier
     public GameObject chargingVFX;
+    public LayerMask tileLayer;
 
     [Header("Special Stats")]
     public float useSpecialTime = 0.5f;
@@ -401,8 +402,8 @@ public class PlayerController : SingletonPattern<PlayerController>
     //Returns true if the player is standing on the ground
     private bool IsGrounded()
     {
-        float distToGround = GetComponent<CharacterController>().bounds.extents.y;
-        return Physics.Raycast(transform.position, -Vector3.up, distToGround + 0.1f);
+        //float distToGround = GetComponent<CharacterController>().bounds.extents.y;
+        return Physics.Raycast(transform.position, Vector3.down, 0.15f);
     }
 
     //Sets the attackSpeed parameter of the Animator in order to increase the player's attack speed
@@ -834,7 +835,7 @@ public class PlayerController : SingletonPattern<PlayerController>
         //Charge forward & apply deceleration until speed is nearly zero
         while (chargeSpeed > 3f)
         {
-            if (IsGrounded())
+            if (IsAboveStairs())
                 chargeVector = transform.forward + new Vector3(0, -1f, 0);
             else
                 chargeVector = transform.forward;
@@ -850,6 +851,19 @@ public class PlayerController : SingletonPattern<PlayerController>
         yield return new WaitForSeconds(chargeCooldownTime); //wait for charge anim to play out before going back to normal
         canChargeAttack = true;
         currAttackDamage = baseAttackDamage.Value; //reset attack damage
+    }
+
+    //Returns true if the player is charge attacking above a stair tile
+    private bool IsAboveStairs()
+    {
+        RaycastHit hit;
+        if(Physics.Raycast(transform.position, Vector3.down, out hit, 10f, tileLayer))
+        {
+            if(hit.transform.GetComponent<Tile>() && hit.transform.GetComponent<Tile>().tileType == Tile.tileTypes.stairs)
+                return true;
+        }
+
+        return false;
     }
 
     //Starts and Ends using Special item
