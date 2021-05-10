@@ -417,6 +417,10 @@ public class Item : MonoBehaviour
         if (isNewBOHItem)
             isNewBOHItem = false;
 
+        //If the item being equipped is the Kapala then we adjust the hasKapala variable in the playerController Script
+        if (item.ItemName == "Kapala")
+            c.hasKapala = true;
+
         StartCoroutine(c.RechargeSpecial());
     }
 
@@ -532,6 +536,10 @@ public class Item : MonoBehaviour
         //If the monster Mask is being unequipped then we set the bool to false
         if (item.ItemName == "Monster Mask")
             c.hasMonsterMask = false;
+
+        //If the Kapala is being unequipped then we set the bool to false
+        if (item.ItemName == "Kapala")
+            c.hasKapala = false;
     }
 
     private void Start()
