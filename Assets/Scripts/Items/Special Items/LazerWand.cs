@@ -22,5 +22,7 @@ public class LazerWand : MonoBehaviour
         //PlayerLazerAttack.GetComponent<Laser>().parentObject = PlayerController.Instance.gameObject;
         GameObject playerLazer = Instantiate(PlayerLazerAttack, spawnPos, playerRotation); //Spawns the Lazer attack
         playerLazer.GetComponent<Laser>().parentObject = PlayerController.Instance.gameObject;
+
+        AudioManager.Instance.Play("LaserFire");
     }
 }

@@ -25,6 +25,7 @@ public class BowllingAttack : MonoBehaviour
         {
             StartCoroutine(other.GetComponent<EnemyBase>().EnemyKnockBack()); 
             other.GetComponent<EnemyBase>().Damage(damage);
+            AudioManager.Instance.Play("BowlingStrike");
         }
 
         //If the bowling ball hits a wall layer then it deletes itself
