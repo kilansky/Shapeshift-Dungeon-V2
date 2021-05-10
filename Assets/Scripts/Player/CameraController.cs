@@ -19,6 +19,7 @@ public class CameraController : SingletonPattern<CameraController>
 
     private DepthOfField DoF;
     private ShadowsMidtonesHighlights shadMidHigh;
+    private Vignette vignette;
     private float shadowValue = 1;
     private float currentZoom;
     private bool canAdjustZoom = true;
@@ -27,6 +28,7 @@ public class CameraController : SingletonPattern<CameraController>
     {
         volProf.TryGet(out DoF);
         volProf.TryGet(out shadMidHigh);
+        volProf.TryGet(out vignette);
 
         Scene scene = SceneManager.GetActiveScene();
         if(scene.buildIndex == 0)
@@ -36,11 +38,12 @@ public class CameraController : SingletonPattern<CameraController>
         {
             DoF.focalLength.value = 210;
             //Set darkness of shadows based on current floor
-            for (int i = 0; i < LevelManager.Instance.currFloor + 1; i++)
+            for (int i = 0; i < PlayerPrefs.GetInt("startingLevel") + 1; i++)
                 SetShadows();
         }
-    }
 
+        vignette.smoothness.value = 0.4f;
+    }
 
     //Increases the camera's distance from the player during a level transition
     public void ZoomOutLevelTransition()
@@ -91,10 +94,42 @@ public class CameraController : SingletonPattern<CameraController>
         framingTransposer.m_CameraDistance = Mathf.Clamp(framingTransposer.m_CameraDistance -= zoomAmt, minZoom, maxZoom);
     }
 
+
+    //Decreases the camera's distance from the player when the player dies
+    public void PlayerDeathZoomIn()
+    {
+        var framingTransposer = playerCam.GetCinemachineComponent<CinemachineFramingTransposer>();
+        framingTransposer.m_CameraDistance = 6f;
+
+        StartCoroutine(DeathVignette());
+    }
+
+    //Decreases the camera's distance from the player when the player wins
+    public void PlayerWinZoomIn()
+    {
+        var framingTransposer = playerCam.GetCinemachineComponent<CinemachineFramingTransposer>();
+        framingTransposer.m_CameraDistance = 9f;
+    }
+
     //Increase the darkness of the post processing slightly each time this is called
     public void SetShadows()
     {
         shadowValue += shadowAdjustAmt;
         shadMidHigh.shadows.SetValue(new Vector4Parameter(new Vector4(1f, shadowValue, shadowValue, -0.4f)));
+    }
+
+    //Fade the vignette in to full smoothness when the player dies
+    private IEnumerator DeathVignette()
+    {
+        float timeElapsed = 0f;
+        float vignetteFadeTime = 0.75f;
+
+        while (timeElapsed < vignetteFadeTime)
+        {
+            vignette.smoothness.value = Mathf.Lerp(0.4f, 1, timeElapsed / vignetteFadeTime);
+
+            timeElapsed += Time.deltaTime;
+            yield return new WaitForEndOfFrame();
+        }        
     }
 }

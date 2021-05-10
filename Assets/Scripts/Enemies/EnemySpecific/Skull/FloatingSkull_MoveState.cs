@@ -36,7 +36,7 @@ public class FloatingSkull_MoveState : MoveState
     public override void PhysicsUpdate()
     {
         base.PhysicsUpdate();
-        entity.SetDestination();
+        entity.SetNewDestination();
         //entity.SetVelocity(stateData.moveSpeed);
     }
 }

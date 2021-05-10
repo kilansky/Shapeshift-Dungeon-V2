@@ -8,9 +8,20 @@ public class Sword : MonoBehaviour
     public bool dealsExtraDamage; //deals extra damage based on player's attack3 dmg mod if true
 
     private void OnTriggerEnter(Collider other)
-    {
-        if (other.GetComponent<EnemyBase>())
+    {       
+        if (other.GetComponent<EnemyBase>() && !other.GetComponent<EnemyBase>().isInvincible)
         {
+            //Debug.Log(other.gameObject);
+            if (other.GetComponent<Skeleton>())
+            {
+                if (other.GetComponent<Skeleton>().isBlocking)
+                    AudioManager.Instance.Play("Block");
+                else if (!other.GetComponent<EnemyBase>().isInvincible)
+                    AudioManager.Instance.Play("Hit");
+            }
+            else if (!other.GetComponent<EnemyBase>().isInvincible)
+                AudioManager.Instance.Play("Hit");
+
             //Spawn hit effect on enemy
             Vector3 enemyPos = other.transform.position;
             Instantiate(hitEffect, new Vector3(enemyPos.x, transform.position.y, enemyPos.z), Quaternion.identity);
@@ -30,7 +41,31 @@ public class Sword : MonoBehaviour
             //Apply Knockback to enemy
             StartCoroutine(other.GetComponent<EnemyBase>().EnemyKnockBack());
 
-            AudioManager.Instance.Play("Hit");
+            
+        }
+
+        if (other.GetComponent<MageBoss>())
+        {
+            if (!other.GetComponent<MageBoss>().isInvincible)
+                AudioManager.Instance.Play("Hit");
+
+            //Spawn hit effect on enemy
+            Vector3 enemyPos = other.transform.position;
+            Instantiate(hitEffect, new Vector3(enemyPos.x, transform.position.y, enemyPos.z), Quaternion.identity);
+
+            //Apply slight camera shake
+            CineShake.Instance.Shake(1f, 0.1f);
+
+            //Determine dameage to deal based on player's current attack damage
+            float damageToDeal = PlayerController.Instance.CurrAttackDamage;
+
+            if (dealsExtraDamage)//Check to deal additional damage
+                damageToDeal *= PlayerController.Instance.attack3DmgMod;
+
+            //Apply damage to enemy
+            other.GetComponent<MageBoss>().Damage(damageToDeal);
+
+            
         }
 
         if (other.GetComponent<DestructibleProp>())
@@ -44,7 +79,6 @@ public class Sword : MonoBehaviour
 
             //Destroy Prop
             other.GetComponent<DestructibleProp>().ShatterObject();
-            AudioManager.Instance.Play("WoodBreak");
         }
 
         if(other.GetComponent<ExplodingBarrel>())

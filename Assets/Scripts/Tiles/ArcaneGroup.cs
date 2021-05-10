@@ -8,6 +8,7 @@ public class ArcaneGroup : MonoBehaviour
     public GameObject circleOne;
     public GameObject circleTwo;
     public Material inactive;
+    public GameObject teleportVFX;
 
     private GameObject player;
     private FindSafeTile teleportScript;
@@ -27,7 +28,7 @@ public class ArcaneGroup : MonoBehaviour
     {  
         if(onCooldown)
         {
-            Debug.Log("Teleporters on cooldown");
+            //Debug.Log("Teleporters on cooldown");
             return;
         }
 
@@ -45,7 +46,10 @@ public class ArcaneGroup : MonoBehaviour
         }
         if(target != null)
         {
+            Instantiate(teleportVFX, player.transform.position + new Vector3(0, 1.5f, 0), Quaternion.identity);
             teleportScript.TeleportPlayer(target.GetComponent<ArcaneCircle>().teleportPoint.transform.position);
+            AudioManager.Instance.Play("Teleport");
+
             StartCoroutine(DoCooldown());
             if(target == circleOne)
             {

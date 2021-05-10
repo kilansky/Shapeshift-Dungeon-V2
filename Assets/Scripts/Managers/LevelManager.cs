@@ -50,6 +50,7 @@ public class LevelManager : SingletonPattern<LevelManager>
     public GameObject navMeshHazards;
 
     private bool isTransitioning = false;
+    private bool isPlayingBossMusic = false;
     private int enemiesRemaining;
 
     /// <summary>
@@ -57,7 +58,7 @@ public class LevelManager : SingletonPattern<LevelManager>
     /// </summary>
     public void TransitionLevel()
     {
-        PedestalManager.Instance.ClearPedestals();
+        PedestalManager.Instance.ClearPedestals();       
 
         if(isTransitioning)
         {
@@ -86,6 +87,8 @@ public class LevelManager : SingletonPattern<LevelManager>
         else
             LoadNextLevel(SelectLevelList());
 
+        SetAllPedestalToWorldGUI(false);
+
         CineShake.Instance.Shake(1.5f, 2* transitionTime + maxStartTime);
         AudioManager.Instance.Play("Rumble");
         Transform[] allChildrenCurrLevel = activeLevel.GetComponentsInChildren<Transform>(); //Puts all tiles into an array
@@ -102,6 +105,34 @@ public class LevelManager : SingletonPattern<LevelManager>
         CenterTile.Instance.SetFloorText(currFloor);
         CenterTile.Instance.SetTextState(); //Disable the glow of the center tile number
         StartCoroutine(WaitForTransition());    
+    }
+
+    public void ChangeBossLevel(GameObject nextLevel)
+    {
+        if (isTransitioning)
+        {
+            Debug.LogError("Level is already transitioning!");
+            return;
+        }
+
+        isTransitioning = true;
+
+        nextLevel.SetActive(true);
+
+        CineShake.Instance.Shake(1.5f, 2 * transitionTime + maxStartTime);
+        AudioManager.Instance.Play("Rumble");
+        MonsterSpawner.Instance.SetSpawnInfo(nextLevel.GetComponent<SpawnInfo>().spawnInfo);
+
+        Transform[] allChildrenCurrLevel = activeLevel.GetComponentsInChildren<Transform>(); //Puts all tiles into an array
+        foreach (Transform tile in allChildrenCurrLevel) //Cycles through all tiles in the newly created array
+        {
+            if (tile.GetComponent<Tile>()) //If the object selected is a tile
+            {
+                tile.GetComponent<Tile>().DoTransition(transitionTime, Random.Range(minStartTime, maxStartTime)); //Runs the function to initiate a transition
+            }
+        }
+
+        StartCoroutine(WaitForTransition());
     }
 
     /// <summary>
@@ -204,7 +235,9 @@ public class LevelManager : SingletonPattern<LevelManager>
     /// <returns></returns>
     private IEnumerator WaitForTransition()
     {
-        MusicManager.Instance.FadeOut(0f, 1.5f * transitionTime + maxStartTime);
+        if(!isPlayingBossMusic)
+            MusicManager.Instance.FadeOut(0f, 1.5f * transitionTime + maxStartTime);
+
         yield return new WaitForSeconds(2 * transitionTime + maxStartTime);
         //Debug.Log("TransitionComplete!");
         isTransitioning = false; //Sets boolean back to false so transition can occur again
@@ -234,10 +267,24 @@ public class LevelManager : SingletonPattern<LevelManager>
         }
         else if (currFloor < 5)
             MusicManager.Instance.ExoticDangers();
-        else if (currFloor >= 11)
-            MusicManager.Instance.DungeonDestruction();
-        else
+        else if (currFloor >= 6 && currFloor <= 9)
             MusicManager.Instance.DungeonDecoration();
+        else if (currFloor >= 11 && currFloor <= 19)
+            MusicManager.Instance.DungeonDestruction();
+        else if(!isPlayingBossMusic)
+        {
+            isPlayingBossMusic = true;
+            MusicManager.Instance.DungeonDestruction();
+        }
+
+        if(GameObject.FindObjectOfType<MageBoss>())
+        {
+            GameObject.FindObjectOfType<MageBoss>().startBossFight = true;
+            foreach (DangerTiles dangerousTile in GameObject.FindObjectsOfType<DangerTiles>())
+                dangerousTile.ParentToTile();
+        }
+
+        SetAllPedestalToWorldGUI(true);
 
         //Debug.Log("Current map is: " + currMapName);
     }
@@ -288,5 +335,13 @@ public class LevelManager : SingletonPattern<LevelManager>
     private void ForceStartHazards()
     {
         ToggleHazards(true);
+    }
+
+    private void SetAllPedestalToWorldGUI(bool active)
+    {
+        foreach (Item item in GameObject.FindObjectsOfType<Item>())
+        {
+            item.SetWorldGUILayer(active);
+        }
     }
 }

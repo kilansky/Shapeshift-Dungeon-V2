@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
@@ -74,8 +75,14 @@ public class HUDController : SingletonPattern<HUDController>
     [Header("Player Damaged Overlay")]
     public GameObject playerDamagedOverlay;
 
+    [Header("Minimap")]
+    public GameObject minimap;
+
     [Header("Run Timer")]
     public GameObject runTimer;
+
+    [Header("Boss Health Bar")]
+    public Slider bossHealthBar;
 
     [Header("Black Screen Overlay")]
     public GameObject blackScreenOverlay;
@@ -100,9 +107,11 @@ public class HUDController : SingletonPattern<HUDController>
         HideEquipmentPanel();
         HideSpecialItemPanel();
         HideQuickHint();
+        HideMinimap();
 
         ControlSchemeChanged();
 
+        blackScreenOverlay.SetActive(true);
         StartCoroutine(FadeFromBlack());
     }
 
@@ -427,12 +436,15 @@ public class HUDController : SingletonPattern<HUDController>
         if (!PlayerController.Instance.isItemSwapping && PlayerController.Instance.SpecialSlot.ItemName != "Kapala")
             PlayerController.Instance.SpecialCharge = PlayerController.Instance.specialCooldownTime.Value;
 
-        //Where if the item picked up wasn't due to item swapping and it is the Kapala then we set it initially to 0
-        else if (!PlayerController.Instance.isItemSwapping && PlayerController.Instance.SpecialSlot.ItemName == "Kapala")
+        //Where if the item picked up wasn't due to item swapping and it is the Kapala then we set it initially to 0 if the Kapala isn't already in the first slot
+        else if (!PlayerController.Instance.isItemSwapping && PlayerController.Instance.SpecialSlot.ItemName == "Kapala" && !PlayerController.Instance.hasKapala)
+        {
+            PlayerController.Instance.canUseSpecial = false;
             PlayerController.Instance.SpecialCharge = 0;
+            PlayerController.Instance.SpecialSlot.prefab.GetComponent<KapalaSwap>().KapalaSpriteSwap(0); //Changes the sprite of the Kapala based on the Special Charge value
+        }
 
-
-        if(PlayerController.Instance.hasBagOfHolding && PlayerController.Instance.BagOfHoldingSlot)
+        if (PlayerController.Instance.hasBagOfHolding && PlayerController.Instance.BagOfHoldingSlot)
         {
             if(speicalItemEmptyIcon)
             {
@@ -444,7 +456,6 @@ public class HUDController : SingletonPattern<HUDController>
                 SetNewSpecialItemIcons();
             }
         }
-            
 
         UpdateSpecialCharge();
     }
@@ -489,6 +500,16 @@ public class HUDController : SingletonPattern<HUDController>
         swapItemPanel.panel.SetActive(false);
     }
 
+    public void ShowMinimap()
+    {
+        minimap.SetActive(true);
+    }
+
+    public void HideMinimap()
+    {
+        minimap.SetActive(false);
+    }
+
     public void ShowGameOver()
     {
         player.gameObject.GetComponent<PlayerInput>().SwitchCurrentActionMap("UI");
@@ -512,8 +533,20 @@ public class HUDController : SingletonPattern<HUDController>
     public void ShowWinScreen()
     {
         player.gameObject.GetComponent<PlayerInput>().SwitchCurrentActionMap("UI");
-        winScreen.SetActive(true);
+        CameraController.Instance.PlayerWinZoomIn();
+
+        StartCoroutine(WaitToWin());
+    }
+
+    private IEnumerator WaitToWin()
+    {
+        yield return new WaitForSeconds(3);
         Time.timeScale = 0;
+
+        SceneManager.LoadScene(3);
+
+        /*
+        winScreen.SetActive(true);
         playerDamagedOverlay.SetActive(false);
 
         //Set initial selected button if using controller
@@ -521,6 +554,7 @@ public class HUDController : SingletonPattern<HUDController>
             winScreen.GetComponent<Buttons>().SetSelectedButton();
         else
             winScreen.GetComponent<Buttons>().ClearSelectedButtons();
+        */
     }
 
     public void HideWinScreen()
@@ -555,6 +589,16 @@ public class HUDController : SingletonPattern<HUDController>
     public void HideRunTimer()
     {
         runTimer.GetComponent<TextMeshProUGUI>().enabled = false;
+    }
+
+    public void ShowBossHealthBar()
+    {
+        bossHealthBar.gameObject.SetActive(true);
+    }
+
+    public void HideBossHealthBar()
+    {
+        bossHealthBar.gameObject.SetActive(false);
     }
 
     public IEnumerator ShowPlayerDamagedOverlay()

@@ -31,21 +31,20 @@ public class PlayerController : SingletonPattern<PlayerController>
     public PlayerStats baseAttackDamage; //Attack Damage Variable used for AttackDam in ItemsEquipment
     public PlayerStats baseAttackSpeed; //Attack Speed Variable used for AttackSpd in ItemsEquipment
     public PlayerStats attackTime; //ItemsEquipment for Attack Speed
-    public float attackSpeedMod = 0.25f;
+    public float attackMoveSpeedMod = 0.25f;
     public float attack3DmgMod = 1.5f; //increases damage of third attack
 
     [Header("Charge Attack Stats")]
     public GameObject chargeArrow; //GameObject to hold the arrow underneath the player during charge attacks
-    public float timeToFullCharge = 1.25f;
+    public PlayerStats timeToFullCharge; //ItemsEquipment for the Charge Attack Time
     public float minChargeSpeed = 20f;
     public float maxChargeSpeed = 35f;
     public float chargeDeceleration = 55f;
     public float chargeCooldownTime = 0.2f;
     public float minChargeDmgModifier;
     public PlayerStats chargeDmgModifier; //ItemsEquipment for Dash Damage Modifier
-
-    //OBSOLETE: Use timeToFullCharge instead
-    public PlayerStats chargeRate; //ItemsEquipment for Charge Attack Time
+    public GameObject chargingVFX;
+    public LayerMask tileLayer;
 
     [Header("Special Stats")]
     public float useSpecialTime = 0.5f;
@@ -62,6 +61,9 @@ public class PlayerController : SingletonPattern<PlayerController>
     public Transform mouseTargetPoint;
     public LayerMask mouseAimMask;
 
+    [Header("HUD")]
+    public GameObject hud;
+
     [Header("Items")]
     public ItemsEquipment SpecialSlot; //Special Item slot
     public ItemsEquipment HeadSlot; //Head Item slot
@@ -76,6 +78,8 @@ public class PlayerController : SingletonPattern<PlayerController>
     public bool canAffordItem = false; //Variable to see if player can afford an item -Justin
     [HideInInspector] public bool hasRedHerb = false; //Variable to make sure that the player has the red herb (makes for less checking of both pocker slots) so they are able to regain health when they start a new level
     [HideInInspector] public bool hasBagOfHolding = false; //Variable to make sure that the player has the bag of holding item (makes for less checking of both pocker slots) so they are able to store/swap special items
+    [HideInInspector] public bool hasMonsterMask = false; //Variable to check for the Monster Mask item to make it easier to search for by the enemies when they spawn
+    [HideInInspector] public bool hasKapala = false; //Variable to check for the Kapala item to make it easier to adjust Special Charge values
     [HideInInspector] public bool isItemSwapping = false; //Variable to be used to check if the itms are currently being swapped or not
     [HideInInspector] public bool canUseSpecial = true; //Keeps track of if the special item can be used
     [HideInInspector] public float specialCharge2 = 0; //Varaible to hold the special charge of the item in the bag of holding
@@ -117,6 +121,7 @@ public class PlayerController : SingletonPattern<PlayerController>
     private int priceOfLastTouchedItem = 0; //I need this to store prices -Justin
     private bool specialIsCharging = false;
     private bool specialIsCharging2 = false;
+    private bool runStarted = false;
 
     //Allow/prevent input actions
     private bool canMove = true;
@@ -151,6 +156,8 @@ public class PlayerController : SingletonPattern<PlayerController>
     public bool IsUsingSpecial { get { return isUsingSpecial; } }   //True while using a Special Item
     public bool IsPaused { get { return isPaused; } }               //True while game is paused
     public bool IsUsingMouse { get { return isUsingMouse; } }      //True while player is using mouse and keyboard controls
+    public bool IsDead { get; set; }                               //Prevents actions if true
+    public Animator PlayerAnimator { get { return animator; } }
 
     private void Start()
     {
@@ -163,6 +170,7 @@ public class PlayerController : SingletonPattern<PlayerController>
         currAttackSpeed = baseAttackSpeed.Value;
         currAttackDamage = baseAttackDamage.Value;
         SetAttackSpeed();
+        IsDead = false;
 
         StatMaxHealthCount = 0;
         StatAttackCount = 0;
@@ -180,27 +188,30 @@ public class PlayerController : SingletonPattern<PlayerController>
     private void Update()
     {
         //Move, Rotate, & Animate Player
-        MovePlayer();
-        RotatePlayer();
-        AnimatePlayer();
-        ZoomCamera();
-
-        //Set mouse target pos if using M&K
-        if (GetComponent<PlayerInput>().currentControlScheme == "Keyboard&Mouse")
+        if(!IsDead)
         {
-            isUsingMouse = true;
-            SetMouseTargetPosition();
+            MovePlayer();
+            RotatePlayer();
+            AnimatePlayer();
+            ZoomCamera();
+
+            //Set mouse target pos if using M&K
+            if (GetComponent<PlayerInput>().currentControlScheme == "Keyboard&Mouse")
+            {
+                isUsingMouse = true;
+                SetMouseTargetPosition();
+            }
+            else
+                isUsingMouse = false;
+
+            //Check if there are any new button inputs and attempt to activate them
+            if (inputQueue.Count > 0)
+                ActivateQueuedInputs();
+
+            //If the input queue has two or more inputs, remove the first button press w/o performing it
+            if (inputQueue.Count >= 2)
+                inputQueue.Dequeue();
         }
-        else
-            isUsingMouse = false;
-
-        //Check if there are any new button inputs and attempt to activate them
-        if (inputQueue.Count > 0)
-            ActivateQueuedInputs();
-
-        //If the input queue has two or more inputs, remove the first button press w/o performing it
-        if (inputQueue.Count >= 2)
-            inputQueue.Dequeue();
     }
 
     //Checks the input queue for player input and responds according to input type & timing
@@ -281,6 +292,7 @@ public class PlayerController : SingletonPattern<PlayerController>
         }
         else
             moveVelocity = 0;
+
 
         Vector3 attackVector = new Vector3(transform.forward.x, vSpeed, transform.forward.z);
         Vector3 chargingVector = new Vector3(0, vSpeed, 0);
@@ -391,8 +403,8 @@ public class PlayerController : SingletonPattern<PlayerController>
     //Returns true if the player is standing on the ground
     private bool IsGrounded()
     {
-        float distToGround = GetComponent<CharacterController>().bounds.extents.y;
-        return Physics.Raycast(transform.position, -Vector3.up, distToGround + 0.1f);
+        //float distToGround = GetComponent<CharacterController>().bounds.extents.y;
+        return Physics.Raycast(transform.position, Vector3.down, 0.15f);
     }
 
     //Sets the attackSpeed parameter of the Animator in order to increase the player's attack speed
@@ -587,6 +599,18 @@ public class PlayerController : SingletonPattern<PlayerController>
         }
     }
 
+    //Hide HUD Button Pressed
+    public void HideHUD(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            if(hud.activeSelf)
+                hud.SetActive(false);
+            else
+                hud.SetActive(true);
+        }
+    }
+
     //---------------------------------------------------------------------------
     //----------------------------RECIEVE UI INPUTS------------------------------
     //---------------------------------------------------------------------------
@@ -640,6 +664,10 @@ public class PlayerController : SingletonPattern<PlayerController>
         {
             canDash = false;
             isDashing = true;
+            
+            //If the player has the Spiked Boots equipped then we actiivate the dash hitbox - AHL (5/3/21)
+            if(FootSlot != null && FootSlot.ItemName == "Spiked Boots")
+                PlayerAttackController.Instance.ActivateDashHitbox();
 
             animator.SetBool("isDashing", true);
             currMoveSpeed = dashSpeed.Value; //set dash speed
@@ -650,6 +678,11 @@ public class PlayerController : SingletonPattern<PlayerController>
 
             yield return new WaitForSeconds(dashTime.Value); //wait for end of dash & restore base speed
             currMoveSpeed = baseMoveSpeed.Value;
+            
+            //Deactivates Spiked Boots if they are active
+            if(FootSlot != null && FootSlot.ItemName == "Spiked Boots")
+                PlayerAttackController.Instance.DeactivateDashHitbox();
+            
             isDashing = false;
 
             yield return new WaitForSeconds(dashCooldownTime.Value); //wait to refresh dash
@@ -696,7 +729,7 @@ public class PlayerController : SingletonPattern<PlayerController>
                 break;
         }
 
-        currMoveSpeed = baseMoveSpeed.Value * attackSpeedMod; //slows movment while attacking
+        currMoveSpeed = baseMoveSpeed.Value * attackMoveSpeedMod; //slows movment while attacking
     }
 
     //Ends an Attack - called from attack animation event
@@ -755,25 +788,36 @@ public class PlayerController : SingletonPattern<PlayerController>
 
         //Charge input is held down
         chargeArrow.SetActive(true);
+        chargingVFX.SetActive(true);
         float arrowLength = chargeArrow.transform.localScale.y;
         float arrowWidth = chargeArrow.transform.localScale.x;
         float chargeSpeed = minChargeSpeed;
         currAttackDamage = baseAttackDamage.Value * minChargeDmgModifier;
 
+        //If the player has the Cloak of Darkness equipped then we adjust the max charge speed 
+        if (TorsoSlot != null && TorsoSlot.ItemName == "Cloak of Darkness")
+            maxChargeSpeed = 42f;
+
         float timeElapsed = 0;
         while (isCharging) //Increase charge speed & arrow UI until button is released
         {
-            chargeSpeed = Mathf.Lerp(minChargeSpeed, maxChargeSpeed, timeElapsed / timeToFullCharge);
-            currAttackDamage = Mathf.Lerp(baseAttackDamage.Value * minChargeDmgModifier, baseAttackDamage.Value * chargeDmgModifier.Value, timeElapsed / timeToFullCharge);
+            chargeSpeed = Mathf.Lerp(minChargeSpeed, maxChargeSpeed, timeElapsed / timeToFullCharge.Value);
+            currAttackDamage = Mathf.Lerp(baseAttackDamage.Value * minChargeDmgModifier, baseAttackDamage.Value * chargeDmgModifier.Value, timeElapsed / timeToFullCharge.Value);
 
-            arrowLength = Mathf.Lerp(0.5f, 3.5f, timeElapsed / timeToFullCharge);
-            arrowWidth = Mathf.Lerp(0.8f, 1.2f, timeElapsed / timeToFullCharge);
+            //If the player has the Cloak of Darkness equipped then we adjust the arrow length 
+            if (TorsoSlot != null && TorsoSlot.ItemName == "Cloak of Darkness")
+                arrowLength = Mathf.Lerp(0.5f, 5f, timeElapsed / timeToFullCharge.Value);
+
+            else
+                arrowLength = Mathf.Lerp(0.5f, 3.5f, timeElapsed / timeToFullCharge.Value);
+            
+            arrowWidth = Mathf.Lerp(0.8f, 1.2f, timeElapsed / timeToFullCharge.Value);
             chargeArrow.transform.localScale = new Vector3(arrowWidth, arrowLength, arrowWidth);
 
             timeElapsed += Time.deltaTime;
-            if (timeElapsed > timeToFullCharge)
+            if (timeElapsed > timeToFullCharge.Value)
             {
-                timeElapsed = timeToFullCharge;
+                timeElapsed = timeToFullCharge.Value;
                 chargeSpeed = maxChargeSpeed;
                 currAttackDamage = baseAttackDamage.Value * chargeDmgModifier.Value;
             }
@@ -783,15 +827,20 @@ public class PlayerController : SingletonPattern<PlayerController>
 
         //Charge input is released
         chargeArrow.SetActive(false);
+        chargingVFX.SetActive(false);
         chargeArrow.transform.localScale = new Vector3(1, 1, 1);
 
-        Vector3 chargeVector = transform.forward;
-
+        Vector3 chargeVector;
         animator.SetBool("isCharging", false);
 
         //Charge forward & apply deceleration until speed is nearly zero
         while (chargeSpeed > 3f)
         {
+            if (IsAboveStairs())
+                chargeVector = transform.forward + new Vector3(0, -1f, 0);
+            else
+                chargeVector = transform.forward;
+
             controller.Move(chargeVector * chargeSpeed * Time.deltaTime);
             chargeSpeed -= chargeDeceleration * Time.deltaTime;
             yield return new WaitForEndOfFrame();
@@ -803,6 +852,19 @@ public class PlayerController : SingletonPattern<PlayerController>
         yield return new WaitForSeconds(chargeCooldownTime); //wait for charge anim to play out before going back to normal
         canChargeAttack = true;
         currAttackDamage = baseAttackDamage.Value; //reset attack damage
+    }
+
+    //Returns true if the player is charge attacking above a stair tile
+    private bool IsAboveStairs()
+    {
+        RaycastHit hit;
+        if(Physics.Raycast(transform.position, Vector3.down, out hit, 10f, tileLayer))
+        {
+            if(hit.transform.GetComponent<Tile>() && hit.transform.GetComponent<Tile>().tileType == Tile.tileTypes.stairs)
+                return true;
+        }
+
+        return false;
     }
 
     //Starts and Ends using Special item
@@ -1031,42 +1093,21 @@ public class PlayerController : SingletonPattern<PlayerController>
         //If on center tile
         if (CenterTile.Instance.onTile)
         {
-            if (LevelManager.Instance.currFloor == 0)//floor 0 stuff
+            if(!runStarted) //do certain things if this is the start of the run
             {
+                runStarted = true;
                 RunTimer.Instance.IncreaseTimer = true;
                 HUDController.Instance.ShowRunTimer();
+                HUDController.Instance.ShowMinimap();
 
                 AnalyticsEvents.Instance.PlayerControls(); //Sends an analytics event describing the players current controls
-
-                LevelManager.Instance.TransitionLevel();
-                CenterTile.Instance.onTile = false;
-
-                HUDController.Instance.controlsPanel.SetActive(false);
-                HUDController.Instance.HideQuickHint();
             }
-            else if (LevelManager.Instance.currFloor % 5 == 0)//shop stuff
-            {
-                LevelManager.Instance.TransitionLevel();
-                CenterTile.Instance.onTile = false;
 
-                HUDController.Instance.controlsPanel.SetActive(false);
-                HUDController.Instance.HideQuickHint();
-            }
-            else if (LevelManager.Instance.currFloor == 19)//End game stuff
-            {
-                RunTimer.Instance.IncreaseTimer = false;
-                Time.timeScale = 0;
-                HUDController.Instance.ShowWinScreen();
-            }
-            else
-            {
-                LevelManager.Instance.TransitionLevel();
+            LevelManager.Instance.TransitionLevel();
+            CenterTile.Instance.onTile = false;
 
-                CenterTile.Instance.onTile = false;
-
-                HUDController.Instance.controlsPanel.SetActive(false);
-                HUDController.Instance.HideQuickHint();
-            }
+            HUDController.Instance.controlsPanel.SetActive(false);
+            HUDController.Instance.HideQuickHint();
         }
 
         //If there is currently an item being touched then set pickup Item to true
@@ -1097,6 +1138,7 @@ public class PlayerController : SingletonPattern<PlayerController>
                 HUDController.Instance.ShowGemCounter();
 
             PlayerGems.Instance.AddGems(1);
+            AudioManager.Instance.Play("CollectGem");
             Destroy(other.gameObject);
         }
     }
@@ -1118,6 +1160,7 @@ public class PlayerController : SingletonPattern<PlayerController>
             if (pickupItem == true) //If the item can be picked up
             {
                 other.GetComponentInParent<Item>().Equip(this, GetComponent<PlayerHealth>()); //Equip the item to the player
+                AudioManager.Instance.Play("ItemPickup");
 
                 if(LevelManager.Instance.currFloor %5 != 0)
                     AnalyticsEvents.Instance.ItemTaken(other.GetComponentInParent<Item>().item.ItemName); //Send Item Taken analytics event
@@ -1129,6 +1172,8 @@ public class PlayerController : SingletonPattern<PlayerController>
 
                 Destroy(other.gameObject); //Destroy the instance of the item in the gamescene
                 pickupItem = false; //Set pickup to false
+                touchingItem = false;
+                canAffordItem = false;
 
                 PedestalManager.Instance.DeactivatePedestals();
             }
@@ -1140,6 +1185,7 @@ public class PlayerController : SingletonPattern<PlayerController>
         if (other.tag == "Item")
         {
             touchingItem = false;
+            canAffordItem = false;
             HUDController.Instance.HideQuickHint();
         }
     }

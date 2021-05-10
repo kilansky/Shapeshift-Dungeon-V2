@@ -28,25 +28,22 @@ public class Laser : MonoBehaviour
     public bool setOnFire;
     public bool heal;
 
+    [HideInInspector] public GameObject parentObject; //Variable to hold the parent Object to make sure the Damage Tracker is able to track the damage correctly
+    [HideInInspector] public bool laserTriggered = false;
+
     private LineRenderer beam;
     private CapsuleCollider capsuleCollider;
     private VisualEffect hitEffect;
-
-    //[HideInInspector] 
-    public GameObject parentObject; //Variable to hold the parent Object to make sure the Damage Tracker is able to track the damage correctly
-    [HideInInspector] public bool laserTriggered = false;
 
     private void Start()
     {
         beam = laser.gameObject.GetComponent<LineRenderer>();
         capsuleCollider = GetComponent<CapsuleCollider>();
 
-        //parentObject = transform.parent.gameObject;
-
         //If statement to adjust some values if this is used for the player weapon
         if(parentObject.GetComponent<PlayerController>())
         {
-            damage = 5f;
+            damage = 10f;
             Destroy(gameObject, 0.3f);
         }
 
@@ -104,11 +101,11 @@ public class Laser : MonoBehaviour
     /// <param name="other"></param>
     private void OnTriggerEnter(Collider other)
     {
+        //If the parent object isn't the enemy (then it is the player) and the other object is an enemy we check for more things!
         if (!parentObject.GetComponent<EnemyBase>() && other.GetComponent<EnemyBase>())
         {
-            if (!laserTriggered && parentObject.GetComponent<PlayerController>() && !other.GetComponent<EnemyBase>().isInvincible)
+            if (parentObject.GetComponent<PlayerController>() && !other.GetComponent<EnemyBase>().isInvincible)
             {
-                print("Hit an enemey for the enemy!");
                 StartCoroutine(LaserWandCycle(other.gameObject));
             }
         }
@@ -164,15 +161,6 @@ public class Laser : MonoBehaviour
         {
             if (heal)
                 target.GetComponent<EnemyBase>().Heal(1);
-            /*else if(!parentObject.GetComponent<EnemyBase>())
-            {
-                //Starts the knockback coroutine
-                StartCoroutine(target.GetComponent<EnemyBase>().EnemyKnockBack());
-                target.GetComponent<EnemyBase>().Damage(damage);
-
-                if (setOnFire)
-                    target.GetComponent<EnemyBase>().transform.GetComponent<StatusEffects>().fireStatus(3f);
-            }*/
 
             yield return new WaitForSeconds(tickRate);
         }
@@ -193,7 +181,10 @@ public class Laser : MonoBehaviour
         if (target.GetComponent<EnemyBase>())
         {
             //Starts the knockback coroutine
-            //StartCoroutine(target.GetComponent<EnemyBase>().EnemyKnockBack());
+
+            //Currently Knockback is broken for this item - AHL (4/27/21)
+            //StartCoroutine(target.GetComponent<EnemyBase>().EnemyKnockBack()); 
+            
             target.GetComponent<EnemyBase>().Damage(damage);
 
             /*if (setOnFire)

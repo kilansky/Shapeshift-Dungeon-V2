@@ -40,6 +40,7 @@ public class Tile : MonoBehaviour
 
     public bool hasDecor = false;
     public bool forceSwap = false;
+    public bool occupiedByWorm = false;
 
     private GameObject nextTile;
 
@@ -150,7 +151,7 @@ public class Tile : MonoBehaviour
         {
             if (hit.transform.CompareTag("Player")) //If boxcast finds player on top of tile, delay the transition
             {
-                Debug.Log("Player Hit!");
+                //Debug.Log("Player Hit!");
                 yield return null;
             }
             else //If player is not on top of tile, begin transition and enable the colliders on the pedestal

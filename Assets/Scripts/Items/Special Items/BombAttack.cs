@@ -22,7 +22,7 @@ public class BombAttack : MonoBehaviour
     /// <summary>
     /// OnTrigger so when the bool is true it checks to see what would take damage - AHL (3/9/21)
     /// </summary>
-    private void OnTriggerStay(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
         //Checks to see if the is damaging bool true (The bomb explodes)
         if(isDamage)
@@ -65,6 +65,7 @@ public class BombAttack : MonoBehaviour
 
         //Spawn explosion vfx
         Instantiate(explosionEffect, transform.position, Quaternion.identity);
+        GetComponent<AudioSource>().Play();
 
         //Sets it to damage the player
         isDamage = true;
@@ -82,6 +83,8 @@ public class BombAttack : MonoBehaviour
         //Makes sure the hitbox scale is set to the final scale
         transform.localScale = finalScale;
 
-        Destroy(transform.parent.gameObject); //Destroys the bomb parent object
+        GetComponent<SphereCollider>().enabled = false;
+
+        Destroy(transform.parent.gameObject, 2f); //Destroys the bomb parent object
     }
 }

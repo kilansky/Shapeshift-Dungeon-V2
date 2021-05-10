@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 614538dc814d046429c1d3bece288708, type: 3}
+  m_Name: Cloak of Darkness
+  m_EditorClassIdentifier: 
+  sprite: {fileID: 21300000, guid: f900996c0f571524eb663e4363c33990, type: 3}
+  prefab: {fileID: 5382143777911795397, guid: ac630502735e06246b1a61a49ab5708e, type: 3}
+  _itemSlotType: 2
+  slotSprite: {fileID: 21300000, guid: 079aae6caf0df1247b9f10d7dfd2fe55, type: 3}
+  _itemName: Cloak of Darkness
+  itemDescription: Charge attacks are faster and cover more distance
+  statMods:
+  - adjustableValue: -0.25
+    statModifier: 200
+    statType: 5

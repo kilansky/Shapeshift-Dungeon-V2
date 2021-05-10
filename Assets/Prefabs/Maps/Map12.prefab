@@ -505,6 +505,18 @@ MonoBehaviour:
     - name: Green Crystal
       monster: {fileID: 1044970987093620923, guid: 0fb047fb2c5b4894a8b3c9107b38137d,
         type: 3}
+      spawnWeight: 1
+    - name: BigSlime
+      monster: {fileID: 8696890763414873574, guid: 1d112426ee2088c44935b083ad91af2e,
+        type: 3}
+      spawnWeight: 6
+    - name: Worm
+      monster: {fileID: 5520990575442047842, guid: c8c2fc06c1a8db747b16c4b4fe7937bd,
+        type: 3}
+      spawnWeight: 8
+    - name: Skeleton
+      monster: {fileID: 5520990575442047842, guid: 88ab8574e27b2034183b63847449338a,
+        type: 3}
       spawnWeight: 6
     totalMonsters: 25
     maxMonsters: 9
@@ -6564,6 +6576,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2280226080432650527}
     m_Modifications:
+    - target: {fileID: 186188970890191261, guid: f13817cc86f1e2c4b943183a2ee2fbc4,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 186188970890191261, guid: f13817cc86f1e2c4b943183a2ee2fbc4,
         type: 3}
       propertyPath: m_StaticEditorFlags

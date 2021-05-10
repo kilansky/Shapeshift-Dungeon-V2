@@ -19,6 +19,11 @@ public class Goblin_StunState : StunState
     public override void Enter()
     {
         base.Enter();
+        enemy.Anim.SetBool("isMoving", false);
+        enemy.Anim.SetBool("isAttacking", false);
+
+        enemy.aliveGO.GetComponent<EnemyAttack>().DisableHitBox();
+        enemy.agent.SetDestination(enemy.transform.position);
     }
 
     public override void Exit()
@@ -34,11 +39,11 @@ public class Goblin_StunState : StunState
         {
             if (isPlayerInMinAttackRange)
             {
-                stateMachine.ChangeState(enemy.playerDetectedState);
+                stateMachine.ChangeState(enemy.attackState);
             }
             else
             {
-                stateMachine.ChangeState(enemy.lookForPlayerState);
+                stateMachine.ChangeState(enemy.moveState);
             }
         }
     }

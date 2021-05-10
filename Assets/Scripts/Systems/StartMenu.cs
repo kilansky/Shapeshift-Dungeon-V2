@@ -13,6 +13,7 @@ public class StartMenu : MonoBehaviour
 
     public GameObject startCanvas;
     public GameObject playCanvas;
+    public GameObject optionsCanvas;
     public float menuTransitionTime;
 
     public Image blackScreenOverlay;
@@ -70,13 +71,20 @@ public class StartMenu : MonoBehaviour
 
     public void StartFloor20()
     {
-        //PlayerPrefs.SetInt("startingLevel", 19);
-        //StartCoroutine(FadeOutToLevel(2));
+        PlayerPrefs.SetInt("startingLevel", 19);
+        StartCoroutine(FadeOutToLevel(2));
     }
 
-    public void FormFeedback()
+    //Transition to the options canvas
+    public void Options()
     {
-        Application.OpenURL("https://docs.google.com/forms/d/1yeWTvuf43eci_y8Tj1MR-Tj1UTHPfomzOjMlrw7A2mM/edit");
+        StartCoroutine(TransitionMenu(optionsCanvas));
+    }
+
+    //Transition to the credits screen
+    public void Credits()
+    {
+        StartCoroutine(FadeOutToLevel(3));
     }
 
     //Goes back to the start canvas
@@ -98,6 +106,7 @@ public class StartMenu : MonoBehaviour
         float currPos = startPos;
 
         CineShake.Instance.Shake(2f, (menuTransitionTime / 2));
+        AudioManager.Instance.Play("MenuRumble");
         while (timeElapsed < (menuTransitionTime / 2))
         {
             currPos = Mathf.Lerp(startPos, endPos, timeElapsed / (menuTransitionTime / 2));
@@ -116,6 +125,7 @@ public class StartMenu : MonoBehaviour
 
         timeElapsed = 0;
         CineShake.Instance.Shake(2f, (menuTransitionTime / 2));
+        AudioManager.Instance.Play("MenuRumble");
         while (timeElapsed < (menuTransitionTime / 2))
         {
             currPos = Mathf.Lerp(endPos, startPos, timeElapsed / (menuTransitionTime / 2));

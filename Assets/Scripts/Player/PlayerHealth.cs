@@ -64,6 +64,8 @@ public class PlayerHealth : SingletonPattern<PlayerHealth>, IDamageable
                 return;
             }
 
+            AudioManager.Instance.Play("PlayerHit");
+
             //prevent from taking damage temporarily
             StartCoroutine(InvincibilityFrames());
         }
@@ -91,6 +93,7 @@ public class PlayerHealth : SingletonPattern<PlayerHealth>, IDamageable
                 return;
             }
 
+            //AudioManager.Instance.Play("PlayerHitMagic");
             //prevent from taking damage temporarily
             StartCoroutine(InvincibilityFrames());
         }
@@ -129,8 +132,9 @@ public class PlayerHealth : SingletonPattern<PlayerHealth>, IDamageable
                 {
                     potionSlots[i].sprite = transparentSquare;
                     Heal(maxHealth); //Old healing value: 15f + additionalPotionHealing.Value
+                    AudioManager.Instance.Play("Potion");
 
-                    if(GetPotionCount() == 0)
+                    if (GetPotionCount() == 0)
                         HUDController.Instance.HidePotionsPanel();
 
                     return;
@@ -143,6 +147,13 @@ public class PlayerHealth : SingletonPattern<PlayerHealth>, IDamageable
     //Adds a potion - REPLACE W/ BETTER SYSTEM LATER!
     public void AddPotion()
     {
+        if(GetPotionCount() == 3)
+        {
+            UsePotion();
+            return;
+        }
+
+
         //Check each potion slot front to back
         //If the slot is available, add the potion to it
         for (int i = 0; i < potionSlots.Length; i++)
@@ -204,9 +215,16 @@ public class PlayerHealth : SingletonPattern<PlayerHealth>, IDamageable
     {
         AnalyticsEvents.Instance.PlayerDied(); //Send Player Died Analytics Event
         AnalyticsEvents.Instance.ItemsOnDeath(); //Send Items On Death Analytics Event
-        //StartCoroutine(AnalyticsEvents.Instance.DamageSourcesData()); //Send Damage source data Analytics Event
-        HUDController.Instance.ShowGameOver();
-        Time.timeScale = 0;
+
+        //Play Death Animation, lock player movement, and zoom in the camera
+        PlayerController.Instance.PlayerAnimator.SetBool("isDead", true);
+        PlayerController.Instance.IsDead = true;
+        CameraController.Instance.PlayerDeathZoomIn();
+
+        AudioManager.Instance.Play("PlayerDeath");
+
+        //Wait to show game over screen until death anim is done
+        StartCoroutine(WaitToShowGameOver());
     }
 
     //Makes the player invincible briefly
@@ -215,5 +233,14 @@ public class PlayerHealth : SingletonPattern<PlayerHealth>, IDamageable
         isInvincible = true;
         yield return new WaitForSeconds(dmgInvincibilityTime);
         isInvincible = false;
+    }
+
+    //Wait to show the game over screen upon death
+    IEnumerator WaitToShowGameOver()
+    {
+        yield return new WaitForSeconds(4f);
+
+        HUDController.Instance.ShowGameOver();
+        Time.timeScale = 0;
     }
 }

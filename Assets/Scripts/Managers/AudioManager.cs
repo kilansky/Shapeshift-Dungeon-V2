@@ -20,6 +20,7 @@ public class Sound
 public class AudioManager : SingletonPattern<AudioManager>
 {
     public Sound[] sounds;
+    public AudioMixerGroup SFXGroup;
 
     private void Start()
     {
@@ -31,6 +32,7 @@ public class AudioManager : SingletonPattern<AudioManager>
             s.source.pitch = s.pitch;
             s.source.loop = s.loop;
             s.source.spatialBlend = s.spacialBlend;
+            s.source.outputAudioMixerGroup = SFXGroup;
         }
     }
 
@@ -42,6 +44,19 @@ public class AudioManager : SingletonPattern<AudioManager>
             Debug.LogWarning("Sound " + name + " not found!");
             return;
         }
+        s.source.pitch = s.pitch;
+        s.source.Play();
+    }
+
+    public void Play(string name, float pitch)
+    {
+        Sound s = Array.Find(sounds, sound => sound.name == name);
+        if (s == null)
+        {
+            Debug.LogWarning("Sound " + name + " not found!");
+            return;
+        }
+        s.source.pitch = pitch;
         s.source.Play();
     }
 

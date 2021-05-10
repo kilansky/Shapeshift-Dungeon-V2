@@ -58,10 +58,7 @@ public class Goblin : EnemyBase
         stunState = new Goblin_StunState(this, stateMachine, "stun", stunStateData, this);
 
         //initialize the goblin in the idle state
-        //stateMachine.Initialize(idleState);
-
-        //this line is what got rid of my NullReferenceExceptions
-        stateMachine.Initialize(moveState);
+        stateMachine.Initialize(idleState);
 
         FrontTarget = PlayerController.Instance.frontTarget;
         SideTarget = PlayerController.Instance.sideTarget;
@@ -101,7 +98,7 @@ public class Goblin : EnemyBase
         {
             //if we see our target gameObject, draw the line
             //if(sightHit.transform.gameObject.name.Equals.BackTarget)
-                //Debug.DrawRay(transform.position, direction, Color.red);
+            //Debug.DrawRay(transform.position, direction, Color.red);
         }
 
 
@@ -113,7 +110,6 @@ public class Goblin : EnemyBase
         //sets enemy's color to the hitMat (red)
         renderer.material = hitMat;
         StartCoroutine(WaitToResetColor());
-
     }
 
     public override void ResetColor()

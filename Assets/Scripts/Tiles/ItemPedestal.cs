@@ -16,8 +16,10 @@ public class ItemPedestal : MonoBehaviour
     public GameObject colliderBox;
     public bool isRandom;
     public bool isRandomSpecial;
+    public bool isRandomShopItem;
+    public int price = 0;
 
-    [HideInInspector] public GameObject item;
+    /*[HideInInspector]*/ public GameObject item;
 
     private void Start()
     {
@@ -26,10 +28,19 @@ public class ItemPedestal : MonoBehaviour
             item = Instantiate(ItemPool.Instance.randomSpecialSpawn().prefab, transform.position + new Vector3(0, 7.2f, 0), transform.rotation, transform);
 
             GameObject itemBase = item.transform.GetChild(0).gameObject;
-            foreach (Transform canvas in itemBase.transform)
-            {
-                canvas.gameObject.layer = 16;//Set world GUI layer on each child
-            }
+            //SetWorldGUILayer();
+        }
+        else if(isRandomShopItem)
+        {
+            item = Instantiate(ItemPool.Instance.GetItemNoGem().prefab, transform.position + new Vector3(0, 7.2f, 0), transform.rotation, transform);
+
+            Item itemScript = item.GetComponent<Item>();
+            itemScript.SetPrice(price);
+            //SetWorldGUILayer();
+        }
+        else
+        {
+            item = GetComponentInChildren<Item>().gameObject;
         }
     }
 
@@ -49,6 +60,7 @@ public class ItemPedestal : MonoBehaviour
     {       
         if(isRandom) //Checks if pedestal is set to spawn random item
         {
+            /*----------Removed code to randomly spawn potions/gem bags after floor 5----------  -Sky
             if(LevelManager.Instance.currFloor >= 5) //Checks if the current level is passed floor 5
             {
                 int rnd = Random.Range(0, 100); //If it is, rolls for percent chance on drops. 15% for small potion, 15% for gem pouch, and 70% chance for random item
@@ -64,9 +76,11 @@ public class ItemPedestal : MonoBehaviour
                     item = Instantiate(ItemPool.Instance.randomItemSpawn().prefab, transform.position + new Vector3(0, 7.2f, 0), transform.rotation, transform);
             }
             else //If it isn't passed floor 5 yet, spawns a random item
-                item = Instantiate(ItemPool.Instance.randomItemSpawn().prefab, transform.position + new Vector3(0, 7.2f, 0), transform.rotation, transform);
+            */
+
+            item = Instantiate(ItemPool.Instance.randomItemSpawn().prefab, transform.position + new Vector3(0, 7.2f, 0), transform.rotation, transform);
         }
-        else //If pedestal is not a random pedestal, it spawns a stat potion
+        else //If pedestal is not a random pedestal, it spawns a gem bag
         {
             item = Instantiate(ItemPool.Instance.statPotion.prefab, transform.position + new Vector3(0, 7.2f, 0), transform.rotation, transform);
         }

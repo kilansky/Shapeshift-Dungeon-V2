@@ -10,6 +10,7 @@ public class Bullet : MonoBehaviour
 
     [Range(0f, 1f)]
     public bool canDamage = false;
+    public bool canBeDestroyed = true;
     public float moveSpeed = 20f;
 
     //explosion variables
@@ -65,53 +66,66 @@ public class Bullet : MonoBehaviour
     private void Update()
     {
         transform.position += shootDir * moveSpeed * Time.deltaTime;
+
+        if (!parentObject)
+            Destroy(gameObject);
     }
 
     //Check if player was hit & deal damage
     private void OnTriggerEnter(Collider collider)
     {
         //Detect if the player's sword hits this bullet and destroy it
-        if (canDamage && collider.gameObject.layer == 14)
-            Destroy(gameObject);
+        if (canDamage && canBeDestroyed && collider.gameObject.layer == 14)
+            DestroyBullet();
 
-        if (canDamage && collider.GetComponent<PlayerController>())
+        if (canDamage && collider.GetComponent<PlayerController>() && !PlayerHealth.Instance.isInvincible)
         {
             //if (!PlayerHealth.Instance.isInvincible)
-                //AnalyticsEvents.Instance.PlayerDamaged(shotBy + " Projectile"); //Sends analytics event about damage source
+            //AnalyticsEvents.Instance.PlayerDamaged(shotBy + " Projectile"); //Sends analytics event about damage source
+
+            AudioManager.Instance.Play("PlayerHitMagic");
 
             PlayerHealth.Instance.Damage(bulletDamage, parentObject);
 
             if (setOnFire)
                 PlayerHealth.Instance.transform.GetComponent<StatusEffects>().fireStatus(3f);
 
-            Destroy(gameObject);
+            DestroyBullet();
         }
 
         if(collider.GetComponent<ExplodingBarrel>())
         {
             collider.GetComponent<ExplodingBarrel>().TriggerFuse();
-            Destroy(gameObject);
+            DestroyBullet();
         }
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        //destroy the bullet if it hits the environment, walls, the player, or stairs
-        if(canDamage && collision.gameObject.layer == 10 || collision.gameObject.layer == 9 || collision.gameObject.layer == 8 || collision.gameObject.layer == 2)
-        {
-            Destroy(gameObject);
-        }
+        //destroy the bullet if it hits the environment, walls, stairs, or the player while not dashing
+        if (canDamage && collision.gameObject.layer == 10 || collision.gameObject.layer == 9|| collision.gameObject.layer == 2 || 
+            (collision.gameObject.layer == 8 && !PlayerController.Instance.IsDashing))
+            DestroyBullet();
 
         //if the bullet hit another enemy, damage the enemy & destroy the bullet
-        if (canDamage && collision.gameObject.layer == 11)
+        if (canDamage && collision.gameObject.layer == 11 && !parentObject.GetComponent<MageBoss>())
         {
             collision.gameObject.GetComponent<EnemyBase>().Damage(bulletDamage);
 
             if (setOnFire)
                 collision.gameObject.GetComponent<StatusEffects>().fireStatus(3f);
 
-            Destroy(gameObject);
+            DestroyBullet();
         }
+    }
+
+    private void DestroyBullet()
+    {
+        //Remove this bullet from the mage boss's ring of projectiles if relevant
+        if(parentObject.GetComponent<MageBoss>() && parentObject.GetComponent<MageBoss>().unfiredProjectiles.Count > 0)
+            parentObject.GetComponent<MageBoss>().unfiredProjectiles.Remove(gameObject);
+
+        Destroy(gameObject);
     }
 
     private void Setup()

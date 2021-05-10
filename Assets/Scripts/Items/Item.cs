@@ -88,6 +88,11 @@ public class Item : MonoBehaviour
                 c.HeadSlot.prefab.GetComponent<Item>().Unequip(c, h);
                 c.HeadSlot = this.item;
             }
+
+            //Checks if the item being equipped is the Monster Mask so we can adjust the bool variable in the player controller
+            if (item.ItemName == "Monster Mask")
+                c.hasMonsterMask = true;
+
         }
 
         //Torso Item Slot
@@ -265,18 +270,18 @@ public class Item : MonoBehaviour
             {
                 //Flat Value
                 if ((int)item.statMods[i].statModifier == 100)
-                    c.chargeRate.AddModifiers(new StatModifier(item.statMods[i].adjustableValue, StatModType.Flat, item.prefab));
+                    c.timeToFullCharge.AddModifiers(new StatModifier(item.statMods[i].adjustableValue, StatModType.Flat, item.prefab));
 
                 //Percent Add Value
                 if ((int)item.statMods[i].statModifier == 200)
-                    c.chargeRate.AddModifiers(new StatModifier(item.statMods[i].adjustableValue, StatModType.PercentAdd, item.prefab));
+                    c.timeToFullCharge.AddModifiers(new StatModifier(item.statMods[i].adjustableValue, StatModType.PercentAdd, item.prefab));
 
                 //Percent Mult Value
                 if ((int)item.statMods[i].statModifier == 300)
-                    c.chargeRate.AddModifiers(new StatModifier(item.statMods[i].adjustableValue, StatModType.PercentMult, item.prefab));
+                    c.timeToFullCharge.AddModifiers(new StatModifier(item.statMods[i].adjustableValue, StatModType.PercentMult, item.prefab));
 
                 //Debug.Log("This item " + item.ItemName + " has been equipped so Charge Attack Time has been adjusted.");
-                //Debug.Log("The new Charge Attack Time is " + c.chargeRate.Value);
+                //Debug.Log("The new Charge Attack Time is " + c.timeToFullCharge.Value);
             }
 
             //Attack Knockback Adjustment
@@ -412,6 +417,10 @@ public class Item : MonoBehaviour
         if (isNewBOHItem)
             isNewBOHItem = false;
 
+        //If the item being equipped is the Kapala then we adjust the hasKapala variable in the playerController Script
+        if (item.ItemName == "Kapala")
+            c.hasKapala = true;
+
         StartCoroutine(c.RechargeSpecial());
     }
 
@@ -461,7 +470,7 @@ public class Item : MonoBehaviour
             //Charge Attack Time Adjustment
             else if ((int)item.statMods[i].statType == 5)
             {
-                c.chargeRate.RemoveAllModifiersFromSource(item.prefab);
+                c.timeToFullCharge.RemoveAllModifiersFromSource(item.prefab);
                 //Debug.Log("This item " + item.ItemName + " has been removed so Charge Attack Time has been adjusted.");
                 //Debug.Log("The new Charge Attack Time is " + c.chargeRate.Value);
             }
@@ -523,6 +532,14 @@ public class Item : MonoBehaviour
                 //Debug.Log("The new Special Item Recharge is " + c.specialCooldownTime.Value);
             }
         }
+
+        //If the monster Mask is being unequipped then we set the bool to false
+        if (item.ItemName == "Monster Mask")
+            c.hasMonsterMask = false;
+
+        //If the Kapala is being unequipped then we set the bool to false
+        if (item.ItemName == "Kapala")
+            c.hasKapala = false;
     }
 
     private void Start()
@@ -540,6 +557,24 @@ public class Item : MonoBehaviour
     public bool IsSecondItem()
     {
         return isSecondItem;
+    }
+
+    public void SetWorldGUILayer(bool active)
+    {
+        if (active)
+        {
+            foreach (Transform canvas in itemBase.transform)
+            {
+                canvas.gameObject.layer = 16;//Set world GUI layer on each child
+            }
+        }
+        else
+        {
+            foreach (Transform canvas in itemBase.transform)
+            {
+                canvas.gameObject.layer = 5;//Set UI layer on each child
+            }
+        }
     }
 
 

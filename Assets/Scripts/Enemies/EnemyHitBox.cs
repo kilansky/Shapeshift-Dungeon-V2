@@ -5,7 +5,7 @@ using UnityEngine;
 public class EnemyHitBox : MonoBehaviour
 {
     public GameObject hitEffect;
-    public bool hasTorch = false;
+    public bool appliesFireStatus = false;
     //public bool dealsExtraDamage; //deals extra damage based on player's attack3 dmg mod if true
 
     private void OnTriggerEnter(Collider other)
@@ -19,26 +19,26 @@ public class EnemyHitBox : MonoBehaviour
             //Apply slight camera shake
             CineShake.Instance.Shake(1f, 0.1f);
 
+            float damageToDeal;
             //Determine dameage to deal based on player's current attack damage
-            float damageToDeal = transform.parent.GetComponent<EnemyBase>().meleeDamage;
+            if (transform.parent.GetComponent<EnemyBase>())
+                damageToDeal = transform.parent.GetComponent<EnemyBase>().meleeDamage;
+            else
+                damageToDeal = transform.root.GetComponent<EnemyBase>().meleeDamage;
 
             //Set player on fire if this enemy is holding a torch
-            if (hasTorch)
+            if (appliesFireStatus)
             {
                 damageToDeal--;
                 other.GetComponent<StatusEffects>().fireStatus(4);
             }
             //Apply damage to player
+            if (!PlayerHealth.Instance.isInvincible)
+                AudioManager.Instance.Play("PlayerHit");
+
             other.GetComponent<PlayerHealth>().Damage(damageToDeal, transform.parent.gameObject);
 
-            //if (dealsExtraDamage)//Check to deal additional damage
-            //  damageToDeal *= PlayerController.Instance.attack3DmgMod;
-
             
-            //Apply Knockback to enemy
-            //StartCoroutine(other.GetComponent<EnemyBase>().EnemyKnockBack());
-
-            AudioManager.Instance.Play("Hit");
         }
 
         if (other.GetComponent<DestructibleProp>())
