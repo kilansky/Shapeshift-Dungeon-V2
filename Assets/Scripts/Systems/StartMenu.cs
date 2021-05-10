@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
+using TMPro;
 
 public class StartMenu : MonoBehaviour
 {
@@ -11,11 +12,21 @@ public class StartMenu : MonoBehaviour
     //public GameObject[] buttons;
     //public EventSystem eventSystem;
 
+    [Header("Menus")]
     public GameObject startCanvas;
     public GameObject playCanvas;
     public GameObject optionsCanvas;
     public float menuTransitionTime;
 
+    [Header("Assist Mode")]
+    public Image assistCheckbox;
+    public Sprite redX;
+    public Sprite greenCheckmark;
+
+    [Header("Settings")]
+    public TextMeshProUGUI fullscreenText;
+
+    [Header("Black Overlay")]
     public Image blackScreenOverlay;
     public float fadeInTime = 2f;
     public float fadeOutTime = 2f;
@@ -97,6 +108,18 @@ public class StartMenu : MonoBehaviour
     public void QuitGame()
     {
         Application.Quit();
+    }
+
+    public void AssistMode()
+    {
+        //PlayerPrefs.GetInt("AssistMode")
+    }
+
+    //Toggle whether the game is fullscreen or not
+    public void ToggleFullscreen()
+    {
+        Screen.fullScreen = !Screen.fullScreen;
+        fullscreenText.text = Screen.fullScreen ? "Fullscreen" : "Windowed";
     }
 
     //Have the tile slide down & up to transition to the next menu
