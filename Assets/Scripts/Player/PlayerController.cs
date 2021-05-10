@@ -828,13 +828,17 @@ public class PlayerController : SingletonPattern<PlayerController>
         chargingVFX.SetActive(false);
         chargeArrow.transform.localScale = new Vector3(1, 1, 1);
 
-        Vector3 chargeVector = transform.forward;
-
+        Vector3 chargeVector;
         animator.SetBool("isCharging", false);
 
         //Charge forward & apply deceleration until speed is nearly zero
         while (chargeSpeed > 3f)
         {
+            if (IsGrounded())
+                chargeVector = transform.forward + new Vector3(0, -1f, 0);
+            else
+                chargeVector = transform.forward;
+
             controller.Move(chargeVector * chargeSpeed * Time.deltaTime);
             chargeSpeed -= chargeDeceleration * Time.deltaTime;
             yield return new WaitForEndOfFrame();

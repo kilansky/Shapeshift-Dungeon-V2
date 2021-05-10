@@ -11,6 +11,7 @@ public class DestructibleProp : MonoBehaviour
     [Range(0, 100)] public float spawnGemChance;
     public Collider unshatteredCollider;
     public GameObject shatteredProp;
+    public bool isPot;
 
     private bool spawnGem = false;
     public bool HasGem { get { return spawnGem; } }
@@ -27,6 +28,11 @@ public class DestructibleProp : MonoBehaviour
 
     public void ShatterObject()
     {
+        if(!isPot)
+            AudioManager.Instance.Play("WoodBreak", Random.Range(0.6f, 1.2f));
+        else
+            AudioManager.Instance.Play("PotBreak", Random.Range(0.6f, 1.2f));
+
         //Spawn destroy effect
         Instantiate(destroyEffect, transform.position + new Vector3(0, 0.7f, 0), Quaternion.identity);
 
