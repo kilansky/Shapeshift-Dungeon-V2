@@ -599,20 +599,26 @@ public class PlayerController : SingletonPattern<PlayerController>
         if (context.performed && playerIsAlive && !statPotionPanelActive) 
         {
             if (!IsPaused) //If the game is not paused then pause the game
-            {
-                isPaused = true;
-                Time.timeScale = 0;
-                HUDController.Instance.ShowPauseScreen();
-                HUDController.Instance.ShowControlsPanel();
-            }
+                Pause();
             else //If the game is paused then unpause the game
-            {
-                isPaused = false;
-                Time.timeScale = 1;
-                HUDController.Instance.HidePauseScreen();
-                HUDController.Instance.HideControlsPanel();
-            }
+                Unpause();
         }
+    }
+
+    public void Pause()
+    {
+        isPaused = true;
+        Time.timeScale = 0;
+        HUDController.Instance.ShowPauseScreen();
+        HUDController.Instance.ShowControlsPanel();
+    }
+
+    public void Unpause()
+    {
+        isPaused = false;
+        Time.timeScale = 1;
+        HUDController.Instance.HidePauseScreen();
+        HUDController.Instance.HideControlsPanel();
     }
 
     //Mouse Aiming Screen Position
