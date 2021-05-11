@@ -44,7 +44,7 @@ public class Sword : MonoBehaviour
             
         }
 
-        if (other.GetComponent<MageBoss>())
+        /*if (other.GetComponent<MageBoss>())
         {
             if (!other.GetComponent<MageBoss>().isInvincible)
                 AudioManager.Instance.Play("Hit");
@@ -66,7 +66,7 @@ public class Sword : MonoBehaviour
             other.GetComponent<MageBoss>().Damage(damageToDeal);
 
             
-        }
+        }*/
 
         if (other.GetComponent<DestructibleProp>())
         {
