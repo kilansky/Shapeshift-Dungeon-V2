@@ -286,11 +286,14 @@ public class StartMenu : MonoBehaviour
 
         if (PlayerPrefs.GetInt("unlockedLevels", 0) >= 5)
             floor5.interactable = true;
-        else if (PlayerPrefs.GetInt("unlockedLevels", 0) >= 10)
+
+        if (PlayerPrefs.GetInt("unlockedLevels", 0) >= 10)
             floor10.interactable = true;
-        else if (PlayerPrefs.GetInt("unlockedLevels", 0) >= 15)
+
+        if (PlayerPrefs.GetInt("unlockedLevels", 0) >= 15)
             floor15.interactable = true;
-        else if (PlayerPrefs.GetInt("unlockedLevels", 0) >= 20)
+
+        if (PlayerPrefs.GetInt("unlockedLevels", 0) >= 20)
             floor20.interactable = true;
     }
 

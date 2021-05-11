@@ -18,7 +18,7 @@ public class GameOverStats : MonoBehaviour
     {
         PlayerController pc = PlayerController.Instance;
 
-        runTimeText.text = "Time: " + RunTimer.Instance.TimerTextValue;
+        runTimeText.text = "Time: " + RunTimer.Instance.FinalTime();
         floorText.text = "Floor Reached: " + LevelManager.Instance.currFloor.ToString();
         healthText.text = "Health - " + pc.StatMaxHealthCount.ToString();
         attackText.text = "Attack - " + pc.StatAttackCount.ToString();

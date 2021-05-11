@@ -30,10 +30,27 @@ public class RunTimer : SingletonPattern<RunTimer>
     private void UpdateTimerUI()
     {
         var timeSpan = System.TimeSpan.FromSeconds(runTimer);
-        TimerTextValue = timeSpan.Hours.ToString("0") + ":" +
-                        timeSpan.Minutes.ToString("00") + ":" +
-                        timeSpan.Seconds.ToString("00");
+
+        if(timeSpan.Hours > 0)
+        {
+            TimerTextValue = timeSpan.Hours.ToString("0") + ":" +
+                timeSpan.Minutes.ToString("00") + ":" +
+                timeSpan.Seconds.ToString("00");
+        }
+        else
+        {
+            TimerTextValue = timeSpan.Minutes.ToString("00") + ":" + timeSpan.Seconds.ToString("00");
+        }
 
         timerText.text = TimerTextValue;
+    }
+
+    public string FinalTime()
+    {
+        var timeSpan = System.TimeSpan.FromSeconds(runTimer);
+        string time;
+
+        time = timeSpan.Hours.ToString("0") + ":" + timeSpan.Minutes.ToString("00") + ":" + timeSpan.Seconds.ToString("00") + timeSpan.Milliseconds.ToString("00");
+        return string.Format(@"{0:mm\:ss\:ff}", time);
     }
 }

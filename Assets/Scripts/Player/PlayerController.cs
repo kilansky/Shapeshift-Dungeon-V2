@@ -662,7 +662,10 @@ public class PlayerController : SingletonPattern<PlayerController>
 
             Buttons buttons = FindObjectOfType<Buttons>();
 
-            if(buttons)
+            if (!EventSystem.current.currentSelectedGameObject)
+                EventSystem.current.SetSelectedGameObject(buttons.buttonsArray[buttons.currButtonIndex]);
+
+            if (buttons)
             {
                 if (navigationInput.y > 0.5f || navigationInput.x < -0.5f)
                     buttons.PreviousButton();
