@@ -238,8 +238,10 @@ public class PlayerHealth : SingletonPattern<PlayerHealth>, IDamageable
     //Wait to show the game over screen upon death
     IEnumerator WaitToShowGameOver()
     {
+        MusicManager.Instance.FadeOut(0, 4f);
         yield return new WaitForSeconds(4f);
 
+        AudioManager.Instance.Play("GameOver");
         HUDController.Instance.ShowGameOver();
         Time.timeScale = 0;
     }
