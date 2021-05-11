@@ -8,7 +8,7 @@ public class Sword : MonoBehaviour
     public bool dealsExtraDamage; //deals extra damage based on player's attack3 dmg mod if true
 
     private void OnTriggerEnter(Collider other)
-    {       
+    {
         if (other.GetComponent<EnemyBase>() && !other.GetComponent<EnemyBase>().isInvincible)
         {
             //Debug.Log(other.gameObject);
@@ -39,34 +39,8 @@ public class Sword : MonoBehaviour
             other.GetComponent<EnemyBase>().Damage(damageToDeal);
 
             //Apply Knockback to enemy
-            StartCoroutine(other.GetComponent<EnemyBase>().EnemyKnockBack());
-
-            
+            StartCoroutine(other.GetComponent<EnemyBase>().EnemyKnockBack());  
         }
-
-        /*if (other.GetComponent<MageBoss>())
-        {
-            if (!other.GetComponent<MageBoss>().isInvincible)
-                AudioManager.Instance.Play("Hit");
-
-            //Spawn hit effect on enemy
-            Vector3 enemyPos = other.transform.position;
-            Instantiate(hitEffect, new Vector3(enemyPos.x, transform.position.y, enemyPos.z), Quaternion.identity);
-
-            //Apply slight camera shake
-            CineShake.Instance.Shake(1f, 0.1f);
-
-            //Determine dameage to deal based on player's current attack damage
-            float damageToDeal = PlayerController.Instance.CurrAttackDamage;
-
-            if (dealsExtraDamage)//Check to deal additional damage
-                damageToDeal *= PlayerController.Instance.attack3DmgMod;
-
-            //Apply damage to enemy
-            other.GetComponent<MageBoss>().Damage(damageToDeal);
-
-            
-        }*/
 
         if (other.GetComponent<DestructibleProp>())
         {

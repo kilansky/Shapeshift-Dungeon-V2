@@ -55,6 +55,7 @@ public class Worm_MoveState : MoveState
         {
             enemy.dirtCloud.Stop();
             enemy.dirtChunks.Stop();
+            enemy.wormCanBeHit = false;
 
             //Quench flames if burning underground
             if (enemy.GetComponent<StatusEffects>().isBurning)

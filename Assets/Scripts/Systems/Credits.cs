@@ -31,6 +31,7 @@ public class Credits : MonoBehaviour
 
     void Start()
     {
+        Time.timeScale = 1;
         skipButtonPanel.SetActive(false);
 
         StartCoroutine(FadeTitleFromBlack());

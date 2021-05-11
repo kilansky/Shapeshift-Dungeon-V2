@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.Audio;
 using UnityEngine.EventSystems;
 using TMPro;
 
@@ -19,12 +20,41 @@ public class StartMenu : MonoBehaviour
     public float menuTransitionTime;
 
     [Header("Assist Mode")]
-    public Image assistCheckbox;
-    public Sprite redX;
-    public Sprite greenCheckmark;
+    public TextMeshProUGUI difficultyText;
+    //public Image assistCheckbox;
+    //public Sprite redX;
+    //public Sprite greenCheckmark;
 
     [Header("Settings")]
     public TextMeshProUGUI fullscreenText;
+    public AudioMixer mixer;
+
+    private AudioSource audioSource;
+    private float currSliderValue;
+
+    public void SetMusicLevel(float sliderValue)
+    {
+        if(sliderValue > 0)
+            mixer.SetFloat("MusicVolume", (Mathf.Log10(sliderValue) * 20) + 5);
+        else
+            mixer.SetFloat("MusicVolume", -80);
+    }
+
+    public void SetSFXLevel(float sliderValue)
+    {
+        if (sliderValue > 0)
+            mixer.SetFloat("SFXVolume", (Mathf.Log10(sliderValue) * 20) + 5);
+        else
+            mixer.SetFloat("SFXVolume", -80);
+
+        currSliderValue = sliderValue;
+
+        if (!audioSource.isPlaying)
+        {
+            audioSource.Play();
+            StartCoroutine(StopRumbleSFX());
+        }
+    }
 
     [Header("Black Overlay")]
     public Image blackScreenOverlay;
@@ -38,6 +68,7 @@ public class StartMenu : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        audioSource = GetComponent<AudioSource>();
         startCanvas.SetActive(true);
         playCanvas.SetActive(false);
 
@@ -46,7 +77,58 @@ public class StartMenu : MonoBehaviour
         startPos = transform.position.y;
         endPos = transform.position.y - 6f;
 
+        //set preferred difficulty and screen size     
+        SetPreferredScreenSize();
+        SetPreferredDifficulty();
+
         StartCoroutine(FadeInToMenu());
+    }
+
+    private void SetPreferredScreenSize()
+    {
+        if (PlayerPrefs.GetInt("isFullscreen", 0) == 0)
+        {
+            Screen.SetResolution(Screen.currentResolution.width, Screen.currentResolution.height, true);
+            fullscreenText.text = "Fullscreen";
+        }
+        else
+        {
+            Screen.SetResolution(1024, 768, false);
+            fullscreenText.text = "Windowed";
+        }
+    }
+
+    private void SetPreferredDifficulty()
+    {
+        switch (PlayerPrefs.GetInt("Difficulty", 1))
+        {
+            case 0: //assist
+                difficultyText.text = "Casual";
+                PlayerPrefs.GetInt("Difficulty", 0);
+                break;
+            case 1: //standard
+                difficultyText.text = "Standard";
+                PlayerPrefs.GetInt("Difficulty", 1);
+                break;
+            case 2: //hardcore
+                difficultyText.text = "Hardcore";
+                PlayerPrefs.GetInt("Difficulty", 2);
+                break;
+            default:
+                break;
+        }
+    }
+
+    private IEnumerator StopRumbleSFX()
+    {
+        float tempValue = currSliderValue;
+        yield return new WaitForSeconds(0.5f);
+
+        if(currSliderValue == tempValue)
+            audioSource.Stop();
+
+        if(audioSource.isPlaying)
+            StartCoroutine(StopRumbleSFX());
     }
 
     //Transitions to the play game canvas
@@ -110,16 +192,44 @@ public class StartMenu : MonoBehaviour
         Application.Quit();
     }
 
-    public void AssistMode()
+    public void ChangeDifficulty()
     {
-        //PlayerPrefs.GetInt("AssistMode")
+        switch (PlayerPrefs.GetInt("Difficulty", 1))
+        {
+            case 0: //assist->standard
+                difficultyText.text = "Standard";
+                PlayerPrefs.SetInt("Difficulty", 1);
+                break;
+            case 1: //standard->hardcore
+                difficultyText.text = "Hardcore";
+                PlayerPrefs.SetInt("Difficulty", 2);
+                break;
+            case 2: //hardcore->casual
+                difficultyText.text = "Casual";
+                PlayerPrefs.SetInt("Difficulty", 0);
+                break;
+            default:
+                break;
+        }
     }
 
     //Toggle whether the game is fullscreen or not
     public void ToggleFullscreen()
     {
-        Screen.fullScreen = !Screen.fullScreen;
-        fullscreenText.text = Screen.fullScreen ? "Fullscreen" : "Windowed";
+        //Screen.fullScreen = !Screen.fullScreen;
+
+        if(Screen.fullScreen)
+        {
+            Screen.SetResolution(1024, 768, false);
+            fullscreenText.text = "Windowed";
+            PlayerPrefs.SetInt("isFullscreen", 1);
+        }
+        else
+        {
+            Screen.SetResolution(Screen.currentResolution.width, Screen.currentResolution.height, true);
+            fullscreenText.text = "Fullscreen";
+            PlayerPrefs.SetInt("isFullscreen", 0);
+        }
     }
 
     //Have the tile slide down & up to transition to the next menu

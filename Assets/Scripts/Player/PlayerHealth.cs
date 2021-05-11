@@ -9,6 +9,7 @@ public class PlayerHealth : SingletonPattern<PlayerHealth>, IDamageable
     public float startingMaxHealth = 30f;
     public int startingPotionCount = 0;
     public PlayerStats damageModifier; //Damage Modifier from ItemsEquipment for Damage modifier
+    public float difficultyDamageMod = 1f;
     public float dmgInvincibilityTime = 1f;
     public PlayerStats additionalPotionHealing; //Potion Healing Modifier to be used from ItemsEquipment
 
@@ -79,7 +80,7 @@ public class PlayerHealth : SingletonPattern<PlayerHealth>, IDamageable
         if (!isInvincible && Health > 0)
         {
             //deal damage to player
-            Health -= damage * damageModifier.Value;
+            Health -= damage * damageModifier.Value * difficultyDamageMod;
             Health = Mathf.Clamp(Health, 0, maxHealth);
             StartCoroutine(HUDController.Instance.UpdateHealthBar(Health, maxHealth));
             StartCoroutine(HUDController.Instance.ShowPlayerDamagedOverlay());

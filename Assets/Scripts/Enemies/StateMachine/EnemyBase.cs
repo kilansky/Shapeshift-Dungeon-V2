@@ -116,6 +116,8 @@ public class EnemyBase : MonoBehaviour, IDamageable
             if (GetComponent<GemMonster>().isGemMonster)
                 health *= GetComponent<GemMonster>().healthMod;
 
+            ModifyHealthFromDifficulty();
+
             //set health variables
             Health = health;
             healthBar.maxValue = Health;
@@ -153,6 +155,24 @@ public class EnemyBase : MonoBehaviour, IDamageable
     {
         if (!isMageBoss)
             stateMachine.currentState.PhysicsUpdate();
+    }
+
+    private void ModifyHealthFromDifficulty()
+    {
+        switch (PlayerPrefs.GetInt("Difficulty", 1))
+        {
+            case 0: //casual
+                health *= 0.5f;
+                break;
+            case 1: //standard
+                health *= 1f;
+                break;
+            case 2: //hardcore
+                health *= 1.5f;
+                break;
+            default:
+                break;
+        }
     }
 
     public virtual void SetVelocity(float velocity)

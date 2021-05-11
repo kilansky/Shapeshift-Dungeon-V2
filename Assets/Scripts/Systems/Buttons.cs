@@ -50,16 +50,14 @@ public class Buttons : MonoBehaviour
         buttons[currButtonIndex].GetComponent<Button>().onClick.Invoke();
     }
 
-    public void QuitGame()
+    public void ContinueGame()
     {
-        //Time.timeScale = 1;
-        //SceneManager.LoadScene(0);
-        Application.Quit();
+        PlayerController.Instance.Unpause();
     }
 
-    public void FormFeedback()
+    public void QuitGame()
     {
-        Application.OpenURL("https://docs.google.com/forms/d/1yeWTvuf43eci_y8Tj1MR-Tj1UTHPfomzOjMlrw7A2mM/edit");
+        Application.Quit();
     }
 
     public void RestartGame()

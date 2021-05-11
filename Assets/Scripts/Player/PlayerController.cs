@@ -178,6 +178,8 @@ public class PlayerController : SingletonPattern<PlayerController>
         StatSpeedCount = 0;
         SandSpeedMod = 1;
 
+        SetPreferredDifficulty();
+
         if (PlayerPrefs.GetInt("UserID") == 0)
         {
             int randUserID = UnityEngine.Random.Range(10000, 100000);
@@ -212,6 +214,24 @@ public class PlayerController : SingletonPattern<PlayerController>
             //If the input queue has two or more inputs, remove the first button press w/o performing it
             if (inputQueue.Count >= 2)
                 inputQueue.Dequeue();
+        }
+    }
+
+    private void SetPreferredDifficulty()
+    {
+        switch (PlayerPrefs.GetInt("Difficulty", 1))
+        {
+            case 0: //casual
+                PlayerHealth.Instance.difficultyDamageMod = 0.5f;
+                break;
+            case 1: //standard
+                PlayerHealth.Instance.difficultyDamageMod = 1f;
+                break;
+            case 2: //hardcore
+                PlayerHealth.Instance.difficultyDamageMod = 1.5f;
+                break;
+            default:
+                break;
         }
     }
 
@@ -583,20 +603,26 @@ public class PlayerController : SingletonPattern<PlayerController>
         if (context.performed && playerIsAlive && !statPotionPanelActive) 
         {
             if (!IsPaused) //If the game is not paused then pause the game
-            {
-                isPaused = true;
-                Time.timeScale = 0;
-                HUDController.Instance.ShowPauseScreen();
-                HUDController.Instance.ShowControlsPanel();
-            }
+                Pause();
             else //If the game is paused then unpause the game
-            {
-                isPaused = false;
-                Time.timeScale = 1;
-                HUDController.Instance.HidePauseScreen();
-                HUDController.Instance.HideControlsPanel();
-            }
+                Unpause();
         }
+    }
+
+    public void Pause()
+    {
+        isPaused = true;
+        Time.timeScale = 0;
+        HUDController.Instance.ShowPauseScreen();
+        HUDController.Instance.ShowControlsPanel();
+    }
+
+    public void Unpause()
+    {
+        isPaused = false;
+        Time.timeScale = 1;
+        HUDController.Instance.HidePauseScreen();
+        HUDController.Instance.HideControlsPanel();
     }
 
     //Mouse Aiming Screen Position

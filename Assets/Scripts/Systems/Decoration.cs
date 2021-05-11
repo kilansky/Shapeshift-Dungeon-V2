@@ -33,7 +33,9 @@ public class Decoration : MonoBehaviour
 
     public void SetTileVariables()
     {
-        transform.parent.GetComponent<Tile>().hasDecor = true;
+        if(transform.parent.GetComponent<Tile>())
+            transform.parent.GetComponent<Tile>().hasDecor = true;
+
         if (forceTileSwap)
             transform.parent.GetComponent<Tile>().forceSwap = true;
 
@@ -81,7 +83,7 @@ public class Decoration : MonoBehaviour
         }
         else
         {
-            Debug.Log("No raycast hit");
+            //Debug.Log("No raycast hit");
         }
     }
 }
