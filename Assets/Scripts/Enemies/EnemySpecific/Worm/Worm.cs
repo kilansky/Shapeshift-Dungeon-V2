@@ -36,6 +36,7 @@ public class Worm : EnemyBase
     [HideInInspector] public float dirtAboveGroundYPos;
     [HideInInspector] public float dirtUnderGroundYPos;
     [HideInInspector] public bool wormIsMoving;
+    [HideInInspector] public bool wormCanBeHit;
     [HideInInspector] public Tile currOccupiedTile;
 
     [Header("Worm Moving")]
@@ -79,6 +80,7 @@ public class Worm : EnemyBase
         aboveGroundYPos = wormMover.transform.position.y;
         underGroundYPos = aboveGroundYPos - amountToMoveWorm;
         wormMover.transform.position = new Vector3(wormMover.transform.position.x, underGroundYPos, wormMover.transform.position.z);
+        wormCanBeHit = false;
 
         dirtAboveGroundYPos = dirtCircle.transform.position.y;
         dirtUnderGroundYPos = aboveGroundYPos - amountToMoveDirt;
@@ -113,13 +115,16 @@ public class Worm : EnemyBase
     //set current state to stunState if isStunned
     public override void Damage(float damage)
     {
-        base.Damage(damage);
-        Flash();
-
-        //Make sure worm is not moving before transitioning to stun state
-        if (isStunned && stateMachine.currentState != stunState && !wormIsMoving)
+        if(wormCanBeHit)
         {
-            stateMachine.ChangeState(stunState);
+            base.Damage(damage);
+            Flash();
+
+            //Make sure worm is not moving before transitioning to stun state
+            if (isStunned && stateMachine.currentState != stunState && !wormIsMoving)
+            {
+                stateMachine.ChangeState(stunState);
+            }
         }
     }
 

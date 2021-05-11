@@ -286,16 +286,20 @@ public class MonsterSpawner : SingletonPattern<MonsterSpawner>
             spawnPoints.Add(point);
         }
 
+        for (int i = 0; i < spawnPoints.Count; i++) //Shuffles the list of spawn points
+        {
+            int j = Random.Range(i, spawnPoints.Count);
+            SpawnPoint t = spawnPoints[i];
+            spawnPoints[i] = spawnPoints[j];
+            spawnPoints[j] = t;
+        }
+
         for (int i = 0; i < amountOfMonsters; i++)
         {
             Debug.Log("There are currently " + monstersInRoom + " monsters active");
             if (monstersInRoom < currFloorInfo.maxMonsters)
-            {
-                Debug.Log("List size is: " + spawnPoints.Count);
-                int randSpawnPoint = Random.Range(0, monsterSpawnPoints.Count);
-                
-                spawnPoints[randSpawnPoint].SpawnMonster(currFloorInfo.GetMonsterToSpawn(), false);
-                spawnPoints.RemoveAt(randSpawnPoint);
+            {                
+                spawnPoints[i].SpawnMonster(currFloorInfo.GetMonsterToSpawn(), false);
                 monstersInRoom++;
             }
             else

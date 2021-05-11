@@ -576,6 +576,9 @@ public class MageBoss : MonoBehaviour, IDamageable
 
     private IEnumerator StartPhase2()
     {
+        //Disable Natural Spawning
+        LevelManager.Instance.disableSpawning = true;
+
         //Clear phase 1 teleport points
         DestroyOldTeleportPoints();
         teleportPoints.Clear();

@@ -411,8 +411,11 @@ public class Item : MonoBehaviour
         }
 
         HUDController.Instance.HideQuickHint();
-        if(c.isItemSwapping == false) //Only Destroy a game object if there is no item swapping happening from the Bag of Holding button
+        if (!c.isItemSwapping) //Only Destroy a game object if there is no item swapping happening from the Bag of Holding button
+        {
             Destroy(gameObject);
+            StartCoroutine(c.RechargeSpecial());
+        }
 
         if (isNewBOHItem)
             isNewBOHItem = false;
@@ -420,8 +423,7 @@ public class Item : MonoBehaviour
         //If the item being equipped is the Kapala then we adjust the hasKapala variable in the playerController Script
         if (item.ItemName == "Kapala")
             c.hasKapala = true;
-
-        StartCoroutine(c.RechargeSpecial());
+        
     }
 
     /// <summary>

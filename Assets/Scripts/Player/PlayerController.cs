@@ -177,6 +177,8 @@ public class PlayerController : SingletonPattern<PlayerController>
         StatSpeedCount = 0;
         SandSpeedMod = 1;
 
+        SetPreferredDifficulty();
+
         if (PlayerPrefs.GetInt("UserID") == 0)
         {
             int randUserID = UnityEngine.Random.Range(10000, 100000);
@@ -211,6 +213,24 @@ public class PlayerController : SingletonPattern<PlayerController>
             //If the input queue has two or more inputs, remove the first button press w/o performing it
             if (inputQueue.Count >= 2)
                 inputQueue.Dequeue();
+        }
+    }
+
+    private void SetPreferredDifficulty()
+    {
+        switch (PlayerPrefs.GetInt("Difficulty", 1))
+        {
+            case 0: //casual
+                PlayerHealth.Instance.difficultyDamageMod = 0.5f;
+                break;
+            case 1: //standard
+                PlayerHealth.Instance.difficultyDamageMod = 1f;
+                break;
+            case 2: //hardcore
+                PlayerHealth.Instance.difficultyDamageMod = 1.5f;
+                break;
+            default:
+                break;
         }
     }
 
@@ -602,6 +622,7 @@ public class PlayerController : SingletonPattern<PlayerController>
     //Hide HUD Button Pressed
     public void HideHUD(InputAction.CallbackContext context)
     {
+        /*
         if (context.performed)
         {
             if(hud.activeSelf)
@@ -609,6 +630,7 @@ public class PlayerController : SingletonPattern<PlayerController>
             else
                 hud.SetActive(true);
         }
+        */
     }
 
     //---------------------------------------------------------------------------
@@ -892,7 +914,10 @@ public class PlayerController : SingletonPattern<PlayerController>
                     HUDController.Instance.UpdateSpecialCharge();
                 }
                 else
+                {
                     canUseSpecial = true; //Needs this or else it will get stuck in an infinite loop
+                    AudioManager.Instance.Play("ItemCharge");
+                }
 
             }
             //Else - Not the Kapala so we go through the rest of the special items like normal
@@ -996,6 +1021,7 @@ public class PlayerController : SingletonPattern<PlayerController>
             if (!isItemSwapping && SpecialCharge >= specialCooldownTime.Value)
             {
                 canUseSpecial = true;
+                AudioManager.Instance.Play("ItemCharge");
                 HUDController.Instance.UpdateSpecialCharge();
             }
         }           
@@ -1037,7 +1063,10 @@ public class PlayerController : SingletonPattern<PlayerController>
                 SpecialCharge++; //Adds 1 to the special charge since this is when an enemy dies
 
             if (!isItemSwapping && SpecialCharge >= specialCooldownTime.Value)
+            {
                 canUseSpecial = true;
+                AudioManager.Instance.Play("ItemCharge");
+            }
 
             //Calculates the % value of the Special Charge compared to the SpecialCooldownTime.Value
             float percent = SpecialCharge / specialCooldownTime.Value;
