@@ -43,6 +43,7 @@ public class MageBoss : MonoBehaviour, IDamageable
 
     [Header("Object References")]
     public GameObject aliveMage;
+    public SkinnedMeshRenderer renderer;
     public GameObject deathEffect;
     public GameObject phase2Map;
     public GameObject phase3Map;
@@ -59,7 +60,6 @@ public class MageBoss : MonoBehaviour, IDamageable
     private Slider healthBar;
     private GameObject player;
     private Animator animator;
-    private Renderer mageRenderer;
     private float currentStunResistance;
     private float stunTimeRemaining;
     private float lastTimeAttacked;
@@ -89,7 +89,6 @@ public class MageBoss : MonoBehaviour, IDamageable
         distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
 
         animator = aliveMage.GetComponent<Animator>();
-        mageRenderer = aliveMage.GetComponent<Renderer>();
 
         currentStunResistance = stunResistance;
         lastTargetRotation = Quaternion.identity;
@@ -589,8 +588,8 @@ public class MageBoss : MonoBehaviour, IDamageable
 
         //Teleport away to hidden point
         PhaseChangeTeleport();
-        timeToTeleportAgain = 16f;
-        timeTillNextTeleport = 16f;
+        timeToTeleportAgain = 18f;
+        timeTillNextTeleport = 18f;
 
         //Alert player of dangerous tiles
         foreach (DangerTiles dangerousTile in GameObject.FindObjectsOfType<DangerTiles>())
@@ -761,7 +760,7 @@ public class MageBoss : MonoBehaviour, IDamageable
     public void Flash()
     {
         //sets enemy's color to the hitMat (red)
-        mageRenderer.material = hitMat;
+        renderer.material = hitMat;
         StartCoroutine(WaitToResetColor());
     }
 
@@ -769,6 +768,6 @@ public class MageBoss : MonoBehaviour, IDamageable
     {
         //reset enemy's color to normalMat
         yield return new WaitForSeconds(dmgInvincibilityTime);
-        mageRenderer.material = normalMat;
+        renderer.material = normalMat;
     }
 }

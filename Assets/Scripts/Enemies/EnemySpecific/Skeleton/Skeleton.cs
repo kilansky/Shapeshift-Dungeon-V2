@@ -90,7 +90,7 @@ public class Skeleton : EnemyBase
     //set current state to stunState if isStunned
     public override void Damage(float damage)
     {
-        if (!isBlocking)
+        if (!isBlocking || damage > 8)
         {
             base.Damage(damage);
             Flash();
