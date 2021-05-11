@@ -872,6 +872,7 @@ public class PlayerController : SingletonPattern<PlayerController>
                 {
                     //Heals the player for 5 HP then sets the special charge to 0 **This is based on the Kapala item on the GDD** - AHL (4/20/21)
                     PlayerHealth.Instance.Heal(5);
+                    AudioManager.Instance.Play("Potion", .5f);
                     SpecialCharge = 0;
                     SpecialSlot.prefab.GetComponent<KapalaSwap>().KapalaSpriteSwap(0); //Resets the Kapala sprite aas it was used
                     HUDController.Instance.UpdateSpecialCharge();
