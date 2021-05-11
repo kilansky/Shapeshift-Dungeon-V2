@@ -411,6 +411,9 @@ public class Item : MonoBehaviour
                         HUDController.Instance.ShowSpecialSwapPanel();
                 }
 
+                if (item.ItemName == "AA Battery" && c.SpecialSlot)
+                    StartCoroutine(c.RechargeSpecial());
+
                 //Debug.Log("This item " + item.ItemName + " has been equipped so Special Item Recharge Time has been adjusted.");
                 //Debug.Log("The new Special Item Recharge Time is " + c.specialCooldownTime.Value);
             }
