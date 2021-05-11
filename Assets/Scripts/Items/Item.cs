@@ -55,7 +55,7 @@ public class Item : MonoBehaviour
                 if (item.ItemName == "Kapala")
                 {
                     item.prefab.GetComponent<KapalaSwap>().KapalaSpriteSwap(0);
-                    c.specialCharge2MaxValue = 10;
+                    c.specialCharge2MaxValue = item.statMods[0].adjustableValue;
                 }
 
                 //If the item is anything but the Kapala then we need to set its special charge 2 max value to whatever it's value is

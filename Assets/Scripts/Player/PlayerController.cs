@@ -1067,7 +1067,7 @@ public class PlayerController : SingletonPattern<PlayerController>
 
             specialIsCharging2 = false;
             
-            if(BagOfHoldingSlot)
+            if(BagOfHoldingSlot && BagOfHoldingSlot.ItemName != "Kapala")
                 HUDController.Instance.ShowSpecialGlow2();
         }
     }
@@ -1105,10 +1105,12 @@ public class PlayerController : SingletonPattern<PlayerController>
                 specialCharge2MaxValue = 10;
 
             if ((specialCharge2 < specialCharge2MaxValue) && !isItemSwapping)
+            {
                 specialCharge2++; //Adds 1 to the special charge 2 since this is when an enemy dies
-
-            if (specialCharge2 >= specialCharge2MaxValue && !isItemSwapping)
-                HUDController.Instance.ShowSpecialGlow2();
+                
+                if (specialCharge2 >= specialCharge2MaxValue)
+                    HUDController.Instance.ShowSpecialGlow2();
+            }
 
             float percent = specialCharge2 / specialCharge2MaxValue;
 
