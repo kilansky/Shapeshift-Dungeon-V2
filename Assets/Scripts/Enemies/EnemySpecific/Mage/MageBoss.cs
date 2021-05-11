@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 //using UnityEngine.VFX;
 
-public class MageBoss : MonoBehaviour, IDamageable
+public class MageBoss : SingletonPattern<MageBoss>, IDamageable
 {
     //-----------Public-----------
     [Header("Health & Stun")]
@@ -94,6 +94,7 @@ public class MageBoss : MonoBehaviour, IDamageable
         lastTargetRotation = Quaternion.identity;
 
         //set health variables
+        SetPreferredDifficulty();
         Health = startingHealth;
         healthBar = HUDController.Instance.bossHealthBar;
         HUDController.Instance.ShowBossHealthBar();
@@ -127,8 +128,26 @@ public class MageBoss : MonoBehaviour, IDamageable
 
             //Set teleport points and teleport to a point within the map
             GetAllTeleportPoints();
-            Teleport();
+            StartTeleport();
             StartCoroutine(WaitToTeleport());
+        }
+    }
+
+    private void SetPreferredDifficulty()
+    {
+        switch (PlayerPrefs.GetInt("Difficulty", 1))
+        {
+            case 0: //casual
+                startingHealth = 120f;
+                break;
+            case 1: //standard
+                startingHealth = 200f;
+                break;
+            case 2: //hardcore
+                startingHealth = 280f;
+                break;
+            default:
+                break;
         }
     }
 
@@ -182,7 +201,7 @@ public class MageBoss : MonoBehaviour, IDamageable
     public IEnumerator Attack1()
     {
         isAttacking = true;
-
+        animator.SetBool("attack1", true);
         //Debug.Log("Attack1 Started");
 
         //Charge up and fire a projectile from each fire point
@@ -197,6 +216,7 @@ public class MageBoss : MonoBehaviour, IDamageable
 
             timeElapsed += Time.deltaTime;
             yield return new WaitForEndOfFrame();
+            animator.SetBool("attack1", false);
         }
         isAttacking = false;
     }
@@ -255,6 +275,7 @@ public class MageBoss : MonoBehaviour, IDamageable
     {
         isAttacking = true;
         timeTillNextTeleport += 4f;
+        animator.SetBool("attack2", true);
 
         //Charge up a ring of projectiles
         foreach (Transform firePoint in firePoints2)
@@ -279,6 +300,7 @@ public class MageBoss : MonoBehaviour, IDamageable
             yield return new WaitForSeconds(0.5f);
         }
 
+        animator.SetBool("attack2", false);
         isAttacking = false;
     }
 
@@ -349,66 +371,25 @@ public class MageBoss : MonoBehaviour, IDamageable
         GetComponent<AudioSource>().Play();
     }
 
-    /*
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(transform.position, minTeleportRange);
-
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, maxTeleportRange);
-    }
-    */
-
-    //================================================================
-    //------------------------Monster Spawning------------------------
-    //================================================================
-
-    /*
-    //Spawns a single monster, waits, and is called again recursively until all monsters have been killed
-    private void SpawnMonsters()
-    {
-        isSpawningMonsters = true;
-
-        //Only spawn if the # of monsters in the room is less than maxMonsters
-        if (monstersInRoom < currFloorInfo.maxMonsters && monsterSpawnPoints.Count > 0)
-        {
-            //Get a random spawn point index
-            int randSpawnPoint = Random.Range(0, monsterSpawnPoints.Count);
-
-            //Get a random monster to spawn
-            //int randMonster = Random.Range(0, currFloorInfo.monsters.Length);
-            GameObject monsterToSpawn = currFloorInfo.GetMonsterToSpawn();
-
-            //Spawn the monster and disable the spawn point temporarily
-            monsterSpawnPoints[randSpawnPoint].SpawnMonster(monsterToSpawn, CheckForGem());
-            monstersInRoom++;
-            monstersSpawned++;
-            StartCoroutine(DisableSpawner(randSpawnPoint));
-        }
-
-        //Recursively attempt to spawn until the total # of monsters to spawn have been killed
-        if (monstersSpawned < currFloorInfo.totalMonsters)
-            StartCoroutine(WaitToSpawnAgain());
-        else
-            isSpawningMonsters = false;
-    }
-    */
-
     //================================================================
     //---------------------------Teleporting--------------------------
     //================================================================
 
-    public void Teleport()
+    public void StartTeleport()
     {
         isAttacking = false;
         stunTimeRemaining = 0;
+        animator.SetBool("teleport", true);
+    }
 
+    public void Teleport()
+    {
         GameObject vfx = Instantiate(teleportParticles, transform.position + new Vector3(0, 1.5f, 0), Quaternion.identity);
         Destroy(vfx, 2f);
+        animator.SetBool("teleport", false);
 
         //Check to destroy attack2 projectiles if left unfired before teleporting
-        if(unfiredProjectiles.Count > 0)
+        if (unfiredProjectiles.Count > 0)
         {
             foreach (GameObject projectile in unfiredProjectiles)
                 Destroy(projectile, 0.1f);
@@ -537,7 +518,7 @@ public class MageBoss : MonoBehaviour, IDamageable
         }
         timeTillNextTeleport = timeToTeleportAgain;
 
-        Teleport();
+        StartTeleport();
         StartCoroutine(WaitToTeleport());
     }
 

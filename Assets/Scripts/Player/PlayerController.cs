@@ -122,6 +122,7 @@ public class PlayerController : SingletonPattern<PlayerController>
     private bool specialIsCharging = false;
     private bool specialIsCharging2 = false;
     private bool runStarted = false;
+    private bool hasPickedUpItemRecently = false;
 
     //Allow/prevent input actions
     private bool canMove = true;
@@ -934,7 +935,9 @@ public class PlayerController : SingletonPattern<PlayerController>
                 {
                     canUseSpecial = true; //Needs this or else it will get stuck in an infinite loop
                     HUDController.Instance.ShowSpecialGlow();
-                    AudioManager.Instance.Play("ItemCharge");
+
+                    if (!hasPickedUpItemRecently)
+                        AudioManager.Instance.Play("ItemCharge");
                 }
 
             }
@@ -1040,7 +1043,10 @@ public class PlayerController : SingletonPattern<PlayerController>
             {
                 canUseSpecial = true;
                 HUDController.Instance.ShowSpecialGlow();
-                AudioManager.Instance.Play("ItemCharge");
+
+                if(!hasPickedUpItemRecently)
+                    AudioManager.Instance.Play("ItemCharge");
+
                 HUDController.Instance.UpdateSpecialCharge();
             }
         }           
@@ -1088,7 +1094,9 @@ public class PlayerController : SingletonPattern<PlayerController>
             {
                 canUseSpecial = true;
                 HUDController.Instance.ShowSpecialGlow();
-                AudioManager.Instance.Play("ItemCharge");
+
+                if (!hasPickedUpItemRecently)
+                    AudioManager.Instance.Play("ItemCharge");
             }
 
             //Calculates the % value of the Special Charge compared to the SpecialCooldownTime.Value
@@ -1118,6 +1126,13 @@ public class PlayerController : SingletonPattern<PlayerController>
             BagOfHoldingSlot.prefab.GetComponent<KapalaSwap>().KapalaSpriteSwap(percent); //Changes the sprite of the Kapala based on the Special Charge value
             HUDController.Instance.UpdateSpecialCharge();
         }
+    }
+
+    private IEnumerator PickedUpItemSFXWaiting()
+    {
+        hasPickedUpItemRecently = true;
+        yield return new WaitForSeconds(1f);
+        hasPickedUpItemRecently = false;
     }
 
 
@@ -1232,6 +1247,8 @@ public class PlayerController : SingletonPattern<PlayerController>
             {
                 other.GetComponentInParent<Item>().Equip(this, GetComponent<PlayerHealth>()); //Equip the item to the player
                 AudioManager.Instance.Play("ItemPickup");
+                hasPickedUpItemRecently = true;
+                StartCoroutine(PickedUpItemSFXWaiting());
 
                 if(LevelManager.Instance.currFloor %5 != 0)
                     AnalyticsEvents.Instance.ItemTaken(other.GetComponentInParent<Item>().item.ItemName); //Send Item Taken analytics event
