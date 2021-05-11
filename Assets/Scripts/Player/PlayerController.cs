@@ -129,6 +129,7 @@ public class PlayerController : SingletonPattern<PlayerController>
     private bool canAttack = true;
     private bool canChargeAttack = true;
     private bool canUsePotion = true;
+    private bool canSwap = true;
 
     //Current action/state of the player
     private bool isDashing = false;
@@ -536,13 +537,14 @@ public class PlayerController : SingletonPattern<PlayerController>
         }
     }
 
-    //Bag Of Holding Item Swap Button Pressed - AHL (4/8/21)
+    //Bag Of Holding Item Swap Button Pressed - AHL (5/10/21)
     public void BagOfHoldingItemSwap(InputAction.CallbackContext context)
     {
-        if (context.performed && hasBagOfHolding && BagOfHoldingSlot) //This action is only performed when the Bag of Holding Item is equipped and there is an item in the slot
+        if (context.performed && hasBagOfHolding && BagOfHoldingSlot && canSwap) //This action is only performed when the Bag of Holding Item is equipped and there is an item in the slot
         {
-            //Adjusts bool to make sure things work as intended during this process
+            //Adjusts bools to make sure things work as intended during this process
             isItemSwapping = true;
+            canSwap = false;
 
             //Puts the Special Item into the Temporary slot to begin the item transfer
             TemporarySlot = SpecialSlot;
@@ -581,6 +583,9 @@ public class PlayerController : SingletonPattern<PlayerController>
             HUDController.Instance.SetNewSpecialItemIcons();
 
             HUDController.Instance.UpdateSpecialCharge();
+
+            //Starts the Corutine to get items to swap again after a few seconds
+            StartCoroutine(CanSwapWait());
         }
     }
 
@@ -1091,6 +1096,20 @@ public class PlayerController : SingletonPattern<PlayerController>
             HUDController.Instance.UpdateSpecialCharge();
         }
     }
+
+
+    /// <summary>
+    /// Function to be called by change canSwap to true after a few seconds to prevent rapid item swapping - AHL (5/10/21)
+    /// </summary>
+    IEnumerator CanSwapWait()
+    {
+        //Waits for 0.5 seconds
+        yield return new WaitForSeconds(0.5f);
+
+        //Changes the canSwap to true
+        canSwap = true;
+    }
+    
 
     //Starts and Ends using a Potion
     IEnumerator ActivatePotion()
