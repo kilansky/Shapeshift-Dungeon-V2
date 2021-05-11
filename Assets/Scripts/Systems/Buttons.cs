@@ -7,11 +7,11 @@ using UnityEngine.EventSystems;
 
 public class Buttons : MonoBehaviour
 {
-    public GameObject[] buttons;
+    public GameObject[] buttonsArray;
     public EventSystem eventSystem;
     public GameObject optionsPanel;
 
-    private int currButtonIndex = 0;
+    [HideInInspector] public int currButtonIndex = 0;
 
     public void SetSelectedButton()
     {
@@ -19,7 +19,13 @@ public class Buttons : MonoBehaviour
 
         //Set a new selected button
         currButtonIndex = 0;
-        eventSystem.GetComponent<EventSystem>().SetSelectedGameObject(buttons[currButtonIndex]);
+        eventSystem.GetComponent<EventSystem>().SetSelectedGameObject(buttonsArray[currButtonIndex]);
+
+        if (EventSystem.current.currentSelectedGameObject.GetComponent<Slider>())
+        {
+            Slider thisSlider = EventSystem.current.currentSelectedGameObject.GetComponent<Slider>();
+            thisSlider.transform.GetChild(2).GetChild(0).localScale *= 1.5f;
+        }
     }
 
     public void ClearSelectedButtons()
@@ -30,25 +36,57 @@ public class Buttons : MonoBehaviour
 
     public void NextButton()
     {
-        currButtonIndex++;
-        if (currButtonIndex > buttons.Length - 1)
-            currButtonIndex = 0;
+        if (EventSystem.current.currentSelectedGameObject.GetComponent<Slider>())
+        {
+            Slider thisSlider = EventSystem.current.currentSelectedGameObject.GetComponent<Slider>();
+            thisSlider.transform.GetChild(2).GetChild(0).localScale /= 1.5f;
+        }
 
-        eventSystem.GetComponent<EventSystem>().SetSelectedGameObject(buttons[currButtonIndex]);
+        do
+        {
+            currButtonIndex++;
+            if (currButtonIndex > buttonsArray.Length - 1)
+                currButtonIndex = 0;
+
+        } while (buttonsArray[currButtonIndex].GetComponent<Button>() && !buttonsArray[currButtonIndex].GetComponent<Button>().interactable);
+
+        eventSystem.GetComponent<EventSystem>().SetSelectedGameObject(buttonsArray[currButtonIndex]);
+
+        if (EventSystem.current.currentSelectedGameObject.GetComponent<Slider>())
+        {
+            Slider thisSlider = EventSystem.current.currentSelectedGameObject.GetComponent<Slider>();
+            thisSlider.transform.GetChild(2).GetChild(0).localScale *= 1.5f;
+        }
     }
 
     public void PreviousButton()
     {
-        currButtonIndex--;
-        if (currButtonIndex < 0)
-            currButtonIndex = buttons.Length - 1;
+        if (EventSystem.current.currentSelectedGameObject.GetComponent<Slider>())
+        {
+            Slider thisSlider = EventSystem.current.currentSelectedGameObject.GetComponent<Slider>();
+            thisSlider.transform.GetChild(2).GetChild(0).localScale /= 1.5f;
+        }
 
-        eventSystem.GetComponent<EventSystem>().SetSelectedGameObject(buttons[currButtonIndex]);
+        do
+        {
+            currButtonIndex--;
+            if (currButtonIndex < 0)
+                currButtonIndex = buttonsArray.Length - 1;
+
+        } while (buttonsArray[currButtonIndex].GetComponent<Button>() && !buttonsArray[currButtonIndex].GetComponent<Button>().interactable);
+
+        eventSystem.GetComponent<EventSystem>().SetSelectedGameObject(buttonsArray[currButtonIndex]);
+
+        if (EventSystem.current.currentSelectedGameObject.GetComponent<Slider>())
+        {
+            Slider thisSlider = EventSystem.current.currentSelectedGameObject.GetComponent<Slider>();
+            thisSlider.transform.GetChild(2).GetChild(0).localScale *= 1.5f;
+        }
     }
 
     public void SubmitButton()
     {
-        buttons[currButtonIndex].GetComponent<Button>().onClick.Invoke();
+        buttonsArray[currButtonIndex].GetComponent<Button>().onClick.Invoke();
     }
 
     public void ContinueGame()
@@ -64,6 +102,12 @@ public class Buttons : MonoBehaviour
     public void QuitGame()
     {
         Application.Quit();
+    }
+
+    public void LoadCredits()
+    {
+        Time.timeScale = 1;
+        SceneManager.LoadScene(3);
     }
 
     public void RestartGame()

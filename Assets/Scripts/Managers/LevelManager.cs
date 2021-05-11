@@ -254,6 +254,10 @@ public class LevelManager : SingletonPattern<LevelManager>
         GetComponent<NavMeshSurface>().BuildNavMesh();
         navMeshHazards.GetComponent<NavMeshSurface>().BuildNavMesh();
 
+        //Unlock Levels
+        if(PlayerPrefs.GetInt("unlockedLevels", 0) < currFloor)
+            PlayerPrefs.SetInt("unlockedLevels", currFloor);
+
         //Activate hazards in the map
         ToggleHazards(true);
 

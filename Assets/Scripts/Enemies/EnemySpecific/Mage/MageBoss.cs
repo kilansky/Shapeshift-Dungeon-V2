@@ -32,9 +32,8 @@ public class MageBoss : SingletonPattern<MageBoss>, IDamageable
     //public float maxTeleportRangeFromPlayer = 25f;
 
     [Header("Phase Changes")]
-    public float phaseChange1 = 0.75f;
-    public float phaseChange2 = 0.4f;
-    public float phaseChange3 = 0.1f;
+    public float phaseChange1 = 0.66f;
+    public float phaseChange2 = 0.33f;
 
     [Header("Fire Points")]
     public Transform[] firePoints1;
@@ -47,7 +46,6 @@ public class MageBoss : SingletonPattern<MageBoss>, IDamageable
     public GameObject deathEffect;
     public GameObject phase2Map;
     public GameObject phase3Map;
-    public GameObject phase4Map;
 
     public float Health { get; set; }
 
@@ -452,11 +450,6 @@ public class MageBoss : SingletonPattern<MageBoss>, IDamageable
             teleportPoints.Remove(currentTeleportPoint);
             teleportPoints.Remove(previousTeleportPoint);
         }
-        //---------------------------Phase 4---------------------------
-        else
-        {
-
-        }
 
         GameObject vfx2 = Instantiate(teleportParticles, transform.position + new Vector3(0, 1.5f, 0), Quaternion.identity);
         Destroy(vfx2, 2f);
@@ -549,11 +542,6 @@ public class MageBoss : SingletonPattern<MageBoss>, IDamageable
             //Debug.Log("Start Phase 3");
             StartCoroutine(StartPhase3());
         }
-        else if (!phase3Complete && Health / startingHealth < phaseChange3)
-        {
-            phase3Complete = true;
-            //Debug.Log("Start Phase 4");
-        }
     }
 
     private IEnumerator StartPhase2()
@@ -611,10 +599,10 @@ public class MageBoss : SingletonPattern<MageBoss>, IDamageable
                 enemy.Damage(100f);
         }
 
-
         //Alert player of dangerous tiles
         foreach (DangerTiles dangerousTile in GameObject.FindObjectsOfType<DangerTiles>())
             dangerousTile.StartFlashing();
+
         CineShake.Instance.Shake(1.5f, 2.5f);
         CameraController.Instance.ZoomOutLevelTransition();
         AudioManager.Instance.Play("Rumble");

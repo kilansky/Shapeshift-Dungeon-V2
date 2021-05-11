@@ -53,7 +53,7 @@ public class Credits : MonoBehaviour
     public void ControlSchemeChanged()
     {
         currentControlScheme = playerInput.currentControlScheme;
-        Debug.Log("currentControlScheme: " + currentControlScheme);
+        //Debug.Log("currentControlScheme: " + currentControlScheme);
 
         //Using Keyboard
         if (playerInput.currentControlScheme == "Keyboard&Mouse")

@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class GameOverStats : SingletonPattern<GameOverStats>
+public class GameOverStats : MonoBehaviour
 {
     public TextMeshProUGUI runTimeText;
     public TextMeshProUGUI floorText;
@@ -14,7 +14,7 @@ public class GameOverStats : SingletonPattern<GameOverStats>
     public Image[] items;
     public Sprite smallPotion;
 
-    public void SetGameOverStats()
+    public void SetGameEndStats()
     {
         PlayerController pc = PlayerController.Instance;
 

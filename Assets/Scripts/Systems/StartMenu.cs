@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.Audio;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using TMPro;
 
 public class StartMenu : MonoBehaviour
@@ -19,17 +20,21 @@ public class StartMenu : MonoBehaviour
     public GameObject optionsCanvas;
     public float menuTransitionTime;
 
+    [Header("Menus")]
+    public Button floor5;
+    public Button floor10;
+    public Button floor15;
+    public Button floor20;
+
     [Header("Assist Mode")]
     public TextMeshProUGUI difficultyText;
-    //public Image assistCheckbox;
-    //public Sprite redX;
-    //public Sprite greenCheckmark;
 
     [Header("Settings")]
     public TextMeshProUGUI fullscreenText;
     public AudioMixer mixer;
 
     private AudioSource audioSource;
+    private PlayerInput playerInput;
     private float currSliderValue;
 
     public void SetMusicLevel(float sliderValue)
@@ -62,8 +67,29 @@ public class StartMenu : MonoBehaviour
     public float fadeOutTime = 2f;
 
     private GameObject activeCanvas;
+    private string currentControlScheme;
     private float startPos;
     private float endPos;
+
+    private Slider mySlider;
+    private GameObject thisSlider;
+    private float sliderChange;
+    private float maxSliderValue;
+    private float minSliderValue;
+    private float sliderRange;
+    private const float SLIDERSTEP = 100.0f; //used to detrime how fine to change value
+    private float sliderNavigation;
+    //private const string SLIDERMOVE = "SliderHorizontal";
+
+    //Initialize values
+    private void SetSlider()
+    {
+        mySlider = EventSystem.current.currentSelectedGameObject.GetComponent<Slider>();
+        thisSlider = EventSystem.current.currentSelectedGameObject;
+        maxSliderValue = mySlider.maxValue;
+        minSliderValue = mySlider.minValue;
+        sliderRange = maxSliderValue - minSliderValue;
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -81,7 +107,63 @@ public class StartMenu : MonoBehaviour
         SetPreferredScreenSize();
         SetPreferredDifficulty();
 
+        DisableLockedFloors();
+
+        playerInput = GetComponent<PlayerInput>();
+        currentControlScheme = playerInput.currentControlScheme;
+
+        if (currentControlScheme == "Keyboard&Mouse")
+        {
+            //Set Cursor to be visible
+            Cursor.visible = true;
+
+            //Clear selected buttons
+            GetComponent<EventSystem>().SetSelectedGameObject(null);
+            startCanvas.GetComponent<Buttons>().ClearSelectedButtons();
+        }
+        else
+        {   //Set Cursor to not be visible
+            Cursor.visible = false;
+
+            //Set selected button
+            startCanvas.GetComponent<Buttons>().SetSelectedButton();
+        }
+
         StartCoroutine(FadeInToMenu());
+    }
+
+    private void Update()
+    {
+        if (playerInput.currentControlScheme != currentControlScheme)
+            ControlSchemeChanged();
+
+        //If slider has 'focus'
+        if (thisSlider && thisSlider == EventSystem.current.currentSelectedGameObject)
+        {
+            sliderChange = sliderNavigation * sliderRange / SLIDERSTEP;
+            float sliderValue = mySlider.value;
+            float tempValue = sliderValue + sliderChange;
+            if (tempValue <= maxSliderValue && tempValue >= minSliderValue)
+            {
+                sliderValue = tempValue;
+            }
+            mySlider.value = sliderValue;
+        }
+    }
+
+    private void ControlSchemeChanged()
+    {
+        //Set initial selected button if using controller
+        if (playerInput.currentControlScheme != "Keyboard&Mouse")
+        {
+            Cursor.visible = false;
+            activeCanvas.GetComponent<Buttons>().SetSelectedButton();
+        }
+        else
+        {
+            Cursor.visible = true;        
+            activeCanvas.GetComponent<Buttons>().ClearSelectedButtons();
+        }
     }
 
     private void SetPreferredScreenSize()
@@ -131,10 +213,85 @@ public class StartMenu : MonoBehaviour
             StartCoroutine(StopRumbleSFX());
     }
 
+    //Set movementVector based on movement input
+    public void Navigate(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            Vector2 navigationInput = context.ReadValue<Vector2>();
+
+            Buttons buttons = FindObjectOfType<Buttons>();
+
+            if(!EventSystem.current.currentSelectedGameObject)
+                EventSystem.current.SetSelectedGameObject(buttons.buttonsArray[buttons.currButtonIndex]);
+
+            if (EventSystem.current.currentSelectedGameObject && EventSystem.current.currentSelectedGameObject.GetComponent<Slider>())
+            {
+                SetSlider();
+                sliderNavigation = Mathf.Clamp(navigationInput.x, -1, 1);
+
+                if (navigationInput.y > 0.5f)
+                    buttons.PreviousButton();
+
+                if (navigationInput.y < -0.5f)
+                    buttons.NextButton();
+            }
+            else if (buttons)
+            {
+                if (navigationInput.y > 0.5f || navigationInput.x < -0.5f)
+                    buttons.PreviousButton();
+
+                if (navigationInput.y < -0.5f || navigationInput.x > 0.5f)
+                    buttons.NextButton();
+            }
+        }
+        if(context.canceled)
+        {
+            sliderNavigation = 0;
+        }
+    }
+
+    //Dash Button Pressed
+    public void Submit(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            Buttons buttons = FindObjectOfType<Buttons>();
+            if (buttons)
+                buttons.SubmitButton();
+        }
+    }
+
+    //Attack Button Pressed
+    public void Cancel(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            //Debug.Log("CANCEL PRESSED");
+        }
+    }
+
     //Transitions to the play game canvas
     public void PlayGame()
     {
         StartCoroutine(TransitionMenu(playCanvas));
+    }
+
+    public void DisableLockedFloors()
+    {
+        floor5.interactable = false;
+        floor10.interactable = false;
+        floor15.interactable = false;
+        floor20.interactable = false;
+
+        if (PlayerPrefs.GetInt("unlockedLevels", 0) >= 5)
+            floor5.interactable = true;
+        else if (PlayerPrefs.GetInt("unlockedLevels", 0) >= 10)
+            floor10.interactable = true;
+        else if (PlayerPrefs.GetInt("unlockedLevels", 0) >= 15)
+            floor15.interactable = true;
+        else if (PlayerPrefs.GetInt("unlockedLevels", 0) >= 20)
+            floor20.interactable = true;
     }
 
     //Loads the game from floor 0
@@ -146,26 +303,38 @@ public class StartMenu : MonoBehaviour
 
     public void StartFloor5()
     {
-        PlayerPrefs.SetInt("startingLevel", 4);
-        StartCoroutine(FadeOutToLevel(2));
+        if(PlayerPrefs.GetInt("unlockedLevels", 0) >= 5)
+        {
+            PlayerPrefs.SetInt("startingLevel", 4);
+            StartCoroutine(FadeOutToLevel(2));
+        }
     }
 
     public void StartFloor10()
     {
-        PlayerPrefs.SetInt("startingLevel", 9);
-        StartCoroutine(FadeOutToLevel(2));
+        if (PlayerPrefs.GetInt("unlockedLevels", 0) >= 10)
+        {
+            PlayerPrefs.SetInt("startingLevel", 9);
+            StartCoroutine(FadeOutToLevel(2));
+        }
     }
 
     public void StartFloor15()
     {
-        PlayerPrefs.SetInt("startingLevel", 14);
-        StartCoroutine(FadeOutToLevel(2));
+        if (PlayerPrefs.GetInt("unlockedLevels", 0) >= 15)
+        {
+            PlayerPrefs.SetInt("startingLevel", 14);
+            StartCoroutine(FadeOutToLevel(2));
+        }
     }
 
     public void StartFloor20()
     {
-        PlayerPrefs.SetInt("startingLevel", 19);
-        StartCoroutine(FadeOutToLevel(2));
+        if (PlayerPrefs.GetInt("unlockedLevels", 0) >= 20)
+        {
+            PlayerPrefs.SetInt("startingLevel", 19);
+            StartCoroutine(FadeOutToLevel(2));
+        }
     }
 
     //Transition to the options canvas
@@ -268,6 +437,7 @@ public class StartMenu : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
         transform.position = new Vector3(transform.position.x, startPos, transform.position.z);
+        ControlSchemeChanged();
     }
 
     //Fade into the start menu

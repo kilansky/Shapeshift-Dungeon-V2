@@ -662,11 +662,14 @@ public class PlayerController : SingletonPattern<PlayerController>
 
             Buttons buttons = FindObjectOfType<Buttons>();
 
-            if (navigationInput.y > 0.5f || navigationInput.x < -0.5f)
-                buttons.PreviousButton();
+            if(buttons)
+            {
+                if (navigationInput.y > 0.5f || navigationInput.x < -0.5f)
+                    buttons.PreviousButton();
 
-            if (navigationInput.y < -0.5f || navigationInput.x > 0.5f)
-                buttons.NextButton();
+                if (navigationInput.y < -0.5f || navigationInput.x > 0.5f)
+                    buttons.NextButton();
+            }
         }
     }
 
@@ -675,7 +678,9 @@ public class PlayerController : SingletonPattern<PlayerController>
     {
         if (context.performed)
         {
-            FindObjectOfType<Buttons>().SubmitButton();
+            Buttons buttons = FindObjectOfType<Buttons>();
+            if (buttons)
+                buttons.SubmitButton();
         }
     }
 

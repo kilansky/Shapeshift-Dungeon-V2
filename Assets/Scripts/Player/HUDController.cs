@@ -537,7 +537,7 @@ public class HUDController : SingletonPattern<HUDController>
         player.gameObject.GetComponent<PlayerInput>().SwitchCurrentActionMap("UI");
         gameOverScreen.SetActive(true);
         playerDamagedOverlay.SetActive(false);
-        GameOverStats.Instance.SetGameOverStats();
+        gameOverScreen.GetComponent<GameOverStats>().SetGameEndStats();
 
         //Set initial selected button if using controller
         if (playerInput.currentControlScheme != "Keyboard&Mouse")
@@ -562,21 +562,19 @@ public class HUDController : SingletonPattern<HUDController>
 
     private IEnumerator WaitToWin()
     {
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(2.5f);
         Time.timeScale = 0;
 
-        SceneManager.LoadScene(3);
-
-        /*
+        player.gameObject.GetComponent<PlayerInput>().SwitchCurrentActionMap("UI");
         winScreen.SetActive(true);
         playerDamagedOverlay.SetActive(false);
+        winScreen.GetComponent<GameOverStats>().SetGameEndStats();
 
         //Set initial selected button if using controller
         if (playerInput.currentControlScheme != "Keyboard&Mouse")
             winScreen.GetComponent<Buttons>().SetSelectedButton();
         else
             winScreen.GetComponent<Buttons>().ClearSelectedButtons();
-        */
     }
 
     public void HideWinScreen()
