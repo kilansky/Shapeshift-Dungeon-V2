@@ -73,7 +73,7 @@ public class LevelDecorator : MonoBehaviour
 
         if(props.Count > 0)
         {
-            Debug.LogError("Unassigned prop types found! Disabling all unasigned props");
+            //Debug.LogError("Unassigned prop types found! Disabling all unasigned props");
             foreach(Transform prop in props)
             {
                 Debug.LogWarning(prop.GetComponent<Decoration>().propType + " has been disabled at " + prop.position);

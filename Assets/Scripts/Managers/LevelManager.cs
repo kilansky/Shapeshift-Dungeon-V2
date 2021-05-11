@@ -289,6 +289,11 @@ public class LevelManager : SingletonPattern<LevelManager>
         //Debug.Log("Current map is: " + currMapName);
     }
 
+    public void BossBuildNavMesh()
+    {
+        GetComponent<NavMeshSurface>().BuildNavMesh();
+    }
+
     /// <summary>
     /// Allows the hazards on the map to be enabled or disabled
     /// </summary>

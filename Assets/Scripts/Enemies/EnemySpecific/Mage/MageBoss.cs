@@ -447,7 +447,7 @@ public class MageBoss : MonoBehaviour, IDamageable
             currentTeleportPoint = teleportPoints[randTeleportPoint];
             teleportPoints.Remove(currentTeleportPoint);
 
-            MonsterSpawner.Instance.BossWaveSpawn(3);
+            MonsterSpawner.Instance.BossWaveSpawn(5);
         }
         //---------------------------Phase 3---------------------------
         else if (!phase3Complete)
@@ -623,6 +623,14 @@ public class MageBoss : MonoBehaviour, IDamageable
         timeToTeleportAgain = 16f;
         timeTillNextTeleport = 16f;
 
+        //Kill the monsters
+        foreach (EnemyBase enemy in GameObject.FindObjectsOfType<EnemyBase>())
+        {
+            if(enemy != this)
+                enemy.Damage(100f);
+        }
+
+
         //Alert player of dangerous tiles
         foreach (DangerTiles dangerousTile in GameObject.FindObjectsOfType<DangerTiles>())
             dangerousTile.StartFlashing();
@@ -637,7 +645,6 @@ public class MageBoss : MonoBehaviour, IDamageable
         timeTillNextTeleport = 16f;
         changeToUseAttack2 = 0.7f;
     }
-
 
     //================================================================
     //-------------------------Health & Damage------------------------
