@@ -914,7 +914,10 @@ public class PlayerController : SingletonPattern<PlayerController>
                     HUDController.Instance.UpdateSpecialCharge();
                 }
                 else
+                {
                     canUseSpecial = true; //Needs this or else it will get stuck in an infinite loop
+                    AudioManager.Instance.Play("ItemCharge");
+                }
 
             }
             //Else - Not the Kapala so we go through the rest of the special items like normal
@@ -1018,6 +1021,7 @@ public class PlayerController : SingletonPattern<PlayerController>
             if (!isItemSwapping && SpecialCharge >= specialCooldownTime.Value)
             {
                 canUseSpecial = true;
+                AudioManager.Instance.Play("ItemCharge");
                 HUDController.Instance.UpdateSpecialCharge();
             }
         }           
@@ -1059,7 +1063,10 @@ public class PlayerController : SingletonPattern<PlayerController>
                 SpecialCharge++; //Adds 1 to the special charge since this is when an enemy dies
 
             if (!isItemSwapping && SpecialCharge >= specialCooldownTime.Value)
+            {
                 canUseSpecial = true;
+                AudioManager.Instance.Play("ItemCharge");
+            }
 
             //Calculates the % value of the Special Charge compared to the SpecialCooldownTime.Value
             float percent = SpecialCharge / specialCooldownTime.Value;

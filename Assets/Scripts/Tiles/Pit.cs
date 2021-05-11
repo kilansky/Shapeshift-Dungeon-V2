@@ -24,8 +24,5 @@ public class Pit : MonoBehaviour
         {
             FindSafeTile.Instance.MovePlayerToSafeLocation(pitDamage);
         }
-
-        else if (other.name == "Bowling Ball Pit Checker")
-            StartCoroutine(other.GetComponentInParent<BowllingAttack>().ballOverPit());
     }
 }

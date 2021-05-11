@@ -242,7 +242,7 @@ public class LevelManager : SingletonPattern<LevelManager>
         //Debug.Log("TransitionComplete!");
         isTransitioning = false; //Sets boolean back to false so transition can occur again
         CenterTile.Instance.SetInvisibleWall(false); //Sets invisible walls back to disabled
-        if (!disableSpawning) //Checks if the debug bool is set
+        if (!disableSpawning) //Checks if the debug bool is set and that the player isn't on the boss fight
         {
             MonsterSpawner.Instance.BeginSpawingMonsters(); //Start spawning monsters
         }

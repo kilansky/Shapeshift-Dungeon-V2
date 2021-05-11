@@ -8,7 +8,9 @@ public class BowllingAttack : MonoBehaviour
     public float damage; //Damage variable to adjust the damage the enemy takes when it gets hit
     //public float destroyTime; //This is the time that it will take before the bowling ball gets destroyed
     public float speed; //The speed that the bowling ball will go at
-    private bool isOverPit = false; //Bool to change the transform.translate to down if it is over a pit by setting this bool to true
+    public LayerMask tileLayer; //Public variable to keep track of the environment layer
+    public GameObject hitEffect;
+    private float gravity; //Gravity!
 
     private void Start()
     {
@@ -21,10 +23,46 @@ public class BowllingAttack : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         //If the other object is Monster (Contains the enemy base script) then go on with the rest of the damage
-        if (other.GetComponent<EnemyBase>())
+        if (other.GetComponent<EnemyBase>() && !other.GetComponent<EnemyBase>().isInvincible)
         {
-            StartCoroutine(other.GetComponent<EnemyBase>().EnemyKnockBack()); 
+            //Debug.Log(other.gameObject);
+            if (other.GetComponent<Skeleton>())
+            {
+                if (other.GetComponent<Skeleton>().isBlocking)
+                    AudioManager.Instance.Play("Block");
+                else if (!other.GetComponent<EnemyBase>().isInvincible)
+                    AudioManager.Instance.Play("BowlingStrike");
+            }
+            
+            else if (!other.GetComponent<EnemyBase>().isInvincible)
+                AudioManager.Instance.Play("BowlingStrike");
+
+            //Spawn hit effect on enemy
+            Vector3 enemyPos = other.transform.position;
+            Instantiate(hitEffect, new Vector3(enemyPos.x, transform.position.y, enemyPos.z), Quaternion.identity);
+
+            //Apply slight camera shake
+            CineShake.Instance.Shake(1f, 0.1f);
+
+            //Apply damage to enemy
             other.GetComponent<EnemyBase>().Damage(damage);
+
+            //Apply Knockback to enemy
+            StartCoroutine(other.GetComponent<EnemyBase>().EnemyKnockBack());
+        }
+
+        if (other.GetComponent<DestructibleProp>())
+        {
+            //Apply slight camera shake
+            CineShake.Instance.Shake(1f, 0.1f);
+
+            //Destroy Prop
+            other.GetComponent<DestructibleProp>().ShatterObject();
+        }
+
+        if (other.GetComponent<ExplodingBarrel>())
+        {
+            other.GetComponent<ExplodingBarrel>().TriggerFuse();
         }
 
         //If the bowling ball hits a wall layer then it deletes itself
@@ -38,35 +76,30 @@ public class BowllingAttack : MonoBehaviour
     private void Update()
     {
         //If the ball is not over a pit then it moves forward
-        if (!isOverPit)
-            transform.Translate(Vector3.forward * speed * Time.deltaTime); //Every frame the bowling ball will move forward
+        if (IsAboveEnvironment())
+            gravity = 0;
 
         //If the ball is over a pit then it moves downward into the pit itself
         else
-        {
-            //Every frame the bowling ball will move downward
-            transform.Translate(Vector3.down * speed * Time.deltaTime); 
+            gravity = 9.81f/2;
 
-            //And a bit forward
-            transform.Translate((Vector3.forward * speed * Time.deltaTime) / 2.25f);
-        }
-            
-        
-        
+        transform.Translate(Vector3.forward * speed * Time.deltaTime); //Every frame the bowling ball will move forward
+        transform.Translate(Vector3.down * gravity * Time.deltaTime); //Every frame the bowling ball will move down
+
         //And rotate forward - Sky (3/29/21)
         //transform.RotateAround(transform.position, Vector3.right, speed * Time.deltaTime);
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <returns></returns>
-    public IEnumerator ballOverPit()
+    //Returns true if the bowling ball above a pit or lower floor - AHL (5/10/21)
+    private bool IsAboveEnvironment()
     {
-        //A minor delay so the ball will be fully over the pit
-        yield return new WaitForSeconds(0.05f);
-        
-        //Adjusts the isoverpit to true so the ball falls down it
-        isOverPit = true;
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, Vector3.down, out hit, 1f, tileLayer))
+        {
+            if (hit.transform.GetComponent<Tile>() && hit.transform.GetComponent<Tile>().tileType != Tile.tileTypes.pit)
+                return true;
+        }
+
+        return false;
     }
 }
