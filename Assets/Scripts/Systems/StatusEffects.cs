@@ -46,6 +46,7 @@ public class StatusEffects : MonoBehaviour
     {
         currTime = 0; //Tracker to make sure that the ticks only happen a certain amount of time as specified by the duration
         timeLeft = duration - currTime; //Adjusts time left to show how much time is remaining (aka how much damage is left for the enemy to take)
+        AudioManager.Instance.Play("Burn");
 
         //While the tracker is less than the duration the function will run and every second deal a single damage to the player or the enemy that this script is attached to.
         while (currTime < duration)

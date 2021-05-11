@@ -14,5 +14,6 @@ public class BombBag : MonoBehaviour
     public void spawnBomb(Vector3 playerPos, Quaternion playerRotation)
     {
         Instantiate(BombAttack, playerPos, playerRotation); //Spawns the bomb attack at the current player location
+        AudioManager.Instance.Play("Fuse");
     }
 }
