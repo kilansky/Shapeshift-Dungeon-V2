@@ -446,6 +446,8 @@ public class MageBoss : MonoBehaviour, IDamageable
             //then set the new current teleport point and remove it from the list
             currentTeleportPoint = teleportPoints[randTeleportPoint];
             teleportPoints.Remove(currentTeleportPoint);
+
+            MonsterSpawner.Instance.BossWaveSpawn(3);
         }
         //---------------------------Phase 3---------------------------
         else if (!phase3Complete)
