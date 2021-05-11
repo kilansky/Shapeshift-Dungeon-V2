@@ -17,5 +17,6 @@ public class FireWand : MonoBehaviour
         spawnPos.y += 1f; //Adjusts the fireball to spawn in the correct position to the player
 
         Instantiate(PlayerFireBall, spawnPos, playerRotation); //Spawns the fireball attack
+        AudioManager.Instance.Play("Ignite");
     }
 }

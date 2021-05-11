@@ -4,6 +4,14 @@ using UnityEngine;
 
 public class Footsteps : SingletonPattern<Footsteps>
 {
+    /*
+     * Script: Footsteps
+     * Programmer: Justin Donato
+     * Description: Plays footstep sounds based on the tile the player is currently above
+     * Date Created: 5/10/2021
+     * Date Last Edited: 5/10/2021
+     */
+
     public float rateOfStep = .25f;
     public LayerMask mask;
 
@@ -68,6 +76,10 @@ public class Footsteps : SingletonPattern<Footsteps>
             return "Pit";
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     private Tile.tileTypes GetTileType()
     {
         RaycastHit hit;
@@ -78,6 +90,8 @@ public class Footsteps : SingletonPattern<Footsteps>
             {
                 return hit.transform.gameObject.GetComponent<Tile>().tileType;
             }
+            else if(hit.transform.parent.GetComponent<CenterTile>())
+                return Tile.tileTypes.stone;
             else //If object is not a tile, return null
             {
                 return Tile.tileTypes.pit;
@@ -92,6 +106,10 @@ public class Footsteps : SingletonPattern<Footsteps>
     public void StopFootsteps()
     {
         audioPlayer.Stop("Grass");
+        audioPlayer.Stop("Sand");
+        audioPlayer.Stop("Dirt");
+        audioPlayer.Stop("Stone");
+        audioPlayer.Stop("Metal");
     }
 
     private IEnumerator WaitToResumeSound()

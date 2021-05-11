@@ -274,11 +274,21 @@ public class MonsterSpawner : SingletonPattern<MonsterSpawner>
         List<SpawnPoint> spawnPoints = new List<SpawnPoint>();
         SpawnPoint[] spawnArray = FindObjectsOfType<SpawnPoint>();
         Debug.Log(spawnArray.Length);
+        dirtAndSandTiles.Clear();       
 
-        if(amountOfMonsters > currFloorInfo.maxMonsters)
+        if (amountOfMonsters > currFloorInfo.maxMonsters)
         {
-            Debug.LogWarning("Trying to spawn more monsters than spawn points! Aborting.");
-            return;
+            Debug.LogWarning("Trying to spawn more monsters than spawn points!");
+            amountOfMonsters = currFloorInfo.maxMonsters;
+        }
+
+        foreach (Tile tile in GameObject.FindObjectsOfType<Tile>())
+        {
+            //Check if the tile is safe to stand on
+            if (tile.tileType == Tile.tileTypes.dirt || tile.tileType == Tile.tileTypes.sand)
+            {
+                dirtAndSandTiles.Add(tile);
+            }
         }
 
         foreach (SpawnPoint point in spawnArray)
@@ -296,11 +306,34 @@ public class MonsterSpawner : SingletonPattern<MonsterSpawner>
 
         for (int i = 0; i < amountOfMonsters; i++)
         {
-            Debug.Log("There are currently " + monstersInRoom + " monsters active");
+            //Debug.Log("There are currently " + monstersInRoom + " monsters active");
             if (monstersInRoom < currFloorInfo.maxMonsters)
-            {                
-                spawnPoints[i].SpawnMonster(currFloorInfo.GetMonsterToSpawn(), false);
-                monstersInRoom++;
+            {
+                GameObject bossMonster = currFloorInfo.GetMonsterToSpawn();
+
+                if (bossMonster.GetComponent<Worm>())
+                {
+                    int randomTile;
+                    do
+                    {  //Keep looking for a tile to spawn on that doesn't already contain a worm
+                        randomTile = Random.Range(0, dirtAndSandTiles.Count);
+                    }
+                    while (dirtAndSandTiles[randomTile].occupiedByWorm == true);
+
+                    dirtAndSandTiles[randomTile].spawnerIndicator.SetActive(true);
+                    dirtAndSandTiles[randomTile].spawnerIndicator.GetComponent<SpawnPoint>().SpawnMonster(bossMonster, false);
+                    dirtAndSandTiles[randomTile].occupiedByWorm = true;
+                    if (!dirtAndSandTiles[randomTile].spawnerIndicator.GetComponent<SpawnPoint>().onAtStart)
+                    {
+                        StartCoroutine(DisableWormSpawner(dirtAndSandTiles[randomTile].spawnerIndicator));
+                    }
+                    monstersInRoom++;
+                }
+                else
+                {
+                    spawnPoints[i].SpawnMonster(bossMonster, false);
+                    monstersInRoom++;
+                }
             }
             else
             {
