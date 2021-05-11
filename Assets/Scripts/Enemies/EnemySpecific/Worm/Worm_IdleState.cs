@@ -64,6 +64,8 @@ public class Worm_IdleState : IdleState
 
             float dirtYPos = Mathf.Lerp(enemy.dirtUnderGroundYPos, enemy.dirtAboveGroundYPos, timeElapsed / (enemy.timeToEmergeOrSubmerge/2));
             enemy.dirtCircle.transform.position = new Vector3(enemy.dirtCircle.transform.position.x, dirtYPos, enemy.dirtCircle.transform.position.z);
+
+            enemy.wormCanBeHit = true;
         }
 
         //If worm is fully moved up, check to attack

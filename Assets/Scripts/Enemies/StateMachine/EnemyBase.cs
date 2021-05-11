@@ -162,7 +162,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
         switch (PlayerPrefs.GetInt("Difficulty", 1))
         {
             case 0: //casual
-                health *= 0.75f;
+                health *= 0.5f;
                 break;
             case 1: //standard
                 health *= 1f;

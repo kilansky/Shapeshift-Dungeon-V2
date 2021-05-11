@@ -221,7 +221,7 @@ public class PlayerController : SingletonPattern<PlayerController>
         switch (PlayerPrefs.GetInt("Difficulty", 1))
         {
             case 0: //casual
-                PlayerHealth.Instance.difficultyDamageMod = 0.75f;
+                PlayerHealth.Instance.difficultyDamageMod = 0.5f;
                 break;
             case 1: //standard
                 PlayerHealth.Instance.difficultyDamageMod = 1f;

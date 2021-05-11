@@ -5,6 +5,7 @@ using UnityEngine;
 public class TileRotator : MonoBehaviour
 {
     private int rotateAmount;
+    private bool hasCounterRotated = false;
 
     void Start()
     {
@@ -24,6 +25,10 @@ public class TileRotator : MonoBehaviour
 
     public void UndoRotation()
     {
-        transform.Rotate(0, 90 * -rotateAmount, 0);//Rotate tile back to the starting rotation
+        if(!hasCounterRotated)
+        {
+            transform.Rotate(0, 90 * -rotateAmount, 0);//Rotate tile back to the starting rotation
+            hasCounterRotated = true;
+        }
     }
 }
