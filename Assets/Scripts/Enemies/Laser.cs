@@ -95,7 +95,7 @@ public class Laser : MonoBehaviour
     }
 
     /// <summary>
-    /// Used for enemy hit from the laser wand - AHL (4/27/21)
+    /// Used for enemy hit from the laser wand - AHL (5/10/21)
     /// *I SAID NO DELETE!!!!!!*
     /// </summary>
     /// <param name="other"></param>
@@ -107,6 +107,24 @@ public class Laser : MonoBehaviour
             if (parentObject.GetComponent<PlayerController>() && !other.GetComponent<EnemyBase>().isInvincible)
             {
                 StartCoroutine(LaserWandCycle(other.gameObject));
+            }
+        }
+
+        //If the parent object isn't the enemy (then it is the player) so this can be used for the props
+        if (!parentObject.GetComponent<EnemyBase>())
+        {
+            if (other.GetComponent<DestructibleProp>())
+            {
+                //Apply slight camera shake
+                CineShake.Instance.Shake(1f, 0.1f);
+
+                //Destroy Prop
+                other.GetComponent<DestructibleProp>().ShatterObject();
+            }
+
+            if (other.GetComponent<ExplodingBarrel>())
+            {
+                other.GetComponent<ExplodingBarrel>().TriggerFuse();
             }
         }
     }

@@ -573,6 +573,10 @@ public class PlayerController : SingletonPattern<PlayerController>
 
             canUseSpecial = false;
 
+            //Sets the two glows to stop for the special charge bars
+            HUDController.Instance.HideSpecialGlow();
+            HUDController.Instance.HideSpecialGlow2();
+
             //Adjusts the bool to make sure things work as inteded after this process
             isItemSwapping = false;
 
@@ -907,6 +911,7 @@ public class PlayerController : SingletonPattern<PlayerController>
         ResetAttackCombo();
         canUseSpecial = false;
         isUsingSpecial = true;
+        HUDController.Instance.HideSpecialGlow();
 
         //If there is an item in the special slot then we trigger the specific program assigned to the item
         if (SpecialSlot != null)
@@ -927,6 +932,7 @@ public class PlayerController : SingletonPattern<PlayerController>
                 else
                 {
                     canUseSpecial = true; //Needs this or else it will get stuck in an infinite loop
+                    HUDController.Instance.ShowSpecialGlow();
                     AudioManager.Instance.Play("ItemCharge");
                 }
 
@@ -1032,6 +1038,7 @@ public class PlayerController : SingletonPattern<PlayerController>
             if (!isItemSwapping && SpecialCharge >= specialCooldownTime.Value)
             {
                 canUseSpecial = true;
+                HUDController.Instance.ShowSpecialGlow();
                 AudioManager.Instance.Play("ItemCharge");
                 HUDController.Instance.UpdateSpecialCharge();
             }
@@ -1059,6 +1066,9 @@ public class PlayerController : SingletonPattern<PlayerController>
             }
 
             specialIsCharging2 = false;
+            
+            if(BagOfHoldingSlot)
+                HUDController.Instance.ShowSpecialGlow2();
         }
     }
 
@@ -1076,6 +1086,7 @@ public class PlayerController : SingletonPattern<PlayerController>
             if (!isItemSwapping && SpecialCharge >= specialCooldownTime.Value)
             {
                 canUseSpecial = true;
+                HUDController.Instance.ShowSpecialGlow();
                 AudioManager.Instance.Play("ItemCharge");
             }
 
@@ -1095,6 +1106,9 @@ public class PlayerController : SingletonPattern<PlayerController>
 
             if ((specialCharge2 < specialCharge2MaxValue) && !isItemSwapping)
                 specialCharge2++; //Adds 1 to the special charge 2 since this is when an enemy dies
+
+            if (specialCharge2 >= specialCharge2MaxValue && !isItemSwapping)
+                HUDController.Instance.ShowSpecialGlow2();
 
             float percent = specialCharge2 / specialCharge2MaxValue;
 

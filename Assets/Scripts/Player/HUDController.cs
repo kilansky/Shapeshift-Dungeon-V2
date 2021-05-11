@@ -54,6 +54,8 @@ public class HUDController : SingletonPattern<HUDController>
     public GameObject speicalItemEmptyIcon;
     public Image chargeBarFill;
     public Image chargeBar2Fill;
+    public GameObject specialGlow;
+    public GameObject specialGlow2;
     public UIPanel swapItemPanel;
 
     [Header("Equipment Panel")]
@@ -498,6 +500,26 @@ public class HUDController : SingletonPattern<HUDController>
     public void HideSpecialSwapPanel()
     {
         swapItemPanel.panel.SetActive(false);
+    }
+
+    public void ShowSpecialGlow()
+    {
+        specialGlow.SetActive(true);
+    }
+
+    public void HideSpecialGlow()
+    {
+        specialGlow.SetActive(false);
+    }
+    
+    public void ShowSpecialGlow2()
+    {
+        specialGlow2.SetActive(true);
+    }
+
+    public void HideSpecialGlow2()
+    {
+        specialGlow2.SetActive(false);
     }
 
     public void ShowMinimap()
