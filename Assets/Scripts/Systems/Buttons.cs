@@ -9,6 +9,7 @@ public class Buttons : MonoBehaviour
 {
     public GameObject[] buttons;
     public EventSystem eventSystem;
+    public GameObject optionsPanel;
 
     private int currButtonIndex = 0;
 
@@ -53,6 +54,11 @@ public class Buttons : MonoBehaviour
     public void ContinueGame()
     {
         PlayerController.Instance.Unpause();
+    }
+
+    public void OptionsMenu()
+    {
+        optionsPanel.SetActive(true);
     }
 
     public void QuitGame()

@@ -557,16 +557,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnInfo:
     monsters:
-    - name: Skull
+    - name: FlamingSkull
       monster: {fileID: 3285207134206969448, guid: b0000f853a2ad1e49bbb03a316767d9b,
         type: 3}
-      spawnWeight: 1
-    - name: Goblin
-      monster: {fileID: 5520990575442047842, guid: 34538ae51f538ff4d942b8f1c8a2cb10,
+      spawnWeight: 5
+    - name: TorchGoblin
+      monster: {fileID: 5520990575442047842, guid: 9d03ed83e242006488103c59c6218c0a,
+        type: 3}
+      spawnWeight: 2
+    - name: RedCrystal
+      monster: {fileID: 1044970987093620923, guid: 792c78382d787984ab081c3078f073f4,
+        type: 3}
+      spawnWeight: 3
+    - name: Slime
+      monster: {fileID: 2863785476348903915, guid: 4240dc0cbdae9a24ba369f0738bc89f0,
         type: 3}
       spawnWeight: 1
+    - name: Worm
+      monster: {fileID: 5520990575442047842, guid: c8c2fc06c1a8db747b16c4b4fe7937bd,
+        type: 3}
+      spawnWeight: 3
+    - name: Skeleton
+      monster: {fileID: 5520990575442047842, guid: 88ab8574e27b2034183b63847449338a,
+        type: 3}
+      spawnWeight: 3
     totalMonsters: 0
-    maxMonsters: 12
+    maxMonsters: 3
     gemsOnFloor: 0
 --- !u!114 &4646935286817369844
 MonoBehaviour:
