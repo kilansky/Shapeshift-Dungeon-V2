@@ -73,6 +73,12 @@ public class Item : MonoBehaviour
                 
                 c.SpecialSlot.prefab.GetComponent<Item>().Unequip(c, h);
                 c.SpecialSlot = this.item;
+
+                //If the item is the Kapala then we set the CanUseSpecial to false as you can't use the Kapala out of the gate and resets the sprite - AHL (4/25/21)
+                if (item.ItemName == "Kapala")
+                {
+                    HUDController.Instance.HideSpecialGlow();
+                }
             }
         }
 

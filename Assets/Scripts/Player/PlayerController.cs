@@ -1034,6 +1034,9 @@ public class PlayerController : SingletonPattern<PlayerController>
                 if (isItemSwapping)
                     break;
 
+                if(SpecialCharge >= specialCooldownTime.Value)
+                    AudioManager.Instance.Play("ItemCharge");
+
                 yield return new WaitForEndOfFrame();
             }
 
@@ -1043,10 +1046,6 @@ public class PlayerController : SingletonPattern<PlayerController>
             {
                 canUseSpecial = true;
                 HUDController.Instance.ShowSpecialGlow();
-
-                if(!hasPickedUpItemRecently)
-                    AudioManager.Instance.Play("ItemCharge");
-
                 HUDController.Instance.UpdateSpecialCharge();
             }
         }           
@@ -1074,7 +1073,7 @@ public class PlayerController : SingletonPattern<PlayerController>
 
             specialIsCharging2 = false;
             
-            if(BagOfHoldingSlot && BagOfHoldingSlot.ItemName != "Kapala")
+            if(BagOfHoldingSlot && specialCharge2 >= specialCharge2MaxValue)
                 HUDController.Instance.ShowSpecialGlow2();
         }
     }
@@ -1088,15 +1087,18 @@ public class PlayerController : SingletonPattern<PlayerController>
         if (SpecialSlot && SpecialSlot.ItemName == "Kapala")
         {
             if (SpecialCharge < specialCooldownTime.Value && !isItemSwapping)
+            {
                 SpecialCharge++; //Adds 1 to the special charge since this is when an enemy dies
+
+                if(SpecialCharge >= specialCooldownTime.Value)
+                    AudioManager.Instance.Play("ItemCharge");
+
+            }
 
             if (!isItemSwapping && SpecialCharge >= specialCooldownTime.Value)
             {
                 canUseSpecial = true;
                 HUDController.Instance.ShowSpecialGlow();
-
-                if (!hasPickedUpItemRecently)
-                    AudioManager.Instance.Play("ItemCharge");
             }
 
             //Calculates the % value of the Special Charge compared to the SpecialCooldownTime.Value
