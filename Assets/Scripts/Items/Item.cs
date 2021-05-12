@@ -404,15 +404,7 @@ public class Item : MonoBehaviour
 
                 //Shows the special swap panel
                 if(item.ItemName != "AA Battery")
-                {
                     HUDController.Instance.ShowSpecialItemPanel();
-
-                    if(c.hasBagOfHolding && c.SpecialSlot != null)//if player already has the bag of holding and a special item, show the swap panel
-                        HUDController.Instance.ShowSpecialSwapPanel();
-                }
-
-                if (item.ItemName == "AA Battery" && c.SpecialSlot)
-                    StartCoroutine(c.RechargeSpecial());
 
                 //Debug.Log("This item " + item.ItemName + " has been equipped so Special Item Recharge Time has been adjusted.");
                 //Debug.Log("The new Special Item Recharge Time is " + c.specialCooldownTime.Value);
@@ -432,7 +424,9 @@ public class Item : MonoBehaviour
         //If the item being equipped is the Kapala then we adjust the hasKapala variable in the playerController Script
         if (item.ItemName == "Kapala")
             c.hasKapala = true;
-        
+
+        if (c.hasBagOfHolding && c.SpecialSlot != null)//if player already has the bag of holding and a special item, show the swap panel
+            HUDController.Instance.ShowSpecialSwapPanel();
     }
 
     /// <summary>
