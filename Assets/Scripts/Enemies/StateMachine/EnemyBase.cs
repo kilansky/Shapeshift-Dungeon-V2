@@ -25,7 +25,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     [Header("Health & Taking Damage")]
     public float health;
-    public float dmgInvincibilityTime = 0.25f;
+    public float dmgInvincibilityTime = 0.1f;
     public float knockBackStrength = 5f;
     public Material hitMat;
     public Material normalMat;
