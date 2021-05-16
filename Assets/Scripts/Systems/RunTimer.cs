@@ -8,6 +8,7 @@ public class RunTimer : SingletonPattern<RunTimer>
 {
     public TextMeshProUGUI timerText;
     public string TimerTextValue { get; set; }
+    public string EndTimeValue { get; set; }
 
     private float runTimer = 0;
     public bool IncreaseTimer { get; set; }
@@ -31,15 +32,18 @@ public class RunTimer : SingletonPattern<RunTimer>
     {
         var timeSpan = System.TimeSpan.FromSeconds(runTimer);
 
-        if(timeSpan.Hours > 0)
+        //timerText.text = System.TimeSpan.FromSeconds(runTimer);
+
+        if (timeSpan.Hours > 0)
         {
-            TimerTextValue = timeSpan.Hours.ToString("0") + ":" +
-                            timeSpan.Minutes.ToString("00") + ":" +
-                            timeSpan.Seconds.ToString("00");
+            TimerTextValue = timeSpan.ToString("h\\:mm\\:ss");
+            EndTimeValue = timeSpan.ToString("h\\:mm\\:ss\\.ff");
         }
         else
-            TimerTextValue = timeSpan.Minutes.ToString("00") + ":" + timeSpan.Seconds.ToString("00");
-
+        {
+            TimerTextValue = timeSpan.ToString("mm\\:ss");
+            EndTimeValue = timeSpan.ToString("mm\\:ss\\.ff");
+        }
 
         timerText.text = TimerTextValue;
     }

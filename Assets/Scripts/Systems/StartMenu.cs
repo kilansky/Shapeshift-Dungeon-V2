@@ -26,8 +26,11 @@ public class StartMenu : MonoBehaviour
     public Button floor15;
     public Button floor20;
 
-    [Header("Assist Mode")]
-    public TextMeshProUGUI difficultyText;
+    [Header("Difficulty")]
+    public TextMeshProUGUI difficultyButtonText;
+    public GameObject casualDiamonds;
+    public GameObject standardDiamonds;
+    public GameObject hardcoreDiamonds;
 
     [Header("Settings")]
     public TextMeshProUGUI fullscreenText;
@@ -36,6 +39,7 @@ public class StartMenu : MonoBehaviour
     private AudioSource audioSource;
     private PlayerInput playerInput;
     private float currSliderValue;
+    private bool isUsingMouse;
 
     public void SetMusicLevel(float sliderValue)
     {
@@ -114,6 +118,8 @@ public class StartMenu : MonoBehaviour
 
         if (currentControlScheme == "Keyboard&Mouse")
         {
+            isUsingMouse = true;
+
             //Set Cursor to be visible
             Cursor.visible = true;
 
@@ -122,7 +128,10 @@ public class StartMenu : MonoBehaviour
             startCanvas.GetComponent<Buttons>().ClearSelectedButtons();
         }
         else
-        {   //Set Cursor to not be visible
+        {
+            isUsingMouse = false;
+
+            //Set Cursor to not be visible
             Cursor.visible = false;
 
             //Set selected button
@@ -136,6 +145,8 @@ public class StartMenu : MonoBehaviour
     {
         if (playerInput.currentControlScheme != currentControlScheme)
             ControlSchemeChanged();
+
+        Cursor.visible = isUsingMouse ? true : false;
 
         //If slider has 'focus'
         if (thisSlider && thisSlider == EventSystem.current.currentSelectedGameObject)
@@ -154,16 +165,18 @@ public class StartMenu : MonoBehaviour
     private void ControlSchemeChanged()
     {
         //Set initial selected button if using controller
-        if (playerInput.currentControlScheme != "Keyboard&Mouse")
+        if (playerInput.currentControlScheme == "Keyboard&Mouse")
         {
-            Cursor.visible = false;
-            activeCanvas.GetComponent<Buttons>().SetSelectedButton();
+            isUsingMouse = true;
+            activeCanvas.GetComponent<Buttons>().ClearSelectedButtons();
         }
         else
         {
-            Cursor.visible = true;        
-            activeCanvas.GetComponent<Buttons>().ClearSelectedButtons();
+            isUsingMouse = false;
+            activeCanvas.GetComponent<Buttons>().SetSelectedButton();
         }
+
+        currentControlScheme = playerInput.currentControlScheme;
     }
 
     private void SetPreferredScreenSize()
@@ -182,18 +195,25 @@ public class StartMenu : MonoBehaviour
 
     private void SetPreferredDifficulty()
     {
+        casualDiamonds.SetActive(false);
+        standardDiamonds.SetActive(false);
+        hardcoreDiamonds.SetActive(false);
+
         switch (PlayerPrefs.GetInt("Difficulty", 1))
         {
             case 0: //assist
-                difficultyText.text = "Casual";
+                difficultyButtonText.text = "Casual";
+                casualDiamonds.SetActive(true);
                 PlayerPrefs.GetInt("Difficulty", 0);
                 break;
             case 1: //standard
-                difficultyText.text = "Standard";
+                difficultyButtonText.text = "Standard";
+                standardDiamonds.SetActive(true);
                 PlayerPrefs.GetInt("Difficulty", 1);
                 break;
             case 2: //hardcore
-                difficultyText.text = "Hardcore";
+                difficultyButtonText.text = "Hardcore";
+                hardcoreDiamonds.SetActive(true);
                 PlayerPrefs.GetInt("Difficulty", 2);
                 break;
             default:
@@ -223,7 +243,7 @@ public class StartMenu : MonoBehaviour
             Buttons buttons = FindObjectOfType<Buttons>();
 
             if(!EventSystem.current.currentSelectedGameObject)
-                EventSystem.current.SetSelectedGameObject(buttons.buttonsArray[buttons.currButtonIndex]);
+                buttons.SetSelectedButton();
 
             if (EventSystem.current.currentSelectedGameObject && EventSystem.current.currentSelectedGameObject.GetComponent<Slider>())
             {
@@ -257,6 +277,10 @@ public class StartMenu : MonoBehaviour
         if (context.performed)
         {
             Buttons buttons = FindObjectOfType<Buttons>();
+
+            if (buttons && !EventSystem.current.currentSelectedGameObject)
+                buttons.SetSelectedButton();
+
             if (buttons)
                 buttons.SubmitButton();
         }
@@ -265,9 +289,9 @@ public class StartMenu : MonoBehaviour
     //Attack Button Pressed
     public void Cancel(InputAction.CallbackContext context)
     {
-        if (context.performed)
+        if (context.performed && activeCanvas != startCanvas)
         {
-            //Debug.Log("CANCEL PRESSED");
+            StartCoroutine(TransitionMenu(startCanvas));
         }
     }
 
@@ -368,16 +392,22 @@ public class StartMenu : MonoBehaviour
     {
         switch (PlayerPrefs.GetInt("Difficulty", 1))
         {
-            case 0: //assist->standard
-                difficultyText.text = "Standard";
+            case 0: //casual->standard
+                casualDiamonds.SetActive(false);
+                standardDiamonds.SetActive(true);
+                difficultyButtonText.text = "Standard";
                 PlayerPrefs.SetInt("Difficulty", 1);
                 break;
             case 1: //standard->hardcore
-                difficultyText.text = "Hardcore";
+                standardDiamonds.SetActive(false);
+                hardcoreDiamonds.SetActive(true);
+                difficultyButtonText.text = "Hardcore";
                 PlayerPrefs.SetInt("Difficulty", 2);
                 break;
             case 2: //hardcore->casual
-                difficultyText.text = "Casual";
+                hardcoreDiamonds.SetActive(false);
+                casualDiamonds.SetActive(true);
+                difficultyButtonText.text = "Casual";
                 PlayerPrefs.SetInt("Difficulty", 0);
                 break;
             default:

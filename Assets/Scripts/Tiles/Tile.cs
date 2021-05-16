@@ -147,9 +147,9 @@ public class Tile : MonoBehaviour
 
         RaycastHit hit;
 
-        while (NoOrientation() && rewardIndicator.activeInHierarchy && Physics.BoxCast(transform.position, transform.localScale, transform.TransformDirection(Vector3.up), out hit)) //Sends a boxcast to look for an object above this one if it is flagged as a shop
+        while (NoOrientation() && rewardIndicator && rewardIndicator.activeInHierarchy && Physics.BoxCast(transform.position, transform.localScale, transform.TransformDirection(Vector3.up), out hit)) //Sends a boxcast to look for an object above this one if it is flagged as a shop
         {
-            if (hit.transform.CompareTag("Player")) //If boxcast finds player on top of tile, delay the transition
+            if (hit.transform.GetComponent<PlayerController>()) //If boxcast finds player on top of tile, delay the transition
             {
                 //Debug.Log("Player Hit!");
                 yield return null;

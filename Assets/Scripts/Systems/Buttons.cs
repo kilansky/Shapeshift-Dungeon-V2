@@ -9,7 +9,7 @@ public class Buttons : MonoBehaviour
 {
     public GameObject[] buttonsArray;
     public EventSystem eventSystem;
-    public GameObject optionsPanel;
+    //public GameObject optionsPanel;
 
     [HideInInspector] public int currButtonIndex = 0;
 
@@ -42,11 +42,14 @@ public class Buttons : MonoBehaviour
             thisSlider.transform.GetChild(2).GetChild(0).localScale /= 1.5f;
         }
 
-        do
+        do //Skip over buttons that are not interactable
         {
             currButtonIndex++;
             if (currButtonIndex > buttonsArray.Length - 1)
                 currButtonIndex = 0;
+
+            Debug.Log("currButtonIndex " + currButtonIndex);
+            Debug.Log("buttonsArray[currButtonIndex]: " + buttonsArray[currButtonIndex]);
 
         } while (buttonsArray[currButtonIndex].GetComponent<Button>() && !buttonsArray[currButtonIndex].GetComponent<Button>().interactable);
 
@@ -67,11 +70,14 @@ public class Buttons : MonoBehaviour
             thisSlider.transform.GetChild(2).GetChild(0).localScale /= 1.5f;
         }
 
-        do
+        do //Skip over buttons that are not interactable
         {
             currButtonIndex--;
             if (currButtonIndex < 0)
                 currButtonIndex = buttonsArray.Length - 1;
+
+            Debug.Log("currButtonIndex " + currButtonIndex);
+            Debug.Log("buttonsArray[currButtonIndex]: " + buttonsArray[currButtonIndex]);
 
         } while (buttonsArray[currButtonIndex].GetComponent<Button>() && !buttonsArray[currButtonIndex].GetComponent<Button>().interactable);
 
@@ -96,7 +102,7 @@ public class Buttons : MonoBehaviour
 
     public void OptionsMenu()
     {
-        optionsPanel.SetActive(true);
+        //optionsPanel.SetActive(true);
     }
 
     public void QuitGame()

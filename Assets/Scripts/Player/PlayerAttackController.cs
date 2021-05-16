@@ -103,7 +103,7 @@ public class PlayerAttackController : SingletonPattern<PlayerAttackController>
         radialHitbox.transform.localScale = new Vector3(hitboxMinScale, 1, hitboxMinScale); //Shrink scale to min size
 
         //Enable the hitbox
-        radialHitbox.GetComponent<SphereCollider>().enabled = true;
+        radialHitbox.GetComponent<MeshCollider>().enabled = true;
         if (showHitboxes)
             radialHitbox.GetComponent<MeshRenderer>().enabled = true;
 
@@ -127,7 +127,7 @@ public class PlayerAttackController : SingletonPattern<PlayerAttackController>
         }
 
         //disable the hitbox
-        radialHitbox.GetComponent<SphereCollider>().enabled = false;
+        radialHitbox.GetComponent<MeshCollider>().enabled = false;
         if (showHitboxes)
             radialHitbox.GetComponent<MeshRenderer>().enabled = false;
 

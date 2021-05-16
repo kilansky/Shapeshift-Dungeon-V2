@@ -12,6 +12,7 @@ public class FindSafeTile : SingletonPattern<FindSafeTile>
      * Date Last Edited: 2/22/2021
      **/
     public GameObject teleportVFX;
+    public LayerMask safeLayers;
     [HideInInspector]public Vector3 safePos;
 
     private bool respawningPlayer = false;
@@ -30,7 +31,7 @@ public class FindSafeTile : SingletonPattern<FindSafeTile>
     {
         RaycastHit hit;
 
-        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), out hit)) //Sends a raycast to look for an object below this one
+        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), out hit, 20f, safeLayers)) //Sends a raycast to look for an object below this one
         {
             if(hit.transform.gameObject.GetComponent<Tile>()) //If the raycast finds an object, this finds out if that object is a tile
             {
@@ -38,7 +39,7 @@ public class FindSafeTile : SingletonPattern<FindSafeTile>
 
                 if (hitTile.tileType == Tile.tileTypes.stone || hitTile.tileType == Tile.tileTypes.dirt || hitTile.tileType == Tile.tileTypes.stoneGrass || hitTile.tileType == Tile.tileTypes.dirtGrass || hitTile.tileType == Tile.tileTypes.sand)
                 {
-                    if(transform.position.y > 2f)
+                    if(transform.position.y > 2f && VerifySafePosition(hitTile.transform.position + new Vector3(0f, 5f, 0f)))
                         safePos = hitTile.transform.position + new Vector3(0f, 5f, 0f);               
                 }
             }
@@ -48,8 +49,28 @@ public class FindSafeTile : SingletonPattern<FindSafeTile>
             }
         }
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.5f);
         StartCoroutine(LocateSafePosition());
+    }
+
+    private bool VerifySafePosition(Vector3 pos)
+    {
+        RaycastHit hit;
+
+        if (Physics.Raycast(pos + new Vector3(0, 3f, 0), Vector3.down, out hit, 20f, safeLayers)) //Sends a raycast to look for an object below this one
+        {
+            if (hit.transform.gameObject.GetComponent<Tile>()) //If the raycast finds an object, this finds out if that object is a tile
+            {
+                Tile hitTile = hit.transform.gameObject.GetComponent<Tile>();
+
+                if (hitTile.tileType == Tile.tileTypes.stone || hitTile.tileType == Tile.tileTypes.dirt || hitTile.tileType == Tile.tileTypes.stoneGrass || hitTile.tileType == Tile.tileTypes.dirtGrass || hitTile.tileType == Tile.tileTypes.sand)
+                {
+                    if (safePos.y > 2f)
+                        return true;
+                }
+            }
+        }
+        return false;
     }
 
     public void MovePlayerToSafeLocation(float pitDamage)
@@ -80,13 +101,11 @@ public class FindSafeTile : SingletonPattern<FindSafeTile>
             }
 
             //Disable Character Controller in order to set player position
-            GetComponent<CharacterController>().enabled = false;
-            yield return new WaitForEndOfFrame();
-            transform.position = safePos;
-            yield return new WaitForEndOfFrame();
+            if(VerifySafePosition(safePos))
+                StartCoroutine(MovePlayer(safePos));
+            else
+                StartCoroutine(MovePlayer(new Vector3(0, 5f, 0)));
 
-            //Re-enable Character Controller
-            GetComponent<CharacterController>().enabled = true;
             respawningPlayer = false;
         }
     }

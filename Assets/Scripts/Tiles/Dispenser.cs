@@ -56,11 +56,15 @@ public class Dispenser : MonoBehaviour
 
         bullet.transform.GetChild(0).gameObject.SetActive(false);
         yield return new WaitForSeconds(.1f);
-        bullet.transform.GetChild(0).gameObject.SetActive(true);
-        bullet.transform.localScale = Vector3.one * .01f;
+
+        if(bullet)
+        {
+            bullet.transform.GetChild(0).gameObject.SetActive(true);
+            bullet.transform.localScale = Vector3.one * .01f;
+        }
 
         float counter = 0f; //Counter to keep track of time elapsed
-        while (counter < chargeTime) //This while loop scales object over time
+        while (bullet && counter < chargeTime) //This while loop scales object over time
         {
             counter += Time.deltaTime;
             bullet.transform.localScale = Vector3.Lerp(bullet.transform.localScale, originalScale, counter / chargeTime);
@@ -69,15 +73,18 @@ public class Dispenser : MonoBehaviour
             bullet.GetComponent<Bullet>().SetVFXScale(vfxPercent);
             yield return null;
         }
-
         //Waits at max scale size for a bit before moving
         yield return new WaitForSeconds(delayBeforeFiring);
-        //Fires Projectile after waiting
-        bullet.GetComponent<Bullet>().moveSpeed = originalSpeed;
-        bullet.GetComponent<Bullet>().canDamage = true;
-        //bullet.GetComponent<Bullet>().shotBy = "Dispenser";
 
-        yield return new WaitForSeconds(rateOfFire - delayBeforeFiring - chargeTime);
+        if (bullet)
+        {
+            //Fires Projectile after waiting
+            bullet.GetComponent<Bullet>().moveSpeed = originalSpeed;
+            bullet.GetComponent<Bullet>().canDamage = true;
+            //bullet.GetComponent<Bullet>().shotBy = "Dispenser";
+
+            yield return new WaitForSeconds(rateOfFire - delayBeforeFiring - chargeTime);
+        }
 
         if(canFire)
             StartCoroutine(AttackCycle());

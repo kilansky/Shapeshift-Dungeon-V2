@@ -6,8 +6,8 @@ using UnityEngine.UI;
 public class ArcaneCircle : MonoBehaviour
 {
     public GameObject teleportPoint;
-    public bool playerOnCircle = false;
-    [HideInInspector]public ArcaneGroup groupScript;
+    [HideInInspector] public bool playerOnCircle = false;
+    [HideInInspector] public ArcaneGroup groupScript;
 
     private void Start()
     {
@@ -19,7 +19,8 @@ public class ArcaneCircle : MonoBehaviour
         if(other.GetComponent<PlayerController>())
         {
             playerOnCircle = true;
-            groupScript.TeleportPlayer();
+            other.GetComponent<PlayerController>().onArcaneCircle = this;
+            HUDController.Instance.ShowQuickHint("Teleport");
             //Debug.Log("Player entered circle!");
         }
     }
@@ -29,7 +30,14 @@ public class ArcaneCircle : MonoBehaviour
         if (other.GetComponent<PlayerController>())
         {
             playerOnCircle = false;
+            other.GetComponent<PlayerController>().onArcaneCircle = null;
+            HUDController.Instance.HideQuickHint();
             //Debug.Log("Player exited circle!");
         }
+    }
+
+    public void TeleportBetweenCircles()
+    {
+        groupScript.TeleportPlayer();
     }
 }

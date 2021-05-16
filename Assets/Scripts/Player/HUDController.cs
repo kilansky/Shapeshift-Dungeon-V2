@@ -83,6 +83,11 @@ public class HUDController : SingletonPattern<HUDController>
     [Header("Run Timer")]
     public GameObject runTimer;
 
+    [Header("Difficulty Mode Panels")]
+    public GameObject casualModePanel;
+    public GameObject standardModePanel;
+    public GameObject hardcoreModePanel;
+
     [Header("Boss Health Bar")]
     public Slider bossHealthBar;
 
@@ -532,9 +537,25 @@ public class HUDController : SingletonPattern<HUDController>
         minimap.SetActive(false);
     }
 
+    public void ShowCasualModePanel()
+    {
+        casualModePanel.SetActive(true);
+    }
+
+    public void ShowStandardModePanel()
+    {
+        standardModePanel.SetActive(true);
+    }
+
+    public void ShowHardcoreModePanel()
+    {
+        hardcoreModePanel.SetActive(true);
+    }
+
     public void ShowGameOver()
     {
         player.gameObject.GetComponent<PlayerInput>().SwitchCurrentActionMap("UI");
+        Time.timeScale = 0;
         gameOverScreen.SetActive(true);
         playerDamagedOverlay.SetActive(false);
         gameOverScreen.GetComponent<GameOverStats>().SetGameEndStats();

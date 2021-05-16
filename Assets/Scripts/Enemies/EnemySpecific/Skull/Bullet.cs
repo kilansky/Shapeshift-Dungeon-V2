@@ -103,7 +103,7 @@ public class Bullet : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         //destroy the bullet if it hits the environment, walls, stairs, or the player while not dashing
-        if (canDamage && collision.gameObject.layer == 10 || collision.gameObject.layer == 9|| collision.gameObject.layer == 2 || 
+        if (canDamage && collision.gameObject.layer == 10 || collision.gameObject.layer == 9 || collision.gameObject.layer == 2 || 
             (collision.gameObject.layer == 8 && !PlayerController.Instance.IsDashing))
             DestroyBullet();
 
@@ -119,7 +119,7 @@ public class Bullet : MonoBehaviour
         }
     }
 
-    private void DestroyBullet()
+    public void DestroyBullet()
     {
         //Remove this bullet from the mage boss's ring of projectiles if relevant
         if(parentObject.GetComponent<MageBoss>() && parentObject.GetComponent<MageBoss>().unfiredProjectiles.Count > 0)

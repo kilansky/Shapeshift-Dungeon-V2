@@ -25,11 +25,8 @@ public class SpawnPoint : MonoBehaviour
         Instantiate(spawnVFX, monster.transform.position + new Vector3(0, 1.5f, 0), Quaternion.identity);
         GetComponent<AudioSource>().Play();
 
-        if (isGemMonster)
-        {
-            //Set monster to gem monster
+        //Set monster to gem monster
+        if (isGemMonster && monster && monster.GetComponent<GemMonster>())
             monster.GetComponent<GemMonster>().SetGemMonster();
-            //Debug.Log("Spawned a game monster! " + MonsterSpawner.Instance.gemMonstersToSpawn + " gem monsters left to spawn.");
-        }
     }
 }

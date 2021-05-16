@@ -82,6 +82,13 @@ public class PlayerHealth : SingletonPattern<PlayerHealth>, IDamageable
             //deal damage to player
             Health -= damage * damageModifier.Value * difficultyDamageMod;
             Health = Mathf.Clamp(Health, 0, maxHealth);
+
+            //Set health values manually under certain conditions
+            if (Health > 29 && Health < 30)
+                Health = 29;
+            else if (Health > 0 && Health < 1)
+                Health = 1;
+
             StartCoroutine(HUDController.Instance.UpdateHealthBar(Health, maxHealth));
             StartCoroutine(HUDController.Instance.ShowPlayerDamagedOverlay());
 
@@ -149,11 +156,7 @@ public class PlayerHealth : SingletonPattern<PlayerHealth>, IDamageable
     public void AddPotion()
     {
         if(GetPotionCount() == 3)
-        {
             UsePotion();
-            return;
-        }
-
 
         //Check each potion slot front to back
         //If the slot is available, add the potion to it
@@ -244,6 +247,5 @@ public class PlayerHealth : SingletonPattern<PlayerHealth>, IDamageable
 
         AudioManager.Instance.Play("GameOver");
         HUDController.Instance.ShowGameOver();
-        Time.timeScale = 0;
     }
 }

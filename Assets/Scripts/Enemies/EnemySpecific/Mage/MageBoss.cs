@@ -9,7 +9,7 @@ public class MageBoss : SingletonPattern<MageBoss>, IDamageable
     //-----------Public-----------
     [Header("Health & Stun")]
     public float startingHealth;
-    public float dmgInvincibilityTime = 0.25f;
+    public float dmgInvincibilityTime = 0.1f;
     public float stunResistance;
     public float stunRecoveryTime;
     public Material hitMat;
@@ -559,12 +559,13 @@ public class MageBoss : SingletonPattern<MageBoss>, IDamageable
 
         //Teleport away to hidden point
         PhaseChangeTeleport();
-        timeToTeleportAgain = 18f;
-        timeTillNextTeleport = 18f;
+        timeToTeleportAgain = 17f;
+        timeTillNextTeleport = 17f;
 
         //Alert player of dangerous tiles
         foreach (DangerTiles dangerousTile in GameObject.FindObjectsOfType<DangerTiles>())
             dangerousTile.StartFlashing();
+
         CineShake.Instance.Shake(1.5f, 2.5f);
         CameraController.Instance.ZoomOutLevelTransition();
         AudioManager.Instance.Play("Rumble");
@@ -572,8 +573,8 @@ public class MageBoss : SingletonPattern<MageBoss>, IDamageable
 
         //Transition Level
         LevelManager.Instance.ChangeBossLevel(phase2Map);
-        timeToTeleportAgain = 16f;
-        timeTillNextTeleport = 16f;
+        timeToTeleportAgain = 17f;
+        timeTillNextTeleport = 17f;
         changeToUseAttack2 = 0.4f;
     }
 
@@ -589,14 +590,14 @@ public class MageBoss : SingletonPattern<MageBoss>, IDamageable
 
         //Teleport away to hidden point
         PhaseChangeTeleport();
-        timeToTeleportAgain = 16f;
-        timeTillNextTeleport = 16f;
+        timeToTeleportAgain = 17f;
+        timeTillNextTeleport = 17f;
 
-        //Kill the monsters
+        //Kill the monsters by damaging them - fills the kapala
         foreach (EnemyBase enemy in GameObject.FindObjectsOfType<EnemyBase>())
         {
-            if(enemy != this)
-                enemy.Damage(100f);
+            if (enemy.gameObject != this.gameObject)
+                enemy.Kill();
         }
 
         //Alert player of dangerous tiles
@@ -606,12 +607,13 @@ public class MageBoss : SingletonPattern<MageBoss>, IDamageable
         CineShake.Instance.Shake(1.5f, 2.5f);
         CameraController.Instance.ZoomOutLevelTransition();
         AudioManager.Instance.Play("Rumble");
+
         yield return new WaitForSeconds(2.5f);
 
         //Transition Level
         LevelManager.Instance.ChangeBossLevel(phase3Map);
-        timeToTeleportAgain = 16f;
-        timeTillNextTeleport = 16f;
+        timeToTeleportAgain = 17f;
+        timeTillNextTeleport = 17f;
         changeToUseAttack2 = 0.7f;
     }
 

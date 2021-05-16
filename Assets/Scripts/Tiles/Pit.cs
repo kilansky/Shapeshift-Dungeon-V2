@@ -24,5 +24,7 @@ public class Pit : MonoBehaviour
         {
             FindSafeTile.Instance.MovePlayerToSafeLocation(pitDamage);
         }
+        else if(other.CompareTag("Gem"))
+            Destroy(other.gameObject);
     }
 }

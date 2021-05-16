@@ -11,6 +11,7 @@ public class GameOverStats : MonoBehaviour
     public TextMeshProUGUI healthText;
     public TextMeshProUGUI attackText;
     public TextMeshProUGUI speedText;
+    public TextMeshProUGUI difficultyText;
     public Image[] items;
     public Sprite smallPotion;
 
@@ -18,16 +19,36 @@ public class GameOverStats : MonoBehaviour
     {
         PlayerController pc = PlayerController.Instance;
 
-        runTimeText.text = "Time: " + RunTimer.Instance.TimerTextValue;
+        runTimeText.text = "Time: " + RunTimer.Instance.EndTimeValue;
         floorText.text = "Floor Reached: " + LevelManager.Instance.currFloor.ToString();
         healthText.text = "Health - " + pc.StatMaxHealthCount.ToString();
         attackText.text = "Attack - " + pc.StatAttackCount.ToString();
         speedText.text = "Speed - " + pc.StatSpeedCount.ToString();
 
+        switch (PlayerPrefs.GetInt("Difficulty", 1))
+        {
+            case 0: //casual
+                difficultyText.text = "Difficulty: Casual";
+                break;
+            case 1: //standard
+                difficultyText.text = "Difficulty: Standard";
+                break;
+            case 2: //hardcore
+                difficultyText.text = "Difficulty: Hardcore";
+                break;
+            default:
+                break;
+        }
+
         int i = 0;
         if(pc.SpecialSlot)
         {
             items[i].sprite = pc.SpecialSlot.sprite;
+            i++;
+        }
+        if (pc.BagOfHoldingSlot)
+        {
+            items[i].sprite = pc.BagOfHoldingSlot.sprite;
             i++;
         }
         if (pc.HeadSlot)

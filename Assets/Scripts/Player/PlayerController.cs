@@ -84,6 +84,7 @@ public class PlayerController : SingletonPattern<PlayerController>
     [HideInInspector] public bool canUseSpecial = true; //Keeps track of if the special item can be used
     [HideInInspector] public float specialCharge2 = 0; //Varaible to hold the special charge of the item in the bag of holding
     [HideInInspector] public float specialCharge2MaxValue = -1; //Variable to hold the max value for the secondary special item charge
+    [HideInInspector] public ArcaneCircle onArcaneCircle; //Variable to check if the player is currently standing on an arcane circle
 
     [Header("Enemy Attack Points")]
     public GameObject frontTarget;
@@ -224,12 +225,15 @@ public class PlayerController : SingletonPattern<PlayerController>
         {
             case 0: //casual
                 PlayerHealth.Instance.difficultyDamageMod = 0.5f;
+                HUDController.Instance.ShowCasualModePanel();
                 break;
             case 1: //standard
                 PlayerHealth.Instance.difficultyDamageMod = 1f;
+                HUDController.Instance.ShowStandardModePanel();
                 break;
             case 2: //hardcore
                 PlayerHealth.Instance.difficultyDamageMod = 1.5f;
+                HUDController.Instance.ShowHardcoreModePanel();
                 break;
             default:
                 break;
@@ -319,9 +323,9 @@ public class PlayerController : SingletonPattern<PlayerController>
         Vector3 attackVector = new Vector3(transform.forward.x, vSpeed, transform.forward.z);
         Vector3 chargingVector = new Vector3(0, vSpeed, 0);
 
-        if (IsDashing) //Movement when Dashing or Charge Attacking
-            controller.Move(transform.forward * currMoveSpeed * SandSpeedMod * Time.deltaTime);
-        else if (IsCharging || (IsAttacking && !canMove)) //Movement when Charging or at the end of Attack3
+        //if (IsDashing) //Movement when Dashing
+            //controller.Move(transform.forward * currMoveSpeed * SandSpeedMod * Time.deltaTime);
+        if (IsCharging || (IsAttacking && !canMove)) //Movement when Charging or at the end of Attack3
             controller.Move(chargingVector * currMoveSpeed * SandSpeedMod * Time.deltaTime);
         else if (IsAttacking) //Movement when Attacking
             controller.Move(attackVector * moveVelocity * currMoveSpeed * SandSpeedMod * Time.deltaTime);
@@ -658,12 +662,14 @@ public class PlayerController : SingletonPattern<PlayerController>
     {
         if (context.performed)
         {
+            Debug.Log("Navigate performed");
+
             Vector2 navigationInput = context.ReadValue<Vector2>();
 
             Buttons buttons = FindObjectOfType<Buttons>();
 
-            if (!EventSystem.current.currentSelectedGameObject)
-                EventSystem.current.SetSelectedGameObject(buttons.buttonsArray[buttons.currButtonIndex]);
+            if (buttons && !EventSystem.current.currentSelectedGameObject)
+                buttons.SetSelectedButton();
 
             if (buttons)
             {
@@ -682,6 +688,10 @@ public class PlayerController : SingletonPattern<PlayerController>
         if (context.performed)
         {
             Buttons buttons = FindObjectOfType<Buttons>();
+
+            if (buttons && !EventSystem.current.currentSelectedGameObject)
+                buttons.SetSelectedButton();
+
             if (buttons)
                 buttons.SubmitButton();
         }
@@ -1206,6 +1216,12 @@ public class PlayerController : SingletonPattern<PlayerController>
             HUDController.Instance.HideQuickHint();
         }
 
+        if(onArcaneCircle)
+        {
+            onArcaneCircle.TeleportBetweenCircles();
+            HUDController.Instance.HideQuickHint();
+        }
+
         //If there is currently an item being touched then set pickup Item to true
         if (touchingItem == true && canAffordItem)
         {
@@ -1226,6 +1242,7 @@ public class PlayerController : SingletonPattern<PlayerController>
     /// While the player is inside the Trigger of an object it will check if they are still touching the object so it can be picked up with the associated action button
     /// </summary>
 
+    /*
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Gem")
@@ -1238,6 +1255,7 @@ public class PlayerController : SingletonPattern<PlayerController>
             Destroy(other.gameObject);
         }
     }
+    */
 
     private void OnTriggerStay(Collider other)
     {

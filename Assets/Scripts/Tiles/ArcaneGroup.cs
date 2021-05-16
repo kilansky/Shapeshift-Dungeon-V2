@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ArcaneGroup : MonoBehaviour
 {
-    public float cooldown = 5f;
+    public float cooldown = 1f;
     public GameObject circleOne;
     public GameObject circleTwo;
     public Material inactive;

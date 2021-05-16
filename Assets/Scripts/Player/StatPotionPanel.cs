@@ -125,7 +125,7 @@ public class StatPotionPanel : MonoBehaviour
         //Keeps track of what the move speed and dash speed starting value was for the debug Log later on
         float moveSpeedStartingValue = pc.baseMoveSpeed.BaseValue;
         float attackSpeedStartingValue = pc.baseAttackSpeed.BaseValue;
-        float dashStartingValue = pc.dashSpeed.BaseValue;
+        //float dashStartingValue = pc.dashSpeed.BaseValue;
 
         //Increases the statSpeedCount by 1 as the speed option has been selected
         pc.StatSpeedCount++;
@@ -136,18 +136,18 @@ public class StatPotionPanel : MonoBehaviour
         //Sets the increase values to the move and dashspeed Base value * speed % increase * math
         moveSpeedIncreaseValue = originalMoveSpeedBaseValue * speedPercentIncrease * MathCalculation;
         attackSpeedIncreaseValue = originalAttackSpeedBaseValue * attackSpeedPercentIncrease * MathCalculation;
-        dashIncreaseValue = originalDashSpeedBaseValue * speedPercentIncrease * MathCalculation;
+        //dashIncreaseValue = originalDashSpeedBaseValue * speedPercentIncrease * MathCalculation;
 
         //Increases the current base values by their representative increase values
         pc.baseMoveSpeed.BaseValue += moveSpeedIncreaseValue;
         pc.baseAttackSpeed.BaseValue += attackSpeedIncreaseValue;
-        pc.dashSpeed.BaseValue += dashIncreaseValue;
+        //pc.dashSpeed.BaseValue += dashIncreaseValue;
         pc.SetAttackSpeed();
 
         //Sets the increase percent values to be used for the debug log later and for displaying proper information for the UI
         float moveSpeedIncreasePercent = ((originalMoveSpeedBaseValue + moveSpeedIncreaseValue) / originalMoveSpeedBaseValue) - 1;
         float attackSpeedIncreasePercent = ((originalAttackSpeedBaseValue + attackSpeedIncreaseValue) / originalAttackSpeedBaseValue) - 1;
-        float dashIncreasePercent = ((originalDashSpeedBaseValue + dashIncreaseValue) / originalDashSpeedBaseValue) - 1;
+        //float dashIncreasePercent = ((originalDashSpeedBaseValue + dashIncreaseValue) / originalDashSpeedBaseValue) - 1;
 
         //Debug Log to show all the math as check for Skys math table equations
         /*

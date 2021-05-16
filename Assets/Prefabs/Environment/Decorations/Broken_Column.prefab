@@ -950,6 +950,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6226460130211662762}
   - component: {fileID: 5431755347649932995}
+  - component: {fileID: 6750901802786423980}
   m_Layer: 0
   m_Name: Broken_Column
   m_TagString: Untagged
@@ -1000,6 +1001,19 @@ MonoBehaviour:
   mask:
     serializedVersion: 2
     m_Bits: 1024
+--- !u!65 &6750901802786423980
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6711213175470444816}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 3.7536151, y: 1.260886, z: 3.2744777}
+  m_Center: {x: -0.1694603, y: 0.5230669, z: -0.5856616}
 --- !u!1 &7132631311954851933
 GameObject:
   m_ObjectHideFlags: 0
